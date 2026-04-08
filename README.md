@@ -1,3 +1,10 @@
+separate environment for this, and the data I want to do
+fixed the input and fixed output, but the output change that means regression will fail.
+Now I want to do this with Terraform, GCP, data-related, and schema changes 
+
+
+This is the transcript of the meeting. Now, understand these points and give me an understanding of what exactly they want.
+
 
 
 Harshit Patel (PCB-C)
