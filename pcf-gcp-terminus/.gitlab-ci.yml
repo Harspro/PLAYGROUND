@@ -1,0 +1,1138 @@
+stages:
+  - init
+  - tfplan-processing
+  - tfapply-processing
+  - tfplan-curated
+  - tfapply-curated
+  - tfplan-landing
+  - tfapply-landing
+
+include:
+  - project: 'loblaw/pc-financial/pcf-engineering/shared/cicd/gitlab-pipelines-library'
+    ref: ${CI_LIBRARY_VERSION}
+    file:
+      - '/gitlab-ci/gcp/gcp_auth.yml'
+      - '/gitlab-ci/default.yml'
+      - '/gitlab-ci/hashicorp-vault/vault-gitlab-auth-base.yml'
+
+default:
+  tags:
+    - pcf
+    - azure
+    - nonprod
+
+variables:
+  TECHOPS_OPERATOR_AUTHORIZED_USERS: "abhijit.ghogare,aditya.gorthi,vaibhav.patil,tallapally.yeshwanthgoud,sharon.ajith,raj.suwalka,radhika.solanki,nishant.waghela,manisha.lalwani,dipayan.mallick,vikas.singh,sejal.zade,atyajit.ashoklande,narkar.pritesh,manoj.malapati,himanshu.shekher,nithya.basavanna,aneesha.shaik,anuhya.sunchikala,amit.shah"
+  DEV_SLACK_CHANNEL: "#gcp-dev-alerts"
+  UAT_SLACK_CHANNEL: "#gcp-uat-alerts"
+  PROD_SLACK_CHANNEL: "#gcp-prod-alerts"
+  GITLAB_PIPELINE_CHANNEL: "#gitlab-pipeline-alerts"
+  DOWNLOAD_EXTERNAL_MODULES: "true"
+  WI_POOL_PROVIDER: "//iam.googleapis.com/projects/$GCP_WI_FEDERATION_PROJECT/locations/global/workloadIdentityPools/gitlab-oidc-platform/providers/gitlab-oidc-platform-terminus"
+  SERVICE_ACCOUNT: "infra-admin-sa@$PROJECT_ID.iam.gserviceaccount.com"
+  AUDIENCE: "https://gitlab.lblw.ca"
+  VAULT_ENV_DEBUG: true
+  VAULT_AUTH_ROLE:
+    value: gitlab-ci-platforms-gcp-terminus
+
+.vault-auth:
+  stage: deploy
+  id_tokens:
+    VAULT_TOKEN:
+      aud: $VAULT_SERVER_URL
+  secrets:
+    SLACK_WEBHOOK_URL:
+      vault: pcf-engineering/platforms/pcf-gcp-management/pcf-terminus/pcf-gcp-terminus/SLACK_WEBHOOK_URL@gitlab-pipeline-secrets
+      file: false
+      token: $VAULT_TOKEN
+
+# Terraform stages for Processing in Dev
+tf-plan-dev-processing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  id_tokens:
+    TERRAFORM_VAULT_AUTH_JWT:
+      aud: "https://web-vault.dolphin.azure.nonprod.pcfcloud.io"
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for Processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  stage: tfplan-processing
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Dev/02_processing/"
+    ENV_NAME: "dev"
+    PROJECT_ID: "pcb-dev-processing"
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  only:
+    - merge_requests
+    - main
+
+tf-apply-dev-processing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  id_tokens:
+    TERRAFORM_VAULT_AUTH_JWT:
+      aud: "https://web-vault.dolphin.azure.nonprod.pcfcloud.io"
+  extends:
+    - .vault-auth
+    - .google-oidc:auth    
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$DEV_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$DEV_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  stage: tfapply-processing
+  environment: nonprod 
+  variables:
+    ENV_DIR: "live/Dev/02_processing/"
+    ENV_NAME: "dev"
+    PROJECT_ID: "pcb-dev-processing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-dev-processing
+  only:
+    - main
+  when: manual
+
+# Terraform stages for Curated in Dev
+tf-plan-dev-curated:
+  stage: tfplan-curated
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Dev/03_curated/"
+    ENV_NAME: "dev"
+    PROJECT_ID: "pcb-dev-curated"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  dependencies:
+    - tf-plan-dev-processing
+  only:
+    - merge_requests
+    - main
+
+tf-apply-dev-curated:
+  stage: tfapply-curated
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth 
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$DEV_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$DEV_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Dev/03_curated/"
+    ENV_NAME: "dev"
+    PROJECT_ID: "pcb-dev-curated"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-dev-curated
+  only:
+    - main
+  when: manual
+
+# Terraform stages for Landing in Dev
+tf-plan-dev-landing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  stage: tfplan-landing
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Dev/01_landing/"
+    ENV_NAME: "dev"
+    PROJECT_ID: "pcb-dev-landing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-dev-processing
+    - tf-plan-dev-curated
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  only:
+    - merge_requests
+    - main
+
+tf-apply-dev-landing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth  
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$DEV_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$DEV_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at Landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  stage: tfapply-landing
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Dev/01_landing/"
+    ENV_NAME: "dev"
+    PROJECT_ID: "pcb-dev-landing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-dev-landing
+  only:
+    - main
+  when: manual
+
+
+######### UAT #########
+
+## Terraform stages for Processing in UAT
+tf-plan-uat-processing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  id_tokens:
+    TERRAFORM_VAULT_AUTH_JWT:
+      aud: "https://web-vault.dolphin.azure.nonprod.pcfcloud.io"
+  extends:
+    - .vault-auth
+    - .google-oidc:auth    
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  stage: tfplan-processing
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Uat/02_processing/"
+    ENV_NAME: "uat"
+    PROJECT_ID: "pcb-uat-processing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  dependencies:
+    - tf-plan-dev-processing
+  only:
+    - merge_requests
+    - main
+    - /^release.*$/
+
+tf-apply-uat-processing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  id_tokens:
+    TERRAFORM_VAULT_AUTH_JWT:
+      aud: "https://web-vault.dolphin.azure.nonprod.pcfcloud.io"
+  extends:
+    - .vault-auth
+    - .google-oidc:auth     
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$UAT_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$UAT_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  stage: tfapply-processing
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Uat/02_processing/"
+    ENV_NAME: "uat"
+    PROJECT_ID: "pcb-uat-processing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-uat-processing
+  only:
+    - main
+    - /^release.*$/
+  when: manual
+
+# # # Terraform stages for Curated in UAT
+tf-plan-uat-curated:
+  stage: tfplan-curated
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Uat/03_curated/"
+    ENV_NAME: "uat"
+    PROJECT_ID: "pcb-uat-curated"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  dependencies:
+    - tf-plan-uat-processing
+  only:
+    - merge_requests
+    - main
+    - /^release.*$/
+
+tf-apply-uat-curated:
+  stage: tfapply-curated
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth 
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$UAT_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$UAT_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Uat/03_curated/"
+    ENV_NAME: "uat"
+    PROJECT_ID: "pcb-uat-curated"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-uat-curated
+  only:
+    - main
+    - /^release.*$/
+  when: manual
+
+# # Terraform stages for Landing in UAT
+tf-plan-uat-landing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  stage: tfplan-landing
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Uat/01_landing/"
+    ENV_NAME: "uat"
+    PROJECT_ID: "pcb-uat-landing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-uat-processing
+    - tf-plan-uat-curated
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  only:
+    - merge_requests
+    - main
+    - /^release.*$/
+
+tf-apply-uat-landing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$UAT_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$UAT_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at Landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  stage: tfapply-landing
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Uat/01_landing/"
+    ENV_NAME: "uat"
+    PROJECT_ID: "pcb-uat-landing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_BETA
+  dependencies:
+    - tf-plan-uat-landing
+  only:
+    - main
+    - /^release.*$/
+  when: manual
+
+
+# # # ######### PROD #########
+
+### Terraform stages for Processing in PROD
+tf-plan-prod-processing:
+  image: ${JFROG_GAMMA}/pcb-dp-docker-prod/build/google/gcp-terragrunt:v2026.3.0
+  id_tokens:
+    TERRAFORM_VAULT_AUTH_JWT:
+      aud: "https://web-vault.octopus.azure.prod.pcfcloud.io"
+  extends:
+    - .vault-auth
+    - .google-oidc:auth    
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  stage: tfplan-processing
+  environment: prod
+  variables:
+    ENV_DIR: "live/Prod/02_processing/"
+    ENV_NAME: "prod"
+    PROJECT_ID: "pcb-prod-processing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_GAMMA
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  dependencies:
+    - tf-plan-uat-processing
+  only:
+    - merge_requests
+    - main
+    - /^release.*$/
+  tags:
+    - pcf
+    - azure
+    - prod  
+
+tf-apply-prod-processing:
+  image: ${JFROG_GAMMA}/pcb-dp-docker-prod/build/google/gcp-terragrunt:v2026.3.0
+  id_tokens:
+    TERRAFORM_VAULT_AUTH_JWT:
+      aud: "https://web-vault.octopus.azure.prod.pcfcloud.io"
+  extends:
+    - .vault-auth
+    - .google-oidc:auth     
+  script:
+    - |
+      IFS=',' read -ra authorized_users <<< "$TECHOPS_OPERATOR_AUTHORIZED_USERS"
+      if [[ ! " ${authorized_users[@]} " =~ " ${GITLAB_USER_LOGIN} " ]]; then
+        echo "Pipeline triggered by an unauthorized user ${GITLAB_USER_LOGIN} for Prod. Exiting.";
+        exit 1;
+      fi
+      echo "Pipeline triggered by an authorized user ${GITLAB_USER_LOGIN} for Prod. Continuing with the Terraform Apply."
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$PROD_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$PROD_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  stage: tfapply-processing
+  environment: prod
+  variables:
+    ENV_DIR: "live/Prod/02_processing/"
+    ENV_NAME: "prod"
+    PROJECT_ID: "pcb-prod-processing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_GAMMA
+  dependencies:
+    - tf-plan-prod-processing
+  only:
+    - /^release.*$/
+  when: manual
+  tags:
+    - pcf
+    - azure
+    - prod
+
+# # # Terraform stages for Curated in PROD
+tf-plan-prod-curated:
+  image: ${JFROG_GAMMA}/pcb-dp-docker-prod/build/google/gcp-terragrunt:v2026.3.0
+  stage: tfplan-curated
+  extends:
+    - .vault-auth
+    - .google-oidc:auth 
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  environment: prod
+  variables:
+    ENV_DIR: "live/Prod/03_curated/"
+    ENV_NAME: "prod"
+    PROJECT_ID: "pcb-prod-curated"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_GAMMA
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  dependencies:
+    - tf-plan-prod-processing
+  only:
+    - merge_requests
+    - main
+    - /^release.*$/
+  tags:
+    - pcf
+    - azure
+    - prod  
+
+tf-apply-prod-curated:
+  image: ${JFROG_GAMMA}/pcb-dp-docker-prod/build/google/gcp-terragrunt:v2026.3.0
+  stage: tfapply-curated
+  extends:
+    - .vault-auth
+    - .google-oidc:auth 
+  script:
+    - |
+      IFS=',' read -ra authorized_users <<< "$TECHOPS_OPERATOR_AUTHORIZED_USERS"
+      if [[ ! " ${authorized_users[@]} " =~ " ${GITLAB_USER_LOGIN} " ]]; then
+        echo "Pipeline triggered by an unauthorized user ${GITLAB_USER_LOGIN} for Prod. Exiting.";
+        exit 1;
+      fi
+      echo "Pipeline triggered by an authorized user ${GITLAB_USER_LOGIN} for Prod. Continuing with the Terraform Apply."
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$PROD_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$PROD_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at curated zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  environment: prod
+  variables:
+    ENV_DIR: "live/Prod/03_curated/"
+    ENV_NAME: "prod"
+    PROJECT_ID: "pcb-prod-curated"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_GAMMA
+  dependencies:
+    - tf-plan-prod-curated
+  only:
+    - /^release.*$/
+  when: manual
+  tags:
+    - pcf
+    - azure
+    - prod
+
+# # Terraform stages for Landing in PROD
+tf-plan-prod-landing:
+  image: ${JFROG_GAMMA}/pcb-dp-docker-prod/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt plan -out=tfplan -detailed-exitcode
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  stage: tfplan-landing
+  environment: prod
+  variables:
+    ENV_DIR: "live/Prod/01_landing/"
+    ENV_NAME: "prod"
+    PROJECT_ID: "pcb-prod-landing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_GAMMA
+  dependencies:
+    - tf-plan-prod-processing
+    - tf-plan-prod-curated
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  only:
+    - merge_requests
+    - main
+    - /^release.*$/
+  tags:
+    - pcf
+    - azure
+    - prod 
+
+tf-apply-prod-landing:
+  image: ${JFROG_GAMMA}/pcb-dp-docker-prod/build/google/gcp-terragrunt:v2026.3.0
+  extends:
+    - .vault-auth
+    - .google-oidc:auth  
+  script:
+    - |
+      IFS=',' read -ra authorized_users <<< "$TECHOPS_OPERATOR_AUTHORIZED_USERS"
+      if [[ ! " ${authorized_users[@]} " =~ " ${GITLAB_USER_LOGIN} " ]]; then
+        echo "Pipeline triggered by an unauthorized user ${GITLAB_USER_LOGIN} for Prod. Exiting.";
+        exit 1;
+      fi
+      echo "Pipeline triggered by an authorized user ${GITLAB_USER_LOGIN} for Prod. Continuing with the Terraform Apply."
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt apply tfplan
+      export TF_EXIT_CODE=$?
+      set -e
+      if [ "$TF_EXIT_CODE" -eq 0 ]; then
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$PROD_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Success: The pipeline job success for landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"good\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+      else
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$PROD_SLACK_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job failed at Landing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+  stage: tfapply-landing
+  environment: prod
+  variables:
+    ENV_DIR: "live/Prod/01_landing/"
+    ENV_NAME: "prod"
+    PROJECT_ID: "pcb-prod-landing"
+    VAULT_SERVER_URL:
+      value: $VAULT_AZURE_GAMMA
+  dependencies:
+    - tf-plan-prod-landing
+  only:
+    - /^release.*$/
+  when: manual
+  tags:
+    - pcf
+    - azure
+    - prod
