@@ -1,0 +1,52 @@
+CREATE TABLE IF NOT EXISTS `{fee.reversal.landing.table.id}`
+    CLUSTER BY REC_LOAD_TIMESTAMP
+AS
+    SELECT
+        SEQUENCE_NUMBER,
+        TRANSACTION_CODE,
+        ACCOUNT_NUMBER,
+        TRANSACTION_DATE,
+        TANDEM_AUTH_FLAG,
+        TRANSACTION_AMOUNT,
+        MERCHANT_NAME,
+        MERCHANT_CITY,
+        MERCHANT_STATE_PROV,
+        ALLOW_MER_DESC_ON_CORR,
+        REFERENCE_NUMBER,
+        REFERENCE_NUMBER_EXT,
+        FILLER1,
+        MERCHANT_COUNTRY_CODE
+        MERCHANT_CATEGORY_CODE,
+        FILLER2,
+        AUTHORIZATION_CODE,
+        MAIL_PHONE_ORDER,
+        EXTENSION_IND,
+        REC_LOAD_TIMESTAMP,
+        FILE_NAME
+    FROM `{fee.reversal.staging.detail.file.view.id}`
+    LIMIT 0;
+
+INSERT INTO `{fee.reversal.landing.table.id}`
+    SELECT
+        SEQUENCE_NUMBER,
+        TRANSACTION_CODE,
+        ACCOUNT_NUMBER,
+        TRANSACTION_DATE,
+        TANDEM_AUTH_FLAG,
+        TRANSACTION_AMOUNT,
+        MERCHANT_NAME,
+        MERCHANT_CITY,
+        MERCHANT_STATE_PROV,
+        ALLOW_MER_DESC_ON_CORR,
+        REFERENCE_NUMBER,
+        REFERENCE_NUMBER_EXT,
+        FILLER1,
+        MERCHANT_COUNTRY_CODE
+        MERCHANT_CATEGORY_CODE,
+        FILLER2,
+        AUTHORIZATION_CODE,
+        MAIL_PHONE_ORDER,
+        EXTENSION_IND,
+        REC_LOAD_TIMESTAMP,
+        FILE_NAME
+    FROM `{fee.reversal.staging.detail.file.view.id}`;

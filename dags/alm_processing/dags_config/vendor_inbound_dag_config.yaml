@@ -1,0 +1,735 @@
+alm_rbc_pcb_bonds_monthly_load:
+  file:
+    prefix: off-bal-sheet-bond-forward
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/rbc_pcb/bonds_forwards
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket:  rbccm-inbound-pcb{env_suffix}
+  inbound_folder: inbound_bonds
+  bq_to_gcs_folder: alm/rbc_pcb/rbc_bonds_forwards
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: RBC_BONDS_FORWARDS
+  inbound_file:
+    format: csv
+    skip_leading_rows: 0
+    delimiter: "|"
+    validation_file: validation_bond_rbc.yaml
+    prefix: rbc_pcb_alm_bond_forwards
+    schema_external:
+      - {"name": "Trade_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Previous_Trade_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Trade_Date", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Effective_Date", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Maturity_Date", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Sub_Product", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Short_Name", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "BuySell", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Strike", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Notional", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_Index", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_Rate", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_Frequency", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_CCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Notional_2", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_Index", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_Rate", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_Frequency", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_CCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Accrued_Interest_USD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MTM_USD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MTM_CAD", "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: ' "BONDFORWARD" '
+        Trade_ID: Trade_ID
+        Counterparty: ' "RBCCM" '
+        Bond_CUSIP: ' "" '
+        Trade_date: CAST(Trade_Date AS DATE FORMAT 'MM/DD/YYYY')
+        Settlement_date: ' "" '
+        Forward_termination_date: ' "" '
+        Forward_settlement_date: CAST(Maturity_Date AS DATE FORMAT 'MM/DD/YYYY')
+        Contract_forward_price: ' "" '
+        Face_amount: Notional
+        Purpose_of_Bond_Forward: ' "" '
+        MTM: MTM_CAD
+        Currency: COALESCE(Pay_CCY,Receive_CCY)
+        Sub_Product: Sub_Product
+      data_filter:
+        Sub_Product = 'Debt Forward'
+
+alm_rbc_pcb_swaps_monthly_load:
+  file:
+    prefix: off-bal-sheet-swap
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/rbc_pcb/swaps
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: rbccm-inbound-pcb{env_suffix}
+  inbound_folder: inbound_swaps
+  bq_to_gcs_folder: alm/rbc_pcb/rbc_swaps
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: RBC_SWAPS
+  inbound_file:
+    format: csv
+    skip_leading_rows: 0
+    delimiter: "|"
+    validation_file: validation_swap_rbc.yaml
+    prefix: rbc_pcb_alm_swaps
+    schema_external:
+      - {"name": "Trade_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Previous_Trade_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Trade_Date", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Effective_Date", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Maturity_Date", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Sub_Product", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Short_Name", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "BuySell", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Strike", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Notional", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_Index", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_Rate", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_Frequency", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Pay_CCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Notional_2", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_Index", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_Rate", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_Frequency", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Receive_CCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "Accrued_Interest_USD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MTM_USD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MTM_CAD", "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: ' "SWAPS" '
+        Trade_ID: Trade_ID
+        Notional: Notional
+        Trade_date: CAST(Trade_Date AS DATE FORMAT 'MM/DD/YYYY')
+        Effective_date: CAST(Effective_Date AS DATE FORMAT 'MM/DD/YYYY')
+        Maturity_date: CAST(Maturity_Date AS DATE FORMAT 'MM/DD/YYYY')
+        Fixed_rate: ' "" '
+        Fixed_payment_frequency: Pay_Frequency
+        Float_benchmark: Receive_Index
+        Float_spread: ' "" '
+        Float_payment_frequency: Receive_Frequency
+        Counterparty: ' "RBCCM" '
+        MTM: MTM_CAD
+        Purpose_of_Bond_Forward: ' "" '
+        Currency: COALESCE(Pay_CCY,Receive_CCY)
+      data_filter:
+        Sub_Product = 'SWAP'
+
+alm_cibcmn_pcb_investment_detail_monthly_load:
+  file:
+    prefix: asset-investment-d
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/cibcmn_pcb/asset_investment
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: cibcmn-inbound-pcb{env_suffix}
+  inbound_folder: cibcmn_pcb_alm
+  bq_to_gcs_folder: alm/cibcmn_pcb/cibcmn_asset_investment
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: CIBCMN_ASSET_INVESTMENT
+  inbound_file:
+    format: csv
+    skip_leading_rows: 1
+    validation_file: validation_investment_cibcmn.yaml
+    delimiter: ","
+    prefix: cibcmn_pcb_alm_investments
+    schema_external:
+      - { "name": "reporting_account_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reporting_account_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "source_account_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "source_account_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reporting_account_base_currency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reporting_account_fx_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "source_account_base_currency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "source_account_fx_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "source_account_to_reporting_account_fx_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "vendor_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "as_of_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_id", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_cross_reference_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_cross_reference", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "description_1", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "description_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "asset_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "asset_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "sector_description", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_currency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_currency_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "country_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "country_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "shares", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "base_cost", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_cost", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "base_price", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_price", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "base_market_value", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_market_value", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "coupon_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "maturity_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "base_unrealized_investment_gainloss", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_unrealized_investment_gainloss", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "base_unrealized_currency_gainloss", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reporting_account_status", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "position_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "report_id", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_base_both", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "gl_account", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "consolidate_explode", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "alternate_base_currency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "source_account_status", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "asset_mix_category_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "asset_mix_category_description", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "form5500_category_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "form5500_class_code_description", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        ROW_TYPE: ' "Investment" '
+        id: ' "" '
+        cusip: security_cross_reference
+        investment_type: sector_description
+        face_amount: shares
+        coupon: coupon_rate
+        rate_type: ' "" '
+        issue_date: ' "" '
+        maturity_date: CAST(maturity_date AS DATE FORMAT 'YYYYMMDD')
+        first_coupon_date: ' "" '
+        payment_frequency: ' "" '
+        purchase_date: ' "" '
+        market_value: base_market_value
+        book_yield_to_maturity: ' "" '
+        issuer: description_1
+        investment_name: description_2
+        base_cost: base_cost
+        as_of_date: CAST(as_of_date AS DATE FORMAT 'YYYYMMDD')
+        local_currency: local_currency
+
+alm_cibcmn_pcb_custody_holdings_monthly_load:
+  file:
+    prefix: asset-custody-holding
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/cibcmn_pcb/asset_custody
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: cibcmn-inbound-pcb{env_suffix}
+  inbound_folder: cibcmn_pcb_alm
+  bq_to_gcs_folder: alm/cibcmn_pcb/cibcmn_asset_custody
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: CIBCMN_ASSET_CUSTODY
+  inbound_file:
+    format: csv
+    skip_leading_rows: 1
+    delimiter: ","
+    validation_file: validation_custody_cibcmn.yaml
+    prefix: cibcmn_pcb_alm_custody-holdings
+    schema_external:
+      - { "name": "account_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "account_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "account_group", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "account_base_currency_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "account_base_currency_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_short_description", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_description_1", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_description_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_description_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_description_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_description_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_status_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_status_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "location_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "location_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "registration_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "registration_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_currency_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "local_currency_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "maturity_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "coupon_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "traded_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "settled_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "amortized_face", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "pending_receive_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "pending_deliver_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "cash_investment_vehicle", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "country_of_incorporation_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "country_of_incorporation_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "cusip_cins", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "isin", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ticker", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "quick", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "sedol", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "valoren", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "sicovam", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "wpk", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "as_of_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "moodys_rating", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "sp_rating", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "report_run_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "report_run_time", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "previous_factor_record_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "previous_factor_payable_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "previous_factor", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "current_factor_record_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "current_factor_payable_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "current_factor", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ias_account_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "cid", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "asset_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "asset_type_description", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "account_gsp", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "extended_account", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ias_account_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ias_consolidated_account_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ias_consolidated_account_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "chn_local_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "available_to_deliver", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "da_option_multiplier", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "da_traded_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "da_settled_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "da_pending_receive_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "da_pending_deliver_shares_par", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "digitization_eligible", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        ROW_TYPE: ' "Investment" '
+        id: ' "" '
+        cusip: cusip_cins
+        investment_type: asset_type_description
+        face_amount: traded_shares_par
+        coupon: coupon_rate
+        rate_type: ' "" '
+        issue_date: ' "" '
+        maturity_date: CAST(maturity_date AS DATE FORMAT 'MM/DD/YYYY')
+        first_coupon_date: ' "" '
+        payment_frequency: ' "" '
+        purchase_date: ' "" '
+        market_value: ' "" '
+        book_yield_to_maturity: ' "" '
+        issuer: registration_name
+        investment_name: security_description_1
+        base_cost: ' "" '
+        as_of_date: CAST(as_of_date AS DATE FORMAT 'MM/DD/YYYY')
+        local_currency: local_currency_code
+
+alm_gwl_pcb_cash_monthly_load:
+  file:
+    prefix: asset-cash-d
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/gwl_pcb/asset_cash
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: gwl-inbound-pcb{env_suffix}
+  inbound_folder: gwl_inbound_alm
+  bq_to_gcs_folder: alm/gwl_pcb/gwl_asset_cash
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: GWL_ASSET_CASH
+  inbound_file:
+    format: csv
+    skip_leading_rows: 0
+    delimiter: ","
+    validation_file: validation_cash_gwl.yaml
+    prefix: gwl_pcb_alm_cash
+    schema_external:
+      - { "name": "report_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "report_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_6", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_7", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_8", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_9", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_10", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_11", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_12", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_13", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_14", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_15", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_16", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_17", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_18", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_19", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_20", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_21", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_22", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "bank", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "bank_account_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "legal_entity", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "bank_account_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "bank_account_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "opening_balance", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "debits", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "credits", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "net_change", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "closing_balance", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_33", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_34", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_35", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_36", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_37", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_38", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_39", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_40", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_41", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_42", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_43", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_44", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_45", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_46", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_47", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_48", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_49", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_50", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_51", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_52", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "report_extraction_details", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "col_54", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        ROW_TYPE: ' "Cash" '
+        report_name: report_name
+        report_date: SAFE_CAST(report_date AS DATE FORMAT 'DD-MON-YYYY')
+        bank: bank
+        bank_account_type: bank_account_type
+        legal_entity: legal_entity
+        bank_account_number: bank_account_number
+        bank_account_name: bank_account_name
+        opening_balance: opening_balance
+        debits: debits
+        credits: credits
+        net_change: net_change
+        closing_balance: closing_balance
+        rate: IFNULL(( SELECT rate FROM pcb-{env}-curated.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI WHERE REF_ALM_INTEREST_RATE_BY_FI.bank = TRIM(LOWER(GWL_ASSET_CASH_RAW_LATEST.bank)) AND VENDOR_CODE = 'gwl' AND INSTRUMENT_TYPE = 'cash' AND FIELD_NAME = 'rate' AND CURRENT_DATE >= EFFECTIVE_DATE AND (END_DATE IS NULL OR END_DATE > CURRENT_DATE)), '')
+        report_extraction_details: report_extraction_details
+        currency_held_in: ' "" '
+
+alm_gwl_pcb_investment_by_deal_monthly_load:
+  file:
+    prefix: asset-investment-by-deal
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/gwl_pcb/asset_investment_by_deal
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: gwl-inbound-pcb{env_suffix}
+  inbound_folder: gwl_inbound_alm
+  bq_to_gcs_folder: alm/gwl_pcb/asset_investment_by_deal
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: GWL_INVESTMENT_BY_DEAL
+  inbound_file:
+    format: csv
+    skip_leading_rows: 1
+    delimiter: ","
+    validation_file: validation_investment_by_deal_gwl.yaml
+    prefix: gwl_pcb_alm_investment-by-deal
+    schema_external:
+      - { "name": "entity_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "deal_no", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "cusip", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "counterparty_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "broker", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "instrument_name", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "face_value", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "coupon_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "bond_price", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "issue_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "deal_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "settlement_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "maturity_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "first_coupon_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "next_coupon_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "coupon_frequency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "prev_coupon_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "settlement_amount", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "interest_rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "offset", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "buy_or_sell", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "currency", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        ROW_TYPE: ' "InvestmentByDeal" '
+        entity_name: entity_name
+        deal_no: deal_no
+        cusip: substr(cusip,7)
+        counterparty_code: counterparty_code
+        broker: broker
+        instrument_name: instrument_name
+        face_value: CASE WHEN buy_or_sell='SELL' THEN -1*CAST(face_value AS NUMERIC) ELSE CAST(face_value  AS NUMERIC) END
+        coupon_rate: coupon_rate
+        bond_price: bond_price
+        issue_date: issue_date
+        deal_date: deal_date
+        settlement_date: settlement_date
+        maturity_date: maturity_date
+        first_coupon_date: first_coupon_date
+        prev_coupon_date: prev_coupon_date
+        next_coupon_date: next_coupon_date
+        coupon_frequency: coupon_frequency
+        settlement_amount: settlement_amount
+        interest_rate: interest_rate
+        offset: offset
+        buy_or_sell: buy_or_sell
+        currency: currency
+
+alm_gwl_pcb_fx_hedges_monthly_load:
+  file:
+    prefix: off-bal-sheet-fx-hedges
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/gwl_pcb/fx_hedges
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_bonds
+  bq_to_gcs_folder: alm/gwl_pcb/fx_hedges
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: GWL_FX_HEDGES
+  inbound_file:
+    format: csv
+    skip_leading_rows: 0
+    delimiter: "|"
+    validation_file: validation_fx_hedges_gwl.yaml
+    prefix: gwl_pcb_alm_fx_hedges
+    schema_external:
+      - { "name": "deal_no", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "legal_entity", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ticket_no", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "tradedate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "valuedate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "counterparty", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "sell", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "currencies", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "contractrate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "buy", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "realized_gain_loss", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "settlementrate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "fair_value_of_hedge", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "forwardrate", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        ROW_TYPE: ' "FXHEDGES" '
+        tradeid: deal_no
+        counterparty: counterparty
+        currency1: currencies
+        currency1_amount: sell
+        currency2: currencies
+        currency2_amount: buy
+        trade_date: CAST(tradedate AS DATE FORMAT 'MM/DD/YYYY')
+        settlement_date: CAST(valuedate AS DATE FORMAT 'MM/DD/YYYY')
+        forward_rate: forwardrate
+        contract_rate: contractrate
+        settlement_rate: settlementrate
+
+alm_pfp_pcb_term_deposits_monthly_load:
+  file:
+    prefix: liability-term-deposit
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/pfp_pcb/term_deposits
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: pfp-inbound-pcb{env_suffix}
+  inbound_folder: pfp_inbound_alm
+  bq_to_gcs_folder: alm/pfp_pcb/term_deposits
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: PFP_TERM_DEPOSITS
+  inbound_file:
+    format: csv
+    skip_leading_rows: 0
+    delimiter: "|"
+    validation_file: validation_term_deposits_pfp.yaml
+    prefix: pfp_pcb_alm_term_deposit
+    schema_external:
+      - { "name": "row_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "deposit_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "principal", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "rate", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "issue_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "maturity_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "payment_frequency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "compound_frequency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "compound_interest_to_date", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "deposit_account_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "client_number", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "owner_type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "external_account", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "currency", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        row_type: row_type
+        deposit_number: deposit_number
+        principal: principal
+        rate: rate
+        issue_date: SAFE_CAST(issue_date AS DATE FORMAT 'YYYY-MM-DD')
+        maturity_date: SAFE_CAST(maturity_date AS DATE FORMAT 'YYYY-MM-DD')
+        payment_frequency: payment_frequency
+        compound_frequency: compound_frequency
+        compound_interest_to_date: compound_interest_to_date
+        deposit_account_type: deposit_account_type
+        client_number: client_number
+        owner_type: owner_type
+        type: type
+        external_account: external_account
+        Currency: currency
+
+alm_bbg_pcb_rate_monthly_load:
+  file:
+    prefix: asset-market-rate
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/bbg_pcb/market_rate
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: bbg-inbound-pcb{env_suffix}
+  inbound_folder: bbg_inbound_alm
+  bq_to_gcs_folder: alm/bbg_pcb/market_rate
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: BBG_MARKET_RATE
+  inbound_file:
+    format: csv
+    skip_leading_rows: 43
+    delimiter: "|"
+    validation_file: validation_rates_bbg.yaml
+    prefix: bbg_pcb_alm_rate
+    schema_external:
+      - { "name": "securities", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "error_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "num_flds", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "px_last", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "prior_close_mid", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "prior_close_bid", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_des", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "id_cusip", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DUMMY", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        row_type: ' "MARKETRATES" '
+        securities: securities
+        error_code: error_code
+        num_flds: num_flds
+        px_last: px_last
+        prior_close_mid: prior_close_mid
+        prior_close_bid: prior_close_bid
+        security_des: security_des
+        id_cusip: id_cusip
+
+alm_bbg_pcb_bond_monthly_load:
+  file:
+    prefix: asset-bond-data
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/bbg_pcb/bond_data
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: bbg-inbound-pcb{env_suffix}
+  inbound_folder: bbg_inbound_alm
+  bq_to_gcs_folder: alm/bbg_pcb/bond_data
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: BBG_BOND_DATA
+  inbound_file:
+    format: csv
+    skip_leading_rows: 47
+    delimiter: "|"
+    validation_file: validation_bbg_pcb_alm_bond.yaml
+    prefix: bbg_pcb_alm_bond
+    schema_external:
+      - { "name": "securities", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "error_code", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "num_flds", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "id_cusip", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "security_des", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "cpn", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reset_idx", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "flt_spread", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "int_acc_dt", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "first_cpn_dt", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "maturity", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "cpn_freq", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DUMMY", "type": "STRING", "mode": "NULLABLE" }
+    data_mapping:
+      column_map:
+        row_type: ' "MARKETRATES" '
+        securities: securities
+        error_code: error_code
+        num_flds: num_flds
+        id_cusip: id_cusip
+        security_des: security_des
+        cpn: cpn
+        reset_idx: reset_idx
+        flt_spread: flt_spread
+        int_acc_dt: SAFE_CAST(int_acc_dt AS DATE FORMAT 'MM/DD/YYYY')
+        first_cpn_dt: SAFE_CAST(first_cpn_dt AS DATE FORMAT 'MM/DD/YYYY')
+        maturity: SAFE_CAST(maturity AS DATE FORMAT 'MM/DD/YYYY')
+        cpn_freq: cpn_freq

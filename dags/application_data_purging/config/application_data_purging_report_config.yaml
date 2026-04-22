@@ -1,0 +1,206 @@
+purging.processor:
+  output.location: gs://pcb-{env}-staging-extract/purging/
+
+sql.script.generator:
+  tables:
+    adm:
+      - name: ADM_STD_DISP_ADDR_INFO
+        schemas: PR053.ADM, PR053.ADM_P053, PR303.ADM
+        id.column: APA_APP_NUM
+      - name: ADM_STD_DISP_CUST_INFO
+        schemas: PR053.ADM, PR053.ADM_P053, PR303.ADM
+        id.column: APA_APP_NUM
+      - name: ADM_STD_DISP_EMPM_INFO
+        schemas: PR053.ADM, PR053.ADM_P053, PR303.ADM
+        id.column: APA_APP_NUM
+      - name: ADM_STD_DISP_BAL_TRNS_INFO
+        schemas: PR053.ADM, PR053.ADM_P053, PR303.ADM
+        id.column: APA_APP_NUM
+      - name: ADM_STD_DISP_MEMO
+        schemas: PR053.ADM, PR053.ADM_P053, PR303.ADM
+        id.column: APA_APP_NUM
+      - name: ADM_STD_DISP_USER
+        schemas: PR053.ADM, PR053.ADM_P053, PR303.ADM
+        id.column: APA_APP_NUM
+      - name: GEN_VAL_DETAIL
+        schemas: PR053.ADM, PR303.ADM
+        id.column: APP_NUM
+      - name: ADM_RT_RESPONSE_UNS
+        schemas: PR053.PCMC, PR563.PCMC
+        id.column: APA_APP_NUM
+      - name: APP_CUST_INFO
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: APP_CUST_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 9
+      - name: CUST_CONSENT_XREF
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_CONSENT_XREF
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 1
+      - name: CUST_VERIFICATION_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 2
+      - name: CUST_INCOME_INFO
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_INCOME_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 3
+      - name: APP_LOYALTY_XREF
+        schemas: PR053.PCMC, PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_ACCOUNT_INFO
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_ACCOUNT_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 4
+      - name: CUST_ADDRESS_INFO
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_ADDRESS_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 5
+      - name: CUST_EMPLOYMENT_INFO
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_EMPLOYMENT_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 6
+      - name: CUST_PHONE_INFO
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_PHONE_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 7
+      - name: AML_RESULTS
+        schemas: PR053.PCMC, PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: APP_IDV_INFO
+        schemas: PR563.PCMC
+        id.column: APA_APP_NUM
+      - name: APP_TAX_INFO
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_BALANCE_TRANSFER_XREF
+        schemas: PR053.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+      - name: CUST_BALANCE_TRANSFER_XREF
+        schemas: PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+        group: APP_CUST_INFO_GROUP
+        seq: 8
+      - name: T_EAPP_TRCK_DETAIL
+        schemas: PR053.PCMC, PR563.PCMC
+        join.table: ADM_RT_RESPONSE
+        join.column.from: APP_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: APA_APP_NUM
+    experian:
+      - name: BUREAU
+        schemas: PR053.PCMCEXP
+        id.column: APP_NUMBER
+      - name: DAILY_HISTORY
+        schemas: PR053.PCMCEXP
+        id.column: APP_NUMBER
+      - name: EXPERIAN_BASE
+        schemas: PR053.PCMCEXP
+        id.column: APP_NUMBER
+      - name: RESULTS
+        schemas: PR053.PCMCEXP
+        id.column: APP_NUMBER
+      - name: AML_CANADA_POST
+        schemas: PR053.PCMCEXP
+        join.table: EXPERIAN_BASE
+        join.column.from: ACCOUNT_NUMBER
+        join.column.to: MCCARD_NUMBER_FDR
+        id.column: APP_NUMBER
+      - name: PCMC_REGISTRATION
+        schemas: PR053.PCMCEXP
+        join.table: EXP_REALTIME_RESULT_PCMCEID
+        join.column.from: PC_MC_CUST_APPL_ID
+        join.column.to: PC_MC_CUST_APPL_ID
+        id.column: EXP_APP_NUMBER
+    eapps:
+      - name: EAPS_2
+        schemas: PR053.PCB
+        id.column: APPLICATION_ID

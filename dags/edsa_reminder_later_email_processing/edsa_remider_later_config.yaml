@@ -1,0 +1,28 @@
+default_args:
+  owner: "team-growth-and-sales-alerts"
+  capability: "CustomerAcquisition"
+  severity: "P3"
+  sub_capability: "Applications"
+  business_impact: "EDSA Reminder Emails will not be sent to exisiting PCMA customers."
+  customer_impact: "PCMA Customer will not receive reminder emails for EDSA, which they opted for 48 hours ago"
+  depends_on_past: False
+  email: []
+  retries: 0
+  email_on_failure: False
+  email_on_retry: False
+
+
+dag:
+  task_id:
+    kafka_writer_task_id: trigger_kafka_writer_dag
+  dag_id:
+    kafka_trigger_dag_id: edsa_reminder_later_email_recipients_kafka_writer
+  query:
+    email_recipient_account_count: edsa_reminder_later_account_count.sql
+    email_recipient: edsa_reminder_later_recipients.sql
+  wait_for_completion: True
+  poke_interval: 30
+  bucket: pcb-{env}-staging-extract
+  folder_name: edsa_reminder_later
+  file_name: edsa-reminder-later-email-recipients-*.parquet
+  

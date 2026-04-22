@@ -1,0 +1,6 @@
+source_fi_code,product_type_code,trade_id,cusip
+RBC CM,swap,T12345,cusip_1
+CIBC CM,bond forward,T12345,cusip_2
+CIBC CM,swap,T12345,cusip_3
+BMO CM,swap,T12345,cusip_4
+NB CM,bond forward,T12345,cusip_4

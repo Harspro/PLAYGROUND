@@ -1,0 +1,43 @@
+pcb_ops_pcmc_account_closure_file_generation:
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  filename_prefix: pcb_tsys_pcmc_nmsbm
+  character_set: 'cp037'
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: PCMC_ACCOUNT_CLOSURE
+    TRLR:
+      table_name: PCMC_ACCOUNT_CLOSURE_TRAILER
+  email:
+    subject: "TSYS Batch Submission Request (Account Closure)"
+    approver: ""
+    description: "Account Closure"
+    batch_type: "Account Closure"
+    purpose: "For PCMC - Account Closure"
+    recipients:
+      dev: "daniel.zhao01@pcbank.ca, pranav.maheshwari@pcbank.ca"
+      uat: "radhika.solanki@pcbank.ca, Madhu.Chatterjee@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"
+
+pcb_ops_eda_account_closure_file_generation:
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  filename_prefix: pcb_tsys_pcmc_nmsbm
+  character_set: 'cp037'
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: EDA_ACCOUNT_CLOSURE
+    TRLR:
+      table_name: EDA_ACCOUNT_CLOSURE_TRAILER
+  email:
+    subject: "TSYS Batch Submission Request (Account Closure)"
+    approver: ""
+    description: "Account Closure"
+    batch_type: "Account Closure"
+    purpose: "For EDA - Account Closure"
+    recipients:
+      dev: "daniel.zhao01@pcbank.ca, pranav.maheshwari@pcbank.ca"
+      uat: "radhika.solanki@pcbank.ca, Madhu.Chatterjee@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"

@@ -1,0 +1,1820 @@
+#######################################################
+#The flags below are for dag argument -
+#  - is_paused
+#    - True (= dags are paused / disabled)
+#    - False (= dags are un paused / enabled)
+#######################################################
+
+#######################################################
+# Default settings:
+#######################################################
+
+default:
+  dev: False
+  uat: True
+  prod: True
+
+###########################################################
+# DAGs
+# Once released in prod, we can remove from here and in DAG
+###########################################################
+
+bigquery_loader:
+  dev: False
+  uat: False
+  prod: True
+
+bigquery_batch_loader:
+  dev: False
+  uat: False
+  prod: True
+
+bigquery_csv_loader:
+  dev: False
+  uat: False
+  prod: True
+
+bigquery_view_creator:
+  dev: False
+  uat: False
+  prod: True
+
+ref_transaction_rail:
+  dev: False
+  uat: False
+  prod: False
+
+esso_merchant_processing:
+  dev: False
+  uat: False
+  prod: False
+
+esso_merchant_file_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+TS2_at31_accttx_file:
+  dev: True
+  uat: True
+  prod: True
+
+TS2_at31_accttx_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+ts2_events_full_file_loading:
+  dev: False
+  uat: False
+  prod: False
+
+ts2_events_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+glp_pcl_lcl_merch_list:
+  dev: False
+  uat: False
+  prod: False
+
+glp_pcl_lcl_merch_list_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+esso_merchant_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+padded_esso_merchant_file_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcl_merchant_code_updating_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcl_campaign_merchant_updating_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcoscoresdataset_pco_scores_backup:
+  dev: False
+  uat: False
+  prod: True
+
+pcoscoresdataset_pco_scores_insert:
+  dev: False
+  uat: False
+  prod: True
+
+aml_transaction_feed:
+  dev: False
+  uat: False
+  prod:
+
+tsys_file_loader:
+  dev: False
+  uat: False
+  prod: True
+
+tsys_pcb_mc_acct_hist_file_loading:
+  dev: False
+  uat: False
+  prod: True
+
+tcs_ethoca_chargeback_dispute_loader:
+  dev: False
+  uat: False
+  prod: True
+
+tsys_cheque_order_loader:
+  dev: False
+  uat: True
+  prod: True
+
+tsys_convchq_conf_loader:
+  dev: False
+  uat: True
+  prod: True
+
+tsys_balance_transfer_loader:
+  dev: False
+  uat: True
+  prod: True
+
+ntt_conv_cheque_loader:
+  dev: False
+  uat: True
+  prod: True
+
+ntt_paper_payments_loader:
+  dev: False
+  uat: True
+  prod: True
+
+bigquery_delta_loader:
+  dev: False
+  uat: False
+  prod: True
+
+tsys_rms_file_loader:
+  dev: False
+  uat: True
+  prod: True
+
+mobile_token_initial_segment_part_1_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+mobile_token_initial_segment_part_2_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_profile_initial_segment_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_profile_remaining_segment_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+esso_fuel_transactions_file_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+points_comprehension_daily_esso_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_esso_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_esso_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_esso_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_esso_refund_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_initial_load_esso_purchase_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_esso_refund_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_esso_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_esso_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_esso_refund_pco_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_monthly_esso_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_esso_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_esso_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_esso_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_esso_refund_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_lcl_in_store_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_lcl_in_store_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_lcl_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_joe_fresh_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_lcl_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_joe_fresh_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_lcl_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_lcl_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_initial_load_lcl_in_store_purchase_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_lcl_in_store_refund_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_lcl_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_joe_fresh_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_initial_load_lcl_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_joe_fresh_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_initial_load_lcl_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_lcl_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_monthly_lcl_in_store_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_lcl_in_store_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_lcl_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_joe_fresh_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_lcl_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_joe_fresh_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_lcl_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_lcl_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_in_store_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_in_store_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_in_store_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_in_store_refund_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_online_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_online_refund_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_sdm_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_initial_load_sdm_in_store_purchase_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_in_store_refund_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_in_store_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_in_store_refund_pco_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_online_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_online_refund_pco_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_sdm_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_monthly_sdm_in_store_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_in_store_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_online_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_online_refund_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_in_store_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_in_store_refund_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_online_purchase_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_online_refund_pco_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_sdm_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_other_pcf_offers_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_out_of_network_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_out_of_network_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_initial_load_other_pcf_offers_purchase_bonus:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_out_of_network_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_initial_load_out_of_network_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: True
+
+points_comprehension_monthly_other_pcf_offers_purchase_bonus:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_out_of_network_purchase_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_out_of_network_refund_pcf_base:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_daily_lcl_subscription_pcx_pass:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_initial_load_lcl_subscription_pcx_pass:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_monthly_lcl_subscription_pcx_pass:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_loyalty_points_earned:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_loyalty_points_earned_lifetime:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_loyalty_subscription_usage:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_loyalty_subscription_usage_lifetime:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_loyalty_points_earned_lifetime_data_sync:
+  dev: True
+  uat: True
+  prod: False
+
+points_comprehension_loyalty_subscription_usage_lifetime_data_sync:
+  dev: True
+  uat: True
+  prod: False
+
+tsys_pcb_mc_accttx_file:
+  dev: False
+  uat: False
+  prod: False
+
+tokenized_consent_capture_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+tokenized_consent_bq_to_kafka:
+  dev: False
+  uat: False
+  prod: False
+
+estatement_ready_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_manual_variable_limits_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cnst_detail_db610_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cnst_acct_db610_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cnst_event_db610_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cust_cnst_state_db610_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cnst_acct_cust_id_xref_db610_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cnst_signature_db610_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+sfmc_email_unsubscribe_dns_file_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+sfmc_email_unsubscribe_dns_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+sfmc_email_unsubscribe_dns_processing:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cnst_event_history_db563_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_pcb_mc_acctmaster_monthly_full_file_loading:
+  dev: False
+  uat: True
+  prod: True
+
+pre_purge_report_stats_etl:
+  dev: False
+  uat: False
+  prod: False
+
+terminus_cnst_event_analytics_db053:
+  dev: False
+  uat: False
+  prod: False
+
+cnst_signature_db610_metadata_migration:
+  dev: False
+  uat: False
+  prod: False
+
+cnst_signature_db563_metadata_migration:
+  dev: False
+  uat: False
+  prod: False
+
+doc_generation_processing:
+  dev: False
+  uat: False
+  prod: False
+
+cnst_migration_metadata_update_db610_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+card_embossing_file_loading:
+  dev: False
+  uat: False
+  prod: False
+
+card_embossing_reissue_file_loading:
+  dev: False
+  uat: False
+  prod: False
+
+card_embossing_rush_file_loading:
+  dev: False
+  uat: False
+  prod: False
+
+card_embossing_bq_to_kafka:
+  dev: False
+  uat: False
+  prod: False
+
+consent_signature_tar_extraction:
+  dev: False
+  uat: False
+  prod: False
+
+dnscnst_cnst_event_history_db053_to_pg:
+  dev: False
+  uat: False
+  prod: False
+
+transaction_risk_score_writer_file_status_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0201_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0202_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0211_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0221_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0501_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0999_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+alm_pcb_ref_table_change_monthly_load:
+  dev: False
+  uat: False
+  prod: False
+
+cme01_aau_pch_cli_offers_processing:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0212_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0231_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0232_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0233_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0234_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0235_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0100_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0500_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+instant_issuance_orchestration_bq_to_kafka:
+  dev: False
+  uat: False
+  prod: False
+
+instant_issuance_reconciliation_orchestration:
+  dev: False
+  uat: False
+  prod: False
+
+instant_issuance_reconciliation_rt11:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_acc_master_status_bq_to_kafka:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0236_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0237_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0238_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0239_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0240_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0241_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0401_domain_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0110_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0120_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+embossing_pin_flag_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_customer_level_status_bq_to_kafka:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0121_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0130_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0400_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0211_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0232_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0235_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0234_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0221_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0201_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0152_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0900_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0140_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0800_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0238_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0241_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0233_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0212_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0237_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0600_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0501_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0999_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0236_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0231_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0153_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0202_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0240_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0239_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0242_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0401_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0110_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0100_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0140_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0500_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0900_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+re_idv_request_processing:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0120_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0121_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0800_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0130_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_card_level_status_bq_to_kafka:
+  dev: False
+  uat: False
+  prod: False
+
+product_upgrade_offer_kafka_writer:
+  dev: False
+  uat: False
+  prod: True
+
+product_upgrade_offers_kafka:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_manual_transaction_processing:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_publish_manual_campaign:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_manual_transaction_update_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0201_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0202_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0211_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0221_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0501_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0999_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0212_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0231_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0232_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0233_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0234_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0235_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0152_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0153_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0140_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0238_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0100_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0120_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0235_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0236_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0237_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0239_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0240_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_account_status_migration:
+  dev: False
+  uat: False
+  prod: False
+
+broadridge_doc_generation_recon_processing:
+  dev: False
+  uat: False
+  prod: False
+
+mail_print_status_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0236_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0237_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0238_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0239_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0240_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0241_cots_cdic_loading_job:
+    dev: False
+    uat: False
+    prod: False
+
+pcma_cdic_0242_cots_cdic_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0401_cots_cdic_loading_job:
+    dev: False
+    uat: False
+    prod: False
+
+pcma_cdic_0201_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0202_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0211_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0121_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0501_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0999_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0800_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0900_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_pcb_pcmc_stmt_cgo_file_loading:
+  dev: False
+  uat: False
+  prod: True
+
+tsys_pcb_pcmc_stmt_reg_file_loading:
+  dev: False
+  uat: False
+  prod: True
+
+pcma_cdic_0241_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0242_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0400_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0401_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0500_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0600_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_profile_loststolen_productchange_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0212_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0221_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0231_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0232_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0233_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0234_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_savings_offer_processing:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0130_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_0110_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_orchestrator:
+  dev: False
+  uat: False
+  prod: False
+
+pcb_ops_monsbm_file_generation:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_case_details_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcmc_memo_file_generation:
+  dev: False
+  uat: False
+  prod: False
+
+cli_offer_event_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_case_details_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_case_image_landing_to_processing_job:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_invoke_cloud_function_decompression_job:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_image_metadata_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_image_metadata_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_image_metadata_orchestrator:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_case_details_orchestrator:
+  dev: False
+  uat: False
+  prod: False
+
+pcma_cdic_staging_cleanup_job:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_case_details_kafka_writer_mock:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_image_metadata_kafka_writer_mock:
+  dev: False
+  uat: False
+  prod: False
+
+dmx_letters_processing:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_generate_and_upload_png_mock:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_mock_job:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_case_image_staging_extract_to_tsys_outbound_job:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_tcs_casepurge_images_outbound_cleanup_job:
+  dev: False
+  uat: False
+  prod: False
+
+pcb_idx_stmt_processing_orchestrator:
+  dev: False
+  uat: False
+  prod: False
+
+pcb_idx_stmt_file_processor:
+  dev: False
+  uat: False
+  prod: False
+
+pcb_dgtl_mc_estmtavail_file_generator:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_status_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+sfmc_push_device_contact_file_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+sfmc_push_device_contact_file_to_staging_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+sfmc_push_device_contact_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+sfmc_push_device_contact_orchestrator:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_offer_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_offer_status_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_benefit_expiry_orchestrator:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_benefit_expiry_file_cleanup_job:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_benefit_expiry_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+loyalty_benefit_expiry_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_dataproc_decompression_job:
+  dev: False
+  uat: False
+  prod: False
+
+generic_communication_csv_to_bq_loader:
+  dev: False
+  uat: False
+  prod: False
+
+generic_communications_launcher:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_scoring_prep_mth_acquisition_eq_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_scoring_prep_pcmc_data_depot_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_scoring_prep_prizm_unique_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_scoring_prep_am00_pre_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_extract_job:
+  dev: False
+  uat: False
+  prod: True
+
+c2p_eligibility_report_processing:
+  dev: False
+  uat: False
+  prod: False
+
+generic_communications_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+c2p_privacy_update_notification_orchestrator:
+  dev: False
+  uat: False
+  prod: False
+
+c2p_privacy_update_notification_file_cleanup_job:
+  dev: False
+  uat: False
+  prod: False
+
+c2p_privacy_notification_extract_job:
+  dev: False
+  uat: False
+  prod: False
+
+c2p_privacy_update_notification_file_consolidation_job:
+  dev: False
+  uat: False
+  prod: False
+
+tsys_tcs_casepurge_records_inbound_cleanup_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_scoring_prep_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_model_inference_pmml_scoring_job:
+  dev: False
+  uat: False
+  prod: False
+
+migrate_batch_authorization_log_schema:
+  dev: False
+  uat: False
+  prod: False
+
+eft_funds_in_rt_job:
+  dev: False
+  uat: False
+  prod: False
+
+eft_funds_in_rt_data_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+eft_funds_in_rt_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+c2p_back_book_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_business_approval_log:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_business_rejection_log:
+  dev: False
+  uat: False
+  prod: True
+
+c2p_back_book_piv_kafka_writer:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_scoring_workflow_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_business_rejection_workflow_job:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_trs_t0090_business_approval_workflow_job:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_trs_t0090_file_writer_job:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_index4_t0040_scoring_workflow_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_index4_t0040_business_rejection_workflow_job:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_index4_t0040_business_approval_workflow_job:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_index4_t0040_file_writer_job:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_index4_t0040_extract_job:
+  dev: False
+  uat: False
+  prod: True
+
+all_score_index4_t0040_scoring_prep_loading_job:
+  dev: False
+  uat: False
+  prod: False
+
+tcs_purge_staging_extract_cleanup_job:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_trs_t0090_post_model_inference:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_index4_t0040_post_model_inference:
+  dev: False
+  uat: False
+  prod: False
+
+all_score_index4_t0040_model_inference_pmml_scoring_job:
+  dev: False
+  uat: False
+  prod: False

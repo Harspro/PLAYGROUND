@@ -1,0 +1,38 @@
+loyalty_offer_status_kafka_writer:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P3"
+    sub_capability: "account-management"
+    business_impact: "This loads customers eve loyalty offer status updates into dp-core-{env}-loyalty-offer-fulfillment"
+    customer_impact: "Customers may experience incorrect savings account interest rates/won't receive proper notifications about status changes (fulfilled, expired, or disqualified)."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/loyalty-offer-status/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/loyalty-offer-status/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/loyalty-offer-status/loyalty_offer_status_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/loyalty-offer-status/loyalty_offer_status_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/loyalty-offer-status/loyalty_offer_status_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: loyalty_offer_status_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: loyalty_offer_status_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: accountId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: loyalty_offer_status_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_loyalty_offer_status
+    tags: [ "Digital-Adoption" ]
+    job_size: extra_small
+    dataproc_cluster_name: loyalty-offer-status
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_account_management
+    query_file: digital_adoption/sql/loyalty_offer_status_kafka.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: digital-adoption
+    file_name: loyalty-offer-status

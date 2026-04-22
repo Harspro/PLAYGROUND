@@ -1,0 +1,9 @@
+dag_1:
+  dag:
+    schedule: "@daily"
+  tasks: []
+
+dag_2:
+  dag:
+    schedule: "@daily"
+  tasks: []

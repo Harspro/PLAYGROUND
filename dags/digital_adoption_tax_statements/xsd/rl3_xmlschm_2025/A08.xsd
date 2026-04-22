@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="R08.xsd" />
+	<!-- @@@@ Definition du A08 @@@@           -->
+	<xsd:complexType
+    name="A08Struct">
+		<xsd:complexContent>
+			<xsd:extension
+        base="R08Struct">
+				<xsd:sequence>
+					<xsd:element
+            name="NoReleveDerniereTrans"
+            type="NoReleveType">
+					
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

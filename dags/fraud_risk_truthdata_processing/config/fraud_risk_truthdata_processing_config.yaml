@@ -1,0 +1,34 @@
+fraud_risk_truthdata_kafka_processing:
+  dag:
+    description: "Fraud Risk Truth Data Kafka processing from BigQuery"
+    schedule: null
+    max_active_runs: 1
+    is_paused_upon_creation: true
+    tags: [ "team-growth-and-sales", "fraud_risk_truthdata" ]
+    render_template_as_native_obj: true
+    task_id:
+      kafka_writer_task_id: trigger_kafka_writer_dag
+    dag_id:
+      kafka_trigger_dag_id: fraud_risk_truthdata_kafka_writer
+    query:
+      fraud_risk_truthdata_count: fraud_risk_truthdata_count.sql
+      fraud_risk_truthdata: fraud_risk_truthdata.sql
+      fraud_risk_truthdata_update: fraud_risk_truthdata_update.sql
+    wait_for_completion: true
+    poke_interval: 30
+    bucket: pcb-{env}-staging-extract
+    folder_name: fraud_risk_truthdata
+    file_name: fraud-risk-truthdata-*.parquet
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "Fraud Events from New applications or login will not be send as feedback to TMX"
+    customer_impact: "Customers are not categorized as Fraud from TMX"
+    depends_on_past: false
+    email: []
+    retries: 0
+    email_on_failure: false
+    email_on_retry: false
+    catchup: false

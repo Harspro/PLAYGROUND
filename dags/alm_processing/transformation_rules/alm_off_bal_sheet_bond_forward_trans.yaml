@@ -1,0 +1,24 @@
+transformation:
+  - task_name: trans1_ingest_gcs_bucket_to_bq_tmp
+    task_type: GCS_CSV_TO_BQ
+    task_param:
+      source_file:
+        bucket: tbsm-inbound-pcb-{env}
+        folder: mock_data
+        file_pattern: pcb_tbsm_alm_off_bal_sheet_bond_forward_.*
+        CSV:
+          skip_leading_rows: 0
+          field_delimiter: "\x07"
+          schema_external: 
+            - {"name":"ALL_RECORDS","type":"STRING","mode":"NULLABLE"}
+      bigquery:
+        project_id: pcb-{env}-landing
+        dataset_id: cots_alm_tbsm
+        table_name: OFF_BAL_SHEET_BOND_FORWARD_TMP
+        data_load_type: FULL_REFRESH
+
+  - task_name: trans2_load_bq_tmp_to_bq_main
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/trans2_load_bq_tmp_to_bq_main.sql
+

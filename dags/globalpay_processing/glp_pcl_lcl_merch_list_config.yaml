@@ -1,0 +1,11 @@
+table_id: pcb-{env}-landing.domain_retail.GLOBAL_PAYMENT_MERCHANT
+staging_dataset: domain_retail
+staging_table_id: GLOBAL_PAYMENT_MERCHANT_STAGING
+field_delimiter: '|'
+kafka_cluster_name: glp-pcl-lcl-merch-c
+kafka_trigger_dag_id: glp_pcl_lcl_merch_list_kafka_writer
+read_pause_deploy_config: True
+time_partitioning_field: CREATE_DT
+time_partitioning_type: DAY
+cluster_fields: MERCHANT_UID
+staging_bucket: 'pcb-{env}-staging'

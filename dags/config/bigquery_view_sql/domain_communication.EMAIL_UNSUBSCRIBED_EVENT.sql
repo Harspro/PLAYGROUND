@@ -1,0 +1,10 @@
+SELECT 
+  requestId, 
+  communicationCode, 
+  unsubscribeUuid, 
+  pcfCustomerId, 
+  email, 
+  marketingGroup,
+  INGESTION_TIMESTAMP
+FROM 
+  pcb-{env}-landing.domain_communication.EMAIL_UNSUBSCRIBED_EVENT

@@ -1,0 +1,62 @@
+alm_pcb_tbsm_cc_recv_monthly_load:
+  file:
+    prefix: asset_creditcard_recv
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/pcb_tbsm/cc_recv
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  bq_to_gcs_folder: alm/pcb_tbsm/cc_recv
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: CREDIT_CARD_RECV
+    sql_path: alm_processing/sql/asset_creditcard_recv.sql
+  dag:
+    schedule_interval: '0 7 * * 2-6'
+
+alm_pcb_tbsm_dd_monthly_load:
+  file:
+    prefix: liability_demand_deposit
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/pcb_tbsm/dd_liability
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  bq_to_gcs_folder: alm/pcb_tbsm/dd_liability
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: LIABILITY_DEMAND_DEPOSITS
+    sql_path: alm_processing/sql/liability-demand-deposit.sql
+  dag:
+    schedule_interval: '0 7 * * 2-6'
+
+alm_pcb_tbsm_dd_eve_monthly_load:
+  file:
+    prefix: liability_saving_deposit
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/pcb_tbsm/dd_eve
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  bq_to_gcs_folder: alm/pcb_tbsm/dd_eve
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: LIABILITY_SAVING_DEPOSITS
+    sql_path: alm_processing/sql/liability-saving-deposit.sql
+  dag:
+    schedule_interval: '0 9 * * 2-6'

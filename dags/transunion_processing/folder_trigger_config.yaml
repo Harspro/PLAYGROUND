@@ -1,0 +1,12 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+- folder_name: transunion_inbound
+  filename_pattern: ^tru_pcb_pcmceda_identicate_(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [transunion_pcmceda_identification_data_loading_job]

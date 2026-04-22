@@ -1,0 +1,332 @@
+# Please refer below to a sample validation config.
+#sample:
+#  schedule_interval:
+#    dev: '0 8 * * *'
+#    uat: None
+#    prod: None
+#  dag_id:  example_file_processing_dag_id
+#  vendor: tsys
+#  default_args:
+#    owner: "team-digital-adoption-alerts"
+#    capability: "Account Management - Digital Adoption"
+#    sub_capability: "Statements"
+#    business_impact: "Potential compliance issue due to delay in generating statements"
+#    customer_impact: "Delay in producing latest e-statements"
+
+tsys_pcb_mc_cif_weekly_dag_validator:
+  schedule_interval:
+    dev: '0 9 * * 0'
+    uat: '0 9 * * 0'
+    prod: '0 9 * * 0'
+  dag_id: tsys_pcb_mc_cif_weekly_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: 'TBD'
+    customer_impact: 'TBD'
+    severity: "P3"
+
+tsys_pcb_mc_adm_cif_daily_dag_validator:
+  schedule_interval:
+    dev: '0 11 * * 2-6'
+    uat: '0 11 * * 2-6'
+    prod: '0 9 * * 2-6'
+  dag_id: tsys_pcb_mc_cif_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: 'N/A'
+    business_impact: 'N/A'
+    customer_impact: 'N/A'
+    severity: "P3"
+
+tsys_convchq_conf_dag_validator:
+  schedule_interval:
+    dev: '0 18 * * 1-5'
+    uat: '0 18 * * 1-5'
+    prod: '0 18 * * 1-5'
+  dag_id: tsys_convchq_conf_loader
+  vendor: tsys
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'NSF fee will not be communicated to TSYS for declined transactions'
+    customer_impact: 'Customer will not be charged NSF fee for convenience cheques'
+    severity: 'P3'
+
+tsys_conv_cheque_fee_dag_validator:
+  schedule_interval:
+    dev: '0 18 * * 1-5'
+    uat: '0 18 * * 1-5'
+    prod: '0 18 * * 1-5'
+  dag_id: tsys_conv_cheque_fee_extractor
+  vendor: tsys
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'NSF fee will not be communicated to TSYS for declined transactions'
+    customer_impact: 'Customer will not be charged NSF fee for convenience cheques'
+    severity: 'P3'
+
+ntt_paper_payments_dag_validator:
+  schedule_interval:
+    dev: '0 14 * * 1-5'
+    uat: '0 14 * * 1-5'
+    prod: '0 14 * * 1-5'
+  dag_id: ntt_paper_payments_loader
+  vendor: m1s
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'Paper payments from NTT will not be processed and sent to TSYS'
+    customer_impact: 'Customer payments will not be posted to TSYS'
+    severity: 'P3'
+
+ntt_conv_cheque_dag_validator:
+  schedule_interval:
+    dev: '0 12 * * 1-5'
+    uat: '0 12 * * 1-5'
+    prod: '0 12 * * 1-5'
+  dag_id: ntt_conv_cheque_loader
+  vendor: m1s
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'Convenience cheques from NTT will not be processed and sent to TSYS'
+    customer_impact: 'Customer convenience cheques requests will not be posted to TSYS'
+    severity: 'P3'
+
+ts2_events_full_file_loading_dag_validator:
+  schedule_interval:
+    dev: '0 19 * * 1-5'
+    uat: '0 19 * * 1-5'
+    prod: '30 23 * * 1-5'
+  dag_id: ts2_events_full_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_acct_hist_dag_validator:
+  schedule_interval:
+    dev: '00 20 * * 2-6'
+    uat: '00 20 * * 2-6'
+    prod: '30 00 * * 2-6'
+  dag_id: tsys_pcb_mc_acct_hist_file_loading
+  vendor: tsys
+  hours_delta: 5
+  default_args:
+    owner: 'team-digital-adoption-alerts'
+    capability: 'account-management'
+    sub_capability: 'N/A'
+    business_impact: 'Potential compliance issue due to delay in loading business data'
+    customer_impact: 'Delay in loading business data'
+    severity: 'P3'
+
+tsys_pcb_mc_accttx_dag_validator:
+  schedule_interval:
+    dev: '30 21 * * 1-5'
+    uat: '30 21 * * 1-5'
+    prod: '30 03 * * 2-6'
+  dag_id: tsys_pcb_mc_accttx_file
+  vendor: tsys
+  hours_delta: 5
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "TBD"
+    business_impact: "tsys_pcb_mc_accttx file loading will be impacted"
+    customer_impact: "None"
+    severity: "P3"
+
+tsys_pcb_mc_enroll_dag_validator:
+  schedule_interval:
+    dev: '00 20 * * 1-5'
+    uat: '00 20 * * 1-5'
+    prod: '30 23 * * 1-5'
+  dag_id: tsys_pcb_mc_enroll_full_file_loading
+  vendor: tsys
+  default_args:
+    owner: 'team-digital-adoption-alerts'
+    capability: 'account-management'
+    sub_capability: 'N/A'
+    business_impact: 'Potential compliance issue due to delay in loading business data'
+    customer_impact: 'Delay in loading business data'
+    severity: 'P3'
+
+ts2_cardguard_authlog_dag_validator:
+  schedule_interval:
+    dev: '00 23 * * 2-6'
+    uat: '00 23 * * 2-6'
+    prod: '55 23 * * 2-6'
+  dag_id: ts2_cardguard_authlog_full_file_loading
+  vendor: tsys
+  default_args:
+    owner: 'team-digital-adoption-alerts'
+    capability: 'account-management'
+    sub_capability: 'N/A'
+    business_impact: 'Potential compliance issue due to delay in loading business data'
+    customer_impact: 'Delay in loading business data'
+    severity: 'P3'
+
+tsys_pcb_mc_cusmaster_daily_dag_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '00 22 * * 1-5'
+  dag_id: tsys_pcb_mc_cusmaster_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_acctmaster_daily_dag_validator:
+  schedule_interval:
+    dev: '00 22 * * 1-5'
+    uat: '00 22 * * 1-5'
+    prod: '00 04 * * 2-6'
+  dag_id: tsys_pcb_mc_acctmaster_daily
+  vendor: tsys
+  hours_delta: 8
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_frd_crdg_fraudlog_dag_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '00 11 * * 2-6'
+  dag_id: ts2_cardguard_fraudlog_full_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_frd_crdg_fraudtxn_dag_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '00 11 * * 2-6'
+  dag_id: ts2_cardguard_fraudtxn_full_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ts2_crdg_caselog_dag_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '15 11 * * 2-6'
+  dag_id: ts2_cardguard_caselog_full_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_prdenh_uptd_dag_validator:
+  schedule_interval:
+    dev: '00 20 * * 1-5'
+    uat: '00 20 * * 1-5'
+    prod: '55 11 * * 1-5'
+  dag_id: tsys_pcb_mc_prdenh_uptd_full_file_loading
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+esso_daily_fuel_dag_validator:
+  schedule_interval:
+    dev: '0 14 * * *'
+    uat: '0 14 * * *'
+    prod: '0 14 * * *'
+  dag_id: esso_merchant_processing
+  vendor: esso
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "Rewards"
+    business_impact: "This will impact the loading of ESSO merchants. The merchant list is used to block all ESSO transactions from getting the points."
+    customer_impact: "If ESSO adds a new store and we receive transactions, PC points will be awarded, resulting in the customer receiving additional points."
+
+TS2_at31_accttx_kafka_writer_dag_validator:
+  schedule_interval:
+    dev: '30 15 * * 2-6'
+    uat: '30 15 * * 2-6'
+    prod: '30 15 * * 2-6'
+  dag_id: TS2_at31_accttx_kafka_writer_control_table_update
+  vendor: tsys
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "Rewards"
+    business_impact: "Failure to run this DAG will impact publishing posted transaction events to Kafka"
+    customer_impact: "If DP doesn't receive the posted transaction events, points awarding will be affected"
+
+tsys_pcb_mc_adm_disp_dag_sla_validator:
+  schedule_interval:
+    dev:  '20 7 * * *'
+    uat:  '20 7 * * *'
+    prod: '20 7 * * *'        
+  dag_id: tsys_pcb_mc_adm_disp_file_loading
+  vendor: tsys
+  hours_delta: 7              
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: 'CustomerAcquisition'
+    sub_capability: 'Applications'
+    severity: "P2"
+    business_impact: "SLA miss: tsys_pcb_mc_adm_disp loading not complete by 7:20 AM EST"
+    customer_impact: "None"
+
+loyalty_savings_offer_processing_validator:
+  schedule_interval:
+    dev:  '30 3 * * *'
+    uat:  '30 3 * * *'
+    prod: '30 3 * * *'        
+  dag_id: loyalty_savings_offer_processing
+  vendor: temenos
+  hours_delta: 6              
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: 'account-management'
+    sub_capability: 'account-management'
+    severity: "P3"
+    business_impact: "This DAG identifies the eligible accounts for the eve loyalty/margin rate offer"
+    customer_impact: "Customer will miss out the eve loyalty/margin rate offer for the day"

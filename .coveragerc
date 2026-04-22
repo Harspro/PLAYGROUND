@@ -1,0 +1,22 @@
+[report]
+# show_missing = true # for local test
+skip_covered = True
+skip_empty = True
+precision = 2
+fail_under = 64.95
+exclude_also =
+    pragma: no cover
+    if TYPE_CHECKING:
+    if config_dir is None:
+    from
+    import
+
+[run]
+omit =
+     # omit constants files
+     */constants.py
+     # omit init files
+     */__init__.py
+     #omit yaml and archived files
+     *.yaml
+     *.archive

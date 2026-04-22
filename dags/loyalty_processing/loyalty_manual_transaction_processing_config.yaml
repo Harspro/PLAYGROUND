@@ -1,0 +1,8 @@
+dag_id: "loyalty_manual_transaction_processing"
+merge_control_table_task_id: "trigger_merge_control_table_dag"
+merge_control_table_dag_id: "loyalty_manual_transaction_merge_table_job"
+kafka_writer_task_id: "trigger_manual_transaction_kafka_writer_dag"
+kafka_writer_dag_id: "loyalty_publish_manual_campaign"
+update_table_task_id: "trigger_update_table_dag"
+update_table_dag_id: "loyalty_manual_transaction_update_job"
+

@@ -1,0 +1,1 @@
+update `pcb-{env}-curated.domain_payments.INTERAC_RECON_EXCEPTIONS` set INVALID_IND='Y' where BUSINESS_DATE = CAST(PARSE_DATETIME('%Y-%m-%dT%H:%M:%E*SZ',<<<from_timestamp_goes_here>>>) AS DATE)

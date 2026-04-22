@@ -1,0 +1,8 @@
+techcom_inbound_file_transfer:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    business_impact: 'Business would not be able to transfer file to the Techcom vendor'
+    severity: P2
+  destination_config:
+    destination_bucket_name: portfoliomgmt-inbound-pcb

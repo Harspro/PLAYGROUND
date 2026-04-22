@@ -1,0 +1,36 @@
+embossing_pin_flag_kafka_writer:
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    severity: "P2"
+    sub_capability: "card-management"
+    business_impact: 'This will impact the card management'
+    customer_impact: 'none'
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/pin_flag_enable/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/pin_flag_enable/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/pin_flag_enable/pin_enable_flag_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/pin_flag_enable/pin_enable_flag_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.value.schema.path: pin_enable_flag_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+    pcb.file.kafka.connector.schema.file.path: pin_enable_flag_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_pin_enable_flag
+    read_pause_deploy_config: True
+    job_size: small
+    dataproc_cluster_name: embossing-pin-flag
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_card_management
+    table_id: pin_enable_flag_{current_date}
+    query_file: scms_card_embossing/pin_flag_enable/sql/pin_enable_flag.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: embossing-pin-flag-enable
+    file_name: embossing-pin-flag-enable

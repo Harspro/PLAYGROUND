@@ -1,0 +1,21 @@
+pcb_ops_pcmc_card_expiration_date_update_file_generation:
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  filename_prefix: pcb_tsys_pcmc_nmsbm
+  character_set: 'cp037'
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: PCMC_CARD_EXPIRATION_DATE_UPDATE
+    TRLR:
+      table_name: PCMC_CARD_EXPIRATION_DATE_UPDATE_TRAILER
+  email:
+    subject: "TSYS Batch Submission Request (Card Expiration Date Update)"
+    approver: ""
+    description: "Standard Batch 176 - Card Expiration Date Update"
+    batch_type: "Standard Batch 176 - Card Expiration Date Update"
+    purpose: "For PCMC - Card Expiration Date Update"
+    recipients:
+      dev: "adel.shahin@pcbank.ca"
+      uat: "adel.shahin@pcbank.ca, arumugam.sabapathi1@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"

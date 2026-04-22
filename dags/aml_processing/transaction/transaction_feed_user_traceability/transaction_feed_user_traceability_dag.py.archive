@@ -1,0 +1,89 @@
+from datetime import datetime, timedelta
+from airflow import DAG, settings
+from airflow.operators.empty import EmptyOperator
+from airflow.utils.trigger_rule import TriggerRule
+from airflow.operators.python import PythonOperator
+from aml_processing.transaction.transaction_feed_user_traceability import transaction_feed_user_traceability_tasks as tasks
+from util.miscutils import (
+    read_variable_or_file,
+    read_yamlfile_env
+)
+from aml_processing import feed_commons as commons
+import util.constants as consts
+
+START_DATE = datetime(2022, 1, 1, tzinfo=commons.TORONTO_TZ)
+GCP_CONFIG = read_variable_or_file(consts.GCP_CONFIG)
+TAGS = commons.TAGS
+DAG_NAME = "aml_transaction_feed_user_traceability"
+TBL_CURATED_TRANSACTION_FEED_USER_TRACEABILITY_SCHEMA = f"{settings.DAGS_FOLDER}/aml_processing/transaction/transaction_feed_user_traceability/TRANSACTION_FEED_USER_TRACEABILITY_SCHEMA.json"
+DEPLOY_ENV = GCP_CONFIG[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+
+config_dir = f'{settings.DAGS_FOLDER}/aml_processing/transaction/transaction_feed_user_traceability/{consts.CONFIG}'
+dag_config = read_yamlfile_env(
+    fname=f'{config_dir}/transaction_feed_user_traceability_loading_config.yaml',
+    deploy_env=DEPLOY_ENV)
+FEEDS_LIST = dag_config['feeds_list']
+DESTINATION_BQ_TABLE_WITH_DATASET = f"{dag_config['destination_bq_table_dataset']}.{dag_config['bq_table.name']}"
+TBL_CURATED_TRANSACTION_FEED_USER_TRACEABILITY_PARTITION_COLUMN = dag_config['bq_table.partitioning_column']
+SQL_FILE_PATH = 'aml_processing/transaction/transaction_feed_user_traceability/sql/insert_into_curated_transaction_feed_user_traceability.sql'
+
+tags = commons.TAGS
+tags.append("Transaction")
+docs = f"""This DAG loads AT31 transaction user traceability into {DESTINATION_BQ_TABLE_WITH_DATASET}.
+        """
+
+# Modify the default_args dictionary
+custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+custom_default_args['business_impact'] = 'Posted transactions needed for AML analysis will be missing in Verafin if this process fails'
+custom_default_args['severity'] = 'P2'
+tags.append(custom_default_args['severity'])
+
+with DAG(
+        DAG_NAME,
+        default_args=custom_default_args,
+        description="DAG to load data into the curated transaction feed user traceability table",
+        schedule=None,
+        dagrun_timeout=timedelta(hours=23, minutes=30),
+        catchup=False,
+        start_date=START_DATE,
+        tags=tags,
+        doc_md=docs,
+        max_active_runs=1,
+        is_paused_upon_creation=True
+) as dag:
+    """
+    DAG to load AML Transaction Feed User Traceability.
+
+    This DAG creates and inserts data into the curated transaction feed user traceability table.
+    It processes the AT31 transactions and ensures the data is available for AML analysis in Verafin.
+    """
+
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+
+    create_curated_transaction_feed_user_traceability_table_task = PythonOperator(
+        task_id="create_curated_transaction_feed_table_task",
+        python_callable=tasks.create_curated_transaction_feed_user_traceability_table,
+        op_args=[
+            DESTINATION_BQ_TABLE_WITH_DATASET,
+            TBL_CURATED_TRANSACTION_FEED_USER_TRACEABILITY_SCHEMA,
+            TBL_CURATED_TRANSACTION_FEED_USER_TRACEABILITY_PARTITION_COLUMN
+        ],
+        trigger_rule=TriggerRule.ALL_SUCCESS,
+        dag=dag
+    )
+
+    insert_into_curated_transaction_feed_user_traceability_table_task = PythonOperator(
+        task_id="insert_into_curated_transaction_feed_user_traceability_table_task",
+        python_callable=tasks.insert_into_curated_transaction_feed_user_traceability_table,
+        op_args=[
+            DESTINATION_BQ_TABLE_WITH_DATASET,
+            FEEDS_LIST,
+            SQL_FILE_PATH
+        ],
+        trigger_rule=TriggerRule.ALL_SUCCESS,
+        dag=dag
+    )
+
+    pipeline_end = EmptyOperator(task_id="pipeline_end")
+
+    pipeline_start >> create_curated_transaction_feed_user_traceability_table_task >> insert_into_curated_transaction_feed_user_traceability_table_task >> pipeline_end

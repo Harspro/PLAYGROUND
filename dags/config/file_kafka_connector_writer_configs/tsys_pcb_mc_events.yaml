@@ -1,0 +1,56 @@
+ts2_events_kafka_writer:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "data-movement"
+    business_impact: "This dag loads tsys payment reminder events into DP kafka topic: dp-core-{env}-tsys-event."
+    customer_impact: "In the event of a failure, a courtesy reminder notification of a missed payment will not be sent out."
+    severity: "P4"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_mc_events/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_mc_events/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_mc_events/tsys_pcb_mc_events_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_mc_events/tsys_pcb_mc_events_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_mc_events/tsys_pcb_mc_events_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.aggregation.criteria: "first(EV3_EVENT_OLD_DATA),first(EV3_EVENT_NEW_DATA)"
+    pcb.file.kafka.connector.avro.key.schema.path: tsys_pcb_mc_events_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: tsys_pcb_mc_events_value.avsc
+    pcb.file.kafka.connector.drop.array.source.fields: true
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+      file_path_suffix: _extract/ALL_SEGMENT/*.parquet
+    pcb.file.kafka.connector.filtered.records.criteria: "EV3_EL01_TYPE_EVENT IN ('162','227','972','973','977')"
+    pcb.file.kafka.connector.group.by.fields:
+      - EV3_EL01_TYPE_EVENT
+      - EV3_EL01_JULIAN_DATE
+      - EV3_AM00_ACCOUNT_ID
+      - EV3_EL01_TIME_EVENT
+      - EV3_EL01_TIME_EVNT_UNPCKD
+      - EV3_EL01_CLIENT_NUM
+      - EV3_EL01_CICS_TRANS_CODE
+      - EV3_EL01_OPERATOR_ID
+      - EV3_EL01_CUSTOMER_ID
+      - EV3_EL01_ACCOUNT_NUMBER
+      - EV3_EL01_TRACKING_NUM
+      - EV3_EL01_TSYS_PROD_CODE
+      - EV3_EL01_CLIENT_PROD_CODE
+      - EV3_EL01_PROVIDER_ID
+      - EV3_EL01_CUST_TYPE
+      - EV3_AM00_APP_SUFFIX
+      - FILE_CREATE_DT
+    pcb.file.kafka.connector.kafka.key: accountId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.pivot.field: EV3_EVENT_FIELD_NUM
+    pcb.file.kafka.connector.result.array.field.name: "EVENT_OLD_DATA,EVENT_NEW_DATA"
+    pcb.file.kafka.connector.schema.file.path: tsys_pcb_mc_events_file_schema.avsc
+    pcb.file.kafka.connector.source.array.fields.keyword: "EV3_EVENT_OLD_DATA,EV3_EVENT_NEW_DATA"
+    pcb.file.kafka.connector.transpose.fields.suffix: true
+    pcb.file.kafka.connector.transpose.join.type: inner
+  dag:
+    kafka_writer_task: kafka_writer_ts2_events
+    read_pause_deploy_config: True
+    job_size: large

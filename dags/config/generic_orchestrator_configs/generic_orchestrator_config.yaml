@@ -1,0 +1,971 @@
+pcma_cdic_orchestrator:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC DAG Orchestrator DAG. This DAG will trigger all CDIC DAGs for File Loading, Extraction and Consolidation."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: pcma_domain_cdic_csv_to_bq_loading_dags_group_01
+      description: File loading dags (from CSV files to BigQuery CDIC tables).
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0201_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0202_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0211_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0221_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0501_domain_cdic_loading_job
+    - group_id: pcma_domain_cdic_csv_to_bq_loading_dags_group_02
+      description: File loading dags (from CSV files to BigQuery CDIC tables).
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0999_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0212_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0231_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0232_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0233_domain_cdic_loading_job
+    - group_id: pcma_domain_cdic_csv_to_bq_loading_dags_group_03
+      description: File loading dags (from CSV files to BigQuery CDIC tables).
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0234_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0235_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0236_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0237_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0238_domain_cdic_loading_job
+    - group_id: pcma_domain_cdic_csv_to_bq_loading_dags_group_04
+      description: File loading dags (from CSV files to BigQuery CDIC tables).
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0239_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0240_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0241_domain_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0401_domain_cdic_loading_job
+    - group_id: pcma_cots_cdic_file_loading_dags_group_01
+      description: File loading DAGs for cots domain
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0201_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0202_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0211_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0221_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0501_cots_cdic_loading_job
+    - group_id: pcma_cots_cdic_file_loading_dags_group_02
+      description: File loading DAGs for cots domain
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0999_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0212_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0231_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0232_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0233_cots_cdic_loading_job
+    - group_id: pcma_cots_cdic_file_loading_dags_group_03
+      description: File loading DAGs for cots domain
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0234_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0235_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0236_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0237_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0238_cots_cdic_loading_job
+    - group_id: pcma_cots_cdic_file_loading_dags_group_04
+      description: File loading DAGs for cots domain
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0239_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0240_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0241_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0242_cots_cdic_loading_job
+        - sub_dag_id: pcma_cdic_0401_cots_cdic_loading_job
+    - group_id: pcma_domain_cdic_file_loading_dags_group_01
+      description: File loading dags (from BQ tables to CDIC tables). This will include empty cdic dags, header cdic dags, and the logic ones.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: pcma_cdic_0500_loading_job
+        - sub_dag_id: pcma_cdic_0100_loading_job
+        - sub_dag_id: pcma_cdic_0900_loading_job
+        - sub_dag_id: pcma_cdic_0110_loading_job
+        - sub_dag_id: pcma_cdic_0120_loading_job
+    - group_id: pcma_domain_cdic_file_loading_dags_group_02
+      description: File loading dags (from BQ tables to CDIC tables). This will include empty cdic dags, header cdic dags, and the logic ones.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: pcma_cdic_0121_loading_job
+        - sub_dag_id: pcma_cdic_0130_loading_job
+        - sub_dag_id: pcma_cdic_0800_loading_job
+        - sub_dag_id: pcma_cdic_0140_loading_job
+    - group_id: pcma_cdic_staging_cleanup_group
+      description: Cleanup staging bucket before file extraction to prevent duplicate records
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: pcma_cdic_staging_cleanup_job
+    - group_id: pcma_cdic_file_extraction_dags_group_01
+      description: File Extraction DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0400_extract_job
+        - sub_dag_id: pcma_cdic_0201_extract_job
+        - sub_dag_id: pcma_cdic_0152_extract_job
+        - sub_dag_id: pcma_cdic_0211_extract_job
+        - sub_dag_id: pcma_cdic_0232_extract_job
+    - group_id: pcma_cdic_file_extraction_dags_group_02
+      description: File Extraction DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0235_extract_job
+        - sub_dag_id: pcma_cdic_0221_extract_job
+        - sub_dag_id: pcma_cdic_0234_extract_job
+        - sub_dag_id: pcma_cdic_0233_extract_job
+        - sub_dag_id: pcma_cdic_0212_extract_job
+    - group_id: pcma_cdic_file_extraction_dags_group_03
+      description: File Extraction DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0237_extract_job
+        - sub_dag_id: pcma_cdic_0600_extract_job
+        - sub_dag_id: pcma_cdic_0238_extract_job
+        - sub_dag_id: pcma_cdic_0241_extract_job
+        - sub_dag_id: pcma_cdic_0231_extract_job
+    - group_id: pcma_cdic_file_extraction_dags_group_04
+      description: File Extraction DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0236_extract_job
+        - sub_dag_id: pcma_cdic_0153_extract_job
+        - sub_dag_id: pcma_cdic_0202_extract_job
+        - sub_dag_id: pcma_cdic_0242_extract_job
+        - sub_dag_id: pcma_cdic_0401_extract_job
+    - group_id: pcma_cdic_file_extraction_dags_group_05
+      description: File Extraction DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0501_extract_job
+        - sub_dag_id: pcma_cdic_0999_extract_job
+        - sub_dag_id: pcma_cdic_0110_extract_job
+        - sub_dag_id: pcma_cdic_0240_extract_job
+        - sub_dag_id: pcma_cdic_0239_extract_job
+    - group_id: pcma_cdic_file_extraction_dags_group_06
+      description: File Extraction DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0100_extract_job
+        - sub_dag_id: pcma_cdic_0140_extract_job
+        - sub_dag_id: pcma_cdic_0500_extract_job
+        - sub_dag_id: pcma_cdic_0900_extract_job
+        - sub_dag_id: pcma_cdic_0120_extract_job
+    - group_id: pcma_cdic_file_extraction_dags_group_07
+      description: File Extraction DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0121_extract_job
+        - sub_dag_id: pcma_cdic_0800_extract_job
+        - sub_dag_id: pcma_cdic_0130_extract_job
+    - group_id: pcma_cdic_file_consolidation_dags_group_01
+      description: File Consolidation DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0110_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0238_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0152_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0153_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0140_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+    - group_id: pcma_cdic_file_consolidation_dags_group_02
+      description: File Consolidation DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0100_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0120_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0201_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0202_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0211_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+    - group_id: pcma_cdic_file_consolidation_dags_group_03
+      description: File Consolidation DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0235_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0236_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0237_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0239_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0240_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+    - group_id: pcma_cdic_file_consolidation_dags_group_04
+      description: File Consolidation DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0121_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0501_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0999_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0800_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0900_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+    - group_id: pcma_cdic_file_consolidation_dags_group_05
+      description: File Consolidation DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0241_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0242_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0400_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0401_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0500_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+    - group_id: pcma_cdic_file_consolidation_dags_group_06
+      description: File Consolidation DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0600_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0212_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0221_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0231_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0232_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+    - group_id: pcma_cdic_file_consolidation_dags_group_07
+      description: File Consolidation DAGs for CDIC
+      execution_mode: parallel
+      dags:
+        - sub_dag_id: pcma_cdic_0233_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0234_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        - sub_dag_id: pcma_cdic_0130_file_consolidation_job
+          params:
+            {"date_prefix" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+
+TS2_at31_accttx_kafka_writer_orchestrator:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "NA"
+    severity: "P2"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Pushes Dag completion record in jobControlDataset for TS2_at31_accttx_kafka_writer."
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: accttx_kafka_writer_save_job_to_control_table_dags_group_01
+      description: TS2_at31_accttx_kafka_writer Dag completion record is pushed to jobControlDataset in BQ.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: TS2_at31_accttx_kafka_writer
+          params:
+            {
+              "bucket": "{{ dag_run.conf['bucket'] }}",
+              "cluster_name": "{{ dag_run.conf['cluster_name'] }}",
+              "file_name": "{{ dag_run.conf['file_name'] }}",
+              "folder_name": "{{ dag_run.conf['folder_name'] }}",
+              "name": "{{ dag_run.conf['name'] }}"
+            }
+        - sub_dag_id: TS2_at31_accttx_kafka_writer_control_table_update
+
+returncff_processing_orchestrator:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Account Management - Digital Adoption"
+    sub_capability: "NA"
+    severity: "P2"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Processing ReturnCFF file from Broadridge post file loading"
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: returncff_processing_dags_group_01
+      description: Post processing task to update/insert STMT_CME_FEEDBACK_STAGING, STMT_CME_FEEDBACK and CME_CUSTOMER tables
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: psf_p_dst_pcb_returncff_file_loading
+          params:
+            {
+              "bucket": "{{ dag_run.conf['bucket'] }}",
+              "name": "{{ dag_run.conf['name'] }}",
+              "folder_name": "{{ dag_run.conf['folder_name'] }}",
+              "file_name": "{{ dag_run.conf['file_name'] }}"
+            }
+        - sub_dag_id: returncff_loading_job
+          params:
+            {
+              "file_name": "{{ dag_run.conf['file_name'] }}"
+            }
+        - sub_dag_id: returncff_cme_customer_update_bq_to_oracle
+
+tcs_purge_image_metadata_orchestrator:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance with TCS Purging"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    start_date: "2025-01-01"
+    catchup: false
+    description: " TCS Purge Image Metadata Orchestrator DAG. This DAG will orchestrate TCS Purge pipeline steps including: a) Move case images file to processing zone. b) Decompressed file using Spark GenericUtilityRunner. c) Ingest metadata related to files into GCP BigQuery. d) Publish the metadata records to a Kafka topic."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: tcs_purge_image_metadata_task_group
+      description: TCS Purge Image Metadata Orchestrator DAG.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: tcs_purge_case_image_landing_to_processing_job
+        - sub_dag_id: tcs_purge_staging_extract_cleanup_job
+        - sub_dag_id: tcs_purge_dataproc_decompression_job
+          params:
+            {
+              "name": "{{ dag_run.conf['name'] }}"
+            }
+        - sub_dag_id: tsys_tcs_casepurge_images_outbound_cleanup_job
+        - sub_dag_id: tcs_purge_case_image_staging_extract_to_tsys_outbound_job
+        - sub_dag_id: tcs_purge_image_metadata_loading_job
+          params:
+            {
+              "file_name": "{{ dag_run.conf['file_name'] }}"
+            }
+        - sub_dag_id: tcs_purge_image_metadata_kafka_writer
+
+tcs_purge_case_details_orchestrator:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance with TCS Purging"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TCS purge case detail orchestrator DAG. This DAG will orchestrate TCS Purge pipeline steps including CSV file ingestion to BQ and publish to Kafka topic."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: tcs_purge_case_details_task_group
+      description: TCS purge case detail orchestrator DAG.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: tcs_purge_case_details_loading_job
+          params:
+            {
+              "bucket": "{{ dag_run.conf['bucket'] }}",
+              "name": "{{ dag_run.conf['name'] }}",
+              "folder_name": "{{ dag_run.conf['folder_name'] }}",
+              "file_name": "{{ dag_run.conf['file_name'] }}"
+            }
+        - sub_dag_id: tcs_purge_case_details_kafka_writer
+        - sub_dag_id: tsys_tcs_casepurge_records_inbound_cleanup_job
+
+tcs_purge_mock_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P4"
+    business_impact: "Compliance with TCS Purging"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TCS Purge mock orchestrator DAG. This DAG will orchestrate TCS Purge mock pipeline steps including generation of png as an image file and publishing 5 events to both case and image Kafka topic."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: tcs_purge_mock_task_group
+      description: TCS Purge mock orchestrator DAG.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: tcs_purge_generate_and_upload_png_mock
+        - sub_dag_id: tcs_purge_case_details_kafka_writer_mock
+        - sub_dag_id: tcs_purge_image_metadata_kafka_writer_mock
+
+pcb_idx_stmt_processing_orchestrator:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Digital Adoption- DA"
+    sub_capability: "statement availability file"
+    severity: "P2"
+    business_impact: "pcmc and pcma statement idx file will not be processed and no statement availability file will be generated"
+    customer_impact: "Customers will not be notified for statements availability"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCB Index Statement Processing Orchestrator DAG. This DAG will orchestrate statement processing pipeline steps including CSV file ingestion to BQ and subsequent processing."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: pcb_idx_stmt_processing_task_group
+      description: PCB Index Statement Processing Orchestrator DAG.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: pcb_idx_stmt_file_processor
+          params:
+            {
+              "bucket": "{{ dag_run.conf['bucket'] }}",
+              "name": "{{ dag_run.conf['name'] }}",
+              "folder_name": "{{ dag_run.conf['folder_name'] }}",
+              "file_name": "{{ dag_run.conf['file_name'] }}"
+            }
+        - sub_dag_id: pcb_dgtl_mc_estmtavail_file_generator
+          params:
+            {
+              "file_name": "{{ dag_run.conf['file_name'] }}"
+            }
+
+loyalty_benefit_expiry_orchestrator:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Account Management"
+    sub_capability: "Account Management"
+    severity: "P3"
+    business_impact: "Potential compliance issue"
+    customer_impact: "Customer will miss out the notification regarding the loyalty offer expiry"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    schedule_interval: "00 10 * * *"
+    catchup: false
+    description: "This DAG will orchestrate loyalty benefit expiry notification pipeline."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: loyalty_benefit_expiry_task_group
+      description: Loyalty benefit expiry orchestrator DAG
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: loyalty_benefit_expiry_file_cleanup_job
+        - sub_dag_id: loyalty_benefit_expiry_extract_job
+        - sub_dag_id: loyalty_benefit_expiry_file_consolidation_job
+          params:
+            { "date_prefix": "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}" }
+
+rl3_statement_orchestrator:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "data-movement"
+    business_impact: "This DAG processes T5 data to produce the RL3 tax statement file."
+    customer_impact: "In the event of a failure RL3 tax statement data will not be available."
+    severity: "P2"
+    retries: 0
+    retry_delay: 300
+    params: {
+      "year": ,
+      "noreleve": ,
+      "noreleve_limit": ,
+      "norelevepdf": ,
+      "norelevepdf_limit":
+    }
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "This DAG processes T5 data to produce the RL3 tax statement file."
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: rl3_statement_task_group
+      description: This DAG processes T5 data to produce the RL3 tax statement file.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: rl3_data_processing
+          params:
+            {
+              "year": "{{ dag_run.conf['year'] }}",
+              "noreleve": "{{ dag_run.conf['noreleve'] }}",
+              "norelevepdf": "{{ dag_run.conf['norelevepdf'] }}"
+            }
+        - sub_dag_id: rl3_generate_xml
+          params:
+            {
+              "year": "{{ dag_run.conf['year'] }}",
+              "noreleve_limit": "{{ dag_run.conf['noreleve_limit'] }}",
+              "norelevepdf_limit": "{{ dag_run.conf['norelevepdf_limit'] }}"
+            }
+        - sub_dag_id: rl3_data_landing
+        - sub_dag_id: rl3_statement_kafka_writer
+
+sfmc_push_device_contact_orchestrator:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "push-notification"
+    severity: "P4"
+    business_impact: "This will impact end-to-end processing and delivery of Push Device Contact data from SFMC to downstream systems like DP."
+    customer_impact: "Customer may not receive PUSH notifications and/or their opt-in/-outs will not be recorded by DP."
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-10-01"
+    catchup: false
+    description: "This DAG will orchestrate SFMC Push Device Contact file processing pipeline."
+    tags: [ "communication", "push-notification" ]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: sfmc_push_device_contact_processing_task_group
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: sfmc_push_device_contact_file_loading_job
+          params:
+            {
+              "bucket": "{{ dag_run.conf['bucket'] }}",
+              "file_name": "{{ dag_run.conf['file_name'] }}",
+              "folder_name": "{{ dag_run.conf['folder_name'] }}",
+              "name": "{{ dag_run.conf['name'] }}",
+            }
+        - sub_dag_id: sfmc_push_device_contact_file_to_staging_extract_job
+          params:
+            {
+              "bucket": "{{ dag_run.conf['bucket'] }}",
+              "name": "{{ dag_run.conf['name'] }}",
+            }
+        - sub_dag_id: sfmc_push_device_contact_kafka_writer
+          params:
+            {
+              "bucket": "pcb-{env}-staging",
+              "file_name": "{{ dag_run.conf['file_name'] }}",
+              "folder_name": "{{ dag_run.conf['folder_name'] }}",
+              "name": "{{ dag_run.conf['name'] }}",
+              "cluster_name": "sfmc-push-device-contact-c",
+            }
+
+generic_communications_launcher:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    severity: "P2"
+    business_impact: "Customers will not get notified if the DAG not runs."
+    customer_impact: "Will miss few communications from business."
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-09-25"
+    catchup: false
+    description: "This is the parent DAG, which will get triggerd when new files arrives in the bucket and then series of transformations happens till it publishes to comms kafka topic."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "ALL_SUCCESS"
+  task_groups:
+    - group_id: generic_communication_task_group
+      description: Generic Communication Orchestrator DAG.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: generic_communication_csv_to_bq_loader
+          params:
+            {
+              "bucket": "{{ dag_run.conf['bucket'] }}",
+              "name": "generic_communications/{{ dag_run.conf['file_name'].rsplit('.', 1)[0] }}.csv"
+            }
+        - sub_dag_id: generic_communications_kafka_writer
+          params:
+            {
+              "replacements": { "{file_name}": "{{ dag_run.conf['bucket'] }}/{{ dag_run.conf['name'].rsplit('.', 1)[0] }}.csv" }
+            }
+
+c2p_privacy_update_notification_orchestrator:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Customer Management"
+    sub_capability: "Customer Management"
+    severity: "P3"
+    business_impact: "Potential compliance issue"
+    customer_impact: "Customer will miss out the notification regarding the Click To Pay auto enrollment"
+    retries: 3
+    retry_delay: 300
+    params: {
+      "start_seq_no": ,
+      "end_seq_no":
+    }
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "This DAG will orchestrate Click To Pay privacy update notification pipeline."
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: c2p_privacy_update_task_group
+      description: Click To Pay Privacy Update Notification Orchestrator DAG
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: c2p_privacy_update_notification_file_cleanup_job
+        - sub_dag_id: c2p_privacy_notification_extract_job
+          params:
+            { "start_seq_no": "{{ dag_run.conf['start_seq_no'] }}" ,
+              "end_seq_no": "{{ dag_run.conf['end_seq_no'] }}"
+            }
+        - sub_dag_id: c2p_privacy_update_notification_file_consolidation_job
+          params:
+            { "date_prefix": "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}" }
+
+eft_funds_in_rt_job:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Money Movement"
+    sub_capability: "G-EFT"
+    severity: "P3"
+    business_impact: "This dag loads G_EFT details into DP kafka topic: dp-batch-eft-rt-pull-processed"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "This dag loads G_EFT details into DP kafka topic: dp-batch-eft-rt-pull-processed"
+    tags: [ "team-money-movement-eng", "" ]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: eft_funds_task_group
+      description: G-EFT funds in PCB DAG.
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: eft_funds_in_rt_data_loading_job
+          params:
+            bucket: "{{ dag_run.conf['bucket'] }}"
+            name: "{{ dag_run.conf['name'] }}"
+        - sub_dag_id: eft_funds_in_rt_kafka_writer
+          params:
+            bucket: "{{ dag_run.conf['bucket'] }}"
+            name: "{{ dag_run.conf['name'] }}"
+
+all_score_trs_t0090_scoring_workflow_job:
+  default_args:
+    owner: "team-defender-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P2"
+    business_impact: "Transaction Risk Score (TRS T0090) model will not be executed and status will not be published"
+    customer_impact: "Credit decisioning may be delayed or impacted"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 240
+    start_date: "2025-01-01"
+    schedule_interval: "0 10 * * 1-5"
+    catchup: false
+    description: "TRS T0090 Scoring workflow Orchestrator DAG. This DAG orchestrates the end-to-end Transaction Risk Score workflow including 1)Data preparation and loading, 2) PMML model inference execution, 3) Publishing status to Kafka"
+    tags: ["team-defender-alerts", "P2"]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: trs_t0090_scoring_workflow_task_group
+      description: "TRS T0090 end-to-end scoring workflow execution"
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: all_score_trs_t0090_scoring_prep_loading_job
+          params: {
+            "report_year":  "{{ dag_run.conf.get('report_year', execution_date.in_timezone('America/Toronto').strftime('%Y')) }}",
+            "report_month":  "{{ dag_run.conf.get('report_month', execution_date.in_timezone('America/Toronto').strftime('%m')) }}",
+            "mode": "{{dag_run.conf.get('mode', 'PCMC')}}"
+          }
+        - sub_dag_id: all_score_trs_t0090_model_inference_pmml_scoring_job
+        - sub_dag_id: all_score_trs_t0090_post_model_inference
+        - sub_dag_id: all_score_status_kafka_writer
+          params: {
+            "score_type": "TRS-T90",
+            "file_name": "",
+            "file_status": "PENDING",
+            "all_score_output_table": "OUTPUT_TRS_T0090_LATEST"
+          }
+
+all_score_trs_t0090_business_rejection_workflow_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P2"
+    business_impact: "TRS T0090 model output rejected by business validation, requiring investigation before production use"
+    customer_impact: "Credit decisioning may be delayed while model issues are investigated"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TRS T0090 Business Rejection Workflow. This DAG is triggered when business validation identifies issues with TRS T0090 model output, logging the rejection for audit and investigation purposes."
+    tags: ["team-defender-alerts", "P2"]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: trs_t0090_business_rejection_task_group
+      description: "Log business rejection of TRS T0090 model output"
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: all_score_business_rejection_log
+
+all_score_trs_t0090_business_approval_workflow_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P2"
+    business_impact: "TRS T0090 data extraction, file generation, and publication to downstream systems will not occur"
+    customer_impact: "Credit decisioning will be delayed or impacted"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 300
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TRS T0090 Business Approval Workflow. This DAG orchestrates the end-to-end data extract, file generation, and publication workflow after business validates TRS T0090 model output. Includes: 1) Logging business approval, 2) Extracting scoring data to GCS, 3) Generating TRS output file, 4) Publishing file creation status to Kafka."
+    tags: ["team-defender-alerts", "P2"]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: trs_t0090_business_approval_task_group
+      description: "TRS T0090 business approval, data extract, and file generation workflow"
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: all_score_business_approval_log
+        - sub_dag_id: all_score_trs_t0090_extract_job
+        - sub_dag_id: all_score_trs_t0090_file_writer_job
+        - sub_dag_id: all_score_status_kafka_writer
+          params:
+            {
+              "score_type": "TRS-T90",
+              "file_name": "{{ ti.xcom_pull(dag_id='all_score_trs_t0090_file_writer_job', task_ids='output_file_name', key='return_value', include_prior_dates=True) }}",
+              "file_status": "FILE_CREATED",
+              "all_score_output_table": "OUTPUT_TRS_T0090_LATEST"
+            }
+
+esso_fuel_transaction_processing:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "ESSO"
+    severity: "P2"
+    business_impact: "No Impact"
+    customer_impact: "Customers receive less points than expected"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Updates the inaccurate records in the ESSO_FUEL_TRANSACTION table using the CSV file provided by fiserve."
+    sub_dag_trigger_rule: "all_done"
+  task_groups:
+    - group_id: remove_duplicates_from_esso_transaction_table
+      description: Removing Duplicates From the table
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: domain_loyalty_views
+    - group_id: load_data_from_csv_to_bq
+      description: Laoding the corrected data from csv to temp table
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_1
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_2
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_3
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_4
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_5
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_6
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_7
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_8
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_9
+        - sub_dag_id: esso_fuel_transaction_csv_data_load_10
+    - group_id: update_esso_transaction_table
+      description: Updating the ESSO_FUEL_TRANSACTION table
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: esso_fuel_transaction_update_job
+
+
+all_score_index4_t0040_business_rejection_workflow_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P2"
+    business_impact: "Index4 T0040 model output rejected by business validation, requiring investigation before production use"
+    customer_impact: "Credit decisioning may be delayed while model issues are investigated"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    schedule_interval: null
+    catchup: false
+    description: "Index4 T0040 Business Rejection Workflow. This DAG is triggered when business validation identifies issues with Index4 T0040 model output, logging the rejection for audit and investigation purposes."
+    tags: ["team-defender-alerts", "credit-risk", "scoring", "index4-t0040", "business-validation"]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: index4_t0040_business_rejection_task_group
+      description: Log business rejection of Index4 T0040 model output
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: all_score_business_rejection_log
+
+
+all_score_index4_t0040_business_approval_workflow_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P2"
+    business_impact: "Index4 T0040 data extraction, file generation, and publication to downstream systems will not occur"
+    customer_impact: "Credit decisioning will be delayed or impacted"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 300
+    start_date: "2025-01-01"
+    schedule_interval: null
+    catchup: false
+    description: "Index4 T0040 Business Approval Workflow. This DAG orchestrates the end-to-end data extract, file generation, and publication workflow after business validates Index4 T0040 model output. Includes: 1) Logging business approval, 2) Extracting scoring data to GCS, 3) Generating Index4 T0040 output file, 4) Publishing file creation status to Kafka."
+    tags: ["team-defender-alerts", "credit-risk", "scoring", "index4-t0040", "business-validation", "file-generation"]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: index4_t0040_business_approval_task_group
+      description: Index4 T0040 business approval, data extract, and file generation workflow
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: all_score_business_approval_log
+        - sub_dag_id: all_score_index4_t0040_extract_job
+        - sub_dag_id: all_score_index4_t0040_file_writer_job
+        - sub_dag_id: all_score_status_kafka_writer
+          params:
+            {
+              "score_type": "INDEX4-T40",
+              "file_name": "{{ ti.xcom_pull(dag_id='all_score_index4_t0040_file_writer_job', task_ids='output_file_name', key='return_value', include_prior_dates=True)  }}",
+              "file_status": "FILE_CREATED",
+              "all_score_output_table": "OUTPUT_INDEX4_T0040_LATEST"
+            }
+
+all_score_index4_t0040_scoring_workflow_job:
+  default_args:
+    owner: "team-defender-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P2"
+    business_impact: "Index4 T0040 credit risk scoring model will not be executed and approval status will not be published"
+    customer_impact: "Credit decisioning may be delayed or impacted due to missing Index4 T0040 risk scores"
+    retries: 3
+    retry_delay: 600
+  dag:
+    dagrun_timeout: 900
+    start_date: "2025-01-01"
+    schedule_interval: "0 11 * * 1-5"
+    catchup: false
+    description: "Index4 T0040 Scoring Workflow Orchestrator DAG. This DAG orchestrates the end-to-end Index4 T0040 credit risk scoring workflow including: 1) Data preparation and feature engineering (17 tasks: 16 scoring prep tables + model input transformation), 2) PMML model inference execution, 3) Publishing approval status to Kafka."
+    tags: ["team-defender-alerts", "credit-risk", "scoring", "index4-t0040"]
+    read_pause_deploy_config: True
+    sub_dag_trigger_rule: "all_success"
+  task_groups:
+    - group_id: index4_t0040_scoring_workflow_task_group
+      description: Index4 T0040 end-to-end scoring workflow execution
+      execution_mode: sequential
+      dags:
+        - sub_dag_id: all_score_index4_t0040_scoring_prep_loading_job
+          params:
+            {
+              "report_year": "{{ dag_run.conf.get('report_year', execution_date.in_timezone('America/Toronto').strftime('%Y')) }}",
+              "report_month": "{{ dag_run.conf.get('report_month', execution_date.in_timezone('America/Toronto').strftime('%m')) }}",
+              "score_date" : "{{ dag_run.conf.get('score_date', execution_date.in_timezone('America/Toronto').strftime('%Y-%m-%d')) }}",
+              "mode": "{{dag_run.conf.get('mode', 'PCMC')}}"
+            }
+        - sub_dag_id: all_score_index4_t0040_model_inference_pmml_scoring_job
+        - sub_dag_id: all_score_index4_t0040_post_model_inference
+        - sub_dag_id: all_score_status_kafka_writer
+          params:
+            {
+              "score_type": "INDEX4-T40",
+              "file_name": "",
+              "file_status": "PENDING",
+              "all_score_output_table": "OUTPUT_INDEX4_T0040_LATEST"
+            }

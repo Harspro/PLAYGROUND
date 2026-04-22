@@ -1,0 +1,89 @@
+{
+  "schema": [
+    {
+      "name": "COMPANY_ID",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "COMPANY_NAME",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "MERCHANT_UID",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "MERCHANT_NAME",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "MERCHANT_ID",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "MERCHANT_FULLNAME",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "MERCHANT_ADDRNAME",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "VAL",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "CODE",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "ADDR_1",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "ADDR_2",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "CITY",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "PROVINCE",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "POSTALCODE",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "CD",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "CREATE_DT",
+      "type": "DATE",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "UPDATE_DT",
+      "type": "DATE",
+      "mode": "NULLABLE"
+    }
+  ]
+}

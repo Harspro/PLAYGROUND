@@ -1,0 +1,44 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+- folder_name: pcb_ops_pcmc_account_closure
+  filename_pattern: ^pcb_ops_pcmc_account_closure_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ pcb_ops_pcmc_account_closure_file_generation ]
+
+- folder_name: pcb_ops_eda_account_closure
+  filename_pattern: ^pcb_ops_eda_account_closure_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcb_ops_eda_account_closure_file_generation]
+
+- folder_name: pcb_ops_pcmc_memo
+  filename_pattern: ^pcb_ops_pcmc_memo_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcmc_memo_file_generation]
+
+- folder_name: pcb_ops_pcmc_monsbm
+  filename_pattern: ^pcb_ops_pcmc_monsbm_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcb_ops_monsbm_file_generation]
+
+- folder_name: pcb_ops_eda_monsbm
+  filename_pattern: ^pcb_ops_eda_monsbm_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcb_ops_monsbm_file_generation]
+
+- folder_name: pcb_ops_pcmc_payment_hierarchy_update
+  filename_pattern: ^pcb_ops_pcmc_payment_hierarchy_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcb_ops_pcmc_payment_hierarchy_update_file_generation]
+
+- folder_name: pcb_ops_pcmc_tw40_start_date_update
+  filename_pattern: ^pcb_ops_pcmc_tw40_start_date_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcb_ops_pcmc_tw40_start_date_update_file_generation]
+
+- folder_name: pcb_ops_pcmc_card_expiration_date_update
+  filename_pattern: ^pcb_ops_pcmc_card_expiration_date_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcb_ops_pcmc_card_expiration_date_update_file_generation]
+
+- folder_name: pcb_ops_pcmc_product_change_downgrade
+  filename_pattern: ^pcb_ops_pcmc_insiders_we_downgrade_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [pcb_ops_pcmc_job_product_change_downgrade]

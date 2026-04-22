@@ -1,0 +1,28 @@
+spark_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/purging-spark-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/purging-spark-batch/application.yaml
+  main_class: com.pcb.batch.spark.purging.PurgingSparkBatchApplication
+  properties:
+    spark.driver.extraJavaOptions: "-Duser.timezone=America/Toronto"
+    spark.executor.extraJavaOptions: "-Duser.timezone=America/Toronto"
+    spark.sql.broadcastTimeout: "1200"
+    spark.sql.autoBroadcastJoinThreshold: "-1"
+    spark.databricks.adaptive.autoBroadcastJoinThreshold: "-1"
+
+args:
+  cutoff_date: 20190930
+  adm_gcp_source : 'N'
+  repartition_count : 100
+
+# GCS to OCI file transfer configuration
+file_transfer:
+  gcs_source_bucket: pcb-{env}-staging-extract
+  gcs_source_path: purging/
+  files_to_transfer:
+    - adm_purge_list.csv
+    - experian_purge_list.csv
+    - eapps_purge_list.csv
+  folders_to_transfer:
+    - delete_procedure

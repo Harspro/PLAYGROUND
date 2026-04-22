@@ -1,0 +1,33 @@
+EXPORT DATA
+  OPTIONS (
+    uri = 'gs://pcb-{env}-staging-extract/loyalty-manual-campaign/publish-manual-campaign-transactions-*.parquet',
+    format = 'PARQUET',
+    overwrite = true
+  )
+AS
+(
+  SELECT
+      TSYS_ACCOUNT_ID,
+      CARD_NUMBER,
+      CAST (CARD_BIN AS STRING) CARD_BIN ,
+      CAST (CARD_LAST4 AS STRING) CARD_LAST4,
+      SOURCE_CD,
+      CAST (TRANSACTION_DATE AS STRING) TRANSACTION_DATE,
+      CAST (TRANSACTION_CODE AS STRING) TRANSACTION_CODE,
+      CAST (TRANSACTION_AMOUNT AS STRING) TRANSACTION_AMOUNT,
+      CAST (POST_DATE AS STRING) POST_DATE,
+      MERCHANT_NAME,
+      MERCHANT_NUMBER,
+      MERCHANT_CATEGORY_CODE,
+      MERCHANT_COUNTRY_CODE,
+      TRANSACTION_REF_NUMBER,
+      PROMO_CODE,
+      PROCESS_FLAG,
+      PCF_PRD,
+      TRANS_REF_ID,
+      REC_CHNG_ID
+ FROM `pcb-{env}-curated.domain_loyalty.LOYALTY_MANUAL_TRANSACTIONS`
+ WHERE CONSUMED_TIME IS NULL
+)
+;
+

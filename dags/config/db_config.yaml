@@ -1,0 +1,216 @@
+# Oracle DB config defaults
+db610:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-loyalty-db610-pcl.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-loyalty-db610-pcl.conf
+
+db303:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db303.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-pds-db303.conf
+
+db053:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db053.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-pds-db053.conf
+
+db053_ogres:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-ogres-db053.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-ogres-db053.conf
+
+db303_ctt_idl:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-ctt-idl-db303.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-ctt-idl-db303.conf
+
+db303_ogres:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-ogres-db303.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-ogres-db303.conf
+
+db303_statement_index:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-statement-index-db303.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-statement-index-db303.conf
+
+ccdr_ctt_idl:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-ctt-idl-ccdr.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-ctt-idl-ccdr.conf
+
+ods:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-pds-ods.conf
+
+db563:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db563.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-pds-db563.conf
+
+db053_money_movement:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-mm-db053.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-mm-db053.conf
+
+db053_biquery:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-biquery-db053.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-biquery-db053.conf
+
+db610_gs:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-db610.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-gs-db610.conf
+
+db563_gs:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-db563.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-gs-db563.conf
+
+db563_ogres:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-ogres-db563.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-ogres-db563.conf
+
+db610_pds:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-pds-db610.conf
+
+db610_ogres:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-ogres-db610.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-ogres-db610.conf
+
+ods_cdic:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-cdic-ods.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-cdic-ods.conf
+
+db724_tml:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-vortex-db724.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-vortex-db724.conf
+
+db732:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-stmt-db732.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-stmt-db732.conf
+
+db303_bods:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-bods-db303.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-bods-db303.conf
+
+db909_ogres:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-ogres-db909.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-ogres-db909.conf
+
+db303_stmt:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-stmt-db303.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-stmt-db303.conf
+
+ods_da:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-da-ods.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-da-ods.conf

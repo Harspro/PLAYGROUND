@@ -1,0 +1,21 @@
+pcb_ops_pcmc_payment_hierarchy_update_file_generation:
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  filename_prefix: pcb_tsys_pcmc_nmsbm
+  character_set: 'cp037'
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: PCMC_PAYMENT_HIERARCHY_UPDATE
+    TRLR:
+      table_name: PCMC_PAYMENT_HIERARCHY_UPDATE_TRAILER
+  email:
+    subject: "TSYS Batch Submission Request (Payment Hierarchy Update)"
+    approver: ""
+    description: "Standard Batch 231 - Payment Hierarchy Update"
+    batch_type: "Standard Batch 231 - Payment Hierarchy Update"
+    purpose: "For PCMC - Payment Hierarchy Update"
+    recipients:
+      dev: "daniel.zhao01@pcbank.ca, ayush.barnawal@pcbank.ca"
+      uat: "radhika.solanki@pcbank.ca, suganya.chinnusamy@pcbank.ca, chandra.katherashala@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"

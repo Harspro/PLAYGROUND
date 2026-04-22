@@ -1,0 +1,20 @@
+MERGE
+  `pcb-{env}-landing.domain_marketing.STMT_FEEDBACK_STAGING` AS t
+USING
+  (
+  SELECT
+    DISTINCT SEQ_NUM,
+    ACCOUNT_ID,
+    CUSTOMER_ID,
+    CUSTOMER_UPDATE_ID
+  FROM
+    `pcb-{env}-processing.domain_customer_management.STMT_CME_FEEDBACK_Y` ) AS s
+ON
+  t.ACCOUNT_ID = s.ACCOUNT_ID
+  AND t.CUSTOMER_ID = s.CUSTOMER_ID
+  AND t.SEQ_NUM = s.SEQ_NUM
+  WHEN MATCHED
+  THEN
+UPDATE
+SET
+  CUSTOMER_UPDATE_ID = s.CUSTOMER_UPDATE_ID

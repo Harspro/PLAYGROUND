@@ -1,0 +1,21 @@
+bigquery_test_dag:
+  default_args:
+    owner: "test-owner"
+    capability: "Test Capability"
+    sub_capability: "Test SubCapability"
+    severity: "P3"
+    business_impact: "Test Business Impact"
+    customer_impact: "Test Customer Impact"
+    retries: 2
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    schedule_interval:
+    description: "Test DAG description"
+    tags: ["BigQueryTest"]
+  bigquery_tasks:
+    - task_id: "test_task_missing_query"
+      project_id: pcb-test-processing
+      dataset_id: domain_test
+      table_id: TEST_TABLE
+      env_specific_replacements: False

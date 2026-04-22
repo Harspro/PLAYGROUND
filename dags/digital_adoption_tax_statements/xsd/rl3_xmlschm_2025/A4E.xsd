@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Ministère du Revenu (MINISTERE DU REVENU DU QUEBEC) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="R4E.xsd" />
+	<!-- @@@@ Definition du A4E @@@@           -->
+	<xsd:complexType
+    name="A4EStruct">
+		<xsd:complexContent>
+			<xsd:extension
+        base="R4EStruct">
+				<xsd:sequence>
+					<xsd:element
+            name="NoReleveDerniereTrans"
+            type="NoReleveType">
+						
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,1160 @@
+ods_notification_req_param_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_NOTIF.NOTIFICATION_REQ_PARAM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: NOTIFICATION_REQ_PARAM
+  dag:
+    schedule_interval: '00 06 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "NA"
+    business_impact: "Notification reporting (legacy data source)"
+    customer_impact: "None"
+    severity: "P4"
+
+ods_product_application_event_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_AUDIT.PRODUCT_APPLICATION_EVENT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: OCCURRED_ON
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PRODUCT_APPLICATION_EVENT
+  dag:
+    schedule_interval: '00 06 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_notification_req_event_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_NOTIF.NOTIFICATION_REQ_EVENT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: NOTIFICATION_REQ_EVENT
+  dag:
+    schedule_interval: '00 06 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "NA"
+    business_impact: "Notification reporting (legacy data source)"
+    customer_impact: "None"
+    severity: "P4"
+
+ods_notification_req_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_NOTIF.NOTIFICATION_REQUEST
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: NOTIFICATION_REQUEST
+  dag:
+    schedule_interval: '00 06 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "NA"
+    business_impact: "Notification reporting (legacy data source)"
+    customer_impact: "None"
+    severity: "P4"
+
+ods_idv_event_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: IDVMGMT.IDV_EVENT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: OCCURRED_ON
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: IDV_EVENT
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: '00 06 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_idv_document_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: IDVMGMT.IDV_DOCUMENT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: IDV_DOCUMENT
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: '00 06 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+adm_inst_card_info_am_run_delta:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_INST_CARD_INFO
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_INST_CARD_INFO
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  batch:
+    time_from: '21:00:00'
+    time_to: '09:00:00'
+  dag:
+    schedule_interval: '05 09 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "customer-acquisition"
+    business_impact: "Inaccurate business and application consent analytics where ADM_INST_CARD_INFO is used (e.g. consent scripts, any reports built on that data)."
+    customer_impact: "Incorrect or missing instant card issuance reconciliation and card replacement requests, with direct impact on customer card instant issuance for SCMS"
+    severity: "P3"
+
+adm_inst_card_info_pm_run_delta:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_INST_CARD_INFO
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_INST_CARD_INFO
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  batch:
+    time_from: '09:00:00'
+    time_to: '13:00:00'
+  dag:
+    schedule_interval: '05 13 * * *'
+    same_day_run: True
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "customer-acquisition"
+    business_impact: "Inaccurate business and application consent analytics where ADM_INST_CARD_INFO is used (e.g. consent scripts, any reports built on that data)."
+    customer_impact: "Incorrect or missing instant card issuance reconciliation and card replacement requests, with direct impact on customer card instant issuance for SCMS"
+    severity: "P3"
+
+adm_inst_card_info_pre_ii_recon_delta:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_INST_CARD_INFO
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_INST_CARD_INFO
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  batch:
+    time_from: '13:00:00'
+    time_to: '21:00:00'
+  trigger_config:
+    trigger_dag_id: instant_issuance_reconciliation_rt11
+    wait_for_completion: False
+  dag:
+    schedule_interval: '05 21 * * *'
+    same_day_run: True
+  default_args:
+    owner: "gremlins"
+    capability: "Account Management - Digital Adoption"
+    sub_capability: "Applications"
+    business_impact: "This will impact instant card issuance for SCMS"
+    customer_impact: "Customer card instant issuance"
+    severity: "P3"
+
+statement_index_table_delta:
+  fetch_spark_job:
+    dbname: db303_statement_index
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCB.PCMC_STMT_INDEX
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: STATEMENT_DATE
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: PCMC_STMT_INDEX
+  dag:
+    schedule_interval: '05 13 * * *'
+    same_day_run: True
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statement"
+    business_impact: "Potential compliance issue due to delay in generating statements"
+    customer_impact: "Delay in producing latest e-statements"
+    severity: "P3"
+
+tsys_generalledger_table_delta:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.GENERALLEDGER
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ledger
+    table_name: GENERALLEDGER
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    time_from: '07:30:00'
+    time_to: '07:30:00'
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "ledger"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+tsys_portfolio_data_table_delta:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.PORTFOLIO_DATA
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ledger
+    table_name: PORTFOLIO_DATA
+    clustering_fields:
+      - REPT_ID
+      - SORT_KEY
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    time_from: '07:30:00'
+    time_to: '07:30:00'
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "ledger"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+ods_cardinal_acct_cust_pref_param_history_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCT_CUST_PREF_PARAM_HISTORY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: ACTION_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCT_CUST_PREF_PARAM_HISTORY
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '40 08 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_eft_extacct_link_req_stat_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EFT_EXTACCT_LINK_REQ_STAT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: EFT_EXTACCT_LINK_REQ_STAT
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '15 8 * * *'
+
+ods_eft_fulfillment_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EFT_FULFILLMENT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: EFT_FULFILLMENT
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '15 8 * * *'
+
+ods_cardinal_interac_recv_xfer_req_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.INTERAC_RECV_XFER_REQ
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: INTERAC_RECV_XFER_REQ
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '20 8 * * *'
+
+ods_cardinal_notif_notification_account_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_NOTIF.NOTIFICATION_ACCOUNT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: NOTIFICATION_ACCOUNT
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P4"
+    sub_capability: "NA"
+    business_impact: "Notification reporting (legacy data source)"
+    customer_impact: "None"
+
+ods_cardinal_notif_notification_customer_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_NOTIF.NOTIFICATION_CUSTOMER
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: NOTIFICATION_CUSTOMER
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '15 8 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P4"
+    sub_capability: "NA"
+    business_impact: "Notification reporting (legacy data source)"
+    customer_impact: "None"
+
+ods_cardinal_customer_history_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_HISTORY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: ACTION_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_HISTORY
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '40 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_contact_history_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CONTACT_HISTORY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: ACTION_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: CONTACT_HISTORY
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '20 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_address_contact_history_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ADDRESS_CONTACT_HISTORY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: ACTION_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: ADDRESS_CONTACT_HISTORY
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '20 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_phone_contact_history_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PHONE_CONTACT_HISTORY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: ACTION_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: PHONE_CONTACT_HISTORY
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '20 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_email_contact_history_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EMAIL_CONTACT_HISTORY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: ACTION_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: EMAIL_CONTACT_HISTORY
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_fundsmove_schedule_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.FUNDSMOVE_SCHEDULE
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: FUNDSMOVE_SCHEDULE
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+ods_cardinal_billpay_instruction_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.BILLPAY_INSTRUCTION
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: BILLPAY_INSTRUCTION
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+ods_cardinal_customer_employment_history_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_EMPLOYMENT_HISTORY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: ACTION_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_EMPLOYMENT_HISTORY
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '45 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_movemoney_inst_account_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.MOVEMONEY_INST_ACCOUNT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: MOVEMONEY_INST_ACCOUNT
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+ods_cardinal_publication_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PUBLICATION
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_technical
+    table_name: PUBLICATION
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: "P3"
+    business_impact: "Delay in loading Data to create Business report"
+
+
+db053_ts2_cardguard_fraudflag_table_delta:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.CARDGUARD_FRAUDFLAG
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_fraud
+    table_name: CARDGUARD_FRAUDFLAG
+    clustering_fields:
+      - ACCOUNT_NUMBER
+      - TRANSACTION_DATE
+      - MESSAGE_TYPE
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    business_impact: "Potential compliance issue due to increased risk of undetected fraud"
+    severity: 'P2'
+
+db053_ts2_post_mon_table_delta:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.POST_MON
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: POST_MON
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+      - LOAD_RESULT_UUID
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Business reports may not be generated"
+    customer_impact: "N/A"
+    severity: "P3"
+
+db563_pcmc_pcmc_registration_table_delta:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.PCMC_REGISTRATION
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PCMC_REGISTRATION
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '35 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+db610_pcl_pcf_points_tx_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCL.PCF_POINTS_TX
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PCF_POINTS_TX
+    clustering_fields:
+      - PCF_SERV_CD
+      - TRANS_TMS
+      - LYLTY_CAMPAIGN_ID
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '40 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_lylty_que_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCL.LYLTY_QUE
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: LYLTY_QUE
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '40 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_pcf_card_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCL.PCF_CARD
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PCF_CARD
+    add_columns:
+      - '`HASH` AS HASH_VALUE'
+    drop_columns:
+      - HASH
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '40 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_pcf_cust_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCL.PCF_CUST
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PCF_CUST
+  batch:
+    time_from: '18:00:00'
+    time_to: '18:00:00'
+  dag:
+    schedule_interval: '05 18 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db053_ts2_operator_inquiry_table_delta:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.OPERATOR_INQUIRY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: OPERATOR_INQUIRY
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '30 7 * * 2-6'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+ods_applmgmt_applicant_detail_address_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICANT_DETAIL_ADDRESS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICANT_DETAIL_ADDRESS
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_cardinal_product_application_req_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PRODUCT_APPLICATION_REQ
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PRODUCT_APPLICATION_REQ
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '50 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_cardinal_ffm_monetary_auth_req_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.FFM_MONETARY_AUTH_REQ
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_fraud
+    table_name: FFM_MONETARY_AUTH_REQ
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '50 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+ods_applmgmt_application_product_role_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_PRODUCT_ROLE
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_PRODUCT_ROLE
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '45 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_cardinal_ffm_monetary_auth_req_stat_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.FFM_MONETARY_AUTH_REQ_STAT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_fraud
+    table_name: FFM_MONETARY_AUTH_REQ_STAT
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '45 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+ods_applmgmt_applicant_detail_email_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICANT_DETAIL_EMAIL
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICANT_DETAIL_EMAIL
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '55 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_applmgmt_applicant_detail_phone_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICANT_DETAIL_PHONE
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICANT_DETAIL_PHONE
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '55 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_cardinal_audit_activity_log_event_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_AUDIT.ACTIVITY_LOG_EVENT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_audit
+    table_name: ACTIVITY_LOG_EVENT
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '50 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+ods_cardinal_interac_incoming_xfer_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.INTERAC_INCOMING_XFER
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: INTERAC_INCOMING_XFER
+  batch:
+    time_from: '07:00:00'
+    time_to: '07:00:00'
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"

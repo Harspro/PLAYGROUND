@@ -1,0 +1,7 @@
+# finished dags have been archived
+bq_terraform_table_audit_management_dag:
+  audit_table: pcb-{env}-landing.domain_technical.BIGQUERY_TABLE_MANAGEMENT_AUDIT
+  project_id: pcb-{env}-landing
+  table_name:
+    - pcb-{env}-landing.domain_account_management.ACCOUNT
+    - pcb-{env}-landing.cots_hr.NEW_HIRE

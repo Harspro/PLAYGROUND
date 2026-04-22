@@ -1,0 +1,109 @@
+-- Aggregation logic for Daily LCL In Store Refund Bonus.
+CREATE OR REPLACE TABLE
+  `{staging_table_id}`
+OPTIONS (
+  expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 14 DAY)
+) AS
+SELECT
+SAFE_CAST(ee_id.value AS STRING) AS pcf_customer_id,
+SAFE_CAST(EXTRACT(YEAR FROM cnsld_latest.wallettransaction_trans_dt) AS INTEGER) AS tx_year,
+SAFE_CAST(EXTRACT(MONTH FROM cnsld_latest.wallettransaction_trans_dt) AS INTEGER) AS tx_month,
+SAFE_CAST(LEFT(ee_payment.masked_card_number, 6) AS INTEGER) AS card_bin,
+'LCL' AS loyalty_partner,
+'BN' AS earning_category,
+'REFUND' AS transaction_type,
+'IN_STORE' AS purchase_method,
+SAFE_CAST((SUM(cnsld_latest.value) * -1) AS INTEGER) AS points_earned,
+CURRENT_DATETIME() AS create_dt,
+'DAILY_LCL_IN_STORE_BONUS' AS create_user_id,
+CURRENT_DATETIME() AS update_dt,
+'DAILY_LCL_IN_STORE_BONUS' AS update_user_id
+FROM `lt-dih-bq-analytics-prd.DIH_CORE.cnsld_ee_wallt_acct_tran_latst` cnsld_latest
+INNER JOIN (
+  SELECT
+  ee_identity_subset.identity_id,
+  ee_identity_subset.business_effective_ts,
+  ee_identity_subset.identity_state,
+  ee_identity_subset.identity_status,
+  ee_identity_subset.wallet_id,
+  ee_identity_subset.identity_type,
+  ee_identity_subset.value
+  FROM (
+    SELECT
+      *,
+      ROW_NUMBER() OVER (PARTITION BY identity_id ORDER BY business_effective_ts DESC, create_ts DESC, event_header_ees_event_id DESC) AS RANK_
+    FROM
+      `lt-dih-bq-analytics-prd.DIH_CORE.ee_identity`
+    WHERE
+      event_header_client_id NOT LIKE 'eestesting%'
+      AND LOWER(identity_type) = 'cif'
+      AND LOWER(identity_status) = 'active'
+      AND business_effective_date >= DATE(2000,01,01)
+    ) ee_identity_subset
+  WHERE
+  ee_identity_subset.RANK_ = 1
+) ee_id ON cnsld_latest.wallettransaction_walletid=ee_id.wallet_id
+INNER JOIN `lt-dih-bq-analytics-prd.DIH_CORE.ee_wallet_transaction_payment` ee_payment ON
+  cnsld_latest.wallettransaction_parentwallettransactionid = ee_payment.wallettransactionid
+  AND ABS(TIMESTAMP_DIFF(CAST(SUBSTR(cnsld_latest.wallettransaction_business_effective_ts, 1, 19) AS TIMESTAMP), CAST(SUBSTR(ee_payment.business_effective_ts, 1, 19) AS TIMESTAMP), SECOND)) <= 1
+WHERE cnsld_latest.trans_dt >= DATE_TRUNC(CURRENT_DATE(), MONTH)
+AND cnsld_latest.trans_dt <= CURRENT_DATE()
+AND ee_payment.trans_dt >= DATE_TRUNC(CURRENT_DATE(), MONTH)
+AND ee_payment.trans_dt <= CURRENT_DATE()
+AND LOWER(cnsld_latest.wallettransaction_status) = 'settled'
+AND LOWER(cnsld_latest.wallettransaction_type) = 'return'
+AND LOWER(cnsld_latest.accounttransactiondetailsentity_accounttype) = 'points'
+AND LOWER(cnsld_latest.wallettransaction_location_storeparentid) = 'lcl'
+AND LOWER(cnsld_latest.event) = 'debit'
+AND LEFT(ee_payment.masked_card_number, 6) = '516179'
+AND LOWER(ee_payment.payment_type) = 'creditcard'
+GROUP BY pcf_customer_id, tx_year, tx_month, card_bin
+HAVING points_earned <= -1;
+
+-- Load staging table into landing zone table.
+MERGE `pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED` T
+USING `{staging_table_id}` S
+ON T.PCF_CUSTOMER_ID = S.PCF_CUSTOMER_ID
+AND T.TX_YEAR = S.TX_YEAR
+AND T.TX_MONTH = S.TX_MONTH
+AND T.CARD_BIN = S.CARD_BIN
+AND T.LOYALTY_PARTNER = S.LOYALTY_PARTNER
+AND T.EARNING_CATEGORY = S.EARNING_CATEGORY
+AND T.TRANSACTION_TYPE = S.TRANSACTION_TYPE
+AND T.PURCHASE_METHOD = S.PURCHASE_METHOD
+WHEN MATCHED AND S.POINTS_EARNED < T.POINTS_EARNED THEN
+  UPDATE SET
+  T.POINTS_EARNED = S.POINTS_EARNED,
+  T.UPDATE_DT = S.UPDATE_DT,
+  T.UPDATE_USER_ID = S.UPDATE_USER_ID
+WHEN NOT MATCHED THEN
+  INSERT (
+    PCF_CUSTOMER_ID,
+    TX_YEAR,
+    TX_MONTH,
+    CARD_BIN,
+    LOYALTY_PARTNER,
+    EARNING_CATEGORY,
+    TRANSACTION_TYPE,
+    PURCHASE_METHOD,
+    POINTS_EARNED,
+    CREATE_DT,
+    CREATE_USER_ID,
+    UPDATE_DT,
+    UPDATE_USER_ID
+  )
+  VALUES (
+    S.PCF_CUSTOMER_ID,
+    S.TX_YEAR,
+    S.TX_MONTH,
+    S.CARD_BIN,
+    S.LOYALTY_PARTNER,
+    S.EARNING_CATEGORY,
+    S.TRANSACTION_TYPE,
+    S.PURCHASE_METHOD,
+    S.POINTS_EARNED,
+    S.CREATE_DT,
+    S.CREATE_USER_ID,
+    S.UPDATE_DT,
+    S.UPDATE_USER_ID
+  );

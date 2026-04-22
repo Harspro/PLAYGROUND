@@ -1,0 +1,21 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+
+- folder_name: sfmc-email-unsubscribe-dns
+  filename_pattern: ^slsfrc_pcb_alerts_email-unsub_(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [sfmc_email_unsubscribe_dns_processing]
+
+- folder_name: sfmc-push-device-contact
+  filename_pattern: ^slsfrc_pcb_alerts_push-device_(?!.*\.(gz|pgp)$).*$ # supports _delta_ and _full_ feed
+  dags_to_trigger: [ sfmc_push_device_contact_orchestrator ]
+
+- folder_name: slsfrc_pcb_pds
+  filename_pattern: ^slsfrc_pcb_pds_[a-z0-9_]{3,40}_\d{14}.*$
+  dags_to_trigger: [salesforce_inbound_file_transfer]

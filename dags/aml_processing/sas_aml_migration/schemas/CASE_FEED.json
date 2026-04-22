@@ -1,0 +1,98 @@
+[
+  {
+    "name": "CASE_FILE_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "CASE_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "STATUS",
+    "type": "STRING"
+  },
+  {
+    "name": "CASE_TYPE",
+    "type": "STRING"
+  },
+  {
+    "name": "CASE_SUB_TYPE",
+    "type": "STRING"
+  },
+  {
+    "name": "OPEN_DATE",
+    "type": "DATE"
+  },
+  {
+    "name": "CLOSE_DATE",
+    "type": "DATE"
+  },
+  {
+    "name": "RESOLVED_DATE",
+    "type": "DATE"
+  },
+  {
+    "name": "EXPIRY_DATE",
+    "type": "DATE"
+  },
+  {
+    "name": "REVIEW_DATE",
+    "type": "DATE"
+  },
+  {
+    "name": "DISPUTE_OPEN_DATE",
+    "type": "DATE"
+  },
+  {
+    "name": "POLICE_FILE_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "DESCRIPTION",
+    "type": "STRING"
+  },
+  {
+    "name": "NARRATIVE",
+    "type": "STRING"
+  },
+  {
+    "name": "RESOLUTION",
+    "type": "STRING"
+  },
+  {
+    "name": "CASE_ACTION_TYPE",
+    "type": "STRING"
+  },
+  {
+    "name": "POTENTIAL_LOSSES",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "PREVENTED_LOSSES",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "RECOVERED_TOTAL",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "ACTUAL_LOSSES",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "MONEY_LAUNDERED",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "INSURANCE_PAID",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "SUSPICIOUS_FUNDS",
+    "type": "STRING"
+  },
+  {
+    "name": "CASE_OWNER",
+    "type": "STRING"
+  }
+]

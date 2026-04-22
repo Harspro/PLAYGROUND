@@ -1,0 +1,10 @@
+dag_id: "transaction_risk_score_writer_dag"
+dag_owner: "team-defenders-alerts"
+jar_file_uris:
+  - gs://pcb-{env}-staging-artifacts/jarfiles/trs-file-writer-spark-batch-2.0.0.jar
+main_class: "com.pcb.batch.spark.trs.writer.TrsFileWriterBatchApplication"
+input_bucket: equifax-inbound-pcb{env_suffix}
+outbound_bucket: batch-approvals-outbound{env_suffix}
+staging_bucket: pcb-{env}-staging
+bq_curated_table_trs_input: TRANSACTION_RISK_SCORING_INPUT
+domain_scoring_dataset: domain_scoring

@@ -1,0 +1,36 @@
+db610_date_query_check:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM (SELECT * FROM DNSCNST.CNST_ACCT_CUST_ID_XREF WHERE (REC_CREATE_TMS BETWEEN '2015-11-23 00:00:00' AND '2015-12-01 00:00:00') AND (REC_CREATE_TMS >= '2015-11-23' AND REC_CREATE_TMS < '2015-12-01')) dataTbl WHERE 1=0"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+
+db610_dnscnst_query_check:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT 1 FROM DNSCNST.CNST_EVENT WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP('2015-11-23 00:00:00', 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP('2015-12-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+
+db610_pcl_query_check:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT 1 FROM PCL.PCF_POINTS_TX WHERE REC_LOAD_TMS BETWEEN TO_DATE('2015-11-23', 'YYYY-MM-DD') AND TO_DATE('2015-12-01', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+
+
+db724_tml_query_check:
+  fetch_spark_job:
+    dbname: db724_tml
+    args:
+      pcb.bigquery.loader.source.query: "select count(*) from TML.TM_TRAN_TYP"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+
+db839_query_check:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT count(*) as cnt from IVRReport.dbo.ExitCode"
+      pcb.bigquery.loader.source.db.read.parallelism: 1

@@ -1,0 +1,113 @@
+ts2_batch_authorization_log_full_file_loading:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_batchauth
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: BATCH_AUTHORIZATION
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: BATCH_AUTHORIZATION
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      BATCH_REC_MC_AC:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_batch_auth/BATCH_AUTH_MC_AC.CPY
+        pcb.tsys.processor.segment.name: BATCH_AUTH
+        pcb.tsys.processor.layout.name: BATCH_REC_MC_AC
+      BATCH_REC_MC_TA:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_batch_auth/BATCH_AUTH_MC_TA.CPY
+        pcb.tsys.processor.segment.name: BATCH_AUTH
+        pcb.tsys.processor.layout.name: BATCH_REC_MC_TA
+      BATCH_REC_MC_TC:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_batch_auth/BATCH_AUTH_MC_TC.CPY
+        pcb.tsys.processor.segment.name: BATCH_AUTH
+        pcb.tsys.processor.layout.name: BATCH_REC_MC_TC
+      BATCH_REC_MC_TE:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_batch_auth/BATCH_AUTH_MC_TE.CPY
+        pcb.tsys.processor.segment.name: BATCH_AUTH
+        pcb.tsys.processor.layout.name: BATCH_REC_MC_TE
+      BATCH_REC_MC_TV:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_batch_auth/BATCH_AUTH_MC_TV.CPY
+        pcb.tsys.processor.segment.name: BATCH_AUTH
+        pcb.tsys.processor.layout.name: BATCH_REC_MC_TV
+      BATCH_REC_MC_MISC:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_batch_auth/BATCH_AUTH_MC_MISC.CPY
+        pcb.tsys.processor.segment.name: BATCH_AUTH
+        pcb.tsys.processor.layout.name: BATCH_REC_MC_MISC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_batch_auth/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    parent_table: BATCH_AUTHORIZATION_LOG
+    tables:
+      BATCH_REC_MC_AC:
+        table_name: BATCH_AUTHORIZATION_MC_AC
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CAST(NULL AS STRING) AS ESC_FRAUD_REASON_CODE
+      BATCH_REC_MC_TA:
+        table_name: BATCH_AUTHORIZATION_MC_TA
+        drop_columns:
+          - MC_DEV_SRC_IP_ADDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CASE 
+              WHEN MC_DEV_SRC_IP_ADDR IS NOT NULL AND LENGTH(TRIM(MC_DEV_SRC_IP_ADDR)) >= 8 THEN
+                CONCAT(
+                  CAST(CAST(CONCAT('0x', SUBSTR(TRIM(MC_DEV_SRC_IP_ADDR), 1, 2)) AS INT64) AS STRING), '.',
+                  CAST(CAST(CONCAT('0x', SUBSTR(TRIM(MC_DEV_SRC_IP_ADDR), 3, 2)) AS INT64) AS STRING), '.',
+                  CAST(CAST(CONCAT('0x', SUBSTR(TRIM(MC_DEV_SRC_IP_ADDR), 5, 2)) AS INT64) AS STRING), '.',
+                  CAST(CAST(CONCAT('0x', SUBSTR(TRIM(MC_DEV_SRC_IP_ADDR), 7, 2)) AS INT64) AS STRING)
+                )
+              ELSE MC_DEV_SRC_IP_ADDR
+            END AS MC_DEV_SRC_IP_ADDR
+          - CAST(NULL AS STRING) AS ESC_FRAUD_REASON_CODE
+      BATCH_REC_MC_TC:
+        table_name: BATCH_AUTHORIZATION_MC_TC
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CAST(NULL AS STRING) AS ESC_FRAUD_REASON_CODE
+      BATCH_REC_MC_TE:
+        table_name: BATCH_AUTHORIZATION_MC_TE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CAST(NULL AS STRING) AS ESC_FRAUD_REASON_CODE
+      BATCH_REC_MC_TV:
+        table_name: BATCH_AUTHORIZATION_MC_TV
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CAST(NULL AS STRING) AS ESC_FRAUD_REASON_CODE
+      BATCH_REC_MC_MISC:
+        table_name: BATCH_AUTHORIZATION_MC_MISC
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CAST(NULL AS STRING) AS ESC_FRAUD_REASON_CODE
+      TRLR:
+        table_name: BATCH_AUTHORIZATION_LOG_TRLR
+        record_count_column: ITRL_LOG_REC_CNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  trigger_config:
+    dag_to_trigger: mobile_token_regular_segment_kafka_writer
+    wait_for_completion: False #this makes an asynchronous call to the child DAG.
+    poke_interval: 30
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data. FFM Impact."
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'

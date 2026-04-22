@@ -1,0 +1,35 @@
+sfmc_email_unsubscribe_dns_kafka_writer:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P2"
+    sub_capability: "email"
+    business_impact: "This will impact the loading of Salesforce Marketing Unsubscribe DNS list into DP Kafka topic: dp-core-sfmc-email-unsubscribe. The list is used to enforce dns on email address for email communications."
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations potentially resulting in penalties for the bank."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce/SfmcEmailUnsubscribeKeyAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce/SfmcEmailUnsubscribeAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce/sfmc_email_unsubscribe_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: SfmcEmailUnsubscribeKeyAO.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: SfmcEmailUnsubscribeAO.avsc
+    pcb.file.kafka.connector.csv.delimiter: ','
+    pcb.file.kafka.connector.csv.header: true
+    pcb.file.kafka.connector.csv.ignore.leading.white.space: true
+    pcb.file.kafka.connector.csv.ignore.trailing.white.space: true
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: CSV
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: subscriberId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.auto.register.schemas: true
+    pcb.file.kafka.connector.schema.file.path: sfmc_email_unsubscribe_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_sfmc_email_unsubscribe_dns
+    read_pause_deploy_config: True
+    tags: ["communication", "email"]
+    job_size: extra_small

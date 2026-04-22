@@ -1,0 +1,938 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Ministère du Revenu (MINISTERE DU REVENU DU QUEBEC) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<!-- @@@@@ Définition de types simples réutilisables @@@@@     -->
+	<!--                                                           -->
+	<!--    Types pour des éléments particuliers				   -->
+	<!--                                                           -->
+	<xsd:simpleType
+    name="CodePostalType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="6" />
+		</xsd:restriction>
+		<!-- Note: Le format du code postal canadien n'est pas spécifié car ce 
+			 type doit aussi accepter un code zip américain. -->
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="CodePostalCanadienType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[a-zA-Z][0-9][a-zA-Z][0-9][a-zA-Z][0-9]" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="LangueType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="A" />
+			<xsd:enumeration
+        value="F" />
+			<xsd:enumeration
+        value="a" />
+			<xsd:enumeration
+        value="f" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="TelType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{3}-\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="NasType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{9}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="NoIdentificationType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{10}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="NoDossierType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="NoReleveType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{9}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="AnneeType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="(20\d{2})|(19\d{2})" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="DateType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{8}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="MoisJourType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--                                                           -->
+	<!--    Chaînes numériques de longueur fixe  				   -->
+	<!--                                                           -->
+	<xsd:simpleType
+    name="Numeric1Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric2Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric3Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{3}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric6Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{6}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric7Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{7}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric8Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{8}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric9Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{9}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric10Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{10}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric1To10Type">
+    
+    <xsd:restriction
+      base="xsd:string">
+        <xsd:pattern
+        value="\d{1,10}" />
+        <xsd:minLength
+        value="1" />
+        <xsd:maxLength
+        value="10" />
+    </xsd:restriction>
+</xsd:simpleType>
+	<xsd:simpleType
+    name="Numeric12Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{12}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--                                                           -->
+	<!-- Chaînes numériques de longueur variable   				   -->
+	<!-- Nombre entiers seulement                                  -->
+	<!--                                                           -->
+	<xsd:simpleType
+    name="Int2Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int3Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,3}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int5Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,5}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int6Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,6}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int7Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,7}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int8Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,8}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int9Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,9}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int10Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,10}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int11Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,11}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int12Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,12}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int13Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,13}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Int15Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,15}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--                                                  -->
+	<!-- Nombres décimaux   							  -->
+	<!--                                                  -->
+	<xsd:simpleType
+    name="Decimal5Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,3}\.\d{2}|\d{1,3},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal6_4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,2}\.\d{4}|\d{1,2},\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal7Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,5}\.\d{2}|\d{1,5},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="SignedDecimal7Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="(-\d{1,5}\.\d{2}|\d{1,5}\.\d{2})|(-\d{1,5},\d{2}|\d{1,5},\d{2})" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal8Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,6}\.\d{2}|\d{1,6},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="SignedDecimal8Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="(-\d{1,6}\.\d{2}|\d{1,6}\.\d{2})|(-\d{1,6},\d{2}|\d{1,6},\d{2})" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal9Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,7}\.\d{2}|\d{1,7},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="SignedDecimal9Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="(-\d{1,7}\.\d{2}|\d{1,7}\.\d{2})|(-\d{1,7},\d{2}|\d{1,7},\d{2})" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal10Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,8}\.\d{2}|\d{1,8},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal12Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,10}\.\d{2}|\d{1,10},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="SignedDecimal12Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="(-\d{1,10}\.\d{2}|\d{1,10}\.\d{2})|(-\d{1,10},\d{2}|\d{1,10},\d{2})" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal12_3Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,9}\.\d{3}|\d{1,9},\d{3}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal12_4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,8}\.\d{4}|\d{1,8},\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal13Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,11}\.\d{2}|\d{1,11},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="SignedDecimal13Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="(-\d{1,11}\.\d{2}|\d{1,11}\.\d{2})|(-\d{1,11},\d{2}|\d{1,11},\d{2})" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal15Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,13}\.\d{2}|\d{1,13},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="SignedDecimal15Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="(-\d{1,13}\.\d{2}|\d{1,13}\.\d{2})|(-\d{1,13},\d{2}|\d{1,13},\d{2})" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal15_3Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,12}\.\d{3}|\d{1,12},\d{3}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal15_4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,11}\.\d{4}|\d{1,11},\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal18Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,16}\.\d{2}|\d{1,16},\d{2}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Decimal18_4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="\d{1,14}\.\d{4}|\d{1,14},\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Taux7_4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="100[.,]0000|\d{1,2}[.,]\d{4}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Taux9_6Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="100[.,]000000|\d{1,2}[.,]\d{6}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--                                                           -->
+	<!-- Chaînes de caractères de longueur variable   		       -->
+	<!--                                                           -->
+	<xsd:simpleType
+    name="Char1Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char3Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="3" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char5Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="5" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char6Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="6" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char8Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="8" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char10Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="10" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char12Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="12" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char15Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="15" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char15FixeType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="15" />
+			<xsd:maxLength
+        value="15" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char16Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="16" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char16FixeType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="16" />
+			<xsd:maxLength
+        value="16" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char20Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="20" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char25Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="25" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char30Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="30" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char40Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="40" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char60Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="60" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Char177Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:minLength
+        value="1" />
+			<xsd:maxLength
+        value="177" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--                                                           -->
+	<!-- Divers indicateurs                 					   -->
+	<!--                                                           -->
+	<xsd:simpleType
+    name="Indicateur0-1Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[0|1]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur0-2Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[0-2]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur0-5Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[0-5]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur0-7Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[0-7]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-2Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1|2]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-3Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1-3]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1-4]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-5Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1-5]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-6Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1-6]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-7Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1-7]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-8Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1-8]{1}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-14Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="[1-9]|1[0-4]" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur01-16Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:pattern
+        value="0[1-9]|1[0-6]" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-3-4Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="1" />
+			<xsd:enumeration
+        value="3" />
+			<xsd:enumeration
+        value="4" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-3-4-6Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="1" />
+			<xsd:enumeration
+        value="3" />
+			<xsd:enumeration
+        value="4" />
+			<xsd:enumeration
+        value="6" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="Indicateur1-4-6Type">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="1" />
+			<xsd:enumeration
+        value="4" />
+			<xsd:enumeration
+        value="6" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="IndicateurO-NType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="O" />
+			<xsd:enumeration
+        value="N" />
+			<xsd:enumeration
+        value="o" />
+			<xsd:enumeration
+        value="n" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="IndicateurI-RType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="I" />
+			<xsd:enumeration
+        value="R" />
+			<xsd:enumeration
+        value="i" />
+			<xsd:enumeration
+        value="r" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

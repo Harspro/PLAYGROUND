@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du D31 @@@@           -->
+	<xsd:complexType
+    name="D31Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionSansFermetureType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Logement">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="A_NumeroLogement"
+              type="Char15FixeType">
+							
+						</xsd:element>
+						<xsd:element
+              name="C_AdresseLogement">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="C1_Appartement"
+                    type="Char6Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+									<xsd:element
+                    name="C2_Numero"
+                    type="Char10Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="C3_Rue"
+                    type="Char40Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="C4_Ville"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="C5_CodePostal"
+                    type="CodePostalCanadienType">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element
+              name="NoCiviqueProprietaire"
+              type="Char10Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

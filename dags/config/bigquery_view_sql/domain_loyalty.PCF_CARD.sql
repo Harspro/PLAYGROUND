@@ -1,0 +1,23 @@
+WITH
+  LABELED_DATA AS (
+  SELECT
+        CARD_NUM,
+        LOB_NUM,
+        PCF_CUST_ID,
+        DEVICE_ID,
+        CARD_TYPE,
+        CARD_BIN,
+        CARD_LAST4,
+        NAME_ON_CARD,
+        HASH_VALUE,
+        HASH_TYPE,
+        STATUS_CD,
+        REC_CREATE_TMS,
+        REC_CHNG_ID,
+        REC_CHNG_TMS,
+        PCF_CUST_ID_PRIM,
+        PCF_PROD_KEY,
+        ROW_NUMBER() OVER (PARTITION BY CARD_NUM ORDER BY REC_CHNG_TMS DESC) AS REC_RANK
+  FROM
+    `pcb-{env}-landing.domain_loyalty.PCF_CARD` )
+SELECT * EXCEPT(REC_RANK) FROM LABELED_DATA WHERE REC_RANK=1

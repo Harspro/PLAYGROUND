@@ -1,0 +1,7 @@
+Min_Range,Max_Range,Description
+-9999,6,"6 months or less"
+7,12,">6 months to 12 months"
+13,24,">12 months to 24 months"
+25,36,">24 months to 36 months"
+37,48,">36 months to 48 months"
+49,9999,">48 months"

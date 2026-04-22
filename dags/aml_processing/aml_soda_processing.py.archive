@@ -1,0 +1,113 @@
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.empty import EmptyOperator
+from airflow import settings
+from airflow.exceptions import AirflowException
+from util.miscutils import (
+    read_variable_or_file,
+    read_yamlfile_env
+)
+
+
+# These paths are relative to the main dags folder
+AML_CONFIG_FILE = 'aml_processing/aml_config'
+# SCHEMA_FILE = 'lcl_processing/aml_table_schema.json'
+gcp_config = read_variable_or_file("gcp_config")
+deploy_env_name = gcp_config['deployment_environment_name']
+deploy_env_suffix = gcp_config['deploy_env_storage_suffix']
+deploy_env = gcp_config['deployment_environment_name']
+dataproc_config = read_variable_or_file("dataproc_config")
+
+# print("Reading config")
+aml_config = read_variable_or_file(AML_CONFIG_FILE, deploy_env_name)
+
+DAG_DEFAULT_ARGS = {
+    "owner": "team-defenders-alerts",
+    'capability': 'risk-management',
+    'severity': 'P3',
+    'sub_capability': 'aml',
+    'business_impact': 'No impact',
+    'customer_impact': 'No impact',
+    "start_date": datetime(2021, 1, 1),
+    "email": [],
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "max_active_runs": 10,
+    "retries": 0,
+    "retry_delay": timedelta(seconds=10),
+    "retry_exponential_backoff": True
+}
+
+
+def validate_bq_table(job_params: dict, **context):
+    from sodasql.scan.scan_builder import ScanBuilder
+    from sodasql.scan.scan import Scan
+    from util.bigquery_dialect_213 import BigQueryDialect213
+    scan_builder = ScanBuilder()
+    scan_builder.warehouse_yml_file = f'{settings.DAGS_FOLDER}/{job_params["warehouse_yml_file"]}'
+    scan_builder.scan_yml_file = f'{settings.DAGS_FOLDER}/{job_params["scan_yml_file"]}'
+    scan_builder.scan_results_json_path = f'{settings.DAGS_FOLDER}/{job_params["scan_results_file"]}'
+    scan_builder.warehouse_yml_dict = read_yamlfile_env(scan_builder.warehouse_yml_file, deploy_env)
+    # scan_builder.warehouse_yml_dict['connection']['project_id'] = gcp_config.get("curated_zone_project_id")
+    # Do some monkey patching
+    scan_builder._build_warehouse_yml()
+    warehouse_yml_parser = scan_builder.parsers[0]
+
+    connection_dict = warehouse_yml_parser.get_dict_required('connection')
+    warehouse_yml_parser._push_context(object=connection_dict, name='connection')
+    bq213 = BigQueryDialect213(warehouse_yml_parser)
+    warehouse_yml_parser.warehouse_yml.dialect = bq213
+
+    warehouse_yml_parser._pop_context()
+
+    scan_builder.warehouse_yml = warehouse_yml_parser.warehouse_yml
+
+    scan_builder._build_scan_yml()
+    from sodasql.scan.warehouse import Warehouse
+    warehouse = Warehouse(warehouse_yml_parser.warehouse_yml)
+
+    scan = Scan(warehouse=warehouse,
+                scan_yml=scan_builder.scan_yml,
+                scan_results_file=scan_builder.scan_results_json_path)
+
+    scan_result = scan.execute()
+    test_fails, test_errors = [], []
+
+    if scan_result.has_test_failures():
+        print('Data validation Scan has test failures, stop the pipeline')
+        failures = scan_result.get_test_failures()
+        print(failures)
+        test_fails = [f.test.title for f in failures]
+        raise AirflowException("Data validation failure: Data validation Scan has test failures, stop the pipeline")
+    else:
+        print('Data validation scan passed with flying colours')
+
+    if scan_result.has_errors():
+        print('Data validation config has errors while scanning')
+        errors = scan_result.get_errors()
+        test_errors = [e.get_message() for e in errors]
+        raise AirflowException("Data validation failure: Data validation config has errors while scanning")
+    else:
+        print('Data validation encountered no errors')
+
+    context['ti'].xcom_push(key='validation_failures', value=test_fails)
+    context['ti'].xcom_push(key='validation_errors', value=test_errors)
+
+
+with DAG(dag_id="aml_soda_test",
+         schedule=None,
+         description="DAG to test Bq with Soda SQL",
+         render_template_as_native_obj=True,
+         is_paused_upon_creation=True,
+         default_args=DAG_DEFAULT_ARGS) as dag:
+
+    start = EmptyOperator(task_id="Start")
+
+    validate_bq_staging_table = PythonOperator(
+        task_id='validate_bq_staging',
+        python_callable=validate_bq_table,
+        op_kwargs={'job_params': aml_config['data_validation']},
+    )
+
+    (start >> validate_bq_staging_table)

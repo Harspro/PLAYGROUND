@@ -1,0 +1,187 @@
+import logging
+from datetime import timedelta, datetime
+
+import pendulum
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from airflow.providers.google.cloud.operators.dataproc import (
+    DataprocSubmitJobOperator,
+    DataprocCreateClusterOperator
+)
+from google.cloud import bigquery
+
+import util.constants as consts
+from util.bq_utils import (
+    create_external_table,
+    apply_column_transformation,
+    apply_join_transformation,
+    apply_timestamp_transformation
+)
+from util.miscutils import (
+    replace_all_env_in_dict,
+    read_variable_or_file,
+    get_ephemeral_cluster_config,
+    get_default_dlaas_spark_job
+)
+
+gcp_config = read_variable_or_file(consts.GCP_CONFIG)
+deploy_env = gcp_config[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+dataproc_config = read_variable_or_file(consts.DATAPROC_CONFIG)
+
+
+def apply_transformations(bigquery_client, transformation_config: dict):
+    transformed_data = create_external_table(bigquery_client, transformation_config.get(consts.EXTERNAL_TABLE_ID),
+                                             transformation_config.get(consts.DATA_FILE_LOCATION))
+
+    add_columns = transformation_config.get(consts.ADD_COLUMNS)
+    drop_columns = transformation_config.get(consts.DROP_COLUMNS)
+
+    if add_columns or drop_columns:
+        column_transform_view = apply_column_transformation(bigquery_client, transformed_data, add_columns,
+                                                            drop_columns)
+        transformed_data = column_transform_view
+
+    join_spec = transformation_config.get(consts.JOIN_SPECIFICATION)
+    if join_spec:
+        join_transform_view = apply_join_transformation(bigquery_client, transformed_data, join_spec)
+        transformed_data = join_transform_view
+
+    transformed_data = apply_timestamp_transformation(bigquery_client, transformed_data)
+
+    return transformed_data
+
+
+def build_fetching_job(**context):
+    context_conf = context['dag_run'].conf.get('conf')
+    context_conf = next(iter(context_conf.values()))
+    config = replace_all_env_in_dict(context_conf, deploy_env)
+
+    properties = config.get(consts.PROPERTIES) or consts.DEFAULT_SPARK_SETTINGS
+    gcs_config = config[consts.GCS]
+    schema = config[consts.ARGS].get(consts.SCHEMA_QUALIFIED_TABLE_NAME).split('.')[0]
+    staging_folder = f"gs://{gcs_config[consts.BUCKET]}/{gcs_config[consts.STAGING_FOLDER]}/{schema}/"
+
+    config.update(get_default_dlaas_spark_job(deploy_env))
+
+    arg_list = [config[consts.APPLICATION_CONFIG], staging_folder]
+
+    if consts.ARGS in config:
+        for k, v in config[consts.ARGS].items():
+            arg_list.append(f'{k}={v}')
+
+    if not any(consts.DB_READ_PARALLELISM in arg for arg in arg_list):
+        arg_list.append(consts.DB_READ_PARALLELISM + '=1')
+
+    return {
+        consts.REFERENCE: {consts.PROJECT_ID: dataproc_config.get(consts.PROJECT_ID)},
+        consts.PLACEMENT: {consts.CLUSTER_NAME: consts.DLAAS_ONETIME_CLUSTER_NAME},
+        consts.SPARK_JOB: {
+            consts.JAR_FILE_URIS: config[consts.JAR_FILE_URIS],
+            consts.MAIN_CLASS: config[consts.MAIN_CLASS],
+            consts.FILE_URIS: config[consts.FILE_URIS],
+            consts.ARGS: arg_list,
+            consts.PROPERTIES: properties
+        }
+    }
+
+
+def build_loading_job(**context):
+    context_conf = context['dag_run'].conf.get('conf')
+    context_conf = next(iter(context_conf.values()))
+    config = replace_all_env_in_dict(context_conf, deploy_env)
+
+    gcs_config = config[consts.GCS]
+    bigquery_config = config[consts.BIGQUERY]
+    bq_table_name = bigquery_config[consts.TABLE_NAME]
+    source_table_name = config[consts.ARGS].get(consts.SCHEMA_QUALIFIED_TABLE_NAME).split('.')[1]
+    schema = config[consts.ARGS].get(consts.SCHEMA_QUALIFIED_TABLE_NAME).split('.')[0]
+
+    parquet_files_path = f"gs://{gcs_config[consts.BUCKET]}/{gcs_config[consts.STAGING_FOLDER]}/{schema}/{source_table_name}/*.parquet"
+    logging.info(f"Starting import of data for table {bq_table_name} from {parquet_files_path}")
+    bq_proc_project_name = gcp_config[consts.PROCESSING_ZONE_PROJECT_ID]
+
+    bq_table_name = bigquery_config[consts.TABLE_NAME]
+    bq_ext_table_id = f"{bq_proc_project_name}.{bigquery_config[consts.DATASET_ID]}.{bq_table_name}_DBEXT"
+    project_id = bigquery_config.get(consts.PROJECT_ID) or gcp_config.get(consts.LANDING_ZONE_PROJECT_ID)
+
+    bq_table_id = f"{project_id}.{bigquery_config[consts.DATASET_ID]}.{bq_table_name}"
+
+    bq_client = bigquery.Client()
+
+    transformation_config = {
+        consts.EXTERNAL_TABLE_ID: bq_ext_table_id,
+        consts.DATA_FILE_LOCATION: parquet_files_path
+    }
+
+    staged_view = apply_transformations(bq_client, transformation_config)
+
+    dest_table_ddl = f"""
+        CREATE OR REPLACE TABLE
+            `{bq_table_id}`
+        AS
+            SELECT {staged_view.get('columns')}
+            FROM `{staged_view.get('id')}`;
+    """
+
+    query_job = bq_client.query(dest_table_ddl)
+    query_job.result()
+
+    target_table = bq_client.get_table(bq_table_id)
+    logging.info(
+        f"Finished import of data for table {bq_table_id} from {parquet_files_path}. Imported {target_table.num_rows} rows.")
+
+
+with DAG(
+        dag_id='dlaas_onetime',
+        default_args={
+            'owner': 'team-centaurs',
+            'capability': 'TBD',
+            'severity': 'P3',
+            'sub_capability': 'TBD',
+            'business_impact': 'TBD',
+            'customer_impact': 'TBD',
+            'depends_on_past': False,
+            "email": [],
+            "email_on_failure": False,
+            "email_on_retry": False
+        },
+        schedule=None,
+        start_date=datetime(2023, 1, 1, tzinfo=pendulum.timezone('America/Toronto')),
+        is_paused_upon_creation=False,
+        catchup=False,
+        render_template_as_native_obj=True,
+        dagrun_timeout=timedelta(hours=24)
+) as dag:
+    start_point = EmptyOperator(task_id='start')
+    end_point = EmptyOperator(task_id='end')
+
+    cluster_creating_task = DataprocCreateClusterOperator(
+        task_id=consts.CLUSTER_CREATING_TASK_ID,
+        project_id=dataproc_config.get(consts.PROJECT_ID),
+        cluster_config=get_ephemeral_cluster_config(deploy_env, gcp_config.get(consts.NETWORK_TAG), 3),
+        region=dataproc_config.get(consts.LOCATION),
+        cluster_name=consts.DLAAS_ONETIME_CLUSTER_NAME
+    )
+
+    prepare_fetching_config = PythonOperator(
+        task_id='prepare_fetching_config',
+        python_callable=build_fetching_job,
+        provide_context='True',
+        do_xcom_push='True'
+    )
+
+    fetching_task = DataprocSubmitJobOperator(
+        task_id='dataproc_job',
+        job="{{ ti.xcom_pull(task_ids='prepare_fetching_config', key='return_value') }}",
+        region=dataproc_config.get(consts.LOCATION),
+        project_id=dataproc_config.get(consts.PROJECT_ID),
+        gcp_conn_id=gcp_config.get(consts.PROCESSING_ZONE_CONNECTION_ID)
+    )
+
+    loading_task = PythonOperator(
+        task_id='loading_task',
+        python_callable=build_loading_job
+    )
+
+    start_point >> cluster_creating_task >> prepare_fetching_config >> fetching_task >> loading_task >> end_point

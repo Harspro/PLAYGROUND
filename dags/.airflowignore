@@ -1,0 +1,9 @@
+# this file is applied in prod
+
+config
+util
+
+# not needed in prod
+automated_testing
+ta_dashboard
+dlaas_bigquery_loader

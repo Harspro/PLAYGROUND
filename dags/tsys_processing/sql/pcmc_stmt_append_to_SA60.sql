@@ -1,0 +1,9 @@
+SELECT
+  * REPLACE(CAST(SA60_PAYMENT_TRANS_INDICATOR AS STRING) AS SA60_PAYMENT_TRANS_INDICATOR)
+FROM
+  pcb-{env}-processing.domain_account_management.SA60_MID{file_type}
+UNION ALL
+SELECT
+  * REPLACE(CAST(SA60_PAYMENT_TRANS_INDICATOR AS STRING) AS SA60_PAYMENT_TRANS_INDICATOR)
+FROM
+  pcb-{env}-processing.domain_account_management.SA60_CALC{file_type}

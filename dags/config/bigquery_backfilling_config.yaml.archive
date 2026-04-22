@@ -1,0 +1,650 @@
+# finished dags have been archived
+db909_scms_tkm_cmn_module_flavour_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT MODULE_NAME, FLAVOUR_NAME, IND_ACTIVE FROM SCMS_TKM.CMN_MODULE_FLAVOUR"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: CMN_MODULE_FLAVOUR
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_blob_triggers_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, BLOB_DATA FROM SCMS_TKM.QRTZ_BLOB_TRIGGERS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_BLOB_TRIGGERS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_calendars_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, CALENDAR_NAME, CALENDAR FROM SCMS_TKM.QRTZ_CALENDARS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_CALENDARS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_cron_triggers_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, CRON_EXPRESSION, TIME_ZONE_ID FROM SCMS_TKM.QRTZ_CRON_TRIGGERS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_CRON_TRIGGERS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_fired_triggers_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, ENTRY_ID, TRIGGER_NAME, TRIGGER_GROUP, INSTANCE_NAME, FIRED_TIME, SCHED_TIME, PRIORITY, STATE, JOB_NAME, JOB_GROUP, IS_NONCONCURRENT, REQUESTS_RECOVERY FROM SCMS_TKM.QRTZ_FIRED_TRIGGERS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_FIRED_TRIGGERS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_job_details_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, JOB_NAME, JOB_GROUP, DESCRIPTION, JOB_CLASS_NAME, IS_DURABLE, IS_NONCONCURRENT, IS_UPDATE_DATA, REQUESTS_RECOVERY, JOB_DATA FROM SCMS_TKM.QRTZ_JOB_DETAILS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_JOB_DETAILS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_locks_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, LOCK_NAME FROM SCMS_TKM.QRTZ_LOCKS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_LOCKS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_paused_trigger_grps_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, TRIGGER_GROUP FROM SCMS_TKM.QRTZ_PAUSED_TRIGGER_GRPS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_PAUSED_TRIGGER_GRPS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_scheduler_state_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, INSTANCE_NAME, LAST_CHECKIN_TIME, CHECKIN_INTERVAL FROM SCMS_TKM.QRTZ_SCHEDULER_STATE"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_SCHEDULER_STATE
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_simple_triggers_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, REPEAT_COUNT, REPEAT_INTERVAL, TIMES_TRIGGERED FROM SCMS_TKM.QRTZ_SIMPLE_TRIGGERS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_SIMPLE_TRIGGERS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_simprop_triggers_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, STR_PROP_1, STR_PROP_2, STR_PROP_3, INT_PROP_1, INT_PROP_2, LONG_PROP_1, LONG_PROP_2, DEC_PROP_1, DEC_PROP_2, BOOL_PROP_1, BOOL_PROP_2 FROM SCMS_TKM.QRTZ_SIMPROP_TRIGGERS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_SIMPROP_TRIGGERS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+db909_scms_tkm_qrtz_triggers_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, JOB_NAME, JOB_GROUP, DESCRIPTION, NEXT_FIRE_TIME, PREV_FIRE_TIME, PRIORITY, TRIGGER_STATE, TRIGGER_TYPE, START_TIME, END_TIME, CALENDAR_NAME, MISFIRE_INSTR, JOB_DATA FROM SCMS_TKM.QRTZ_TRIGGERS"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: cots_scms_tkm
+    table_name: QRTZ_TRIGGERS
+    overwrite_bq_table: True
+  default_args:
+    owner: "team-ogres-alerts"
+
+adm_p053_adm_std_disp_empm_info_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_EMPM_INFO WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_EMPM_INFO')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_EMPM_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_addr_info_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_ADDR_INFO WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_ADDR_INFO')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_ADDR_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_app_data_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_APP_DATA WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_APP_DATA')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_APP_DATA
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_adm_std_disp_app_data_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM.ADM_STD_DISP_APP_DATA WHERE V9SEQ=33662"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_APP_DATA
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_stop_record_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_STOP_RECORD WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_STOP_RECORD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_STOP_RECORD
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_LOAD_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_deci_data_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_DECI_DATA WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_DECI_DATA')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_DECI_DATA
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+      - string(null) as DTC_DEFAULT_IBX
+      - string(null) as DTC_CARD_NUM_SEARCH
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_memo_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_MEMO WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_MEMO')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_MEMO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_dt_elmt_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_DT_ELMT WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_DT_ELMT')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_DT_ELMT
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_ts2t_tmpl_info_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_TS2T_TMPL_INFO WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_TS2T_TMPL_INFO')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_TS2T_TMPL_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_user_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_USER WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_USER')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_USER
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_cust_info_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_CUST_INFO WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_CUST_INFO')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_CUST_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+      - string(null) as DTC_EXTERNAL_CUST_ID
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+adm_p053_adm_std_disp_bal_trns_info_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ADM_P053.ADM_STD_DISP_BAL_TRNS_INFO WHERE V9SEQ NOT IN (SELECT DISTINCT PROCESS_NUM FROM ADM.LOAD_RESULT WHERE TABLE_NM='ADM_STD_DISP_BAL_TRNS_INFO')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_BAL_TRNS_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(REC_CREATE_TMS) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+
+
+
+
+adm_adm_std_disp_empm_info_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_EMPM_INFO a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_EMPM_INFO' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_EMPM_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_deci_data_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR  FROM ADM.ADM_STD_DISP_DECI_DATA a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_DECI_DATA' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_DECI_DATA
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_dt_elmt_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_DT_ELMT a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_DT_ELMT' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_DT_ELMT
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_ts2t_tmpl_info_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_TS2T_TMPL_INFO a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_TS2T_TMPL_INFO' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_TS2T_TMPL_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_user_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR  FROM ADM.ADM_STD_DISP_USER a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_USER' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_USER
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_cust_info_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR  FROM ADM.ADM_STD_DISP_CUST_INFO a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_CUST_INFO' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_CUST_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_bal_trns_info_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_BAL_TRNS_INFO a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_BAL_TRNS_INFO' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_BAL_TRNS_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_addr_info_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_ADDR_INFO a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_ADDR_INFO' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_ADDR_INFO
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_head_trail_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_HEAD_TRAIL a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_HEAD_TRAIL' WHERE TRUNC(a.REC_LOAD_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_HEAD_TRAIL
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+
+adm_adm_std_disp_app_data_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_APP_DATA a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_APP_DATA' WHERE TRUNC(a.REC_CREATE_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_APP_DATA
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+adm_adm_std_disp_stop_record_table_backfilling_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT a.*, l.SOURCE_END_DT_CURR FROM ADM.ADM_STD_DISP_STOP_RECORD a JOIN ADM.LOAD_RESULT l ON a.V9SEQ = l.PROCESS_NUM AND l.TABLE_NM='ADM_STD_DISP_STOP_RECORD' WHERE TRUNC(a.REC_LOAD_TMS) = TO_DATE('2016-08-31', 'YYYY-MM-DD')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_STD_DISP_STOP_RECORD
+    add_columns:
+      - V9SEQ AS EXECUTION_ID
+      - DATE(SOURCE_END_DT_CURR) AS FILE_CREATE_DT
+    drop_columns:
+      - V9SEQ
+      - LOAD_RESULT_UUID
+      - SOURCE_END_DT_CURR
+
+credscore_t0010_header_trlr_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT  '7607' as CLIENT_ID , '9999' as RECORD_TYPE, TSYSINP_TYPE_SC01, TSYSINP_SC01_COUNT, TSYSINP_TYPE_SC31, TSYSINP_SC31_COUNT, TSYSINP_TYPE_SC32, TSYSINP_SC32_COUNT, CB_FILE_NUMBER,
+                                          FILE_CREATION_DATE_TIME FROM RISK.CREDSCORE_FILEINFO
+                                          WHERE TRUNC(FILE_CREATION_DATE_TIME) > '2016-01-01' and FILE_NAME_PREFIX IN ('expcbanktsystt.eqxcan.ds.SC10', 'expcbanktsyspd.eqxcan.ds.SC10')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_scoring
+    table_name: CREDSCORE_T0010_HEADER_TRLR
+    overwrite_bq_table: True
+    add_columns:
+      - DATE(FILE_CREATION_DATE_TIME) AS FILE_CREATE_DT
+      - FILE_CREATION_DATE_TIME AS REC_LOAD_TIMESTAMP
+      - SAFE_CAST(TSYSINP_SC01_COUNT AS INT64) AS TSYSINP_SC01_COUNT
+      - SAFE_CAST(TSYSINP_SC31_COUNT AS INT64) AS TSYSINP_SC31_COUNT
+      - SAFE_CAST(TSYSINP_SC32_COUNT AS INT64) AS TSYSINP_SC32_COUNT
+      - SAFE_CAST(CB_FILE_NUMBER AS STRING) AS CB_FILE_NUMBER
+    drop_columns:
+      - FILE_CREATION_DATE_TIME
+      - TSYSINP_SC01_COUNT
+      - TSYSINP_SC31_COUNT
+      - TSYSINP_SC32_COUNT
+      - CB_FILE_NUMBER
+
+credscore_t0030_header_trlr_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT '7607' as CLIENT_ID , '9999' as RECORD_TYPE, TSYSINP_TYPE_SC01, TSYSINP_SC01_COUNT, TSYSINP_TYPE_SC31, TSYSINP_SC31_COUNT, TSYSINP_TYPE_SC32, TSYSINP_SC32_COUNT,
+                                          CB_FILE_NUMBER, FILE_CREATION_DATE_TIME FROM RISK.CREDSCORE_FILEINFO
+                                          WHERE TRUNC(FILE_CREATION_DATE_TIME) > '2016-01-01' and FILE_NAME_PREFIX IN ('expcbanktsystt.eqxcan.ds.SC30', 'expcbanktsyspd.eqxcan.ds.SC30')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_scoring
+    table_name: CREDSCORE_T0030_HEADER_TRLR
+    overwrite_bq_table: True
+    add_columns:
+      - DATE(FILE_CREATION_DATE_TIME) AS FILE_CREATE_DT
+      - FILE_CREATION_DATE_TIME AS REC_LOAD_TIMESTAMP
+      - SAFE_CAST(TSYSINP_SC01_COUNT AS INT64) AS TSYSINP_SC01_COUNT
+      - SAFE_CAST(TSYSINP_SC31_COUNT AS INT64) AS TSYSINP_SC31_COUNT
+      - SAFE_CAST(TSYSINP_SC32_COUNT AS INT64) AS TSYSINP_SC32_COUNT
+      - SAFE_CAST(CB_FILE_NUMBER AS STRING) AS CB_FILE_NUMBER
+    drop_columns:
+      - FILE_CREATION_DATE_TIME
+      - TSYSINP_SC01_COUNT
+      - TSYSINP_SC31_COUNT
+      - TSYSINP_SC32_COUNT
+      - CB_FILE_NUMBER
+
+credscore_das_header_trlr_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT NULL as BTDR_RECORD_CODE, 0 as BTDR_SUB_CC, 0 as BTDR_SUB_YY, 0 as BTDR_SUB_MM, 0 as BTDR_SUB_DD, 0 as BTDR_SUB_TIME, NULL as BTDR_CUSTOMER_ID,
+                                          NULL as BTDR_PROCESS_CODE, NULL as BTDR_RUN_TYPE, NULL as BTDR_PROCESS_INFO, FILE_NAME_PREFIX as SOURCE_FILE_PREFIX1, CB_FILE_NUMBER, REC_CREATE_ID, CYCLE,
+                                          FILE_CREATION_DATE_TIME, NUMBER_DETAIL_RECORDS, NUMBER_TOTAL_RECORDS, FILE_NAME_PREFIX as SOURCE_FILE_NAME, CYCLE_MONTH, CYCLE_YEAR
+                                          FROM RISK.CREDSCORE_FILEINFO
+                                          WHERE TRUNC(FILE_CREATION_DATE_TIME) > '2016-01-01' and FILE_NAME_PREFIX IN ('expcbanktsystt.eqxcan.ds.SCDS', 'expcbanktsyspd.eqxcan.ds.SCDS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_scoring
+    table_name: CREDSCORE_DAS_HEADER_TRLR
+    overwrite_bq_table: True
+    add_columns:
+      - DATE(FILE_CREATION_DATE_TIME) AS FILE_CREATE_DT
+      - FILE_CREATION_DATE_TIME AS REC_LOAD_TIMESTAMP
+      - SAFE_CAST(BTDR_SUB_CC AS INT64) AS BTDR_SUB_CC
+      - SAFE_CAST(BTDR_SUB_YY AS INT64) AS BTDR_SUB_YY
+      - SAFE_CAST(BTDR_SUB_MM AS INT64) AS BTDR_SUB_MM
+      - SAFE_CAST(BTDR_SUB_DD AS INT64) AS BTDR_SUB_DD
+      - SAFE_CAST(BTDR_SUB_TIME AS INT64) AS BTDR_SUB_TIME
+      - SAFE_CAST(CB_FILE_NUMBER AS INT64) AS FILE_NUMBER
+      - SAFE_CAST(CB_FILE_NUMBER AS INT64) AS CB_FILE_NUMBER
+      - SAFE_CAST(REC_CREATE_ID AS INT64) AS REC_ID
+      - SAFE_CAST(CYCLE AS INT64) AS CYCLE_DAY
+      - SAFE_CAST(NUMBER_DETAIL_RECORDS AS INT64) AS NUMBER_DETAIL_RECORDS
+      - SAFE_CAST(NUMBER_TOTAL_RECORDS AS INT64) AS NUMBER_TOTAL_RECORDS
+      - SAFE_CAST(CYCLE_MONTH AS INT64) AS CYCLE_MONTH
+      - SAFE_CAST(CYCLE_YEAR AS INT64) AS CYCLE_YEAR
+    drop_columns:
+      - FILE_CREATION_DATE_TIME
+      - BTDR_SUB_CC
+      - BTDR_SUB_YY
+      - BTDR_SUB_MM
+      - BTDR_SUB_DD
+      - BTDR_SUB_TIME
+      - CB_FILE_NUMBER
+      - REC_CREATE_ID
+      - CYCLE
+      - NUMBER_DETAIL_RECORDS
+      - NUMBER_TOTAL_RECORDS
+      - CYCLE_MONTH
+      - CYCLE_YEAR
+
+db610_date_format_check:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM nls_session_parameters WHERE parameter = 'NLS_DATE_FORMAT' OR PARAMETER = 'NLS_TIMESTAMP_FORMAT'"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_technical
+    table_name: DB_CONNECTION_TEST_RESULTS
+    overwrite_bq_table: True

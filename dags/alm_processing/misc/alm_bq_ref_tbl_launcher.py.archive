@@ -1,0 +1,5 @@
+# for airflow scanning
+
+from alm_processing.misc.alm_bq_ref_tbl_loader import AlmRefTblLoader
+
+globals().update(AlmRefTblLoader('bq_ref_tbl_dag_config.yaml').generate_dags())  # pragma: no cover

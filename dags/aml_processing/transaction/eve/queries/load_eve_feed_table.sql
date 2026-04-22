@@ -1,0 +1,118 @@
+INSERT INTO
+    `{BQTABLE_EVE_TRANSACTION_FEED}` (
+        INSTITUTION_NUMBER,
+        TRANSACTION_ID,
+        CUSTOMER_NUMBER,
+        ACCOUNT_NUMBER,
+        TRANSACTION_DATE_TIME,
+        POSTED_DATE,
+        TOTAL_VALUE,
+        TRANSACTION_CURRENCY,
+        TRANSACTION_METHOD,
+        TRANSACTION_TYPE,
+        TRANSACTION_DESCRIPTION_1,
+        TRANSACTION_DESCRIPTION_3,
+        CONDUCTOR_CUSTOMER_NUMBER,
+        CONDUCTOR_FIRST_NAME,
+        CONDUCTOR_LAST_NAME,
+        RESPONSE_CODE,
+        AUTHORIZATION_CODE,
+        PAYEE_FIRST_NAME,
+        PAYEE_LAST_NAME,
+        SYSTEM_ID
+    )
+SELECT
+    INSTITUTION_NUMBER,
+    TRANSACTION_ID,
+    CUSTOMER_NUMBER,
+    ACCOUNT_NUMBER,
+    TRANSACTION_DATE_TIME,
+    POSTED_DATE,
+    TOTAL_VALUE,
+    TRANSACTION_CURRENCY,
+    TRANSACTION_METHOD,
+    TRANSACTION_TYPE,
+    TRANSACTION_DESCRIPTION_1,
+    TRANSACTION_DESCRIPTION_3,
+    CONDUCTOR_CUSTOMER_NUMBER,
+    CONDUCTOR_FIRST_NAME,
+    CONDUCTOR_LAST_NAME,
+    RESPONSE_CODE,
+    AUTHORIZATION_CODE,
+    PAYEE_FIRST_NAME,
+    PAYEE_LAST_NAME,
+    SYSTEM_ID
+FROM
+    (
+        SELECT
+            '320' AS INSTITUTION_NUMBER,
+            pt.PCB_TRANSACTION_NO AS TRANSACTION_ID,
+            pt.REFERENCE_NUMBER AS REFERENCE_NUMBER,
+            pt.PCF_CUST_ID AS CUSTOMER_NUMBER,
+            SAFE_CAST(pt.SOURCE_ACCOUNT_ID AS STRING) AS ACCOUNT_NUMBER,
+            SAFE_CAST(pt.TRANSACTED_DATE AS DATETIME) AS TRANSACTION_DATE_TIME,
+            SAFE_CAST(pt.POSTED_DATE AS DATE) AS POSTED_DATE,
+            CASE
+                WHEN LOWER(pt.DEBIT_CREDIT_IND) = 'credit' THEN SAFE_CAST(pt.FINAL_AMOUNT AS STRING)
+                WHEN LOWER(pt.DEBIT_CREDIT_IND) = 'debit' THEN SAFE_CAST(- pt.FINAL_AMOUNT AS STRING)
+            END AS TOTAL_VALUE,
+            'CAD' AS TRANSACTION_CURRENCY,
+            CASE
+                WHEN LOWER(pt.TYPE) = 'transfer'
+                AND LOWER(pt.DEBIT_CREDIT_IND) = 'debit' THEN 'INTERNAL_DEBIT'
+                WHEN LOWER(pt.TYPE) = 'transfer'
+                AND LOWER(pt.DEBIT_CREDIT_IND) = 'credit' THEN 'INTERNAL_CREDIT'
+                WHEN LOWER(pt.TYPE) = 'interest'
+                AND LOWER(pt.DEBIT_CREDIT_IND) = 'credit' THEN 'INTERNAL_CREDIT'
+            END AS TRANSACTION_TYPE,
+            CASE
+                WHEN LOWER(pt.TYPE) = 'transfer'
+                AND LOWER(pt.DEBIT_CREDIT_IND) = 'debit' THEN 'ONLINE_BANKING'
+                WHEN LOWER(pt.TYPE) = 'transfer'
+                AND pt.DEBIT_CREDIT_IND = 'credit' THEN 'ONLINE_BANKING'
+                WHEN LOWER(pt.TYPE) = 'interest'
+                AND LOWER(pt.DEBIT_CREDIT_IND) = 'credit' THEN 'AUTOMATED'
+            END AS TRANSACTION_METHOD,
+            CASE
+                WHEN LOWER(pt.TYPE) = 'transfer'
+                AND pt.DEBIT_CREDIT_IND = 'DEBIT' THEN 'Funds Out - Internal Transfer Savings to PCMA'
+                WHEN LOWER(pt.TYPE) = 'transfer'
+                AND LOWER(pt.DEBIT_CREDIT_IND) = 'credit' THEN 'Funds In - Internal Transfer PCMA/GOAL to Savings'
+                WHEN LOWER(pt.TYPE) = 'interest'
+                AND LOWER(pt.DEBIT_CREDIT_IND) = 'credit' THEN 'Funds In - Internal Transfer Interest'
+            END AS TRANSACTION_DESCRIPTION_1,
+            pt.PRODUCT_TYPE AS TRANSACTION_DESCRIPTION_3,
+            pt.PCF_CUST_ID AS CONDUCTOR_CUSTOMER_NUMBER,
+            cust.GIVEN_NAME AS CONDUCTOR_FIRST_NAME,
+            cust.SURNAME AS CONDUCTOR_LAST_NAME,
+            'ACCEPTED' AS RESPONSE_CODE,
+            SAFE_CAST(pt.AUTHORIZATION_CODE AS STRING) AS AUTHORIZATION_CODE,
+            cust.GIVEN_NAME AS PAYEE_FIRST_NAME,
+            cust.SURNAME AS PAYEE_LAST_NAME,
+            'GCP' AS SYSTEM_ID
+        FROM
+            `{BQTABLE_PRODUCT_TRANSACTION}` pt
+            JOIN `{BQTABLE_CUSTOMER}` cust ON pt.CUSTOMER_UID = cust.CUSTOMER_UID
+        WHERE
+            LOWER(pt.PRODUCT_TYPE) = 'savings'
+            AND pt.RECORD_LOAD_TIMESTAMP BETWEEN '{start_time}' AND '{end_time}' 
+        QUALIFY ROW_NUMBER() OVER (
+                PARTITION BY TRANSACTION_ID, REFERENCE_NUMBER
+                ORDER BY
+                    pt.RECORD_LOAD_TIMESTAMP DESC
+            ) = 1
+    ) EVE
+WHERE
+    NOT EXISTS (
+        SELECT
+            1
+        FROM
+            `{TRANSACTION_HISTORY_TABLE}` hrt
+        WHERE
+            LOWER(hrt.RAIL_TYPE) = 'eve'
+            AND DATETIME(hrt.FILE_SENT_DATE) BETWEEN '{start_time}' AND '{end_time}'
+            AND hrt.TRANSACTION_ID = EVE.TRANSACTION_ID
+            AND DATETIME(hrt.TRANSACTION_DATE_TIME) = EVE.TRANSACTION_DATE_TIME
+            AND hrt.CUSTOMER_NUMBER = EVE.CUSTOMER_NUMBER
+            AND hrt.ACCOUNT_NUMBER = EVE.ACCOUNT_NUMBER
+    );

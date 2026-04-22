@@ -1,0 +1,92 @@
+from airflow import DAG
+from airflow.utils.trigger_rule import TriggerRule
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from aml_processing import feed_commons as commons
+from aml_processing.sas_aml_migration.const import SASAMLMigrationConst
+from aml_processing.sas_aml_migration.sas_aml_data_transformation_info import SASAMLDataTransform
+from util.bq_utils import create_or_replace_table
+
+DAG_NAME = "sas_aml_data_transformation"
+# Modify the default_args dictionary
+custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+custom_default_args['business_impact'] = 'For IDL, Historical SASAML Cases that were migrated to Verafin will not have complete details if this process fails'
+
+with DAG(
+    DAG_NAME,
+    default_args=custom_default_args,
+    description="DAG to orchestrate the migration of existing SAS AML cases to Verafin",
+    schedule=None,
+    catchup=False,
+    start_date=SASAMLMigrationConst.DAG_START_TIME,
+    tags=commons.TAGS,
+    max_active_runs=1,
+    is_paused_upon_creation=True
+) as dag:
+
+    sasAMLDataTransform = SASAMLDataTransform()
+
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+
+    create_case_feed_table_task = PythonOperator(
+        task_id="create_case_feed_table_task",
+        python_callable=create_or_replace_table,
+        op_kwargs={
+            "table": SASAMLMigrationConst.TBL_CURATED_CASE_FEED,
+            "schema_path": SASAMLMigrationConst.TBL_CURATED_CASE_FEED_SCHEMA},
+        trigger_rule=TriggerRule.ALL_SUCCESS
+    )
+
+    create_person_feed_table_task = PythonOperator(
+        task_id="create_person_feed_table_task",
+        python_callable=create_or_replace_table,
+        op_kwargs={
+            "table": SASAMLMigrationConst.TBL_CURATED_PERSON_FEED,
+            "schema_path": SASAMLMigrationConst.TBL_CURATED_PERSON_FEED_SCHEMA},
+        trigger_rule=TriggerRule.ALL_SUCCESS
+    )
+
+    create_note_feed_table_task = PythonOperator(
+        task_id="create_note_feed_table_task",
+        python_callable=create_or_replace_table,
+        op_kwargs={
+            "table": SASAMLMigrationConst.TBL_CURATED_NOTE_FEED,
+            "schema_path": SASAMLMigrationConst.TBL_CURATED_NOTE_FEED_SCHEMA},
+        trigger_rule=TriggerRule.ALL_SUCCESS
+    )
+
+    case_feed_from_existing_cases_task = PythonOperator(
+        task_id="case_feed_from_existing_cases_task",
+        python_callable=sasAMLDataTransform.task_case_feed_from_existing_cases,
+        trigger_rule=TriggerRule.ALL_SUCCESS
+    )
+
+    note_feed_from_existing_cases_task = PythonOperator(
+        task_id="note_feed_from_existing_cases_task",
+        python_callable=sasAMLDataTransform.task_note_feed_from_existing_cases,
+        trigger_rule=TriggerRule.ALL_SUCCESS
+    )
+
+    person_feed_from_existing_cases_task = PythonOperator(
+        task_id="person_feed_from_existing_cases_task",
+        python_callable=sasAMLDataTransform.task_person_feed_from_existing_cases,
+        trigger_rule=TriggerRule.ALL_SUCCESS
+    )
+
+    case_feed_from_derived_cases_task = PythonOperator(
+        task_id="case_feed_from_derived_cases_task",
+        python_callable=sasAMLDataTransform.task_case_feed_from_derived_cases,
+        trigger_rule=TriggerRule.ALL_SUCCESS
+    )
+
+    pipeline_complete = EmptyOperator(
+        task_id="pipeline_complete", trigger_rule=TriggerRule.ALL_SUCCESS)
+
+    pipeline_start >> create_case_feed_table_task >> \
+        create_person_feed_table_task >> \
+        create_note_feed_table_task >> \
+        case_feed_from_existing_cases_task >> \
+        person_feed_from_existing_cases_task >> \
+        note_feed_from_existing_cases_task >> \
+        case_feed_from_derived_cases_task >> \
+        pipeline_complete

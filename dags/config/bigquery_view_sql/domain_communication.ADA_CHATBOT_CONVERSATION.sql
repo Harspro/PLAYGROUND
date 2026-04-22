@@ -1,0 +1,21 @@
+SELECT 
+  id,
+  date_created,
+  date_updated,
+  pcfcustid,
+  agent,
+  browser,
+  browser_version,
+  chatter_id,
+  csat,
+  device,
+  is_engaged,
+  is_escalated,
+  is_test_user,
+  language,
+  oauth_channel,
+  platform,
+  metavariables,
+  variables
+FROM 
+  pcb-{env}-landing.domain_communication.ADA_CHATBOT_CONVERSATION

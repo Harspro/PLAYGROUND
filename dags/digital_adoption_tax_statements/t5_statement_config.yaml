@@ -1,0 +1,25 @@
+staging_bucket: 'pcb-{env}-staging-extract'
+project_id: 'pcb-{env}-landing'
+external_project_id: 'pcb-{env}-processing'
+t5_tax_slip_csv: 'gs://pcb-{env}-staging-extract/temenos_t5_slip/t5_csv/T5_TAX_SLIP.csv'
+t5_tax_header_csv: 'gs://pcb-{env}-staging-extract/temenos_t5_slip/t5_csv/T5_HEADER.csv'
+t5_tax_trailer_csv: 'gs://pcb-{env}-staging-extract/temenos_t5_slip/t5_csv/T5_TRAILER.csv'
+xml_file_path_gcs: 'temenos_t5_slip/t5_xml/temenos_t5.xml'
+t5_tax_slip_table: 'pcb-{env}-landing.domain_tax_slips.T5_TAX_RAW_SLIP'
+t5_tax_header_table: 'pcb-{env}-landing.domain_tax_slips.T5_TAX_RAW_HEADER'
+t5_tax_trailer_table: 'pcb-{env}-landing.domain_tax_slips.T5_TAX_RAW_TRAILER'
+outbound_bucket: "cra-outbound-pcb{env_suffix}"
+
+
+
+# pds t5 tax xml processing config
+pds_t5_tax_slip_csv: 'gs://pcb-{env}-staging-extract/pds_t5_slip/t5_csv/T5_TAX_SLIP.csv'
+pds_t5_tax_header_csv: 'gs://pcb-{env}-staging-extract/pds_t5_slip/t5_csv/T5_HEADER.csv'
+pds_t5_tax_trailer_csv: 'gs://pcb-{env}-staging-extract/pds_t5_slip/t5_csv/T5_TRAILER.csv'
+pds_xml_file_path_gcs: 'pds_t5_slip/t5_xml/pds_t5.xml'
+
+
+
+
+
+

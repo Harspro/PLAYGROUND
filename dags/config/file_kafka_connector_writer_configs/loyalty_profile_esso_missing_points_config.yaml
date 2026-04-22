@@ -1,0 +1,55 @@
+loyalty_profile_sync_esso_points_issue_cust_kafka_writer:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P2"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "This will impact any Loblaw partner using PAR for awarding points. Customer who has reported a card lost/stolen or completed a product change wants their PAR updated, So that customer can earn points at Esso points."
+    customer_impact: "TSYS and Mastercard have been creating a new PAR for lost/stolen and product change cards rather than mapping the old PAR to the new card number. This causes customer missing points."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/sync_loyalty_profile/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/sync_loyalty_profile/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/sync_loyalty_profile/sync_loyalty_profile_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/sync_loyalty_profile/sync_loyalty_profile_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/sync_loyalty_profile/customer_identifier_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: sync_loyalty_profile_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: sync_loyalty_profile_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: customerId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: customer_identifier_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_esso_points_issue
+    read_pause_deploy_config: False
+    tags: ["Loyalty"]
+    job_size: extra_small
+    dataproc_cluster_name: sync-loyalty-profile-esso-points
+    schedule_interval: "0 10 * * 5"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_customer_management
+    table_id: loyalty_profile_esso_points_issue_{current_date}
+    query_file: loyalty_processing/par/loyalty_profile_esso_points_issue.sql
+    env_specific_replacements: True
+    replacements:
+      dev:
+        "{table_cnsld_latest}": "pcb-dev-landing.domain_loyalty.cnsld_ee_wallt_acct_tran_latst"
+        "{table_ee_identity}": "pcb-dev-landing.domain_loyalty.ee_identity"
+        "{table_ee_wallet_transaction_payment}": "pcb-dev-landing.domain_loyalty.ee_wallet_transaction_payment"
+      uat:
+        "{table_cnsld_latest}": "pcb-uat-landing.domain_loyalty.cnsld_ee_wallt_acct_tran_latst"
+        "{table_ee_identity}": "pcb-uat-landing.domain_loyalty.ee_identity"
+        "{table_ee_wallet_transaction_payment}": "pcb-uat-landing.domain_loyalty.ee_wallet_transaction_payment"
+      prod:
+        "{table_cnsld_latest}": "lt-dia-lake-prd-consume.transactional_loyalty.cnsld_ee_wallt_acct_tran_latst"
+        "{table_ee_identity}": "lt-dia-lake-prd-consume.transactional_loyalty.ee_identity"
+        "{table_ee_wallet_transaction_payment}": "lt-dia-lake-prd-consume.transactional_loyalty.ee_wallet_transaction_payment"
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: sync-loyalty-profile
+    file_name: esso-points-issue

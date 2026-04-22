@@ -1,0 +1,47 @@
+tmx_login_fraud_kafka_writer:
+  dag:
+    description: "DAG to send login fraud data read data from BigQuery and send to DP Kafka"
+    schedule: "0 6 * * 1-5"
+    max_active_runs: 1
+    is_paused_upon_creation: true
+    tags: [ "team-ogres", "login_fraud" ]
+    render_template_as_native_obj: true
+    kafka_writer_task_id: trigger_kafka_writer_dag
+    kafka_trigger_dag_id: fraud_risk_truthdata_kafka_writer
+    kafka_cluster_name: tmx-login-fraud-merch-c
+    external_sensor_dag_id:
+      - dag_id: ts2_cardguard_authlog_full_file_loading
+        task: End
+      - dag_id: ts2_cardguard_caselog_full_file_loading
+        task: End
+      - dag_id: ts2_cardguard_fraudflag_full_file_loading   #db053_ts2_cardguard_fraudflag_table_delta
+        task: End
+    poke_interval_min: 15
+    poke_timeout_min: 180
+    wait_for_completion: true
+    poke_interval: 30
+    bucket: pcb-{env}-staging-extract
+    folder_name: tmx_login_fraud
+    file_name: login-confirmed-fraud
+    bigquery:
+      project_id: pcb-{env}-processing
+      dataset_id: domain_fraud_risk_intelligence
+      table_id: login_confirmed_fraud_{current_date}
+      query_file: fraud_risk_truthdata_processing/login_fraud/tmx_login_fraud.sql
+    gcs:
+      bucket: pcb-{env}-staging-extract
+      folder_name: tmx_login_fraud
+      file_name: login-confirmed-fraud-*.parquet
+  default_args:
+    owner: "team-ogres"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "Login Fraud Events from New applications or login will not be send as feedback to TMX"
+    customer_impact: "Customers are not categorized as Fraud from TMX"
+    depends_on_past: false
+    email: []
+    retries: 0
+    email_on_failure: false
+    email_on_retry: false
+    catchup: false

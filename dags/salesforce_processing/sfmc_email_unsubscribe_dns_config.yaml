@@ -1,0 +1,28 @@
+sfmc_email_unsubscribe_dns_processing:
+  tags:
+    - communication
+    - email
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "email"
+    severity: "P2"
+    business_impact: "This will affect the loading of the unsubscribe DNS email list from Salesforce Marketing to the DP."
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations potentially resulting in penalties for the bank."
+  dag:
+    read_pause_deploy_config: True
+    wait_for_completion: True
+    poke_interval: 30
+    staging_bucket: pcb-{env}-staging
+    file_load_config:
+      loading_task_id: trigger_sfmc_email_unsubscribe_dns_file_loading_job_dag
+      loading_dag_id: sfmc_email_unsubscribe_dns_file_loading_job
+    kafka_config:
+      kafka_writer_task_id: trigger_sfmc_email_unsubscribe_dns_kafka_writer_dag
+      kafka_trigger_dag_id: sfmc_email_unsubscribe_dns_kafka_writer
+      kafka_cluster_name: "sfmc-email-unsubscribe-c"
+    trigger_config:
+      bucket: "{{ dag_run.conf['bucket'] }}"
+      name: "{{ dag_run.conf['name'] }}"
+      folder_name: "{{ dag_run.conf['folder_name'] }}"
+      file_name: "{{ dag_run.conf['file_name'] }}"

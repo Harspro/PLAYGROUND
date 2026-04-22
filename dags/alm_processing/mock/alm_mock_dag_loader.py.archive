@@ -1,0 +1,31 @@
+from alm_processing.mock.alm_mock_dag_base import AlmMockBase
+from alm_processing.utils import alm_util as util
+from airflow.operators.python import PythonOperator
+from airflow.utils.trigger_rule import TriggerRule
+from util.constants import BIGQUERY
+from alm_processing.utils import constants
+
+
+class AlmMockDagLoader(AlmMockBase):
+    def __init__(self, config_filename: str):
+        super().__init__(config_filename)
+    #   NOTE:  This function has to be implemented as source of data
+
+    def get_data(self, config: dict):
+        pass
+
+    #   TODO: PLACEHOLDER FOR  STEPS NEEDED FOR PREPROCESSING
+    def preprocessing_job(self, dag_config: dict):
+        pass
+
+    #   TODO: PLACEHOLDER FOR  STEPS NEEDED FOR POSTPROCESSING
+    def postprocessing_job(self, dag_config: dict):
+        pass
+
+    #   TODO:  NEED TO ADD DATAPROC FUNCTIONALITY WHEN NEEDED
+    def create_dataproc_job(self, dag_config: dict):
+        pass
+
+    #   TODO:  NEED TO ADD PARSE FILE FUNCTIONALITY FOR EXTERNAL VENDOR FILES
+    def process_file(self, dag_config: dict):
+        pass

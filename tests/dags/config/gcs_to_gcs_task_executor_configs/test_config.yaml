@@ -1,0 +1,68 @@
+# Test configuration for GcsToGcsTaskExecutor
+# This file contains sample configurations for testing the GCS to GCS task executor
+
+test_dag_1:
+  default_args:
+    owner: 'test_owner'
+    depends_on_past: false
+    email: ['test@example.com']
+    severity: 'P2'
+    email_on_failure: true
+    email_on_retry: false
+    retries: 2
+    retry_delay: 600  # 10 minutes in seconds
+    capability: 'test_capability'
+    sub_capability: 'test_sub_capability'
+    business_impact: 'high'
+    customer_impact: 'medium'
+  dag:
+    source_bucket: 'source-bucket'
+    source_object: 'source/path/file.txt'
+    destination_bucket: 'dest-bucket'
+    destination_object: 'dest/path/file.txt'
+    move_object: true
+    dagrun_timeout: 60
+    description: 'Test DAG for GCS to GCS transfer'
+
+test_dag_2:
+  dag:
+    source_bucket: 'source-bucket-2'
+    source_objects: ['file1.txt', 'file2.txt']
+    destination_bucket: 'dest-bucket-2'
+    destination_object: 'dest/path/'
+    match_glob: '*.txt'
+    move_object: false
+    dagrun_timeout: 45
+
+test_dag_3:
+  dag:
+    source_bucket: 'minimal-bucket'
+    destination_bucket: 'minimal-dest-bucket'
+    # No optional parameters specified - should use defaults
+
+test_dag_4:
+  default_args:
+    owner: 'batch_processor'
+    severity: 'P1'
+    retries: 3
+    retry_delay: 900  # 15 minutes in seconds
+  dag:
+    source_bucket: 'batch-source-bucket'
+    source_objects: ['data1.csv', 'data2.csv', 'data3.csv']
+    destination_bucket: 'batch-dest-bucket'
+    destination_object: 'processed/'
+    match_glob: '*.csv'
+    move_object: true
+    dagrun_timeout: 120
+    description: 'Batch processing DAG for CSV files'
+
+test_dag_5:
+  dag:
+    source_bucket: 'archive-bucket'
+    source_object: 'logs/'
+    destination_bucket: 'backup-bucket'
+    destination_object: 'archived/logs/'
+    match_glob: '*.log'
+    move_object: false
+    dagrun_timeout: 90
+    description: 'Archive logs to backup location' 

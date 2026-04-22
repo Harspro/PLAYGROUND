@@ -1,0 +1,27 @@
+tags:
+  - tag
+default_args:
+  owner: "alerts"
+  capability: "capability"
+  sub_capability: "sub-capability"
+  severity: "P3"
+  business_impact: "business impact"
+  customer_impact: "customer impact"
+dag:
+  read_pause_deploy_config: True
+  wait_for_completion: True
+  poke_interval: 30
+  file_extract_column_index: 6
+  kafka_config:
+    kafka_writer_task_id: 'task-id'
+    kafka_trigger_dag_id: 'trigger-dag-id'
+    kafka_cluster_name: "cluster-name"
+  bigquery:
+    bucket: 'bucket-name'
+    folder_prefix: 'folder-prefix'
+    file_name: 'file-name'
+  trigger_config:
+    bucket: "bucket-name"
+    name: "name"
+    folder_name: "folder-name"
+    file_name: "file-name"

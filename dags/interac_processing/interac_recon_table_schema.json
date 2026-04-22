@@ -1,0 +1,121 @@
+[{
+	"name": "bank_to_customer_account_report",
+	"type": "RECORD",
+	"fields": [{
+			"name": "group_header",
+			"type": "RECORD",
+			"fields": [{
+					"name": "message_identification",
+					"type": "STRING",
+					"mode": "NULLABLE"
+				},
+				{
+					"name": "creation_datetime",
+					"type": "STRING",
+					"mode": "NULLABLE"
+				},
+				{
+					"name": "additional_information",
+					"type": "STRING",
+					"mode": "NULLABLE"
+				}
+			]
+		},
+		{
+			"name": "report",
+			"type": "RECORD",
+			"fields": [{
+					"name": "identification",
+					"type": "STRING",
+					"mode": "NULLABLE"
+				},
+				{
+					"name": "from_to_date",
+					"type": "RECORD",
+					"fields": [{
+							"name": "from_date_time",
+							"type": "STRING",
+							"mode": "NULLABLE"
+						},
+						{
+							"name": "to_date_time",
+							"type": "STRING",
+							"mode": "NULLABLE"
+						}
+					]
+				},
+				{
+					"name": "account",
+					"type": "RECORD",
+					"fields": [{
+							"name": "identification",
+							"type": "RECORD",
+							"fields": [{
+								"name": "other",
+								"type": "RECORD",
+								"fields": [{
+									"name": "identification",
+									"type": "STRING",
+									"mode": "NULLABLE"
+								}]
+							}]
+						},
+						{
+							"name": "servicer",
+							"type": "RECORD",
+							"mode": "NULLABLE",
+							"fields": [{
+								"name": "financial_institution_identification",
+								"type": "RECORD",
+								"mode": "NULLABLE",
+								"fields": [{
+									"name": "clearing_system_member_identification",
+									"type": "RECORD",
+									"mode": "NULLABLE",
+									"fields": [{
+										"name": "member_identification",
+										"type": "STRING",
+										"mode": "NULLABLE"
+									}]
+								}]
+							}]
+						}
+					]
+				},
+				{
+					"name": "transactions_summary",
+					"type": "RECORD",
+					"fields": [{
+						"name": "total_entries_per_bank_transaction_code",
+						"type": "RECORD",
+						"mode": "REPEATED",
+						"fields": [{
+								"name": "number_of_entries",
+								"type": "STRING",
+								"mode": "NULLABLE"
+							},
+							{
+								"name": "sum",
+								"type": "NUMERIC",
+								"mode": "NULLABLE"
+							},
+							{
+								"name": "bank_transaction_code",
+								"type": "RECORD",
+								"fields": [{
+									"name": "proprietary",
+									"type": "RECORD",
+									"fields": [{
+										"name": "code",
+										"type": "STRING",
+										"mode": "NULLABLE"
+									}]
+								}]
+							}
+						]
+					}]
+				}
+			]
+		}
+	]
+}]

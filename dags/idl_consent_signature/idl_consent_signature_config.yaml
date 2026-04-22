@@ -1,0 +1,27 @@
+default_args:
+  owner: "team-vortex"
+  capability: "Consent"
+  severity: "P4"
+  sub_capability: "Consent Signature"
+  business_impact: "Failure to retrieve historical consent signature"
+  customer_impact: "None"
+  depends_on_past: False
+  email: []
+  retries: 0
+  email_on_failure: False
+  email_on_retry: False
+
+read_pause_deploy_config: False
+cluster_name: "idl-consent-spark-batch"
+dag_owner: "team-vortex"
+
+spark_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/idl-consent-signature-spark-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/idl-consent-signature-spark-batch/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/idl-consent-signature-spark-batch/kafka.jks
+  main_class: com.pcb.batch.spark.idl.consent.IdlConsentSignatureJob
+  properties:
+    spark.driver.extraJavaOptions: "-Duser.timezone=America/Toronto"
+    spark.executor.extraJavaOptions: "-Duser.timezone=America/Toronto"

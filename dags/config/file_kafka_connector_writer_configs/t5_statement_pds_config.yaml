@@ -1,0 +1,40 @@
+statement_pds_t5_kafka_writer:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "data-movement"
+    business_impact: "This dag loads T5 statement from temenos events into DP kafka topic:  dp-batch-{env}-statement-temenos-t5-inbound."
+    customer_impact: "In the event of a failure, T5 statement will not be available for the customers."
+    severity: "P2"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/statement-temenos-t5/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/statement-temenos-t5/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/statement-temenos-t5/statement_temenos_t5_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/statement-temenos-t5/statement_temenos_t5_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/statement-temenos-t5/statement_temenos_t5_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: statement_temenos_t5_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: statement_temenos_t5_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: statementId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: statement_temenos_t5_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_statement_t5
+    read_pause_deploy_config: False
+    tags: [ "Digital-Adoption" ]
+    job_size: extra_small
+    dataproc_cluster_name: statement-temenos-t5
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_tax_slips
+    table_id: statement_pds_t5_tax_{current_date}
+    query_file: digital_adoption_tax_statements/sql/t5_pds_kafka.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: t5_statement_PDS
+    file_name: statement_pds_t5_tax

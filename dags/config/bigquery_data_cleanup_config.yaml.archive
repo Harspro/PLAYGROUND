@@ -1,0 +1,106 @@
+landing_zone_cardguard_authlog_cleanup:
+  table_ref: pcb-{env}-landing.domain_fraud.CARDGUARD_AUTHLOG
+  filter: "DATE(REC_LOAD_TIMESTAMP) = '2024-06-05'"
+
+landing_zong_ah02_disputes_cleanup:
+  table_ref: pcb-{env}-landing.domain_account_management.AH02_DISPUTES
+  filter: "AH02_HISTORY_TYPE!=2"
+
+landing_zone_CREDSCORE_DAS_cleanup:
+  dag_owner: "team-defender-alerts"
+  backup_enabled: "true"
+  table_ref: pcb-{env}-landing.domain_scoring.CREDSCORE_DAS
+
+landing_zone_CREDSCORE_T0010_cleanup:
+  dag_owner: "team-defender-alerts"
+  backup_enabled: "true"
+  table_ref: pcb-{env}-landing.domain_scoring.CREDSCORE_T0010
+
+landing_zone_CREDSCORE_T0030_cleanup:
+  dag_owner: "team-defender-alerts"
+  backup_enabled: "true"
+  table_ref: pcb-{env}-landing.domain_scoring.CREDSCORE_T0030
+
+bq_DNS_EMAILBOUNCEBACK_EXACT_TARGET_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.DNS_EMAILBOUNCEBACK_EXACT_TARGET
+  filter: "DATE(EventDate) > '2025-03-20'"
+
+bq_CONTACT_MNGMNT_DB_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.CONTACT_MNGMNT_DB
+  filter: "DATE(CAMPAIGN_DEPLOYMENT_DATE) > '2025-03-23'"
+
+bq_TOUCH_POINT_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.TOUCH_POINT
+  filter: "DATE(DATETIME) > '2025-03-31'"
+
+bq_CCDR_GCP_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.CCDR_GCP
+  filter: "DATE(CALLSTARTDATETIME) > '2025-04-07'"
+
+bq_REVISED_APP_REPORT_20200708_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.REVISED_APP_REPORT_20200708
+  filter: "DATE(APP_DATE) > '2025-02-24'"
+
+bq_store28ace_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.STORE28ACE
+  filter: "DATE(APP_ENTERED_DATE) > '2025-03-29'"
+
+bq_pcmc_mbr_emob_custs_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.PCMC_MBR_EMOB_CUSTS
+  filter: "DATE(DT_OPEN) > '2024-11-30'"
+
+bq_cons_trans_tendr_eft_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.CONS_TRANS_TENDR_EFT
+  filter: "DATE(TRANS_DT) > '2025-03-31'"
+
+bq_CA_IVR_MONTHLY_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.CA_IVR_MONTHLY
+  filter: "DATE(DATETIME) > '2025-04-01'"
+
+bq_server_ccdr_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.CCDR
+  filter: "DATE(callStartDatetime) > '2025-03-31'"
+
+bq_server_cons_trans_pts_rdm_pcb_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.CONS_TRANS_PTS_RDM_PCB
+  filter: "DATE(TRANS_DT) > '2024-08-22'"
+
+bq_pct_upc_daily_sales_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.PCT_UPC_DAILY_SALES
+  filter: "DATE(DATE) > '2025-03-28'"
+
+bq_pco_registered_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.PCO_REGISTERED
+  filter: "DATE(Consumer_Registration_Dt) > '2025-03-06'"
+
+bq_hash_pc_cleanup:
+  table_ref: pcb-prod-pds.sql_server_tables.HASH_PC
+  filter: "DATE(REC_CHNG_TMS) >= '2024-12-30'"
+
+data_patch_batch_authorization_log_table:
+  table_ref: pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG
+  filter: "FILE_CREATE_DT = '2025-06-04' and date(REC_LOAD_TIMESTAMP)='2025-06-04'"
+
+data_patch25_AM3A_table:
+  table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3A
+  filter: "FILE_CREATE_DT='2025-07-31'"
+
+data_patch25_AM3B_table:
+  table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3B
+  filter: "FILE_CREATE_DT='2025-07-31'"
+
+data_patch_batch_authorization_log_table:
+  table_ref: pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG
+  filter: "FILE_CREATE_DT >= '2025-06-04' and date(REC_LOAD_TIMESTAMP)>='2025-06-04'"
+
+data_patch17_18_AT31_table:
+  table_ref: pcb-{env}-landing.domain_account_management.AT31
+  filter: "REC_LOAD_TIMESTAMP>='2017-01-01 00:00:00' and REC_LOAD_TIMESTAMP<'2019-01-01 00:00:00'"
+
+data_patch22_23_AT31_table:
+  table_ref: pcb-{env}-landing.domain_account_management.AT31
+  filter: "REC_LOAD_TIMESTAMP>='2022-01-01 00:00:00' and REC_LOAD_TIMESTAMP<'2024-01-01 00:00:00'"
+
+data_patch_ah02_disputes_table:
+  table_ref: pcb-{env}-landing.domain_account_management.AH02_DISPUTES
+  filter: "FILE_CREATE_DT = '2025-09-11' and REC_LOAD_TIMESTAMP>='2025-09-11 20:20:00' and REC_LOAD_TIMESTAMP<'2025-09-11 20:21:00'"

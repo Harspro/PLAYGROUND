@@ -1,0 +1,52 @@
+# Test configuration for table_comparator
+test_comparator:
+  source_table_name: pcb-{env}-landing.domain_account_management.IDL_CIF_CARD_CURR
+  target_table_name: pcb-{env}-landing.domain_account_management.CIF_CARD_CURR
+
+  # Primary key columns (required)
+  primary_key_columns:
+    - CIFP_ACCOUNT_ID6
+    - FILE_CREATE_DT
+
+  # Optional: Date filtering for incremental comparisons
+  record_load_date_column: FILE_CREATE_DT
+  specific_load_dates:
+    - "2025-07-01"
+    - "2025-07-02"
+
+  # Optional: Specific columns to compare
+  comparison_columns:
+    - CIFP_TRANS_TO_ACCT_NO
+    - CIFP_ACCOUNT_NUM
+
+  # Optional: Columns to exclude from comparison
+  exclude_columns:
+    - REC_LOAD_TIMESTAMP
+
+  # Type-based global expressions
+  global_expressions_by_type:
+    string_types:
+      - COALESCE(column, '')
+    numeric_types:
+      - COALESCE(column, 0)
+
+  # Column-specific expressions
+  column_expressions:
+    CIFP_ACCOUNT_NUM:
+      expressions:
+        - TRIM(column)
+      description: "Trim whitespace from col1"
+
+  # Optional: Detailed mismatch report table
+  mismatch_report_table_name: test-project.test_dataset.mismatch_report
+
+  # Optional: View on top of mismatch report table (if not provided, default will be created in curated project)
+  # mismatch_report_view_name: test-project.test_dataset.mismatch_report_view
+
+  # DAG configuration
+  schedule_interval: "0 1 * * *"
+
+  # Tags
+  tags:
+    - test-tag
+    - table-comparator 

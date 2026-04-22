@@ -1,0 +1,45 @@
+test_bigquery_db_connector_dag:
+  default_args:
+    owner: "test-owner"
+    capability: "test-capability"
+    severity: "test-severity"
+    sub_capability: "test-sub-capability"
+    business_impact: "test-business-impact"
+    customer_impact: "test-customer-impact"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_test
+    table_id: test
+    query: "CREATE OR REPLACE TABLE\n\
+            `{staging_table_id}`\n\
+            OPTIONS (\n\
+            expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 14 DAY)\n\
+            ) AS (SELECT * FROM `pcb-{env}-landing.domain_test.test_table`);"
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: test_postgres_connection
+    target_table_id: public.test_target
+    batch_size: 10000
+    select_fields:
+      - test_select_field_1
+      - test_select_field_2
+      - test_select_field_3
+    update_fields:
+      - test_update_field_1
+    conflict_fields:
+      - test_conflict_field_1
+      - test_conflict_field_2
+  airflow_connection_config:
+    conn_id: test_postgres_connection
+    conn_type: postgres
+    description: "Test Postgres Airflow Connection"
+    test-deployment-environment:
+      host: test-deployment-host
+      login: test_owner
+      vault_password_secret_path: "/test-secret/data/test-deployment-environment/api"
+      vault_password_secret_key: test.datasource.password
+      schema: test_schema
+      port: 5432
+  dag:
+    read_pause_deploy_config: True
+    tags: ["test-tag"]

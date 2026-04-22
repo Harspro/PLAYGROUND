@@ -1,0 +1,134 @@
+INSERT INTO `pcb-{env}-landing.domain_scoring.SCORING_PREP_LCL_NONLCL_GROCERY_DAILY`
+(
+  MAST_ACCOUNT_ID,
+  TOB,
+  TOT_GROCERY_SPEND,
+  TOT_GROCERY_TRANS,
+  GROCERY_TRANS_PER_MONTH,
+  GROCERY_SPEND_PER_MONTH,
+  TOT_NON_LCL_SPEND,
+  N_NON_LCL_TRANS,
+  AVG_NON_LCL_SPEND_PER_TRANS,
+  AVG_NON_LCL_SPEND_PER_MONTH,
+  TOT_LCL_SPEND,
+  N_LCL_TRANS,
+  AVG_LCL_SPEND_PER_TRANS,
+  AVG_LCL_SPEND_PER_MONTH,
+  LCL_PCT_OF_SPEND,
+  NON_LCL_PCT_OF_SPEND,
+  LCL_PCT_OF_TRANS,
+  NON_LCL_PCT_OF_TRANS,
+  GROCERY_PCT_OF_SPEND,
+  GROCERY_PCT_OF_TRANS,
+  REC_LOAD_TIMESTAMP,
+  JOB_ID
+)
+WITH
+  base_data AS (
+    SELECT DISTINCT
+      CAST(grocery_for_lcl_nonlcl_daily.MAST_ACCOUNT_ID AS NUMERIC)
+        AS MAST_ACCOUNT_ID,
+      CAST(grocery_for_lcl_nonlcl_daily.TOB AS NUMERIC) AS TOB,
+      CAST(grocery_for_lcl_nonlcl_daily.TOT_GROCERY_SPEND AS NUMERIC)
+        AS TOT_GROCERY_SPEND,
+      CAST(grocery_for_lcl_nonlcl_daily.TOT_GROCERY_TRANS AS NUMERIC)
+        AS TOT_GROCERY_TRANS,
+      CAST(grocery_for_lcl_nonlcl_daily.GROCERY_TRANS_PER_MONTH AS NUMERIC)
+        AS GROCERY_TRANS_PER_MONTH,
+      CAST(grocery_for_lcl_nonlcl_daily.GROCERY_SPEND_PER_MONTH AS NUMERIC)
+        AS GROCERY_SPEND_PER_MONTH,
+      CAST(non_lcl_store_spend_daily.TOT_NON_LCL_SPEND AS NUMERIC)
+        AS TOT_NON_LCL_SPEND,
+      CAST(non_lcl_store_spend_daily.N_NON_LCL_TRANS AS NUMERIC)
+        AS N_NON_LCL_TRANS,
+      CAST(non_lcl_store_spend_daily.AVG_NON_LCL_SPEND_PER_TRANS AS NUMERIC)
+        AS AVG_NON_LCL_SPEND_PER_TRANS,
+      CAST(non_lcl_store_spend_daily.AVG_NON_LCL_SPEND_PER_MONTH AS NUMERIC)
+        AS AVG_NON_LCL_SPEND_PER_MONTH,
+      CAST(lcl_store_spend_daily.TOT_LCL_SPEND AS NUMERIC) AS TOT_LCL_SPEND,
+      CAST(lcl_store_spend_daily.N_LCL_TRANS AS NUMERIC) AS N_LCL_TRANS,
+      CAST(lcl_store_spend_daily.AVG_LCL_SPEND_PER_TRANS AS NUMERIC)
+        AS AVG_LCL_SPEND_PER_TRANS,
+      CAST(lcl_store_spend_daily.AVG_LCL_SPEND_PER_MONTH AS NUMERIC)
+        AS AVG_LCL_SPEND_PER_MONTH
+    FROM
+      `pcb-{env}-curated.domain_scoring.SCORING_PREP_GROCERY_FOR_LCL_NONLCL_DAILY_LATEST`
+        AS grocery_for_lcl_nonlcl_daily
+    LEFT JOIN
+      `pcb-{env}-curated.domain_scoring.SCORING_PREP_NON_LCL_STORE_SPEND_DAILY_LATEST`
+        AS non_lcl_store_spend_daily
+      ON
+        grocery_for_lcl_nonlcl_daily.MAST_ACCOUNT_ID
+        = non_lcl_store_spend_daily.MAST_ACCOUNT_ID
+    LEFT JOIN
+      `pcb-{env}-curated.domain_scoring.SCORING_PREP_LCL_STORE_SPEND_DAILY_LATEST`
+        AS lcl_store_spend_daily
+      ON
+        grocery_for_lcl_nonlcl_daily.MAST_ACCOUNT_ID
+        = lcl_store_spend_daily.MAST_ACCOUNT_ID
+  ),
+  enriched_data_1 AS (
+    SELECT DISTINCT
+      base_data.*,
+      ROUND(
+        SAFE_DIVIDE(
+          IFNULL(TOT_LCL_SPEND, 0),
+          (IFNULL(TOT_LCL_SPEND, 0) + IFNULL(TOT_NON_LCL_SPEND, 0))),
+        2) AS LCL_PCT_OF_SPEND,
+      ROUND(
+        SAFE_DIVIDE(
+          IFNULL(TOT_NON_LCL_SPEND, 0),
+          (IFNULL(TOT_LCL_SPEND, 0) + IFNULL(TOT_NON_LCL_SPEND, 0))),
+        2) AS NON_LCL_PCT_OF_SPEND,
+      ROUND(
+        SAFE_DIVIDE(
+          IFNULL(N_LCL_TRANS, 0),
+          (IFNULL(N_LCL_TRANS, 0) + IFNULL(N_NON_LCL_TRANS, 0))),
+        2) AS LCL_PCT_OF_TRANS,
+      ROUND(
+        SAFE_DIVIDE(
+          IFNULL(N_NON_LCL_TRANS, 0),
+          (IFNULL(N_LCL_TRANS, 0) + IFNULL(N_NON_LCL_TRANS, 0))),
+        2) AS NON_LCL_PCT_OF_TRANS,
+      ROUND(
+        SAFE_DIVIDE(
+          TOT_GROCERY_SPEND,
+          (IFNULL(TOT_LCL_SPEND, 0) + IFNULL(TOT_NON_LCL_SPEND, 0))),
+        2) AS GROCERY_PCT_OF_SPEND,
+      ROUND(
+        SAFE_DIVIDE(
+          TOT_GROCERY_TRANS,
+          (IFNULL(N_LCL_TRANS, 0) + IFNULL(N_NON_LCL_TRANS, 0))),
+        2) AS GROCERY_PCT_OF_TRANS
+    FROM base_data
+  )
+SELECT DISTINCT
+  CAST(enriched_data_1.MAST_ACCOUNT_ID AS STRING) AS MAST_ACCOUNT_ID,
+  CAST(enriched_data_1.TOB AS STRING) AS TOB,
+  CAST(enriched_data_1.TOT_GROCERY_SPEND AS STRING) AS TOT_GROCERY_SPEND,
+  CAST(enriched_data_1.TOT_GROCERY_TRANS AS STRING) AS TOT_GROCERY_TRANS,
+  CAST(enriched_data_1.GROCERY_TRANS_PER_MONTH AS STRING)
+    AS GROCERY_TRANS_PER_MONTH,
+  CAST(enriched_data_1.GROCERY_SPEND_PER_MONTH AS STRING)
+    AS GROCERY_SPEND_PER_MONTH,
+  CAST(enriched_data_1.TOT_NON_LCL_SPEND AS STRING) AS TOT_NON_LCL_SPEND,
+  CAST(enriched_data_1.N_NON_LCL_TRANS AS STRING) AS N_NON_LCL_TRANS,
+  CAST(enriched_data_1.AVG_NON_LCL_SPEND_PER_TRANS AS STRING)
+    AS AVG_NON_LCL_SPEND_PER_TRANS,
+  CAST(enriched_data_1.AVG_NON_LCL_SPEND_PER_MONTH AS STRING)
+    AS AVG_NON_LCL_SPEND_PER_MONTH,
+  CAST(enriched_data_1.TOT_LCL_SPEND AS STRING) AS TOT_LCL_SPEND,
+  CAST(enriched_data_1.N_LCL_TRANS AS STRING) AS N_LCL_TRANS,
+  CAST(enriched_data_1.AVG_LCL_SPEND_PER_TRANS AS STRING)
+    AS AVG_LCL_SPEND_PER_TRANS,
+  CAST(enriched_data_1.AVG_LCL_SPEND_PER_MONTH AS STRING)
+    AS AVG_LCL_SPEND_PER_MONTH,
+  CAST(enriched_data_1.LCL_PCT_OF_SPEND AS STRING) AS LCL_PCT_OF_SPEND,
+  CAST(enriched_data_1.NON_LCL_PCT_OF_SPEND AS STRING) AS NON_LCL_PCT_OF_SPEND,
+  CAST(enriched_data_1.LCL_PCT_OF_TRANS AS STRING) AS LCL_PCT_OF_TRANS,
+  CAST(enriched_data_1.NON_LCL_PCT_OF_TRANS AS STRING) AS NON_LCL_PCT_OF_TRANS,
+  CAST(enriched_data_1.GROCERY_PCT_OF_SPEND AS STRING) AS GROCERY_PCT_OF_SPEND,
+  CAST(enriched_data_1.GROCERY_PCT_OF_TRANS AS STRING) AS GROCERY_PCT_OF_TRANS,
+  CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP,
+  '{dag_id}' AS JOB_ID
+FROM enriched_data_1;

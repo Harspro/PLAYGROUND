@@ -1,0 +1,5 @@
+rename_landing_zone_events_new_table:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  from_name: EVENTS_new
+  to_name: EVENTS

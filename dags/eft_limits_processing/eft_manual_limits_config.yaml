@@ -1,0 +1,23 @@
+eft_manual_limits:
+  landing_table: pcb-{env}-landing.domain_movemoney_technical.EFT_LIMITS_MANUAL
+  query_file: eft_limits_processing/sql/eft_manual_limits.sql
+  processing_bucket_extract: pcb-{env}-staging-extract
+  folder_name: eft-pull-manual-limits
+  kafka_trigger_dag_id: pcma_manual_variable_limits_kafka_writer
+  kafka_writer_task: kafka_writer_task_eft_manual_limits
+  read_pause_deploy_config: False
+  job_size: extra_small
+  dataproc_cluster_name: eft-manual-limits-c
+  gcs:
+    staging_bucket: pcb-{env}-staging-extract
+    folder_name: eft-manual-limits
+    file_name: eft-manual-limits-*.parquet
+  tags:
+    - gold-alchemists, P3
+  default_args:
+      owner: "team-money-movement-eng"
+      capability: "Payments"
+      sub_capability: "EMT"
+      severity: "P3"
+      business_impact: "EFT Manual limits update failed"
+      customer_impact: "messages not delivered to Kafka EFT Manual limits update failed"

@@ -1,0 +1,61 @@
+table_name: CONTACT_FEED
+metrics:
+  - row_count
+  - missing_count
+  - missing_percentage
+  - values_count
+  - values_percentage
+  - invalid_count
+  - invalid_percentage
+  - valid_count
+  - valid_percentage
+  - avg_length
+  - max_length
+  - min_length
+  - avg
+  - sum
+  - max
+  - min
+  - stddev
+  - variance
+
+tests:
+  - row_count > 0
+
+columns:
+  institution_number:
+    valid_format: number_whole
+    valid_values:
+      - 320
+    valid_min: 0
+    tests:
+      - invalid_percentage == 0
+  customer_number:
+    valid_format: uuid
+    valid_min: 0
+    valid_max_length : 99
+    tests:
+      - invalid_percentage == 0
+  phone_number:
+    valid_regex: '^\s*[0-9]{3}-[0-9]{3}-[0-9]{4}\s*$'
+    tests:
+      - invalid_percentage == 0
+  phone_number_type:
+    valid_values:
+      - HOME
+      - WORK
+      - UNKNOWN
+    tests:
+      - invalid_percentage == 0
+  email_address:
+    valid_format: email
+    valid_regex: '.+\@.+\..+'
+    tests:
+      - invalid_percentage == 0
+  phone_number_extension:
+    valid_format: number_whole
+    valid_min: 0
+    valid_min_length: 0
+    valid_max_length : 99
+    tests:
+      - invalid_percentage == 0

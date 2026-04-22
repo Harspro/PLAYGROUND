@@ -1,0 +1,27 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+input_bucket: equifax-inbound-pcb{env_suffix}
+staging_bucket: pcb-{env}-staging
+output_bucket: equifax-outbound-pcb{env_suffix}
+dag_owner: "team-defenders-alerts"
+filename_pattern: "eqxds_expcbanktsystt_SCRQ_\\d{4}_(\\d{4})(\\d{2})(\\d{2})\\d{6}"
+month_list : ['02', '03', '05', '06', '08', '09', '11', '12']
+output_file_name_prefix: "eqxds_expcbanktsystt_SCRQ"
+dag_id: "equifax_file_processing"
+description: "Dag for Equifax file"
+region: "northamerica-northeast1"
+processing_bucket: pcb-{env}-staging/equifax-file-processing
+jar_file_uris:
+  - gs://pcb-{env}-staging-artifacts/jarfiles/equifax-spark-batch-2.0.0.jar
+file_uris:
+  - gs://pcb-{env}-staging-artifacts/resources/equifax-spark-batch/application.yaml
+main_class: "com.pcb.batch.spark.equifax.EquifaxSparkBatchApplication"
+
+

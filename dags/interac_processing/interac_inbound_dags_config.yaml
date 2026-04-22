@@ -1,0 +1,18 @@
+# Config file for all Interac related dags
+interac_pcb_reconciliation_daily:
+  bq_dataset_id: domain_payments
+  table_name: INTERAC_RECON_STAT
+  region: northamerica-northeast1
+  bank_to_customer_account_report: bank_to_customer_account_report
+  group_header: group_header
+  message_identification: message_identification
+  report: report
+  from_to_date: from_to_date
+  from_date_time: from_date_time
+  to_date_time: to_date_time
+interac_inbound_recon_exceptions:
+  bq_dataset_id: domain_payments
+  curated_table_name: INTERAC_RECON_EXCEPTIONS
+  region: northamerica-northeast1
+  sql_file_path: interac_processing/sql/interac_reconciliation.sql
+  cleanup_sql_file_path: interac_processing/sql/interac_reconciliation_cleanup.sql

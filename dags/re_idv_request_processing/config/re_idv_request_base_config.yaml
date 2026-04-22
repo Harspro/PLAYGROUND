@@ -1,0 +1,15 @@
+re_idv_request_processing:
+  activity_name: re_idv_request
+  bigquery:
+      source_project_id: pcb-{env}-landing
+      processing_project_id: pcb-{env}-processing
+      destination_project_id: pcb-{env}-curated
+  transformation_config: config/re_idv_request_processing_trans.yaml
+  dag:
+    schedule_interval: '0 9 * * *'
+    task_id:
+      kafka_writer_task_id: trigger_kafka_writer_process_dag
+    dag_id:
+      kafka_trigger_dag_id: re_idv_request_kafka_processing
+    wait_for_completion: True
+    poke_interval: 30

@@ -1,0 +1,131 @@
+TS2_STATUS,TS2_REASON_CODE,TS2_DESCRIPTION
+TW,L7,Frozen
+CL,DC,Closed Deceased
+CO,AT,Chargeoff Attorney
+CO,BD,Chargeoff Bad Debt
+CO,CD,Cease and Desist
+CO,DC,Chargeoff Deceased
+CO,EC,Chargeoff Economic
+CO,FR,Chargeoff Fraud
+CO,HD,Chargeoff Divorced
+CO,IC,Chargeoff Incarceration
+CO,IO,Chargeoff Overindebted
+CO,JR,Chargeoff Refused to Pay
+CO,LG,Chargeoff Legal
+CO,M1,Chargeoff Miscellaneous Reason 1
+CO,M2,Chargeoff Miscellaneous Reason 2
+CO,M3,Chargeoff Miscellaneous Reason 3
+CO,M4,Chargeoff Miscellaneous Reason 4
+CO,M5,Chargeoff Miscellaneous Reason 5
+CO,M6,Chargeoff Miscellaneous Reason 6
+CO,M7,Chargeoff Miscellaneous Reason 7
+CO,M8,Chargeoff Miscellaneous Reason 8
+CO,M9,Chargeoff Miscellaneous Reason 9
+CO,M0,Chargeoff Miscellaneous Reason 10
+CO,OT,Chargeoff Other
+CO,P1,Chargeoff Pending Bankruptcy Chapter 11
+CO,P2,Chargeoff Pending Bankruptcy Chapter 12
+CO,P3,Chargeoff Pending Bankruptcy Chapter 13
+CO,P7,Chargeoff Pending Bankruptcy Chapter 7
+CO,P9,Chargeoff Pending Bankruptcy Chapter 9
+CO,RT,Chargeoff Restitution
+CO,SK,Chargeoff Skip Account
+CO,ST,Chargeoff Settlement
+CO,UE,Chargeoff Unemployed
+CO,XM,Chargeoff Medical
+CO,07,Chargeoff Bankrupt Chapter 7
+CO,09,Chargeoff Bankrupt Chapter 9
+CO,11,Chargeoff Bankrupt Chapter 11
+CO,12,Chargeoff Bankrupt Chapter 12
+CO,13,Chargeoff Bankrupt Chapter 13
+CO,14,Chargeoff Bankrupt Chapter 14
+CO,15,Chargeoff Bankrupt Chapter 15
+CO,16,Chargeoff Bankrupt Chapter 16
+CO,17,Chargeoff Bankrupt Chapter 17
+CO,18,Chargeoff Bankrupt Chapter 18
+FR,Y,Fraud Closed
+CL,AF,Closed Annual Fee
+CL,BO,Closed Better Offer
+CL,BP,Closed Bank Policy
+CL,CT,Change in Terms
+CL,DU,Closed Did Not Use
+CL,IR,Closed Interest Rate
+CL,MR,Closed Multiple Relation
+CL,MS,Closed Marital Status Change
+CL,OL,Closed NR Inactive 12 Months
+CL,PD,Closed NR Inactive 6 Months
+CL,PE,Closed Processing Error
+CL,PG,Closed Product Change
+CL,PO,Account Paid Off
+CL,PR,Closed Probe
+CL,PS,Closed Product Structure
+CL,TC,Closed Too Many Cards
+CL,TE,Closed Terminated Employee
+CL,TO,HELOC Term Out
+CL,TR,TRIAD Closed
+CL,US,Closed Unsatisfactory Service
+CL,V1,Voluntarily Closed 1
+CL,V2,Voluntarily Closed 2
+CL,V3,Voluntarily Closed 3
+CL,V4,Voluntarily Closed 4
+CL,V5,Voluntarily Closed 5
+CL,V6,Voluntarily Closed 6
+CL,V7,Voluntarily Closed 7
+CL,V8,Voluntarily Closed 8
+CL,V9,AML Exception
+WA,CO,Watch Collections
+WA,CR,Watch Credit
+WA,CS,Watch Customer Service
+WA,OT,Watch Other
+WA,SF,Watch Security Fraud
+WA,W0,Client-Defined Watch 0
+WA,W1,Client-Defined Watch 1
+WA,W2,Client-Defined Watch 2
+WA,W3,Client-Defined Watch 3
+WA,W4,Client-Defined Watch 4
+WA,W5,Client-Defined Watch 5
+WA,W6,Client-Defined Watch 6
+WA,W7,Client-Defined Watch 7
+WA,W8,Client-Defined Watch 8
+WA,W9,Client-Defined Watch 9
+CR,AT,Credit Revoked Attorney
+CR,A1,Credit Revoked Client-Defined 1
+CR,A2,Probe Credit Revoked Client-Defined 2
+CR,A3,Credit Revoked Client-Defined 3
+CR,A4,Credit Revoked Client-Defined 4
+CR,A5,Credit Revoked Client-Defined 5
+CR,A6,Credit Revoked Client-Defined 6
+CR,A7,Credit Revoked Client-Defined 7
+CR,A8,Credit Revoked Client-Defined 8
+CR,A9,Credit Revoked Client-Defined 9
+CR,A0,Credit Revoked Client-Defined 10
+TW,11,PEP Verification
+IN,A,Transaction Type Inactivity
+IN,B,Inactive This Year
+IN,C,Inactive Since Open
+PD,01,Past Due 1-30
+PD,02,Past Due 31–60
+PD,03,Past Due 61–90
+PD,04,Past Due 91–120
+PD,05,Past Due 121–150
+PD,06,Past Due 151–180
+PD,07,Past Due 181–210
+PD,08,Past Due 211–240
+PD,09,Past Due 241–270
+PD,1A,Past Due 271–300
+PD,1B,Past Due 301–330
+PD,1C,Past Due 331+
+OL,01,Currently Overlimit .00-10%
+OL,02,Currently Overlimit 11–20%
+OL,03,Currently Overlimit 21–30%
+OL,04,Currently Overlimit 31–40%
+OL,05,Currently Overlimit 41–50%
+OL,06,Currently Overlimit 51–60%
+OL,07,Currently Overlimit 61–70%
+OL,08,Currently Overlimit 71–80%
+OL,09,Currently Overlimit 81–90%
+OL,1A,Currently Overlimit 91–100%
+OL,1B,Currently Overlimit 101%+
+RD,Y,Reissue Declined
+DOR,DOR,DORMANT
+ACT,ACT,ACTIVE

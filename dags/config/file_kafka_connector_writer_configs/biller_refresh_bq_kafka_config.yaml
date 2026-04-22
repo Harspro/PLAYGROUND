@@ -1,0 +1,34 @@
+biller_refresh_kafka_writer:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Money Movement"
+    severity: "P3"
+    sub_capability: "EMT"
+    business_impact: "This dag loads Biller refresh details into DP kafka topic: dp-batch-{env}-biller-refresh"
+    customer_impact: "In the event of a failure, Biller refresh details will not be updated"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/biller_refresh/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/biller_refresh/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/biller_refresh/biller_refresh_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/biller_refresh/biller_refresh_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/biller_refresh/biller_refresh_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: biller_refresh_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: biller_refresh_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: id
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+    pcb.file.kafka.connector.schema.file.path: biller_refresh_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_task_biller_refresh
+    dataproc_cluster_name: biller-refresh-proc-c
+    read_pause_deploy_config: False
+    job_size: extra_small
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: bill-refresh-process
+    file_name: bill-refresh-*.parquet

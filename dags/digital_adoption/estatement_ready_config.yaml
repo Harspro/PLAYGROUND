@@ -1,0 +1,4 @@
+kafka_cluster_name: estatement-ready-c
+kafka_trigger_dag_id: estatement_ready_kafka_writer
+read_pause_deploy_config: True
+staging_bucket: 'pcb-{env}-staging'

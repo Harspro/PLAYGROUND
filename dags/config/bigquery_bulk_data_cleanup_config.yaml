@@ -1,0 +1,17 @@
+acc_master_monthly_3B_segments_data_cleanup:
+  filter: "FILE_CREATE_DT IN ('2025-07-31','2025-08-29','2025-09-29')"
+  bigquery:
+    project_id: "pcb-{env}-landing"
+    dataset_id: "domain_account_management"
+    table_id:
+      - "TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3B"
+
+posted_tx_data_cleanup:
+  filter: "FILE_CREATE_DT = '2025-09-10'"
+  bigquery:
+    project_id: "pcb-{env}-landing"
+    dataset_id: "domain_payments"
+    table_id:
+      - "TS2_POSTED_TX_HEDR"
+      - "TS2_POSTED_TX_DETL"
+      - "TS2_POSTED_TX_TRLR"

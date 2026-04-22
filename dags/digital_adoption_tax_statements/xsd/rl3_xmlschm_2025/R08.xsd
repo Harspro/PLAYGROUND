@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R08 @@@@           -->
+	<xsd:complexType
+    name="R08Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Etudiant">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="NAS"
+              type="NasType">
+							
+						</xsd:element>
+						<xsd:element
+              name="CodePermanent">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="Char12Type">
+									<xsd:pattern
+                    value="([A-Z]{4}|[a-z]{4})\d{8}" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="NomFamille"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Prenom"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Initiale"
+              type="Char1Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Adresse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="Ligne1"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Ligne2"
+              type="Char30Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Ville"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Province"
+              type="Char20Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="CodePostal"
+              type="CodePostalType"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R08MntStruct" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R08MntStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="A_EtudesPostSecondaires"
+        minOccurs="0">
+				
+				<xsd:simpleType>
+					<xsd:restriction
+            base="Decimal9Type">
+						<xsd:enumeration
+              value="0.00" />
+						<xsd:enumeration
+              value="0,00" />
+						<xsd:enumeration
+              value="3823.00" />
+						<xsd:enumeration
+              value="3823,00" />
+						<xsd:enumeration
+              value="7646.00" />
+						<xsd:enumeration
+              value="7646,00" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element
+        name="B_FraisScolariteOuExamen"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="C_Dons"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

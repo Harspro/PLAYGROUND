@@ -1,0 +1,177 @@
+transformation:
+  - task_name: create_report_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/purge_report_terminus.sql
+  - task_name: fetch_adm_terminus_curr
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/adm_stats.sql
+      override_params:
+        is_terminus: "Y"
+        purge_ind: "0"
+  - task_name: fetch_adm_terminus_prev
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/adm_stats.sql
+      override_params:
+        is_terminus: "Y"
+        purge_ind: "1"
+  - task_name: fetch_adm_ods_curr
+    task_type: GCS_CSV_TO_BQ
+    task_param:
+      source_file:
+        bucket: pcb-{env}-staging-extract
+        folder: purging
+        file_pattern: adm_purge_list.csv
+        CSV:
+          skip_leading_rows: 1
+          field_delimiter: ","
+          schema_external:
+            - { "name": "APP_NUMBER",  "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "APP_TYPE",   "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "MAST_ACCOUNT_ID", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "IMAGE_ID",   "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "DECLINE_DATE",    "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "ACCOUNT_CLOSE_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "CREDIT_REVOKE_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "LAST_FINANCIAL_ACTIVITY_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "CURRENT_BALANCE", "type": "FLOAT", "mode": "NULLABLE" }
+            - { "name": "APP_SOURCE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "PURGE_LIST_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "PURGE_IND",  "type": "INTEGER", "mode": "NULLABLE" }
+      bigquery:
+        project_id: pcb-{env}-processing
+        dataset_id: domain_customer_acquisition
+        table_name: PURGELIST_ADM_ODS_TEMP_RAW
+        data_load_type: FULL_REFRESH
+  - task_name: transform_adm_ods_curr
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_src_ods_curr.sql
+      override_params:
+        src_table: "PURGELIST_ADM_ODS_TEMP_RAW"
+        app_id_column: "APP_NUMBER"
+  - task_name: fetch_adm_ods_prev
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/adm_stats.sql
+      override_params:
+        is_terminus: "N"
+        purge_ind: "0"
+  - task_name: fetch_experian_terminus_curr
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/experian_stats.sql
+      override_params:
+        is_terminus: "Y"
+        purge_ind: "0"
+  - task_name: fetch_experian_terminus_prev
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/experian_stats.sql
+      override_params:
+        is_terminus: "Y"
+        purge_ind: "1"
+  - task_name: fetch_experian_ods_curr
+    task_type: GCS_CSV_TO_BQ
+    task_param:
+      source_file:
+        bucket: pcb-{env}-staging-extract
+        folder: purging
+        file_pattern: experian_purge_list.csv
+        CSV:
+          skip_leading_rows: 1
+          field_delimiter: ","
+          schema_external:
+            - { "name": "APP_NUMBER",  "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "APP_TYPE",   "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "MAST_ACCOUNT_ID", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "IMAGE_ID",   "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "DECLINE_DATE",    "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "ACCOUNT_CLOSE_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "CREDIT_REVOKE_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "LAST_FINANCIAL_ACTIVITY_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "CURRENT_BALANCE", "type": "FLOAT", "mode": "NULLABLE" }
+            - { "name": "APP_SOURCE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "PURGE_LIST_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "PURGE_IND",  "type": "INTEGER", "mode": "NULLABLE" }
+      bigquery:
+        project_id: pcb-{env}-processing
+        dataset_id: domain_customer_acquisition
+        table_name: PURGELIST_EXPERIAN_ODS_TEMP_RAW
+        data_load_type: FULL_REFRESH
+  - task_name: transform_experian_ods_curr
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_src_ods_curr.sql
+      override_params:
+        src_table: "PURGELIST_EXPERIAN_ODS_TEMP_RAW"
+        app_id_column: "APP_NUMBER"
+  - task_name: fetch_experian_ods_prev
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/experian_stats.sql
+      override_params:
+        is_terminus: "N"
+        purge_ind: "0"
+  - task_name: fetch_eapps_terminus_curr
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/eapps_stats.sql
+      override_params:
+        is_terminus: "Y"
+        purge_ind: "0"
+  - task_name: fetch_eapps_terminus_prev
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/eapps_stats.sql
+      override_params:
+        is_terminus: "Y"
+        purge_ind: "1"
+  - task_name: fetch_eapps_ods_curr
+    task_type: GCS_CSV_TO_BQ
+    task_param:
+      source_file:
+        bucket: pcb-{env}-staging-extract
+        folder: purging
+        file_pattern: eapps_purge_list.csv
+        CSV:
+          skip_leading_rows: 1
+          field_delimiter: ","
+          schema_external:
+            - { "name": "APPLICATION_ID",  "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "APP_TYPE",   "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "MAST_ACCOUNT_ID", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "IMAGE_ID",   "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "DECLINE_DATE",    "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "ACCOUNT_CLOSE_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "CREDIT_REVOKE_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "LAST_FINANCIAL_ACTIVITY_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "CURRENT_BALANCE", "type": "FLOAT", "mode": "NULLABLE" }
+            - { "name": "APP_SOURCE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "PURGE_LIST_DATE", "type": "STRING", "mode": "NULLABLE" }
+            - { "name": "PURGE_IND",  "type": "INTEGER", "mode": "NULLABLE" }
+      bigquery:
+        project_id: pcb-{env}-processing
+        dataset_id: domain_customer_acquisition
+        table_name: PURGELIST_EAPPS_ODS_TEMP_RAW
+        data_load_type: FULL_REFRESH
+  - task_name: transform_eapps_ods_curr
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_src_ods_curr.sql
+      override_params:
+        src_table: "PURGELIST_EAPPS_ODS_TEMP_RAW"
+        app_id_column: "APPLICATION_ID"
+  - task_name: fetch_eapps_ods_prev
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/eapps_stats.sql
+      override_params:
+        is_terminus: "N"
+        purge_ind: "0"
+  - task_name: load_final_report
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/final_pre_purge_report.sql

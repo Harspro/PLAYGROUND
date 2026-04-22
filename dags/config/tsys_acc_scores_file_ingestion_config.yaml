@@ -1,0 +1,63 @@
+tsys_pcb_mc_acctscore_full_file_loading:
+  job_size: small
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_acctscores
+  trigger_dag_id: acct_score_bq_to_oracle
+  create_date_column: FILE_CREATE_DT
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_SCORE_FULL
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_SCORE_FULL
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      SC00:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_acctscores_full/MSTSCOR_SC00.CPY
+        pcb.tsys.processor.segment.name: SC00
+        pcb.tsys.processor.layout.name: SC00_REC
+      SC01:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_acctscores_full/MSTSCOR_SC01.CPY
+        pcb.tsys.processor.segment.name: SC01
+        pcb.tsys.processor.layout.name: SC01_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_acctscores_full/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9999
+        pcb.tsys.processor.layout.name: MAST_TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      SC00:
+        table_name: SC00
+        record_count_column: TRAILER_REC_CNT_X_1
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SC01:
+        table_name: SC01
+        record_count_column: TRAILER_REC_CNT_X_2
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: ACCOUNT_SCORE_TRAILER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

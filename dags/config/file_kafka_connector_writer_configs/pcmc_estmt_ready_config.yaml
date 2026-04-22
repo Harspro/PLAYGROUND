@@ -1,0 +1,34 @@
+estatement_ready_kafka_writer:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "money-movement"
+    sub_capability: "EMT"
+    business_impact: "This dag loads all PCMC E-Statements into DP kafka topic"
+    customer_impact: "In the event of a failure, E-Statements for PCF customers will not be updated"
+    severity: "P2"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcmc_estatement_ready/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcmc_estatement_ready/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcmc_estatement_ready/estmt_ready_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcmc_estatement_ready/estmt_ready_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcmc_estatement_ready/pcmc_estmt_ready_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: estmt_ready_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: estmt_ready_value.avsc
+    pcb.file.kafka.connector.csv.comment.character: T
+    pcb.file.kafka.connector.csv.delimiter: '|'
+    pcb.file.kafka.connector.csv.header: true
+    pcb.file.kafka.connector.csv.ignore.leading.white.space: true
+    pcb.file.kafka.connector.csv.ignore.trailing.white.space: true
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: CSV
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: tsysAccountId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: pcmc_estmt_ready_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_task_estatement_ready
+    read_pause_deploy_config: True
+    job_size: extra_small

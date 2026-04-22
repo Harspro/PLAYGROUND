@@ -1,0 +1,7 @@
+truncate_TSYS_TCS_PURGE_CASE_IMAGE_METADATA:
+  dag_owner: "team-defenders-alerts"
+  tags:
+    - P3
+  backup_enabled: "true"
+  tables:
+    - pcb-{env}-landing.domain_dispute.TSYS_TCS_PURGE_CASE_IMAGE_METADATA

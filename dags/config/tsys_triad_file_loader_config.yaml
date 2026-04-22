@@ -1,0 +1,63 @@
+tsys_triad_file_loader_launcher:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-triad-batch-2.0.0.jar
+  main_class: com.pcb.batch.spark.tsys.triad.TsysTriadSparkBatchApp
+  segment_args:
+    pcb.triad.processor.collection.outpath: gs://pcb-{env}-staging-extract/triad/collection_outcome/
+    pcb.triad.processor.crdt.facilit.outpath: gs://pcb-{env}-staging-extract/triad/crdt_facilit/
+    pcb.triad.processor.strategy.outpath: gs://pcb-{env}-staging-extract/triad/strategy_outcome/
+    pcb.triad.processor.cda.outpath: gs://pcb-{env}-staging-extract/triad/cda_outcome/
+    pcb.triad.processor.scoring.outpath: gs://pcb-{env}-staging-extract/triad/scoring_outcome/
+    pcb.triad.processor.authbase.outpath: gs://pcb-{env}-staging-extract/triad/authbase_outcome/
+    pcb.triad.processor.authorization.outpath: gs://pcb-{env}-staging-extract/triad/authorization_outcome/
+    pcb.triad.processor.decision.keys.outpath: gs://pcb-{env}-staging-extract/triad/decision_keys/
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  tags:
+    - gold-alchemists, P3
+  cluster_name: tsys-ts2-triadreport-c
+  job_size: extra_small
+  region: northamerica-northeast1
+  triad_file_type: triad_report_full
+  read_pause_deploy_config: True
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    processing_bucket_extract: pcb-{env}-staging-extract
+    folder_name: triad
+  processing_outcomes:
+    collection_outcome:
+      table_name: TSYS_COLLECTION_OUTCOMES_TRIAD_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/collection_outcome/*.parquet
+    cda_outcome:
+      table_name: TSYS_CDA_OUTCOMES_TRIAD_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/cda_outcome/*.parquet
+      trigger_dag_id: tsys_triad_variable_limits
+    crdt_facilit:
+      table_name: TSYS_CRDT_FACILIT_OUTCOMES_TRIAD_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/crdt_facilit/*.parquet
+    strategy_outcome:
+      table_name: TSYS_STRATEGY_OUTCOMES_TRIAD_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/strategy_outcome/*.parquet
+    scoring_outcome:
+      table_name: TSYS_SCORING_OUTCOMES_TRIAD_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/scoring_outcome/*.parquet
+    authorization_outcome:
+      table_name: TSYS_AUTHORIZATION_OUTCOME_TRIAD_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/authorization_outcome/*.parquet
+    authbase_outcome:
+      table_name: TSYS_AUTHORIZATION_BASE_TRIAD_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/authbase_outcome/*.parquet
+    decision_keys:
+      table_name: TSYS_TRIAD_DECISION_KEYS_RPT
+      staging_folder: gs://pcb-{env}-staging-extract/triad/decision_keys/*.parquet
+
+      default_args:
+        owner: "team-money-movement-eng"
+        capability: "Payments"
+        sub_capability: "EMT"
+        severity: "P3"
+        business_impact: "Daily orchestration process of TSYS Triad file not done"
+        customer_impact: "This impact business to use data for Dispute & TCS Analysis"

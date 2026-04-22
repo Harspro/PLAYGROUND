@@ -1,0 +1,56 @@
+BEGIN
+  DECLARE report_month DATE;
+
+SET report_month = (
+  SELECT (get_report_month).report_month
+  FROM
+    (
+      SELECT
+        `pcb-{env}-landing.domain_scoring.get_report_month`('{report_year}', '{report_month}')
+          AS get_report_month
+    )
+);
+
+INSERT INTO `pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_TRANS`
+(
+  MAST_ACCOUNT_ID,
+  PROCESS_DT,
+  CYC_MRCH,
+  CYC_CASH,
+  REC_LOAD_TIMESTAMP,
+  JOB_ID
+)
+WITH
+  WK_TSYS_CYC_TRANS1 AS (
+    SELECT DISTINCT
+      CAST(ah31.MAST_ACCOUNT_ID AS INT64) AS MAST_ACCOUNT_ID,
+      DATE_TRUNC(DATE(ah31.FILE_CREATE_DT), MONTH) AS PROCESS_DT,
+      CASE
+        WHEN ah31.AH31_TERMS_BALANCE_CODE IN (1, 3)
+          THEN ah31.AH31_AMT_DEBITS_CTD - ah31.AH31_AMT_CREDITS_CTD
+        ELSE 0
+        END AS CYC_MRCH,
+      CASE
+        WHEN ah31.AH31_TERMS_BALANCE_CODE = 2
+          THEN ah31.AH31_AMT_DEBITS_CTD - ah31.AH31_AMT_CREDITS_CTD
+        ELSE 0
+        END AS CYC_CASH
+    FROM `pcb-{env}-curated.domain_account_management.AH31` ah31
+    WHERE
+      DATE_TRUNC(DATE(ah31.FILE_CREATE_DT), MONTH)
+        = DATE_TRUNC(DATE(report_month), MONTH)
+      AND ah31.AH00_APPLICATION_SUFFIX = 0
+  )
+SELECT DISTINCT
+  CAST(MAST_ACCOUNT_ID AS STRING) AS MAST_ACCOUNT_ID,
+  CAST(PROCESS_DT AS STRING) AS PROCESS_DT,
+  CAST(SUM(CYC_MRCH) AS STRING) AS CYC_MRCH,
+  CAST(SUM(CYC_CASH) AS STRING) AS CYC_CASH,
+  CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP,
+  '{dag_id}' AS JOB_ID
+FROM WK_TSYS_CYC_TRANS1
+GROUP BY
+  MAST_ACCOUNT_ID,
+  PROCESS_DT;
+
+END

@@ -1,0 +1,129 @@
+db610_pcl_category_code_table_daily_loading_job:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCL.CATEGORY_CODE"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: CATEGORY_CODE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_campaign_merchant_table_daily_loading_job:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCL.CAMPAIGN_MERCHANT"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: CAMPAIGN_MERCHANT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_campaign_category_table_daily_loading_job:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCL.CAMPAIGN_CATEGORY"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: CAMPAIGN_CATEGORY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db053_tu_directory_check_table_onetime_loading_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCMC.TU_DIRECTORY_CHECK"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: TU_DIRECTORY_CHECK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-vortex"
+    capability: "Consent"
+    sub_capability: "Consent 053 IDL"
+
+db053_app_adjudication_ctl_table_onetime_loading_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCMC.APP_ADJUDICATION_CTL"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APP_ADJUDICATION_CTL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-vortex"
+    capability: "Consent"
+    sub_capability: "Consent 053 IDL"
+
+db053_ts2_mass_comp_cards_table_daily_loading_job:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM TS2.MASS_COMP_CARDS"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: MASS_COMP_CARDS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '5 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: 'TSYS would not get updated for mass compromise cards'
+    customer_impact: 'Financial lost'
+    severity: 'P3'
+
+db610_pcl_lcl_store_list_daily_loading_job:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCL.LCL_STORE_LIST"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_retail
+    table_name: LCL_STORE_LIST
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'

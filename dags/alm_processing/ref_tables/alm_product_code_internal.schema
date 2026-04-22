@@ -1,0 +1,4 @@
+vendor,STRING
+product_field_name,STRING
+product_field_value,STRING
+alm_standard_value,STRING

@@ -1,0 +1,29 @@
+billrefresh_loader:
+  staging_folder: pcb-{env}-staging-extract/billrefresh
+  staging_table_id: pcb-{env}-processing.domain_payments.BILL_REFRESH_STAGING_DET
+  ext_table_id: pcb-{env}-processing.domain_payments.BILL_REFRESH_STAGING_TRL
+  processing_bucket_extract: pcb-{env}-staging-extract
+  folder_name: bill-refresh-process
+  dataset_id : domain_payments
+  target_table_id: BILLER_REFRESH_RAW
+  sub_capability: EMT
+  capability: bill-payments
+  cols_detail: ['REC_TYPE' ,'BILLER_ID', 'BILLER_NAME', 'BILLER_PROVINCE', 'BILLER_CITY', 'BILLER_STATUS', 'FILE_CREATE_DT', 'FILE_NAME']
+  cols_trailer: ['REC_TYPE', 'BILLER_FILE_DT', 'BILLER_REC_COUNT', 'BILLER_PROVINCE', 'BILLER_CITY', 'BILLER_STATUS', 'FILE_CREATE_DT', 'FILE_NAME']
+  query_file: billrefresh_processing/sql/bill_refresh_data_validation.sql
+  sql_file_path: billrefresh_processing/sql/bill_refresh_bq_parquet.sql
+  cnt_sql_file_path: billrefresh_processing/sql/bill_refresh_table_currentfile_rec_count.sql
+  parquet_file_name : gs://pcb-{env}-staging-extract/bill-refresh-process
+  kafka_trigger_dag_id : biller_refresh_kafka_writer
+  kafka_writer_task: kafka_writer_task_biller_refresh
+  read_pause_deploy_config: False
+  job_size: extra_small
+  severity: P3
+  business_impact: New Billers are not loaded
+  customer_impact: Customer will not be able to choose this new biller for payments
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: bill-refresh-process
+    file_name: bill-refresh-*.parquet
+  tags:
+    - gold-alchemists, P3

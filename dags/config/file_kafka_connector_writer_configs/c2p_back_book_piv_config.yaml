@@ -1,0 +1,40 @@
+c2p_back_book_piv_kafka_writer:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P3"
+    sub_capability: "account-management"
+    business_impact: "This loads C2P eligible customers onto kafka topic: dp-core-{env}-click-to-pay-customer-event"
+    customer_impact: "In the event of a failure, eligible customers wont be enrolled for the C2P feature"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/c2p_back_book_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/c2p_back_book_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/c2p_back_book_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: c2p_back_book_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: c2p_back_book_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: customerId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: c2p_back_book_file_schema.avsc
+    pcb.file.kafka.connector.auto.register.schemas: true
+  dag:
+    kafka_writer_task: kafka_writer_c2p_back_book
+    read_pause_deploy_config: False
+    tags: [ "Digital-Adoption" ]
+    job_size: extra_small
+    dataproc_cluster_name: c2p-back-book-piv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_account_management
+    query_file: digital_adoption/sql/click_to_pay/c2p_back_book_piv_kafka.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: digital-adoption
+    file_name: c2p-back-book

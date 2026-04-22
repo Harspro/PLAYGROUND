@@ -1,0 +1,17 @@
+test_bigquery_db_connector_dag:
+  default_args:
+    owner: "test-owner"
+    capability: "test-capability"
+    severity: "test-severity"
+    sub_capability: "test-sub-capability"
+    business_impact: "test-business-impact"
+    customer_impact: "test-customer-impact"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_test
+    table_id: test
+    query_file: bigquery_db_connector_loader/sql/test_query_file.sql
+    batch_size: 10000
+  dag:
+    read_pause_deploy_config: True
+    tags: ["test-tag"]

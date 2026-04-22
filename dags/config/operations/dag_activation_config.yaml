@@ -1,0 +1,20 @@
+unpause_dags_post_composer_upgrade_based_on_dag_report:
+  throttle:
+    concurrency_limit: 10
+    interval: 300
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P4"
+    business_impact: "Only required when we perform Composer upgrade"
+
+unpause_delta_dags_post_composer_upgrade_based_on_dag_report:
+  filter_substr: '_delta'
+  throttle:
+    concurrency_limit: 10
+    interval: 300
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P4"
+    business_impact: "Only required when we perform Composer upgrade"

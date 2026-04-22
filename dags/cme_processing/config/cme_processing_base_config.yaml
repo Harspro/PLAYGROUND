@@ -1,0 +1,38 @@
+cme01_aau_pch_cli_offers_processing:
+  activity_name: cme_offer_processing
+  interface_id: CME1
+  bigquery:
+      source_project_id: pcb-{env}-landing
+      processing_project_id: pcb-{env}-processing
+      destination_project_id: pcb-{env}-curated
+  transformation_config: config/cme_offer_processing_01_trans.yaml
+  dag:
+      schedule_interval: '20 6 * * 2-6'
+  cluster_name: cme01-aau-pch-cli-offers-processing-c
+  job_size: medium
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-cme-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    updater_job_args:
+      CUSTOMER:
+        application.config: "application-cme-db303.conf"
+        oracle.schema.table.name: "LDS_CME.CUSTOMER"
+        operation.type: "merge"
+        dataset.bq.table.name: "domain_marketing.CME_CUSTOMER_STG"
+        oracle_merge_args:
+          pcb.oracle.update.columns: "All"
+          pcb.bigquery.loader.source.unique.key: "CUSTOMER_REF,OFFER_ID"
+          pcb.oracle.dest.temp.table: "CUSTOMER_BQ_TEMP"
+      DISPOSITION:
+        application.config: "application-cme-db303.conf"
+        oracle.schema.table.name: "LDS_CME.DISPOSITION"
+        operation.type: "insert"
+        dataset.bq.table.name: "domain_marketing.CME_DISPOSITION_STG"
+      CUSTOMER_LOOKUP:
+        application.config: "application-cme-db303.conf"
+        oracle.schema.table.name: "LDS_CME.CUSTOMER_LOOKUP"
+        operation.type: "insert"
+        dataset.bq.table.name: "domain_marketing.CME_CUSTOMER_LOOKUP_STG"

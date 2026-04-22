@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Simple.xsd" />
+	<!--  @@@@     Définition des types complexes réutilisables   @@@@     -->
+	<xsd:complexType
+    name="Adresse2Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Ligne1"
+        type="Char30Type">
+				
+			</xsd:element>
+			<xsd:element
+        name="Ligne2"
+        type="Char30Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="Ville"
+        type="Char30Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="Province"
+        type="Char20Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="CodePostal"
+        type="CodePostalType"
+        minOccurs="0">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="Adresse1Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Ligne1"
+        type="Char30Type">
+				
+			</xsd:element>
+			<xsd:element
+        name="Ville"
+        type="Char30Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="Province"
+        type="Char20Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="CodePostal"
+        type="CodePostalType"
+        minOccurs="0">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="RessourceStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="Nom"
+        type="Char30Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="IndRegional"
+        type="Numeric3Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="Tel"
+        type="TelType"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="PosteTel"
+        type="Int7Type"
+        minOccurs="0">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

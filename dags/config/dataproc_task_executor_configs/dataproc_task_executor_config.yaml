@@ -1,0 +1,214 @@
+# TCS Purge Dataproc Decompression Job Configuration
+# This job replaces the cloud function decompression job with a Spark-based unzip operation
+tcs_purge_dataproc_decompression_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance with TCS Purging"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    start_date: "2025-01-01"
+    catchup: false
+    description: "To decompress TCS Purge image file using Spark GenericUtilityRunner."
+    tags: [ "team-defenders-alerts", "P3" ]
+  spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/spark-utility-runner-2.0.0.jar
+    main_class: com.pcb.batch.spark.GenericUtilityRunner
+    args:
+      pcb.spark.batch.common.utility.operation: unzip
+      pcb.spark.batch.common.source.filepath: "gs://pcb-{env}-staging/{{ dag_run.conf['name'] }}"
+      pcb.spark.batch.common.destination.filepath: "gs://pcb-{env}-staging-extract/"
+      pcb.spark.batch.common.preserve.path: "true"
+    runtime_version: "2.3"
+    properties:
+      # Spark JVM configurations
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+      # Network and timeout configurations (aligned with DAG timeout: 10080 minutes = 7 days)
+      # Set to 6 days (518400s) to leave 1 day buffer for retries and recovery
+      spark.network.timeout: 518400s         # 6 days network timeout (DAG timeout is 7 days)
+      spark.executor.heartbeatInterval: 300s  # 5 minutes heartbeat interval (allows ~1036 heartbeats before timeout)
+      spark.sql.broadcastTimeout: 518400      # 6 days broadcast timeout (integer seconds, no unit)
+      spark.rpc.askTimeout: 518400s          # 6 days RPC timeout
+      spark.rpc.lookupTimeout: 518400s       # 6 days lookup timeout          
+      # Storage and file system configurations (increased timeouts for large zip files)
+      # GCS HTTP timeouts are per-operation, so they don't need to match full DAG timeout
+      # Set to 4 hours to handle very large file operations while allowing retries
+      spark.hadoop.fs.gs.http.connect-timeout: 14400000   # 4 hours connect timeout (for large file operations)
+      spark.hadoop.fs.gs.http.read-timeout: 14400000      # 4 hours read timeout (for reading large zip files)
+      spark.hadoop.fs.gs.http.max-retry: 10               # Increase retry attempts for transient connection failures
+      spark.hadoop.fs.gs.inputstream.fadvise: SEQUENTIAL # Optimize for sequential reads          
+      # Memory and execution configurations  
+      spark.sql.execution.arrow.maxRecordsPerBatch: 50000
+      spark.memory.fraction: 0.8                          # 80% memory for execution/storage
+      spark.memory.storageFraction: 0.3                   # 30% of that for storage
+
+# Model Inference PMML Job Configuration
+# This job applies PMML models to BigQuery data using core pmml4s library
+# Input: FEATURES REPEATED RECORD format (from INPUT_TRS_T0090_FEATURES_LATEST)
+# Output: OUTPUTS REPEATED RECORD format (matching existing schema)
+# - model_type is now required (must be explicitly "PMML")
+# - input_format is now required (must be "repeated_record" or "flat_columns", no auto-detection)
+# - Table must exist before writing (no auto-creation)
+all_score_trs_t0090_model_inference_pmml_scoring_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Model scoring for risk management"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 180
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Apply PMML models to BigQuery data with FEATURES/OUTPUTS REPEATED RECORD format using Spark and core pmml4s library (Runtime 2.3 LTS)"
+    tags: [ "team-defenders-alerts", "P3", "model-inference" ]
+  spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/model-inference-2.0.0.jar
+    main_class: com.pcb.batch.spark.modelinference.ModelInferenceApplication
+    # Batch ID prefix - must conform to pattern [a-z0-9][a-z0-9\-]{2,61}[a-z0-9]
+    # Total batch_id = prefix + "-" + datetime(20 chars) must be <= 63 chars
+    # So prefix must be <= 42 chars and start/end with alphanumeric
+    batch_id_prefix: "all_score_trs_t0090_model_inference"
+    args:
+      # PMML model file path (GCS) - pcb.spark.model.inference.model.pmml.path supported for backward compatibility, pcb.spark.model.inference.model.path preferred
+      pcb.spark.model.inference.model.pmml.path: "gs://pcb-{env}-staging-artifacts/resources/model-inference/trs_t0090/model.xml"
+      # Model type - required: must be explicitly specified (e.g., "PMML")
+      # No longer auto-detected from file extension
+      pcb.spark.model.inference.model.type: "PMML"
+      # BigQuery input query - can read from table with FEATURES REPEATED RECORD format or flat columns
+      # For REPEATED RECORD format: SELECT FEATURES, JOB_ID FROM ... (REC_LOAD_TIMESTAMP is calculated in Spark)
+      # For flat columns format: SELECT * FROM ... (all feature columns as separate columns, excluding REC_LOAD_TIMESTAMP)
+      # Supports two ways to provide query:
+      #   1. Inline query via: pcb.spark.model.inference.input.query: "SELECT ..."
+      #   2. Query file via: pcb.spark.model.inference.input.query_file: "path/relative/to/DAGS_FOLDER/file.sql"
+      # Query file path is relative to DAGS_FOLDER
+      pcb.spark.model.inference.input.query_file: "all_score_processor/sql/trs_t0090/output_data_processing/all_score_trs_t0090_model_inference_input.sql"
+      # Input format - required: must be explicitly "repeated_record" or "flat_columns"
+      # "repeated_record": Input data has FEATURES array with FEATURE_NAME/FEATURE_VALUE structure
+      # "flat_columns": Input data has flat columns (legacy format)
+      # Auto-detection removed - format must be explicitly specified
+      pcb.spark.model.inference.input.format: "repeated_record"
+      # BigQuery input project - required for BigQuery connector to materialize query results
+      pcb.spark.model.inference.input.project: "pcb-{env}-curated"
+      # BigQuery input dataset - required for BigQuery connector to materialize query results
+      pcb.spark.model.inference.input.dataset: "domain_scoring"
+      # BigQuery output table - writes OUTPUTS REPEATED RECORD format
+      # Output schema: OUTPUTS (REPEATED RECORD), EXECUTION_ID, REC_LOAD_TIMESTAMP, JOB_ID
+      # Note: Table must exist - will fail if table doesn't exist (no auto-creation)
+      pcb.spark.model.inference.output.table: "pcb-{env}-landing.domain_scoring.OUTPUT_TRS_T0090"
+      # Execution ID - optional: fetched from dag_run.conf['execution_id'] using Jinja templates
+      # If execution_id is provided in dag_run.conf, it will be used; if None/not provided, Spark will calculate it
+      pcb.spark.model.inference.execution.id: "{{ dag_run.conf.get('execution_id', '') }}"
+      # Job ID - DAG ID concatenated with DAG run ID (required)
+      pcb.spark.model.inference.job.id: "{{ dag.dag_id }}_{{ dag_run.run_id }}"
+      # Output schema JSON classpath path (optional; default: /common/trs_t0090/output_schema.json)
+      pcb.spark.model.inference.output.schema.path: "gs://pcb-{env}-staging-artifacts/resources/model-inference/trs_t0090/output_schema.json"
+    runtime_version: "2.3"  # Dataproc Serverless Runtime 2.3 LTS: Spark 3.5.x, Scala 2.13, Java 17
+    properties:
+      # Spark JVM configurations
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+      # Network and timeout configurations
+      spark.network.timeout: 1800s           # 30 minutes network timeout
+      spark.executor.heartbeatInterval: 60s   # Heartbeat every 60 seconds (allows 30 attempts before timeout)
+      spark.sql.broadcastTimeout: 1800        # 30 minutes broadcast timeout (integer seconds, no unit)
+      spark.rpc.askTimeout: 1800s             # 30 minutes RPC timeout
+      spark.rpc.lookupTimeout: 1800s          # 30 minutes lookup timeout          
+      # Storage and file system configurations
+      spark.hadoop.fs.gs.http.connect-timeout: 300000    # 5 minutes connect timeout
+      spark.hadoop.fs.gs.http.read-timeout: 300000       # 5 minutes read timeout
+      spark.hadoop.fs.gs.inputstream.fadvise: SEQUENTIAL # Optimize for sequential reads          
+      # Memory and execution configurations  
+      spark.sql.execution.arrow.maxRecordsPerBatch: 50000
+      spark.memory.fraction: 0.8                          # 80% memory for execution/storage
+      spark.memory.storageFraction: 0.3                   # 30% of that for storage
+
+all_score_index4_t0040_model_inference_pmml_scoring_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Model scoring for risk management"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 180
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Apply PMML models to BigQuery data with FEATURES/OUTPUTS REPEATED RECORD format using Spark and core pmml4s library (Runtime 2.3 LTS)"
+    tags: [ "team-defenders-alerts", "P3", "model-inference" ]
+  spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/model-inference-2.0.0.jar
+    main_class: com.pcb.batch.spark.modelinference.ModelInferenceApplication
+    # Batch ID prefix - must conform to pattern [a-z0-9][a-z0-9\-]{2,61}[a-z0-9]
+    # Total batch_id = prefix + "-" + datetime(20 chars) must be <= 63 chars
+    # So prefix must be <= 42 chars and start/end with alphanumeric
+    batch_id_prefix: "all_score_index4_t0040_model_inference"
+    args:
+      # PMML model file path (GCS) - pcb.spark.model.inference.model.pmml.path supported for backward compatibility, pcb.spark.model.inference.model.path preferred
+      pcb.spark.model.inference.model.pmml.path: "gs://pcb-{env}-staging-artifacts/resources/model-inference/index4_t0040/model.xml"
+      # Model type - required: must be explicitly specified (e.g., "PMML")
+      # No longer auto-detected from file extension
+      pcb.spark.model.inference.model.type: "PMML"
+      # BigQuery input query - can read from table with FEATURES REPEATED RECORD format or flat columns
+      # For REPEATED RECORD format: SELECT FEATURES, JOB_ID FROM ... (REC_LOAD_TIMESTAMP is calculated in Spark)
+      # For flat columns format: SELECT * FROM ... (all feature columns as separate columns, excluding REC_LOAD_TIMESTAMP)
+      # Supports two ways to provide query:
+      #   1. Inline query via: pcb.spark.model.inference.input.query: "SELECT ..."
+      #   2. Query file via: pcb.spark.model.inference.input.query_file: "path/relative/to/DAGS_FOLDER/file.sql"
+      # Query file path is relative to DAGS_FOLDER
+      pcb.spark.model.inference.input.query_file: "all_score_processor/sql/index4_t0040/output_data_processing/all_score_index4_t0040_model_inference_input.sql"
+      # Input format - required: must be explicitly "repeated_record" or "flat_columns"
+      # "repeated_record": Input data has FEATURES array with FEATURE_NAME/FEATURE_VALUE structure
+      # "flat_columns": Input data has flat columns (legacy format)
+      # Auto-detection removed - format must be explicitly specified
+      pcb.spark.model.inference.input.format: "repeated_record"
+      # BigQuery input project - required for BigQuery connector to materialize query results
+      pcb.spark.model.inference.input.project: "pcb-{env}-curated"
+      # BigQuery input dataset - required for BigQuery connector to materialize query results
+      pcb.spark.model.inference.input.dataset: "domain_scoring"
+      # BigQuery output table - writes OUTPUTS REPEATED RECORD format
+      # Output schema: OUTPUTS (REPEATED RECORD), EXECUTION_ID, REC_LOAD_TIMESTAMP, JOB_ID
+      # Note: Table must exist - will fail if table doesn't exist (no auto-creation)
+      pcb.spark.model.inference.output.table: "pcb-{env}-landing.domain_scoring.OUTPUT_INDEX4_T0040"
+      # Execution ID - optional: fetched from dag_run.conf['execution_id'] using Jinja templates
+      # If execution_id is provided in dag_run.conf, it will be used; if None/not provided, Spark will calculate it
+      pcb.spark.model.inference.execution.id: "{{ dag_run.conf.get('execution_id', '') }}"
+      # Job ID - DAG ID concatenated with DAG run ID (required)
+      pcb.spark.model.inference.job.id: "{{ dag.dag_id }}_{{ dag_run.run_id }}"
+      # Output schema JSON classpath path (optional; default: /common/trs_t0090/output_schema.json)
+      pcb.spark.model.inference.output.schema.path: "gs://pcb-{env}-staging-artifacts/resources/model-inference/index4_t0040/output_schema.json"
+    runtime_version: "2.3"  # Dataproc Serverless Runtime 2.3 LTS: Spark 3.5.x, Scala 2.13, Java 17
+    properties:
+      # Spark JVM configurations
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+      # Network and timeout configurations
+      spark.network.timeout: 1800s           # 30 minutes network timeout
+      spark.executor.heartbeatInterval: 60s   # Heartbeat every 60 seconds (allows 30 attempts before timeout)
+      spark.sql.broadcastTimeout: 1800        # 30 minutes broadcast timeout (integer seconds, no unit)
+      spark.rpc.askTimeout: 1800s             # 30 minutes RPC timeout
+      spark.rpc.lookupTimeout: 1800s          # 30 minutes lookup timeout          
+      # Storage and file system configurations
+      spark.hadoop.fs.gs.http.connect-timeout: 300000    # 5 minutes connect timeout
+      spark.hadoop.fs.gs.http.read-timeout: 300000       # 5 minutes read timeout
+      spark.hadoop.fs.gs.inputstream.fadvise: SEQUENTIAL # Optimize for sequential reads          
+      # Memory and execution configurations  
+      spark.sql.execution.arrow.maxRecordsPerBatch: 50000
+      spark.memory.fraction: 0.8                          # 80% memory for execution/storage
+      spark.memory.storageFraction: 0.3                   # 30% of that for storage

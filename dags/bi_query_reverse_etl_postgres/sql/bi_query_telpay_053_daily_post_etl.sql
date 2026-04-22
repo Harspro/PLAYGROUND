@@ -1,0 +1,75 @@
+-- Inserting records from daily run
+INSERT INTO
+    `pcb-{env}-landing.domain_payments.BI_QUERY_TELPAY_RECORDS_053` (
+        PCF_CUST_ID,
+        ACCOUNT_NO,
+        CARD_NUMBER,
+        PAYER_NAME,
+        AMOUNT,
+        ORIG_FI_DT,
+        EFF_PYMT_DT,
+        TRACE_ID,
+        REPORT_NUMBER,
+        RUN_NUMBER,
+        TELPAY_PYMT_UID,
+        CARD_DEPOSIT_FULFILLMENT_UID,
+        HDR_ID,
+        RUN_TIMESTAMP,
+        VERSION,
+        BILLER_CD,
+        CREATE_DT,
+        CREATE_USER_ID,
+        CREATE_FUNCTION_NAME,
+        UPDATE_DT,
+        UPDATE_MONTH,
+        UPDATE_YEAR,
+        UPDATE_USER_ID,
+        UPDATE_FUNCTION_NAME,
+        TELPAY_SOURCE,
+        BI_QUERY_TELPAY_DATE,
+        BI_QUERY_DAG_RUN_ID,
+        BI_QUERY_TELPAY_UID
+    )
+SELECT
+    DISTINCT PCF_CUST_ID,
+    ACCOUNT_NO,
+    CARD_NUMBER,
+    PAYER_NAME,
+    AMOUNT,
+    ORIG_FI_DT,
+    EFF_PYMT_DT,
+    TRACE_ID,
+    REPORT_NUMBER,
+    RUN_NUMBER,
+    TELPAY_PYMT_UID,
+    CARD_DEPOSIT_FULFILLMENT_UID,
+    HDR_ID,
+    RUN_TIMESTAMP,
+    VERSION,
+    BILLER_CD,
+    CREATE_DT,
+    CREATE_USER_ID,
+    CREATE_FUNCTION_NAME,
+    UPDATE_DT,
+    UPDATE_MONTH,
+    UPDATE_YEAR,
+    UPDATE_USER_ID,
+    UPDATE_FUNCTION_NAME,
+    TELPAY_SOURCE,
+    BI_QUERY_TELPAY_DATE,
+    BI_QUERY_DAG_RUN_ID,
+    BI_QUERY_TELPAY_UID
+FROM
+    `pcb-{env}-processing.domain_payments.BI_QUERY_TELPAY_053` TELPAY
+WHERE
+    NOT EXISTS(
+        SELECT
+            1
+        FROM
+            `pcb-{env}-curated.domain_payments.BI_QUERY_TELPAY_RECORDS_053` TELPAY_REC
+        WHERE
+            TELPAY.CARD_NUMBER = TELPAY_REC.CARD_NUMBER
+            AND TELPAY.TRACE_ID = TELPAY_REC.TRACE_ID
+            AND TELPAY.HDR_ID = TELPAY_REC.HDR_ID
+            AND TELPAY.BI_QUERY_DAG_RUN_ID = TELPAY_REC.BI_QUERY_DAG_RUN_ID
+    );

@@ -1,0 +1,36 @@
+pcb_dst_zip_extractor:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P2"
+    sub_capability: "statements"
+    business_impact: 'Statements and CRM files will not be sent to broadridge for further processing'
+    customer_impact: 'Customers will not be able to access their E-Statements'
+  tags: ["Digital Adoption - DA" , "P2" ]
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/zip-folder-gcp-2.0.0.jar
+    updater_main_class: com.pcb.batch.gcpFolderCompressor.GcpFolderCompressor
+  job_size: large
+  processing_bucket: pcb-{env}-staging
+  destination_bucket: broadridge-outbound-pcb{env_suffix}
+  cluster_name: pcb-dst-zip-extractor-c
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  processing_interim_dir: pcb_dst_pcmc_processing/stmt_post/extract/{cycle}
+  processing_output_dir: pcb_dst_pcmc_processing/stmt_post/output
+  destination_output_dir: pcb_dst_stmtreg/
+  output_file_name:
+    prod: psf_{env_var}_pcb_dst_stmtreg_{cycle}
+    uat: psf_{env_var}_pcb_dst_stmtdnp_{cycle}
+    dev: psf_{env_var}_pcb_dst_stmtdnp_{cycle}
+  output_file_extension:
+    prod: prod
+    uat: uatv
+    dev: uatv
+  output_file_env_vars:
+    prod: p
+    uat: t
+    dev: t
+  validation:
+    file_count_check: 2

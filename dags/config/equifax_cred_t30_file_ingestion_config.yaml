@@ -1,0 +1,51 @@
+equifax_cred_t0030_file_loading:
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: expcbanktsystt.eqxcan.ds.SC30
+  folder_prefix: equifax_t30
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CREDSCORE_TRANSACTION
+      pcb.tsys.processor.segment.name: T0030
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CREDSCORE_TRANSACTION
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: t0030_group
+        segments: T0030
+    segment_args:
+      T0030:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_credscore_transaction/T0030.CPY
+        pcb.tsys.processor.segment.name: T0030
+        pcb.tsys.processor.layout.name: CREDSCORE_T0030_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_credscore_transaction/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_scoring
+    data_load_type: APPEND_ONLY
+    tables:
+      T0030:
+        table_name: CREDSCORE_T0030
+        record_count_column: TSYSINP_SC01_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - SAFE_CAST(CB_FILE_NUMBER AS INT64) AS CB_FILE_NUMBER
+        drop_columns:
+          - CB_FILE_NUMBER
+      TRLR:
+        table_name: CREDSCORE_T0030_HEADER_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP

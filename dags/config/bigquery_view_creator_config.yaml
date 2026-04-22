@@ -1,0 +1,1708 @@
+# Create authorized views
+# By default, views are updated when the DAG is rerun
+# Custom SQL is also supported via config item 'view_file: <SQL-statement>'
+# Archive the DAGs when not needed and store them in dags/config/bigquery_view_creator_config.yaml.archive
+
+domain_dns_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_dns.DNS_ACCT_CUST_ID_XREF
+      view_ref: pcb-{env}-curated.domain_dns.DNS_ACCT_CUST_ID_XREF
+    - table_ref: pcb-{env}-landing.domain_dns.DNS_EXCLUDE_ACCOUNTS
+      view_ref: pcb-{env}-curated.domain_dns.DNS_EXCLUDE_ACCOUNTS
+    - table_ref: pcb-{env}-landing.domain_dns.DNS_ACCT
+      view_ref: pcb-{env}-curated.domain_dns.DNS_ACCT
+    - table_ref: pcb-{env}-landing.domain_dns.CUST_MKTG_PREF
+      view_ref: pcb-{env}-curated.domain_dns.CUST_MKTG_PREF
+    - table_ref: pcb-{env}-landing.domain_dns.DNS_EVENT
+      view_ref: pcb-{env}-curated.domain_dns.DNS_EVENT
+      view_file: domain_dns.DNS_EVENT.sql
+    - table_ref: pcb-{env}-landing.domain_dns.DNS_EVENT_DETAIL
+      view_ref: pcb-{env}-curated.domain_dns.DNS_EVENT_DETAIL
+      view_file: domain_dns.DNS_EVENT_DETAIL.sql
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "View creation dag"
+
+domain_customer_acquisition_views:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "team-growth-and-sales"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_APP_DATA
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.ADM_STD_DISP_APP_DATA
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_DT_ELMT
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.ADM_STD_DISP_DT_ELMT
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_USER
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.ADM_STD_DISP_USER
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_CUST_INFO
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.ADM_STD_DISP_CUST_INFO
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APP_CUST_INFO
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APP_CUST_INFO
+      view_file: domain_customer_acquisition.APP_CUST_INFO.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.CEREBRO_DATA
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.CEREBRO_DATA
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICANT_DETAIL_TAX_INFO
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICANT_DETAIL_TAX_INFO
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.PCMC_REGISTRATION
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.PCMC_REGISTRATION
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APP_OP_PROD_XREF
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APP_OP_PROD_XREF
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_SUBMISSION_PAYLOAD
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPL_APPROPRIATENESS
+      view_file: domain_customer_acquisition.APPL_APPROPRIATENESS.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_SUBMISSION_PAYLOAD
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICATION_SUBMISSION_PAYLOAD
+      view_file: domain_customer_acquisition.APPLICATION_SUBMISSION_PAYLOAD.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.PRE_PURGE_REPORT
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.PRE_PURGE_REPORT
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICANT_DETAIL_ADDRESS
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICANT_DETAIL_ADDRESS
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.PRODUCT_APPLICATION_REQ
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.PRODUCT_APPLICATION_REQ
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICANT_DETAIL_EMAIL
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICANT_DETAIL_EMAIL
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_PRODUCT_ROLE
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICATION_PRODUCT_ROLE
+      view_file: domain_customer_acquisition.APPLICATION_PRODUCT_ROLE.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICANT_DETAIL_PHONE
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICANT_DETAIL_PHONE
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.GEN_VAL_DETAIL
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.GEN_VAL_DETAIL
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.LTTR_OVRD_DETAIL_XTO
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.LTTR_OVRD_DETAIL_XTO
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_SUBMISSION
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICATION_SUBMISSION
+      view_file: domain_customer_acquisition.APPLICATION_SUBMISSION.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_PRODUCT
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICATION_PRODUCT
+      view_file: domain_customer_acquisition.APPLICATION_PRODUCT.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_PRODUCT_EVT
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICATION_PRODUCT_EVT
+      view_file: domain_customer_acquisition.APPLICATION_PRODUCT_EVT.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.RE_IDV_REQUIRED_CUSTOMER
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.RE_IDV_REQUIRED_CUSTOMER
+      view_file: domain_customer_acquisition.RE_IDV_REQUIRED_CUSTOMER.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_SUBMISSION_EVT
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICATION_SUBMISSION_EVT
+      view_file: domain_customer_acquisition.APPLICATION_SUBMISSION_EVT.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.APPLICATION_AFFILIATE_REPORT_DATA
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.APPLICATION_AFFILIATE_REPORT_DATA
+      view_file: domain_customer_acquisition.APPLICATION_AFFILIATE_REPORT_DATA.sql
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.TRANSUNION_PCMCEDA_IDENTIFICATION
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.TRANSUNION_PCMCEDA_IDENTIFICATION
+    - table_ref: pcb-{env}-landing.domain_customer_acquisition.ADM_INST_CARD_INFO
+      view_ref: pcb-{env}-curated.domain_customer_acquisition.ADM_INST_CARD_INFO
+      view_file: domain_customer_acquisition.ADM_INST_CARD_INFO.sql
+
+domain_payments_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_payments.BI_QUERY_EDI_RECORDS_ODS
+      view_ref: pcb-{env}-curated.domain_payments.BI_QUERY_EDI_RECORDS_ODS
+    - table_ref: pcb-{env}-landing.domain_payments.BI_QUERY_EDI_RECORDS_053
+      view_ref: pcb-{env}-curated.domain_payments.BI_QUERY_EDI_RECORDS_053
+    - table_ref: pcb-{env}-landing.domain_payments.BI_QUERY_EFT_RECORDS
+      view_ref: pcb-{env}-curated.domain_payments.BI_QUERY_EFT_RECORDS
+    - table_ref: pcb-{env}-landing.domain_payments.BI_QUERY_PAPER_PAYMENT_RECORDS
+      view_ref: pcb-{env}-curated.domain_payments.BI_QUERY_PAPER_PAYMENT_RECORDS
+    - table_ref: pcb-{env}-landing.domain_payments.BI_QUERY_TELPAY_RECORDS_ODS
+      view_ref: pcb-{env}-curated.domain_payments.BI_QUERY_TELPAY_RECORDS_ODS
+    - table_ref: pcb-{env}-landing.domain_payments.BI_QUERY_TELPAY_RECORDS_053
+      view_ref: pcb-{env}-curated.domain_payments.BI_QUERY_TELPAY_RECORDS_053
+    - table_ref: pcb-{env}-landing.domain_payments.CONVCHKORDER
+      view_ref: pcb-{env}-curated.domain_payments.CONVCHKORDER
+      view_file: domain_payments.CONVCHKORDER.sql
+    - table_ref: pcb-{env}-landing.domain_payments.CONVCHKCONF
+      view_ref: pcb-{env}-curated.domain_payments.CONVCHKCONF
+      view_file: domain_payments.CONVCHKCONF.sql
+    - table_ref: pcb-{env}-landing.domain_payments.PAPER_PYMT_TX
+      view_ref: pcb-{env}-curated.domain_payments.PAPER_PYMT_TX
+      view_file: domain_payments.PAPER_PYMT_TX.sql
+    - table_ref: pcb-{env}-landing.domain_payments.FUNDSMOVE_SCHEDULE
+      view_ref: pcb-{env}-curated.domain_payments.FUNDSMOVE_SCHEDULE
+      view_file: domain_payments.FUNDSMOVE_SCHEDULE.sql
+    - table_ref: pcb-{env}-landing.domain_payments.BILLPAY_INSTRUCTION
+      view_ref: pcb-{env}-curated.domain_payments.BILLPAY_INSTRUCTION
+      view_file: domain_payments.BILLPAY_INSTRUCTION.sql
+    - table_ref: pcb-{env}-landing.domain_payments.MOVEMONEY_INST_ACCOUNT
+      view_ref: pcb-{env}-curated.domain_payments.MOVEMONEY_INST_ACCOUNT
+    - table_ref: pcb-{env}-landing.domain_payments.PCB_FUNDS_MOVE_CREATED
+      view_ref: pcb-{env}-curated.domain_payments.BALANCE_TRANSFERS_INSTRUCTIONS_1_YEAR
+      view_file: domain_payments.BALANCE_TRANSFERS_INSTRUCTIONS_1_YEAR.sql
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_EXTERNAL_ACCOUNT
+      view_ref: pcb-{env}-curated.domain_payments.EFT_EXTERNAL_ACCOUNT_OLD
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_EXTERNAL_ACCOUNT_CHANGED
+      view_ref: pcb-{env}-curated.domain_payments.EFT_EXTERNAL_ACCOUNT
+      view_file: domain_payments.EFT_EXTERNAL_ACCOUNT.sql
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_LINK_REQUEST_VERIFICATION
+      view_ref: pcb-{env}-curated.domain_payments.EFT_LINK_REQUEST
+      view_file: domain_payments.EFT_LINK_REQUEST_VERIFICATION.sql
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_LINK_REQUEST_ACCOUNT_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_payments.EFT_LINK_REQUEST_ACCOUNT_TRANSACTIONS
+      view_file: domain_payments.EFT_LINK_REQUEST_ACCOUNT_TRANSACTIONS.sql
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_LINK_REQUEST_VERIFICATION
+      view_ref: pcb-{env}-curated.domain_payments.EFT_LINK_REQUEST_WITH_ACCOUNT_TRANSACTIONS
+      view_file: domain_payments.EFT_LINK_REQUEST_WITH_ACCOUNT_TRANSACTIONS.sql
+    - table_ref: pcb-{env}-landing.domain_payments.PCB_FUNDS_MOVE_FAILED
+      view_ref: pcb-{env}-curated.domain_payments.PCB_FUNDS_MOVE_FAILED
+      view_file: domain_payments.PCB_FUNDS_MOVE_FAILED.sql
+    - table_ref: pcb-{env}-landing.domain_payments.FUNDSMOVE_GL_REQ_HIST
+      view_ref: pcb-{env}-curated.domain_payments.FUNDSMOVE_GL_REQ_HIST
+    - table_ref: pcb-{env}-landing.domain_payments.FUNDSMOVE_GL_REQ_STATUS_HIST
+      view_ref: pcb-{env}-curated.domain_payments.FUNDSMOVE_GL_REQ_STATUS_HIST
+    - table_ref: pcb-{env}-landing.domain_payments.REF_CURRENCY
+      view_ref: pcb-{env}-curated.domain_payments.REF_CURRENCY
+    - table_ref: pcb-{env}-landing.domain_payments.TELPAY_PYMT_INB_REQ
+      view_ref: pcb-{env}-curated.domain_payments.VW_M1S_TELPAY_PYMT_TX
+      view_file: domain_payments.TELPAY_PYMT_INB_REQ.sql
+    - table_ref: pcb-{env}-landing.domain_payments.EDI_PYMT_INB_REQ
+      view_ref: pcb-{env}-curated.domain_payments.VW_M1S_EDI_PYMT_TX
+      view_file: domain_payments.EDI_PYMT_INB_REQ.sql
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_INCOMING_XFER
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_INCOMING_XFER
+    - table_ref: pcb-{env}-landing.domain_payments.CUSTOMER_BILLER
+      view_ref: pcb-{env}-curated.domain_payments.CUSTOMER_BILLER_OLD
+    - table_ref: pcb-{env}-landing.domain_payments.CUSTOMER_BILLER_CHANGED
+      view_ref: pcb-{env}-curated.domain_payments.CUSTOMER_BILLER
+      view_file: domain_payments.CUSTOMER_BILLER.sql
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_RECIPIENT
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_RECIPIENT_OLD
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_RECIPIENT_CHANGED
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_RECIPIENT
+      view_file: domain_payments.INTERAC_RECIPIENT.sql
+    - table_ref: pcb-{env}-landing.domain_payments.PCB_FUNDS_MOVE_CANCELLED
+      view_ref: pcb-{env}-curated.domain_payments.PCB_FUNDS_MOVE_CANCELLED_INSTRUCTIONS
+      view_file: domain_payments.PCB_FUNDS_MOVE_CANCELLED.sql
+    - table_ref: pcb-{env}-landing.domain_payments.PCB_FUNDS_MOVE_CANCELLED
+      view_ref: pcb-{env}-curated.domain_payments.PCB_FUNDS_MOVE_NONCANCELLED_INSTRUCTIONS
+      view_file: domain_payments.PCB_FUNDS_MOVE_NON_CANCELLED.sql
+
+domain_marketing_views:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Terminus Data Platform - Convergence"
+    severity: "P3"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_marketing.CME_CUSTOMER
+      view_ref: pcb-{env}-curated.domain_marketing.CME_CUSTOMER
+      view_file: domain_marketing.CME_CUSTOMER.sql
+    - table_ref: pcb-{env}-landing.domain_marketing.XSELL_LOG_DETAIL
+      view_ref: pcb-{env}-curated.domain_marketing.XSELL_LOG_DETAIL
+    - table_ref: pcb-{env}-landing.domain_marketing.XSELL_LOG_SUMMARY
+      view_ref: pcb-{env}-curated.domain_marketing.XSELL_LOG_SUMMARY
+    - table_ref: pcb-{env}-landing.domain_marketing.LS_ACCOUNT
+      view_ref: pcb-{env}-curated.domain_marketing.LS_ACCOUNT
+    - table_ref: pcb-{env}-landing.domain_marketing.REF_TRX
+      view_ref: pcb-{env}-curated.domain_marketing.REF_TRX
+    - table_ref: pcb-{env}-landing.domain_marketing.CUST_ACCT
+      view_ref: pcb-{env}-curated.domain_marketing.CUST_ACCT
+    - table_ref: pcb-{env}-landing.domain_marketing.SUBS_RATE_PLAN
+      view_ref: pcb-{env}-curated.domain_marketing.SUBS_RATE_PLAN
+    - table_ref: pcb-{env}-landing.domain_marketing.XSELL_TABLET_LOG_SUMMARY
+      view_ref: pcb-{env}-curated.domain_marketing.XSELL_TABLET_LOG_SUMMARY
+    - table_ref: pcb-{env}-landing.domain_marketing.AUDIT_MAC_ACTIONS
+      view_ref: pcb-{env}-curated.domain_marketing.AUDIT_MAC_ACTIONS
+    - table_ref: pcb-{env}-landing.domain_marketing.LOGIN_LOG
+      view_ref: pcb-{env}-curated.domain_marketing.LOGIN_LOG
+    - table_ref: pcb-{env}-landing.domain_marketing.CHANNEL
+      view_ref: pcb-{env}-curated.domain_marketing.CHANNEL
+      view_file: domain_marketing.CHANNEL.sql
+    - table_ref: pcb-{env}-landing.domain_marketing.MEDIA_REFERENCE
+      view_ref: pcb-{env}-curated.domain_marketing.MEDIA_REFERENCE
+      view_file: domain_marketing.MEDIA_REFERENCE.sql
+    - table_ref: pcb-{env}-landing.domain_marketing.STMT_CME_FEEDBACK
+      view_ref: pcb-{env}-curated.domain_marketing.STMT_CME_FEEDBACK
+      view_file: domain_marketing.STMT_CME_FEEDBACK.sql
+
+domain_customer_management_views:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: 'Business reports may not be generated'
+    customer_impact: 'N/A'
+    severity: 'P3'
+  tables:
+    - table_ref: pcb-{env}-landing.domain_customer_management.ADDRESS_CONTACT_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.ADDRESS_CONTACT_HISTORY
+      view_file: domain_customer_management.ADDRESS_CONTACT_HISTORY.sql
+    - table_ref: pcb-{env}-landing.domain_customer_management.CUSTOMER
+      view_ref: pcb-{env}-curated.domain_customer_management.CUSTOMER
+    - table_ref: pcb-{env}-landing.domain_customer_management.CUSTOMER_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.CUSTOMER_HISTORY
+      view_file: domain_customer_management.CUSTOMER_HISTORY.sql
+    - table_ref: pcb-{env}-landing.domain_customer_management.CUSTOMER_IDENTIFIER
+      view_ref: pcb-{env}-curated.domain_customer_management.CUSTOMER_IDENTIFIER
+    - table_ref: pcb-{env}-landing.domain_customer_management.CUSTOMER_MERGE_SPLIT
+      view_ref: pcb-{env}-curated.domain_customer_management.CUSTOMER_MERGE_SPLIT
+    - table_ref: pcb-{env}-landing.domain_customer_management.CONTACT_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.CONTACT_HISTORY
+      view_file: domain_customer_management.CONTACT_HISTORY.sql
+    - table_ref: pcb-{env}-landing.domain_customer_management.PHONE_CONTACT_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.PHONE_CONTACT_HISTORY
+      view_file: domain_customer_management.PHONE_CONTACT_HISTORY.sql
+    - table_ref: pcb-{env}-landing.domain_customer_management.EMAIL_CONTACT_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.EMAIL_CONTACT_HISTORY
+      view_file: domain_customer_management.EMAIL_CONTACT_HISTORY.sql
+    - table_ref: pcb-{env}-landing.domain_customer_management.ALTERNATE_CONTACT
+      view_ref: pcb-{env}-curated.domain_customer_management.ALTERNATE_CONTACT
+    - table_ref: pcb-{env}-landing.domain_customer_management.CUSTOMER_EMPLOYMENT_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.CUSTOMER_EMPLOYMENT_HISTORY
+      view_file: domain_customer_management.CUSTOMER_EMPLOYMENT_HISTORY.sql
+    - table_ref: pcb-{env}-landing.domain_customer_management.REF_EMPLOYMENT_INDUSTRY
+      view_ref: pcb-{env}-curated.domain_customer_management.REF_EMPLOYMENT_INDUSTRY
+    - table_ref: pcb-{env}-landing.domain_customer_management.REF_EMPLOYMENT_STATUS
+      view_ref: pcb-{env}-curated.domain_customer_management.REF_EMPLOYMENT_STATUS
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM00
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM00
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM01
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM01
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM02
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM02
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM03
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM03
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM04
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM04
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM34
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM34
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM05
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM05
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM06
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM06
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM07
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM07
+    - table_ref: pcb-{env}-landing.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_TRAILER
+      view_ref: pcb-{env}-curated.domain_customer_management.TSYS_PCB_MC_CUSTMASTER_MONTHLY_TRAILER
+    - table_ref: pcb-{env}-landing.domain_customer_management.CUSTOMER_PREFERENCE_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.CUSTOMER_PREFERENCE_HISTORY
+    - table_ref: pcb-{env}-landing.domain_customer_management.CUSTOMER_PREF_PARAM_HISTORY
+      view_ref: pcb-{env}-curated.domain_customer_management.CUSTOMER_PREF_PARAM_HISTORY
+    - table_ref: pcb-{env}-landing.domain_customer_management.REF_OCCUPATION_LABEL
+      view_ref: pcb-{env}-curated.domain_customer_management.REF_OCCUPATION_LABEL
+    - table_ref: pcb-{env}-landing.domain_customer_management.CLICK_TO_PAY_CUSTOMER_STATUS
+      view_ref: pcb-{env}-curated.domain_customer_management.CLICK_TO_PAY_CUSTOMER_STATUS
+    - table_ref: pcb-{env}-landing.domain_customer_management.CLICK_TO_PAY_EVENT_STATUS
+      view_ref: pcb-{env}-curated.domain_customer_management.CLICK_TO_PAY_EVENT_STATUS
+
+domain_communication_views:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "communication"
+    business_impact: "Communication related views will not be created."
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - communication
+  tables:
+    - table_ref: pcb-{env}-landing.domain_communication.CUST_ALERT_NOTIFICATION
+      view_ref: pcb-{env}-curated.domain_communication.CUST_ALERT_NOTIFICATION
+      view_file: domain_communication.CUST_ALERT_NOTIFICATION.sql
+    - table_ref: pcb-{env}-landing.domain_communication.CUST_ALERT_NOTIFI_STATUS
+      view_ref: pcb-{env}-curated.domain_communication.CUST_ALERT_NOTIFI_STATUS
+    - table_ref: pcb-{env}-landing.domain_communication.COMMUNICATION_EVENT
+      view_ref: pcb-{env}-curated.domain_communication.COMMUNICATION_EVENT
+      view_file: domain_communication.COMMUNICATION_EVENT.sql
+    - table_ref: pcb-{env}-landing.domain_communication.COMMUNICATION_REQUEST
+      view_ref: pcb-{env}-curated.domain_communication.COMMUNICATION_REQUEST
+      view_file: domain_communication.COMMUNICATION_REQUEST.sql
+    - table_ref: pcb-{env}-landing.domain_communication.TSYS_COMMS_EVENT
+      view_ref: pcb-{env}-curated.domain_communication.TSYS_COMMS_EVENT
+      view_file: domain_communication.TSYS_COMMS_EVENT.sql
+    - table_ref: pcb-{env}-landing.domain_communication.EMAIL_STATUS
+      view_ref: pcb-{env}-curated.domain_communication.EMAIL_STATUS
+      view_file: domain_communication.EMAIL_STATUS.sql
+    - table_ref: pcb-{env}-landing.domain_communication.EMAIL_UNSUBSCRIBED_EVENT
+      view_ref: pcb-{env}-curated.domain_communication.EMAIL_UNSUBSCRIBED_EVENT
+      view_file: domain_communication.EMAIL_UNSUBSCRIBED_EVENT.sql
+    - table_ref: pcb-{env}-landing.domain_communication.SMS_INBOUND_MESSAGE
+      view_ref: pcb-{env}-curated.domain_communication.SMS_INBOUND_MESSAGE
+      view_file: domain_communication.SMS_INBOUND_MESSAGE.sql
+    - table_ref: pcb-{env}-landing.domain_communication.DNS_UPDATED
+      view_ref: pcb-{env}-curated.domain_communication.DNS_UPDATED
+      view_file: domain_communication.DNS_UPDATED.sql
+    - table_ref: pcb-{env}-landing.domain_communication.ADA_CHATBOT_CONVERSATION
+      view_ref: pcb-{env}-curated.domain_communication.ADA_CHATBOT_CONVERSATION
+      view_file: domain_communication.ADA_CHATBOT_CONVERSATION.sql
+    - table_ref: pcb-{env}-landing.domain_communication.ADA_CHATBOT_MESSAGE
+      view_ref: pcb-{env}-curated.domain_communication.ADA_CHATBOT_MESSAGE
+      view_file: domain_communication.ADA_CHATBOT_MESSAGE.sql
+    - table_ref: pcb-{env}-landing.domain_communication.MAIL_PRINT
+      view_ref: pcb-{env}-curated.domain_communication.MAIL_PRINT
+    - table_ref: pcb-{env}-landing.domain_communication.MAIL_PRINT_STATUS
+      view_ref: pcb-{env}-curated.domain_communication.MAIL_PRINT_STATUS
+    - table_ref: pcb-{env}-landing.domain_communication.GENERIC_BATCH_COMMUNICATION_REQUEST
+      view_ref: pcb-{env}-curated.domain_communication.GENERIC_BATCH_COMMUNICATION_REQUEST
+
+domain_account_management_views:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: 'Business reports may not be generated'
+    customer_impact: 'N/A'
+    severity: 'P3'
+  tables:
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCESS_MEDIUM
+      view_ref: pcb-{env}-curated.domain_account_management.ACCESS_MEDIUM
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCOUNT
+      view_ref: pcb-{env}-curated.domain_account_management.ACCOUNT
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER
+      view_ref: pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREF_PARAM
+      view_ref: pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER_PREF_PARAM
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCT_CUST_PREF_PARAM_HISTORY
+      view_ref: pcb-{env}-curated.domain_account_management.ACCT_CUST_PREF_PARAM_HISTORY
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREFERENCE
+      view_ref: pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER_PREFERENCE
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREF_CONTACT
+      view_ref: pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER_PREF_CONTACT
+      view_file: domain_account_management.ACCOUNT_CUSTOMER_PREF_CONTACT.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCOUNT_RELATIONSHIP
+      view_ref: pcb-{env}-curated.domain_account_management.ACCOUNT_RELATIONSHIP
+      view_file: domain_account_management.ACCOUNT_RELATIONSHIP.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BH
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BH
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BI
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BI
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BJ
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BJ
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BP
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BP
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BR
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BR
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BU
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BU
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BW
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BW
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BX
+      view_ref: pcb-{env}-curated.domain_account_management.AM0BX
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0C
+      view_ref: pcb-{env}-curated.domain_account_management.AM0C
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0E
+      view_ref: pcb-{env}-curated.domain_account_management.AM0E
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0F
+      view_ref: pcb-{env}-curated.domain_account_management.AM0F
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM00
+      view_ref: pcb-{env}-curated.domain_account_management.AM00
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM01
+      view_ref: pcb-{env}-curated.domain_account_management.AM01
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM02
+      view_ref: pcb-{env}-curated.domain_account_management.AM02
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_OL
+      view_ref: pcb-{env}-curated.domain_account_management.AM04_OL
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_PD
+      view_ref: pcb-{env}-curated.domain_account_management.AM04_PD
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM32
+      view_ref: pcb-{env}-curated.domain_account_management.AM32
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM33
+      view_ref: pcb-{env}-curated.domain_account_management.AM33
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM38
+      view_ref: pcb-{env}-curated.domain_account_management.AM38
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM35
+      view_ref: pcb-{env}-curated.domain_account_management.AM35
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3A
+      view_ref: pcb-{env}-curated.domain_account_management.AM3A
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3B
+      view_ref: pcb-{env}-curated.domain_account_management.AM3B
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_PTP
+      view_ref: pcb-{env}-curated.domain_account_management.AM04_PTP
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_S
+      view_ref: pcb-{env}-curated.domain_account_management.AM04_S
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM08
+      view_ref: pcb-{env}-curated.domain_account_management.AM08
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM09
+      view_ref: pcb-{env}-curated.domain_account_management.AM09
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0A
+      view_ref: pcb-{env}-curated.domain_account_management.AM0A
+    - table_ref: pcb-{env}-landing.domain_account_management.AT00
+      view_ref: pcb-{env}-curated.domain_account_management.AT00
+    - table_ref: pcb-{env}-landing.domain_account_management.AT21
+      view_ref: pcb-{env}-curated.domain_account_management.AT21
+    - table_ref: pcb-{env}-landing.domain_account_management.AT31
+      view_ref: pcb-{env}-curated.domain_account_management.AT31
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_AIRLINE_DATA
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_AIRLINE_DATA
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_AIRLINE_INFO
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_AIRLINE_INFO
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_AWARD_INFO
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_AWARD_INFO
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_BAL_ALLOC
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_BAL_ALLOC
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_COMMON_INFO
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_COMMON_INFO
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_EUROPAY
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_EUROPAY
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_INSURANCE
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_INSURANCE
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_LONG_DIST
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_LONG_DIST
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_MC_LODGE
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_MC_LODGE
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_MC_RENTAL
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_MC_RENTAL
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_OUTSTAND_DIST
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_OUTSTAND_DIST
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_PMT_CRED
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_PMT_CRED
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_POINTS
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_POINTS
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_REAGE
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_REAGE
+    - table_ref: pcb-{env}-landing.domain_account_management.AT41_STMT_MSG
+      view_ref: pcb-{env}-curated.domain_account_management.AT41_STMT_MSG
+    - table_ref: pcb-{env}-landing.domain_account_management.PRODUCT
+      view_ref: pcb-{env}-curated.domain_account_management.PRODUCT
+    - table_ref: pcb-{env}-landing.domain_account_management.REF_MERCHANT_CATEGORY
+      view_ref: pcb-{env}-curated.domain_account_management.REF_MERCHANT_CATEGORY
+    - table_ref: pcb-{env}-landing.domain_account_management.REF_MERCHANT_CATEGORY_GROUP
+      view_ref: pcb-{env}-curated.domain_account_management.REF_MERCHANT_CATEGORY_GROUP
+    - table_ref: pcb-{env}-landing.domain_account_management.TRANSACT_ACCOUNT_BALANCE
+      view_ref: pcb-{env}-curated.domain_account_management.TRANSACT_ACCOUNT_BALANCE
+      view_file: domain_account_management.TRANSACT_ACCOUNT_BALANCE.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TRANSACT_ACCOUNT_INTEREST
+      view_ref: pcb-{env}-curated.domain_account_management.TRANSACT_ACCOUNT_INTEREST
+      view_file: domain_account_management.TRANSACT_ACCOUNT_INTEREST.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TRANSACT_ACCOUNT
+      view_ref: pcb-{env}-curated.domain_account_management.TRANSACT_ACCOUNT
+      view_file: domain_account_management.TRANSACT_ACCOUNT.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.AP_PURGED_ACCT
+      view_ref: pcb-{env}-curated.domain_account_management.AP_PURGED_ACCT
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_ACCT_MISC_MA00
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_ACCT_MISC_MA00_REC
+      view_file: domain_account_management.TSYS_ACCT_MISC_MA00.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_ACCT_MISC_MA01
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_ACCT_MISC_MA01_REC
+      view_file: domain_account_management.TSYS_ACCT_MISC_MA01.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_ACCT_MISC_MA03
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_ACCT_MISC_MA03_REC
+      view_file: domain_account_management.TSYS_ACCT_MISC_MA03.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_ACCT_MISC_MA00
+      view_ref: pcb-{env}-curated.domain_account_management.MA00
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_ACCT_MISC_MA01
+      view_ref: pcb-{env}-curated.domain_account_management.MA01
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_ACCT_MISC_MA03
+      view_ref: pcb-{env}-curated.domain_account_management.MA03
+    - table_ref: pcb-{env}-landing.domain_account_management.POST_MON
+      view_ref: pcb-{env}-curated.domain_account_management.POST_MON
+    - table_ref: pcb-{env}-landing.domain_account_management.PRODUCT_TRANSACTION
+      view_ref: pcb-{env}-curated.domain_account_management.PRODUCT_TRANSACTION_VW
+      view_file: domain_account_management.PRODUCT_TRANSACTION.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TCI_ACCOUNT
+      view_ref: pcb-{env}-curated.domain_account_management.TCI_ACCOUNT
+    - table_ref: pcb-{env}-landing.domain_account_management.TCI_EVENTS
+      view_ref: pcb-{env}-curated.domain_account_management.TCI_EVENTS
+    - table_ref: pcb-{env}-landing.domain_account_management.MASS_COMP_CARDS
+      view_ref: pcb-{env}-curated.domain_account_management.MASS_COMP_CARDS
+    - table_ref: pcb-{env}-landing.domain_account_management.CC_USER_LOGIN_HIST
+      view_ref: pcb-{env}-curated.domain_account_management.CC_USER_LOGIN_HIST
+    - table_ref: pcb-{env}-landing.domain_account_management.TCI_WKFWBSKEXT
+      view_ref: pcb-{env}-curated.domain_account_management.TCI_WKFWBSKEXT
+    - table_ref: pcb-{env}-landing.domain_account_management.TCI_WKFLWBSK
+      view_ref: pcb-{env}-curated.domain_account_management.TCI_WKFLWBSK
+    - table_ref: pcb-{env}-landing.domain_account_management.TDR_CASE_DATA
+      view_ref: pcb-{env}-curated.domain_account_management.TDR_CASE_DATA
+    - table_ref: pcb-{env}-landing.domain_account_management.OPERATOR_INQUIRY
+      view_ref: pcb-{env}-curated.domain_account_management.OPERATOR_INQUIRY
+    - table_ref: pcb-{env}-landing.domain_account_management.TDR_TRANSACTION
+      view_ref: pcb-{env}-curated.domain_account_management.TDR_TRANSACTION
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC_PREVIOUS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC_PREVIOUS
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC_PREVIOUS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC_PREVIOUS
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC_PREVIOUS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC_PREVIOUS
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD_PREVIOUS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD_PREVIOUS
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC_PREVIOUS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC_PREVIOUS
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC_PREVIOUS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC_PREVIOUS
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC_PREVIOUS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC_PREVIOUS
+    - table_ref: pcb-{env}-landing.domain_account_management.PRODUCT_UPGRADE_OFFER
+      view_ref: pcb-{env}-curated.domain_account_management.PRODUCT_UPGRADE_OFFER
+    - table_ref: pcb-{env}-landing.domain_account_management.PRODUCT_UPGRADE_OFFER_STATUS
+      view_ref: pcb-{env}-curated.domain_account_management.PRODUCT_UPGRADE_OFFER_STATUS
+    - table_ref: pcb-{env}-landing.domain_account_management.REF_CUSTOMER_OFFER_DETAIL
+      view_ref: pcb-{env}-curated.domain_account_management.REF_CUSTOMER_OFFER_DETAIL
+    - table_ref: pcb-{env}-landing.domain_account_management.SA10
+      view_ref: pcb-{env}-curated.domain_account_management.SA10
+    - table_ref: pcb-{env}-landing.domain_account_management.STMT_DAILY
+      view_ref: pcb-{env}-curated.domain_account_management.STMT_DAILY
+    - table_ref: pcb-{env}-landing.domain_account_management.SA14
+      view_ref: pcb-{env}-curated.domain_account_management.SA14
+    - table_ref: pcb-{env}-landing.domain_account_management.SA15
+      view_ref: pcb-{env}-curated.domain_account_management.SA15
+    - table_ref: pcb-{env}-landing.domain_account_management.SA20
+      view_ref: pcb-{env}-curated.domain_account_management.SA20
+    - table_ref: pcb-{env}-landing.domain_account_management.SA30
+      view_ref: pcb-{env}-curated.domain_account_management.SA30
+    - table_ref: pcb-{env}-landing.domain_account_management.SA40
+      view_ref: pcb-{env}-curated.domain_account_management.SA40
+    - table_ref: pcb-{env}-landing.domain_account_management.SA41
+      view_ref: pcb-{env}-curated.domain_account_management.SA41
+    - table_ref: pcb-{env}-landing.domain_account_management.SA59
+      view_ref: pcb-{env}-curated.domain_account_management.SA59
+    - table_ref: pcb-{env}-landing.domain_account_management.SA60
+      view_ref: pcb-{env}-curated.domain_account_management.SA60
+    - table_ref: pcb-{env}-landing.domain_account_management.SA85
+      view_ref: pcb-{env}-curated.domain_account_management.SA85
+    - table_ref: pcb-{env}-landing.domain_account_management.SA00
+      view_ref: pcb-{env}-curated.domain_account_management.SA00
+    - table_ref: pcb-{env}-landing.domain_account_management.SA99
+      view_ref: pcb-{env}-curated.domain_account_management.SA99
+    - table_ref: pcb-{env}-landing.domain_account_management.STMT_AUDIT
+      view_ref: pcb-{env}-curated.domain_account_management.STMT_AUDIT
+    - table_ref: pcb-{env}-landing.domain_account_management.STMT_LOAD_RESULTS
+      view_ref: pcb-{env}-curated.domain_account_management.STMT_LOAD_RESULTS
+    - table_ref: pcb-{env}-landing.domain_account_management.SA30_TSYS_BUCKETS
+      view_ref: pcb-{env}-curated.domain_account_management.SA30_TSYS_BUCKETS
+    - table_ref: pcb-{env}-landing.domain_account_management.ACCOUNT_PRODUCT_CHANGE_REQ
+      view_ref: pcb-{env}-curated.domain_account_management.ACCOUNT_PRODUCT_CHANGE_REQ
+    - table_ref: pcb-{env}-landing.domain_account_management.REF_FMREQ_STATUS_REASON_CD
+      view_ref: pcb-{env}-curated.domain_account_management.REF_FMREQ_STATUS_REASON_CD
+    - table_ref: pcb-{env}-landing.domain_account_management.INS_CLAIM_STATUS
+      view_ref: pcb-{env}-curated.domain_account_management.INS_CLAIM_STATUS
+    - table_ref: pcb-{env}-landing.domain_account_management.INS_NONFINANCIAL_CHGS
+      view_ref: pcb-{env}-curated.domain_account_management.INS_NONFINANCIAL_CHGS
+    - table_ref: pcb-{env}-landing.domain_account_management.INS_PREMIUM_DATA
+      view_ref: pcb-{env}-curated.domain_account_management.INS_PREMIUM_DATA
+    - table_ref: pcb-{env}-landing.domain_account_management.INS_TRANSFER_DATA
+      view_ref: pcb-{env}-curated.domain_account_management.INS_TRANSFER_DATA
+    - table_ref: pcb-{env}-landing.domain_account_management.PC_DOWNLOAD
+      view_ref: pcb-{env}-curated.domain_account_management.PC_DOWNLOAD
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_EVENTS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_EVENTS
+      view_file: domain_account_management.TSYS_EVENTS.sql
+    - table_ref: pcb-{env}-pds.SHARE_CUST_RISK_PDS.CME_VELVET_UPGRADES
+      view_ref: pcb-{env}-curated.domain_account_management.CME_VELVET_UPGRADES
+      view_file: domain_account_management.CME_VELVET_UPGRADES.sql
+    - table_ref: pcb-{env}-landing.domain_account_management.TOKEN_NOTIFY
+      view_ref: pcb-{env}-curated.domain_account_management.TOKEN_NOTIFY
+    - table_ref: pcb-{env}-landing.domain_account_management.LOYALTY_OFFER_ELIGIBLE_ACCOUNT
+      view_ref: pcb-{env}-curated.domain_account_management.LOYALTY_OFFER_ELIGIBLE_ACCOUNT
+    - table_ref: pcb-{env}-landing.domain_account_management.LOYALTY_OFFER_ACCOUNT
+      view_ref: pcb-{env}-curated.domain_account_management.LOYALTY_OFFER_ACCOUNT
+    - table_ref: pcb-{env}-landing.domain_account_management.REF_LOYALTY_OFFER_DETAIL
+      view_ref: pcb-{env}-curated.domain_account_management.REF_LOYALTY_OFFER_DETAIL
+    - table_ref: pcb-{env}-landing.domain_account_management.CREDIT_LIMIT_OFFER_STATUS
+      view_ref: pcb-{env}-curated.domain_account_management.CREDIT_LIMIT_OFFER_STATUS
+    - table_ref: pcb-{env}-landing.domain_account_management.TSYS_STREAMING_HEALTH_EVENTS
+      view_ref: pcb-{env}-curated.domain_account_management.TSYS_STREAMING_HEALTH_EVENTS
+    - table_ref: pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG
+      view_ref: pcb-{env}-curated.domain_account_management.BATCH_AUTHORIZATION_LOG
+
+domain_loyalty_views:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Terminus Data Platform - Convergence"
+    severity: "P3"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_loyalty.POINTS_CALCULATOR
+      view_ref: pcb-{env}-curated.domain_loyalty.POINTS_CALCULATOR
+    - table_ref: pcb-{env}-landing.domain_loyalty.PCF_MEMO
+      view_ref: pcb-{env}-curated.domain_loyalty.PCF_MEMO
+    - table_ref: pcb-{env}-landing.domain_loyalty.PCF_PRODUCT
+      view_ref: pcb-{env}-curated.domain_loyalty.PCF_PRODUCT
+      view_file: domain_loyalty.PCF_PRODUCT.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.POINTS_STAGING
+      view_ref: pcb-{env}-curated.domain_loyalty.POINTS_STAGING
+      view_file: domain_loyalty.POINTS_STAGING.sql
+      materialized_view_config:
+        options:
+          enable_refresh: true
+          refresh_interval_minutes: 60
+          max_staleness: INTERVAL "12" HOUR
+          allow_non_incremental_definition: true
+        partition_field: DATETIME_TRUNC(TRANSACTION_DATE, MONTH)
+        clustering_fields:
+          - MERCHANT_CATEGORY_CODE
+          - TRANSACTION_CODE
+          - TRANS_REF_ID
+    - table_ref: pcb-{env}-landing.domain_loyalty.POINTS_STAGING
+      view_ref: pcb-{env}-curated.domain_loyalty.POINTS_STAGING_MIRROR
+    - table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED
+      view_ref: pcb-{env}-curated.domain_loyalty.LOYALTY_POINTS_EARNED
+      view_file: domain_loyalty.LOYALTY_POINTS_EARNED.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED_LIFETIME
+      view_ref: pcb-{env}-curated.domain_loyalty.LOYALTY_POINTS_EARNED_LIFETIME
+      view_file: domain_loyalty.LOYALTY_POINTS_EARNED_LIFETIME.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE
+      view_ref: pcb-{env}-curated.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE
+      view_file: domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE_LIFETIME
+      view_ref: pcb-{env}-curated.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE_LIFETIME
+      view_file: domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE_LIFETIME.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.CATEGORY_CODE
+      view_ref: pcb-{env}-curated.domain_loyalty.CATEGORY_CODE
+    - table_ref: pcb-{env}-landing.domain_loyalty.CAMPAIGN_BIN
+      view_ref: pcb-{env}-curated.domain_loyalty.CAMPAIGN_BIN
+    - table_ref: pcb-{env}-landing.domain_loyalty.CAMPAIGN_TRANSACTION
+      view_ref: pcb-{env}-curated.domain_loyalty.CAMPAIGN_TRANSACTION
+    - table_ref: pcb-{env}-landing.domain_loyalty.CAMPAIGN_CATEGORY
+      view_ref: pcb-{env}-curated.domain_loyalty.CAMPAIGN_CATEGORY
+    - table_ref: pcb-{env}-landing.domain_loyalty.CAMPAIGN_MERCHANT
+      view_ref: pcb-{env}-curated.domain_loyalty.CAMPAIGN_MERCHANT
+    - table_ref: pcb-{env}-landing.domain_loyalty.CAMPAIGN_COUNTRY
+      view_ref: pcb-{env}-curated.domain_loyalty.CAMPAIGN_COUNTRY
+    - table_ref: pcb-{env}-landing.domain_loyalty.PCF_POINTS_TX
+      view_ref: pcb-{env}-curated.domain_loyalty.PCF_POINTS_TX
+      view_file: domain_loyalty.PCF_POINTS_TX.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.LYLTY_QUE
+      view_ref: pcb-{env}-curated.domain_loyalty.LYLTY_QUE
+      view_file: domain_loyalty.LYLTY_QUE.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.PCF_CARD
+      view_ref: pcb-{env}-curated.domain_loyalty.PCF_CARD
+      view_file: domain_loyalty.PCF_CARD.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.ESSO_FUEL_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_loyalty.ESSO_FUEL_TRANSACTIONS
+      view_file: domain_loyalty.ESSO_FUEL_TRANSACTION.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_POINTS_AWARDED
+      view_ref: pcb-{env}-curated.domain_loyalty.PC_POINTS_AWARDED
+      view_file: domain_loyalty.PC_POINTS_AWARDED.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_POINTS_REPROCESS
+      view_ref: pcb-{env}-curated.domain_loyalty.PC_POINTS_REPROCESS
+      view_file: domain_loyalty.PC_POINTS_REPROCESS.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.AMBASSADOR_ESSO_TRANSACTION
+      view_ref: pcb-{env}-curated.domain_loyalty.AMBASSADOR_ESSO_TRANSACTION
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_TARGETED_OFFER
+      view_ref: pcb-{env}-curated.domain_loyalty.PC_TARGETED_OFFER
+      view_file: domain_loyalty.PC_TARGETED_OFFER.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_TARGETED_OFFER_FULFILLMENT
+      view_ref: pcb-{env}-curated.domain_loyalty.PC_TARGETED_OFFER_FULFILLMENT
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_TARGETED_OFFER_FULFILLMENT
+      view_ref: pcb-{env}-curated.domain_loyalty.OFFER_MATCHING_VW
+      view_file: domain_loyalty.OFFER_MATCHING_VW.sql
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_OPTIMUM_IDENTITIES_EVENT
+      view_ref: pcb-{env}-curated.domain_loyalty.PC_OPTIMUM_IDENTITIES_EVENT
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_ACCOUNT_REF_SERVICE_PAR_MAPPING
+      view_ref: pcb-{env}-curated.domain_loyalty.PC_ACCOUNT_REF_SERVICE_PAR_MAPPING
+    - table_ref: pcb-{env}-landing.domain_loyalty.PC_DECLINED_APPLICATION_OFFER_ASSIGNMENT
+      view_ref: pcb-{env}-curated.domain_loyalty.PC_DECLINED_APPLICATION_OFFER_ASSIGNMENT
+    - table_ref: pcb-{env}-landing.domain_loyalty.PCO_MISSING_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_loyalty.PCO_MISSING_TRANSACTIONS
+
+
+domain_cots_aml_sas_views:
+  tables:
+    - table_ref: pcb-{env}-landing.cots_aml_sas.CASE_LIVE
+      view_ref: pcb-{env}-curated.cots_aml_sas.CASE_LIVE
+    - table_ref: pcb-{env}-landing.cots_aml_sas.CASE_VERSION
+      view_ref: pcb-{env}-curated.cots_aml_sas.CASE_VERSION
+    - table_ref: pcb-{env}-landing.cots_aml_sas.CASE_X_PARTY
+      view_ref: pcb-{env}-curated.cots_aml_sas.CASE_X_PARTY
+    - table_ref: pcb-{env}-landing.cots_aml_sas.FSC_PARTY_IDV_INFO
+      view_ref: pcb-{env}-curated.cots_aml_sas.FSC_PARTY_IDV_INFO
+    - table_ref: pcb-{env}-landing.cots_aml_sas.INCIDENT_LIVE
+      view_ref: pcb-{env}-curated.cots_aml_sas.INCIDENT_LIVE
+    - table_ref: pcb-{env}-landing.cots_aml_sas.INCIDENT_X_PARTY
+      view_ref: pcb-{env}-curated.cots_aml_sas.INCIDENT_X_PARTY
+    - table_ref: pcb-{env}-landing.cots_aml_sas.PARTY_LIVE
+      view_ref: pcb-{env}-curated.cots_aml_sas.PARTY_LIVE
+    - table_ref: pcb-{env}-landing.cots_aml_sas.FSC_PARTY_IDV_NFTF_INFO
+      view_ref: pcb-{env}-curated.cots_aml_sas.FSC_PARTY_IDV_NFTF_INFO
+    - table_ref: pcb-{env}-landing.cots_aml_sas.FSC_ACCOUNT_DIM
+      view_ref: pcb-{env}-curated.cots_aml_sas.FSC_ACCOUNT_DIM
+    - table_ref: pcb-{env}-landing.cots_aml_sas.FSC_PARTY_DIM
+      view_ref: pcb-{env}-curated.cots_aml_sas.FSC_PARTY_DIM
+    - table_ref: pcb-{env}-landing.cots_aml_sas.FSK_LIST_ELEMENT
+      view_ref: pcb-{env}-curated.cots_aml_sas.FSK_LIST_ELEMENT
+    - table_ref: pcb-{env}-landing.cots_aml_sas.CORE_CUST_RISK_RANK
+      view_ref: pcb-{env}-curated.cots_aml_sas.CORE_CUST_RISK_RANK
+    - table_ref: pcb-{env}-landing.cots_aml_sas.SAS_ATTACHMENT
+      view_ref: pcb-{env}-curated.cots_aml_sas.SAS_ATTACHMENT
+    - table_ref: pcb-{env}-landing.cots_aml_sas.SAS_COMMENT
+      view_ref: pcb-{env}-curated.cots_aml_sas.SAS_COMMENT
+    - table_ref: pcb-{env}-landing.cots_aml_sas.STG_CUST_RISK_RANK
+      view_ref: pcb-{env}-curated.cots_aml_sas.STG_CUST_RISK_RANK
+
+domain_iam_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_iam.IAM_AUTHENTICATION
+      view_ref: pcb-{env}-curated.domain_iam.IAM_AUTHENTICATION
+      view_file: domain_iam.IAM_AUTHENTICATION.sql
+    - table_ref: pcb-{env}-landing.domain_iam.IAM_CUSTOMER_VERIFICATION
+      view_ref: pcb-{env}-curated.domain_iam.IAM_CUSTOMER_VERIFICATION      
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "View creation dag"
+
+domain_consent_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_EVENTS_ANALYTICS
+      view_ref: pcb-{env}-curated.domain_consent.CNST_EVENTS_ANALYTICS
+      view_file: domain_consent.CNST_EVENTS_ANALYTICS.sql
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_ACCT
+      view_ref: pcb-{env}-curated.domain_consent.CNST_ACCT
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_ACCT_CUST_ID_XREF
+      view_ref: pcb-{env}-curated.domain_consent.CNST_ACCT_CUST_ID_XREF
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_DETAIL
+      view_ref: pcb-{env}-curated.domain_consent.CNST_DETAIL
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_EVENT
+      view_ref: pcb-{env}-curated.domain_consent.CNST_EVENT
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_SIGNATURE
+      view_ref: pcb-{env}-curated.domain_consent.CNST_SIGNATURE
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_TYPE
+      view_ref: pcb-{env}-curated.domain_consent.CNST_TYPE
+    - table_ref: pcb-{env}-landing.domain_consent.CNST_TYPE_MKTG_GRP_XREF
+      view_ref: pcb-{env}-curated.domain_consent.CNST_TYPE_MKTG_GRP_XREF
+    - table_ref: pcb-{env}-landing.domain_consent.CUST_CNST_STATE
+      view_ref: pcb-{env}-curated.domain_consent.CUST_CNST_STATE
+    - table_ref: pcb-{env}-landing.domain_consent.EVENT_TYPE
+      view_ref: pcb-{env}-curated.domain_consent.EVENT_TYPE
+    - table_ref: pcb-{env}-landing.domain_consent.EXT_CUST_ID_TYPE
+      view_ref: pcb-{env}-curated.domain_consent.EXT_CUST_ID_TYPE
+    - table_ref: pcb-{env}-landing.domain_consent.LEGAL_ENTITY
+      view_ref: pcb-{env}-curated.domain_consent.LEGAL_ENTITY
+    - table_ref: pcb-{env}-landing.domain_consent.MKTG_GRP
+      view_ref: pcb-{env}-curated.domain_consent.MKTG_GRP
+    - table_ref: pcb-{env}-landing.domain_consent.MKTG_GRP_TYPE
+      view_ref: pcb-{env}-curated.domain_consent.MKTG_GRP_TYPE
+    - table_ref: pcb-{env}-landing.domain_consent.SOURCE
+      view_ref: pcb-{env}-curated.domain_consent.SOURCE
+    - table_ref: pcb-{env}-landing.domain_consent.SOURCE_ORG
+      view_ref: pcb-{env}-curated.domain_consent.SOURCE_ORG
+    - table_ref: pcb-{env}-landing.domain_consent.TOKEN_BIN_SOURCE_ORG
+      view_ref: pcb-{env}-curated.domain_consent.TOKEN_BIN_SOURCE_ORG
+    - table_ref: pcb-{env}-landing.domain_consent.TM_PROC
+      view_ref: pcb-{env}-curated.domain_consent.TM_PROC
+    - table_ref: pcb-{env}-landing.domain_consent.TM_PROC_BAK
+      view_ref: pcb-{env}-curated.domain_consent.TM_PROC_BAK
+    - table_ref: pcb-{env}-landing.domain_consent.TM_DOC
+      view_ref: pcb-{env}-curated.domain_consent.TM_DOC
+    - table_ref: pcb-{env}-landing.domain_consent.TM_DOC_BAK
+      view_ref: pcb-{env}-curated.domain_consent.TM_DOC_BAK
+    - table_ref: pcb-{env}-landing.domain_consent.TM_PROC_BAK1
+      view_ref: pcb-{env}-curated.domain_consent.TM_PROC_BAK1
+    - table_ref: pcb-{env}-landing.domain_consent.TM_PROC_BAK3
+      view_ref: pcb-{env}-curated.domain_consent.TM_PROC_BAK3
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "View creation dag"
+
+domain_technical_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_technical.PUBLICATION
+      view_ref: pcb-{env}-curated.domain_technical.PUBLICATION
+      view_file: domain_technical.PUBLICATION.sql
+    - table_ref: pcb-{env}-landing.domain_technical.VENDOR_HOLIDAY_DATES
+      view_ref: pcb-{env}-curated.domain_technical.VENDOR_HOLIDAY_DATES
+    - table_ref: pcb-{env}-landing.domain_technical.MEMO_REASON
+      view_ref: pcb-{env}-curated.domain_technical.MEMO_REASON
+    - table_ref: pcb-{env}-landing.domain_technical.REPROCESSING_EVENT
+      view_ref: pcb-{env}-curated.domain_technical.REPROCESSING_EVENT
+      view_file: domain_technical.REPROCESSING_EVENT.sql
+    - table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+      view_ref: pcb-{env}-curated.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "View creation dag"
+
+domain_data_logs_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_data_logs.DATA_FRESHNESS
+      view_ref: pcb-{env}-curated.domain_data_logs.DATA_FRESHNESS
+      view_file: domain_data_logs.DATA_FRESHNESS.sql
+
+domain_ops_adhoc_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.REF_DRAFT5_AMOUNT_HEX_CHART
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.REF_DRAFT5_AMOUNT_HEX_CHART
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.REF_DRAFT5_TRANSACTION_CODE
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.REF_DRAFT5_TRANSACTION_CODE
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.FEE_REVERSAL
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.FEE_REVERSAL
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.FEE_REVERSAL_BATCH_TRAILER
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.FEE_REVERSAL_BATCH_TRAILER
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.FEE_REVERSAL_TRANSMIT_TRAILER
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.FEE_REVERSAL_TRANSMIT_TRAILER
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.PCMC_MEMO_TRAILER
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.PCMC_MEMO_TRAILER
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.PCMC_MEMO
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.PCMC_MEMO
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.PCMC_PAYMENT_HIERARCHY_UPDATE_TRAILER
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.PCMC_PAYMENT_HIERARCHY_UPDATE_TRAILER
+    - table_ref: pcb-{env}-landing.domain_ops_adhoc.PCMC_PAYMENT_HIERARCHY_UPDATE
+      view_ref: pcb-{env}-curated.domain_ops_adhoc.PCMC_PAYMENT_HIERARCHY_UPDATE
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "View creation dag"
+
+domain_fraud_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_fraud.CARDGUARD_FRAUDFLAG
+      view_ref: pcb-{env}-curated.domain_fraud.CARDGUARD_FRAUDFLAG
+    - table_ref: pcb-{env}-landing.domain_fraud.CARDGUARD_CASELOG
+      view_ref: pcb-{env}-curated.domain_fraud.CARDGUARD_CASELOG
+      view_file: domain_fraud.CARDGUARD_CASELOG.sql
+    - table_ref: pcb-{env}-landing.domain_fraud.FFM_MONETARY_AUTH_REQ
+      view_ref: pcb-{env}-curated.domain_fraud.FFM_MONETARY_AUTH_REQ
+    - table_ref: pcb-{env}-landing.domain_fraud.FFM_MONETARY_AUTH_REQ_STAT
+      view_ref: pcb-{env}-curated.domain_fraud.FFM_MONETARY_AUTH_REQ_STAT
+
+cots_customer_service_blockworx_views:
+  tables:
+    - table_ref: pcb-{env}-landing.cots_customer_service_blockworx.PAF_MESSAGE_CONTENT
+      view_ref: pcb-{env}-curated.cots_customer_service_blockworx.PAF_MESSAGE_CONTENT
+    - table_ref: pcb-{env}-landing.cots_customer_service_blockworx.PAF_BUS_PROCESS
+      view_ref: pcb-{env}-curated.cots_customer_service_blockworx.PAF_BUS_PROCESS
+    - table_ref: pcb-{env}-landing.cots_customer_service_blockworx.PAF_AUDIT
+      view_ref: pcb-{env}-curated.cots_customer_service_blockworx.PAF_AUDIT
+
+domain_validation_verification_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_validation_verification.APPLICANT_PERSONAL_IDENTIFIER
+      view_ref: pcb-{env}-curated.domain_validation_verification.APPLICANT_PERSONAL_IDENTIFIER
+      view_file: domain_validation_verification.APPLICANT_PERSONAL_IDENTIFIER.sql
+    - table_ref: pcb-{env}-landing.domain_validation_verification.ONFIDO_CHECK
+      view_ref: pcb-{env}-curated.domain_validation_verification.ONFIDO_CHECK
+      view_file: domain_validation_verification.ONFIDO_CHECK.sql
+    - table_ref: pcb-{env}-landing.domain_validation_verification.ONFIDO_APPLICANT
+      view_ref: pcb-{env}-curated.domain_validation_verification.ONFIDO_APPLICANT
+      view_file: domain_validation_verification.ONFIDO_APPLICANT.sql
+    - table_ref: pcb-{env}-landing.domain_validation_verification.IDV_REQUEST
+      view_ref: pcb-{env}-curated.domain_validation_verification.IDV_REQUEST
+      view_file: domain_validation_verification.IDV_REQUEST.sql
+    - table_ref: pcb-{env}-landing.domain_validation_verification.IDV_SUBMISSION
+      view_ref: pcb-{env}-curated.domain_validation_verification.IDV_SUBMISSION
+      view_file: domain_validation_verification.IDV_SUBMISSION.sql
+    - table_ref: pcb-{env}-landing.domain_validation_verification.IDV_EVENT
+      view_ref: pcb-{env}-curated.domain_validation_verification.IDV_EVENT
+      view_file: domain_validation_verification.IDV_EVENT.sql
+    - table_ref: pcb-{env}-landing.domain_validation_verification.IDV_DOCUMENT
+      view_ref: pcb-{env}-curated.domain_validation_verification.IDV_DOCUMENT
+      view_file: domain_validation_verification.IDV_DOCUMENT.sql
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "View creation dag"
+
+domain_customer_service_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_customer_service.INTERCEPTOR_AGENT
+      view_ref: pcb-{env}-curated.domain_customer_service.INTERCEPTOR_AGENT
+
+domain_cdic_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_cdic.CDIC_RESPONSIBLE_PARTY
+      view_ref: pcb-{env}-curated.domain_cdic.CDIC_RESPONSIBLE_PARTY
+    - table_ref: pcb-{env}-landing.domain_cdic.CDIC_IDV_HISTORY
+      view_ref: pcb-{env}-curated.domain_cdic.CDIC_IDV_HISTORY
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0201
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0201
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0202
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0202
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0211
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0211
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0212
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0212
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0221
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0221
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0231
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0231
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0232
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0232
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0233
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0233
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0234
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0234
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0235
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0235
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0236
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0236
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0237
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0237
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0238
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0238
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0239
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0239
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0240
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0240
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0241
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0241
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0242
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0242
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0401
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0401
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0501
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0501
+    - table_ref: pcb-{env}-landing.domain_cdic.PCMA_CDIC_0999
+      view_ref: pcb-{env}-curated.domain_cdic.PCMA_CDIC_0999
+    - table_ref: pcb-{env}-landing.domain_cdic.REF_CDIC_COUNTRY
+      view_ref: pcb-{env}-curated.domain_cdic.REF_CDIC_COUNTRY
+    - table_ref: pcb-{env}-landing.domain_cdic.REF_CUST_ADDRESS_TYPE_CD
+      view_ref: pcb-{env}-curated.domain_cdic.REF_CUST_ADDRESS_TYPE_CD
+
+ts2_cif_views:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: 'Business reports may not be generated'
+    customer_impact: 'N/A'
+    severity: 'P3'
+  tables:
+    - table_ref: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_CURR
+      view_ref: pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR
+    - table_ref: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_PREV
+      view_ref: pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_PREV
+    - table_ref: pcb-{env}-landing.domain_account_management.CIF_CARD_CURR
+      view_ref: pcb-{env}-curated.domain_account_management.CIF_CARD_CURR
+    - table_ref: pcb-{env}-landing.domain_account_management.CIF_CARD_PREV
+      view_ref: pcb-{env}-curated.domain_account_management.CIF_CARD_PREV
+    - table_ref: pcb-{env}-landing.domain_account_management.CIF_CARD_XREF
+      view_ref: pcb-{env}-curated.domain_account_management.CIF_CARD_XREF
+    - table_ref: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_HISTORY
+      view_ref: pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_HISTORY
+    - table_ref: pcb-{env}-landing.domain_account_management.CIF_CARD_HISTORY
+      view_ref: pcb-{env}-curated.domain_account_management.CIF_CARD_HISTORY
+
+domain_tax_slips_views:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "tax_slips"
+    business_impact: 'Business reports may not be generated'
+    customer_impact: 'N/A'
+    severity: 'P3'
+  tables:
+    - table_ref: pcb-{env}-landing.domain_tax_slips.T5_TAX_SLIP
+      view_ref: pcb-{env}-curated.domain_tax_slips.T5_TAX_SLIP
+    - table_ref: pcb-{env}-landing.domain_tax_slips.T5_TAX_TRAILER
+      view_ref: pcb-{env}-curated.domain_tax_slips.T5_TAX_TRAILER
+    - table_ref: pcb-{env}-landing.domain_tax_slips.T5_TAX_HEADER
+      view_ref: pcb-{env}-curated.domain_tax_slips.T5_TAX_HEADER
+    - table_ref: pcb-{env}-landing.domain_tax_slips.T5_TAX_VALIDATION_FAIL_RECORDS
+      view_ref: pcb-{env}-curated.domain_tax_slips.T5_TAX_VALIDATION_FAIL_RECORDS
+
+domain_card_management_views:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: 'Business reports may not be generated; Reconciliation impact'
+    customer_impact: 'N/A'
+    severity: 'P3'
+  tables:
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING
+      view_file: domain_card_management.EMBOSSING.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_REISSUE
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING_REISSUE
+      view_file: domain_card_management.EMBOSSING_REISSUE.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_REISSUE_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING_REISSUE_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_RUSH
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING_RUSH
+      view_file: domain_card_management.EMBOSSING_RUSH.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_FASTCARD_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING_FASTCARD_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.CARD_EMBOSSING_FILE_AUDIT_LOG
+      view_ref: pcb-{env}-curated.domain_card_management.CARD_EMBOSSING_FILE_AUDIT_LOG
+    - table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_CUSTOMER_INFO_FOR_REQUESTED_CARD
+      view_ref: pcb-{env}-curated.domain_card_management.INSTANT_ISSUANCE_CUSTOMER_INFO_FOR_REQUESTED_CARD
+      view_file: domain_card_management.INSTANT_ISSUANCE_CUSTOMER_INFO_FOR_REQUESTED_CARD.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_ORCHESTRATION
+      view_ref: pcb-{env}-curated.domain_card_management.INSTANT_ISSUANCE_ORCHESTRATION
+      view_file: domain_card_management.INSTANT_ISSUANCE_ORCHESTRATION.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_REQUESTED_CARD_DETAILS
+      view_ref: pcb-{env}-curated.domain_card_management.INSTANT_ISSUANCE_REQUESTED_CARD_DETAILS
+      view_file: domain_card_management.INSTANT_ISSUANCE_REQUESTED_CARD_DETAILS.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.CARD_EMBOSSING_REQUEST_STATUS
+      view_ref: pcb-{env}-curated.domain_card_management.CARD_EMBOSSING_REQUEST_STATUS
+      view_file: domain_card_management.CARD_EMBOSSING_REQUEST_STATUS.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.APR_CONTROL_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.APR_CONTROL_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_AUDIT_LOG_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_AUDIT_LOG_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_AUDIT_LOG_FIELD_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_AUDIT_LOG_FIELD_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_CHIP_OPTION_CHANGE_STATUS_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_CHIP_OPTION_CHANGE_STATUS_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_DOC_INPUT_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_DOC_INPUT_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_FULFILL_MASTER_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_FULFILL_MASTER_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_PERSO_TOKEN_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_PERSO_TOKEN_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_PUSHED_DATA_STATUS_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_PUSHED_DATA_STATUS_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_STATE_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_STATE_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_TSYS_PUSH_CLOB_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_TSYS_PUSH_CLOB_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.II_TSYS_PUSHED_DATA_ARCHIVE
+      view_ref: pcb-{env}-curated.domain_card_management.II_TSYS_PUSHED_DATA_ARCHIVE
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_TERMINUS_MAPPING
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING_TERMINUS_MAPPING
+      view_file: domain_card_management.EMBOSSING_TERMINUS_MAPPING.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_REPROCESSING_EVENT
+      view_ref: pcb-{env}-curated.domain_card_management.EMBOSSING_REPROCESSING_EVENT
+      view_file: domain_card_management.EMBOSSING_REPROCESSING_EVENT.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_RECONCILIATION_AUDIT
+      view_ref: pcb-{env}-curated.domain_card_management.INSTANT_ISSUANCE_RECONCILIATION_AUDIT
+    - table_ref: pcb-{env}-landing.domain_card_management.CARD_EMBOSSING_REQUEST_STATUS
+      view_ref: pcb-{env}-curated.domain_card_management.INTANT_ISSUANCE_PROCESSING_CARD_REQUEST
+      view_file: domain_card_management.INTANT_ISSUANCE_PROCESSING_CARD_REQUEST.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_TERMINUS_MAPPING
+      view_ref: pcb-{env}-curated.domain_card_management.BATCH_PROCESSING_CARD_REQUEST
+      view_file: domain_card_management.BATCH_PROCESSING_CARD_REQUEST.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.CARD_EMBOSSING_REQUEST_STATUS
+      view_ref: pcb-{env}-curated.domain_card_management.LIST_ALL_STATUS_REQUEST_ID
+      view_file: domain_card_management.LIST_ALL_STATUS_REQUEST_ID.sql
+    - table_ref: pcb-{env}-landing.domain_card_management.EMBOSSING_REPROCESSING_EVENT
+      view_ref: pcb-{env}-curated.domain_card_management.FAILED_EVENT_NOT_RECOVERED
+      view_file: domain_card_management.FAILED_EVENT_NOT_RECOVERED.sql
+
+
+domain_retail_views:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Terminus Data Platform - Convergence"
+    severity: "P3"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_retail.LCL_STORE_LIST
+      view_ref: pcb-{env}-curated.domain_retail.LCL_STORE_LIST
+    - table_ref: pcb-{env}-landing.domain_retail.SDM_MERCHANT_LST
+      view_ref: pcb-{env}-curated.domain_retail.SDM_MERCHANT_LST
+
+domain_audit_vw_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_audit.ACTIVITY_LOG_EVENT
+      view_ref: pcb-{env}-curated.domain_audit_vw.ACTIVITY_LOG_EVENT
+
+switch_growth_audit_views:
+  tables:
+    - table_ref: pcb-{env}-landing.cots_digital_marketing.PCF_CURRENT_SWITCH_FILE_RECORDS_AUDIT
+      view_ref: pcb-{env}-curated.cots_digital_marketing.PCF_CURRENT_SWITCH_FILE_RECORDS_AUDIT
+
+domain_dispute_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_dispute.TSYS_TCS_PURGE_CASE_DETAILS
+      view_ref: pcb-{env}-curated.domain_dispute.TSYS_TCS_PURGE_CASE_DETAILS
+      view_file: domain_dispute.TSYS_TCS_PURGE_CASE_DETAILS.sql
+    - table_ref: pcb-{env}-landing.domain_dispute.TCS_PURGE_CASE_DETAILS_STATUS
+      view_ref: pcb-{env}-curated.domain_dispute.TCS_PURGE_CASE_DETAILS_STATUS
+    - table_ref: pcb-{env}-landing.domain_dispute.TCS_PURGE_CASE_IMAGE_METADATA_STATUS
+      view_ref: pcb-{env}-curated.domain_dispute.TCS_PURGE_CASE_IMAGE_METADATA_STATUS
+    - table_ref: pcb-{env}-landing.domain_dispute.TSYS_TCS_PURGE_CASE_IMAGE_METADATA
+      view_ref: pcb-{env}-curated.domain_dispute.TSYS_TCS_PURGE_CASE_IMAGE_METADATA
+
+cots_mft_sterling_views:
+  tables:
+    - table_ref: pcb-{env}-landing.cots_mft_sterling.MFT_DATA_FLOW
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_DATA_FLOW_VW
+      view_file: cots_mft_sterling_vw.MFT_DATA_FLOW_VW.sql
+    - table_ref: pcb-{env}-landing.cots_mft_sterling.MFT_FG_ARRIVEDFILE
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_FG_ARRIVEDFILE_VW
+      view_file: cots_mft_sterling_vw.MFT_FG_ARRIVEDFILE_VW.sql
+    - table_ref: pcb-{env}-landing.cots_mft_sterling.MFT_FG_DELIVERY
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_FG_DELIVERY_VW
+      view_file: cots_mft_sterling_vw.MFT_FG_DELIVERY_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_CDRS
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_CDRS_VW
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_PROCESS_QUEUE
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_PROCESS_QUEUE_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_PROCESS_QUEUE_VW.sql
+    - table_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_CDRS_VW
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_SRE_TRANSFER_LOG_VW
+      view_file: cots_mft_sterling_vw.MFT_SRE_TRANSFER_LOG_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_ARCHIVE_HISTORY
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_ARCHIVE_HISTORY_VW
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_DATA_REPLICATION_STATUS
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_DATA_REPLICATION_STATUS_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_DATA_REPLICATION_STATUS_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_NODES
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_NODES_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_NODES_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_LOCATIONS
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_LOCATIONS_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_LOCATIONS_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_FILES
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_FILES_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_FILES_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_DISTRIBUTION_LIST
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_DISTRIBUTION_LIST_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_DISTRIBUTION_LIST_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_FILE_TAG_MAPPING
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_FILE_TAG_MAPPING_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_FILE_TAG_MAPPING_VW.sql
+    - table_ref: pcb-{pnp_env}-compute.mft_ms.MS_FILE_KEY_MAPPING
+      view_ref: pcb-{env}-curated.cots_mft_sterling_vw.MFT_MS_FILE_KEY_MAPPING_VW
+      view_file: cots_mft_sterling_vw.MFT_MS_FILE_KEY_MAPPING_VW.sql
+
+domain_ledger_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_ledger.GENERALLEDGER
+      view_ref: pcb-{env}-curated.domain_ledger.GENERALLEDGER
+    - table_ref: pcb-{env}-landing.domain_ledger.PORTFOLIO_DATA
+      view_ref: pcb-{env}-curated.domain_ledger.PORTFOLIO_DATA
+
+domain_scoring_views:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "team-defenders-alerts"
+    - "P3"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_scoring.INPUT_TRS_T0090_FEATURES
+      view_ref: pcb-{env}-curated.domain_scoring.INPUT_TRS_T0090_FEATURES_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.INPUT_TRS_T0090_FEATURES
+      view_ref: pcb-{env}-curated.domain_scoring.INPUT_TRS_T0090_FEATURES_LATEST
+      view_file: domain_scoring.INPUT_TRS_T0090_FEATURES_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_TRS_T0090
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_TRS_T0090_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_TRS_T0090
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_TRS_T0090_LATEST
+      view_file: domain_scoring.OUTPUT_TRS_T0090_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PRIZM_UNIQUE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PRIZM_UNIQUE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PRIZM_UNIQUE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PRIZM_UNIQUE_LATEST
+      view_file: domain_scoring.SCORING_PREP_PRIZM_UNIQUE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_MTH_ACQUISITION_EQ
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_MTH_ACQUISITION_EQ_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_MTH_ACQUISITION_EQ
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_MTH_ACQUISITION_EQ_LATEST
+      view_file: domain_scoring.SCORING_PREP_MTH_ACQUISITION_EQ_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PCMC_DATA_DEPOT
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PCMC_DATA_DEPOT_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PCMC_DATA_DEPOT
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PCMC_DATA_DEPOT_LATEST
+      view_file: domain_scoring.SCORING_PREP_PCMC_DATA_DEPOT_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.INPUT_INDEX4_T0040_FEATURES
+      view_ref: pcb-{env}-curated.domain_scoring.INPUT_INDEX4_T0040_FEATURES_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.INPUT_INDEX4_T0040_FEATURES
+      view_ref: pcb-{env}-curated.domain_scoring.INPUT_INDEX4_T0040_FEATURES_LATEST
+      view_file: domain_scoring.INPUT_INDEX4_T0040_FEATURES_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_INDEX4_T0040
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_INDEX4_T0040_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_INDEX4_T0040
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_INDEX4_T0040_LATEST
+      view_file: domain_scoring.OUTPUT_INDEX4_T0040_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_TRANS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_TRANS_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_TRANS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_TRANS_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_CYCLE_TRANS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FULL
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FULL_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FULL
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FULL_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FULL_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FR
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FR_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FR
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FR_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_FR_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_SUFFIX
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_SUFFIX_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_SUFFIX
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_SUFFIX_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_CHGOFF_SUFFIX_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_MMM
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_MMM_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_MMM
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_MMM_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_MMM_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_DEMGFX
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_DEMGFX_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_DEMGFX
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_DEMGFX_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_DEMGFX_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TEST_DIGIT
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TEST_DIGIT_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TEST_DIGIT
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TEST_DIGIT_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TEST_DIGIT_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_ACE_FINAL
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_ACE_FINAL_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_ACE_FINAL
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_ACE_FINAL_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_ACE_FINAL_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_SCORE_LNK
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_SCORE_LNK_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_SCORE_LNK
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_SCORE_LNK_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_SCORE_LNK_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_CLI_OFFER_DATA
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_CLI_OFFER_DATA_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_CLI_OFFER_DATA
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_CLI_OFFER_DATA_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_CLI_OFFER_DATA_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_CLI_EVENTS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_CLI_EVENTS_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_CLI_EVENTS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_CLI_EVENTS_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_CLI_EVENTS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_RAW_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_RAW_SCORE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_RAW_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_RAW_SCORE_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_RAW_SCORE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_ACQUISITION
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_ACQUISITION_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_ACQUISITION
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_ACQUISITION_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_ACQUISITION_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_AM00_PRE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_AM00_PRE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_AM00_PRE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_AM00_PRE_LATEST
+      view_file: domain_scoring.SCORING_PREP_AM00_PRE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_MTH_CURRENT_SCORING
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_MTH_CURRENT_SCORING_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_MTH_CURRENT_SCORING
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_MTH_CURRENT_SCORING_LATEST
+      view_file: domain_scoring.SCORING_PREP_MTH_CURRENT_SCORING_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_MTH6
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_MTH6_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_MTH6
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_MTH6_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_MTH6_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_HIST_6MTH
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_HIST_6MTH_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_HIST_6MTH
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_HIST_6MTH_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_HIST_6MTH_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_HIST_3MTH
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_HIST_3MTH_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_HIST_3MTH
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_HIST_3MTH_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_HIST_3MTH_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_TRANS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_TRANS_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_TRANS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_TRANS_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_TRANS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_BNI_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_BNI_SCORE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_BNI_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_BNI_SCORE_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_BNI_SCORE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CB_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CB_SCORE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_CB_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_CB_SCORE_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_CB_SCORE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_FULL
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_FULL_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_FULL
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_FULL_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_FULL_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_SUFFIX
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_SUFFIX_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_SUFFIX
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_SUFFIX_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_MTHEND_SUFFIX_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_AM00
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_AM00_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_AM00
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_AM00_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_AM00_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_AM01
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_AM01_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_AM01
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_AM01_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_AM01_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_AM02
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_AM02_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_WK_TSYS_AM02
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_WK_TSYS_AM02_LATEST
+      view_file: domain_scoring.SCORING_PREP_WK_TSYS_AM02_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_SCORE_POP_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_SCORE_POP_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_SCORE_POP_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_SCORE_POP_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_SCORE_POP_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CUSTOMER_LIST_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CUSTOMER_LIST_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CUSTOMER_LIST_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CUSTOMER_LIST_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_CUSTOMER_LIST_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_LCL_STORE_LIST
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_LCL_STORE_LIST_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_LCL_STORE_LIST
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_LCL_STORE_LIST_LATEST
+      view_file: domain_scoring.SCORING_PREP_LCL_STORE_LIST_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_LCL_STORE_SPEND_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_LCL_STORE_SPEND_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_LCL_STORE_SPEND_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_LCL_STORE_SPEND_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_LCL_STORE_SPEND_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_ALL_TRANS_VARS_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_ALL_TRANS_VARS_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_ALL_TRANS_VARS_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_ALL_TRANS_VARS_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_ALL_TRANS_VARS_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANS_GROCERY_CASH_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANS_GROCERY_CASH_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANS_GROCERY_CASH_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANS_GROCERY_CASH_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_TRANS_GROCERY_CASH_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANS_HIST_BASE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANS_HIST_BASE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANS_HIST_BASE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANS_HIST_BASE_LATEST
+      view_file: domain_scoring.SCORING_PREP_TRANS_HIST_BASE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CUST_TRANS_FULL_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CUST_TRANS_FULL_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CUST_TRANS_FULL_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CUST_TRANS_FULL_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_CUST_TRANS_FULL_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANS_SUMMARY_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANS_SUMMARY_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANS_SUMMARY_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANS_SUMMARY_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_TRANS_SUMMARY_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_GROCERY_FOR_LCL_NONLCL_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_GROCERY_FOR_LCL_NONLCL_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_GROCERY_FOR_LCL_NONLCL_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_GROCERY_FOR_LCL_NONLCL_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_GROCERY_FOR_LCL_NONLCL_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_LCL_NONLCL_GROCERY_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_LCL_NONLCL_GROCERY_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_LCL_NONLCL_GROCERY_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_LCL_NONLCL_GROCERY_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_LCL_NONLCL_GROCERY_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_SEGMENTED_INPUT_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_SEGMENTED_INPUT_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_SEGMENTED_INPUT_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_SEGMENTED_INPUT_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_SEGMENTED_INPUT_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_NON_GROCERY_MCC_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_NON_GROCERY_MCC_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_NON_GROCERY_MCC_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_NON_GROCERY_MCC_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_NON_GROCERY_MCC_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_COMBINED_FEATURES_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_COMBINED_FEATURES_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_COMBINED_FEATURES_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_COMBINED_FEATURES_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_COMBINED_FEATURES_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_NON_LCL_STORE_SPEND_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_NON_LCL_STORE_SPEND_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_NON_LCL_STORE_SPEND_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_NON_LCL_STORE_SPEND_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_NON_LCL_STORE_SPEND_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CASH_ADVANCES_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CASH_ADVANCES_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CASH_ADVANCES_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CASH_ADVANCES_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_CASH_ADVANCES_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_GROCERY_TRANS_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_GROCERY_TRANS_DAILY_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_GROCERY_TRANS_DAILY
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_GROCERY_TRANS_DAILY_LATEST
+      view_file: domain_scoring.SCORING_PREP_GROCERY_TRANS_DAILY_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CREDSCORE_CALCULATED_METRICS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CREDSCORE_CALCULATED_METRICS_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CREDSCORE_CALCULATED_METRICS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CREDSCORE_CALCULATED_METRICS_LATEST
+      view_file: domain_scoring.SCORING_PREP_CREDSCORE_CALCULATED_METRICS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CREDSCORE_ENGINEERED_FEATURES
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CREDSCORE_ENGINEERED_FEATURES_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CREDSCORE_ENGINEERED_FEATURES
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CREDSCORE_ENGINEERED_FEATURES_LATEST
+      view_file: domain_scoring.SCORING_PREP_CREDSCORE_ENGINEERED_FEATURES.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_01
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CREDSCORE_DAS_HISTORICAL_ALL
+      view_file: domain_scoring.SCORING_PREP_CREDSCORE_DAS_HISTORICAL_ALL.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_01
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CREDSCORE_DAS_HISTORICAL_LATEST
+      view_file: domain_scoring.SCORING_PREP_CREDSCORE_DAS_HISTORICAL_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_DEMOSTATS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_DEMOSTATS_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_DEMOSTATS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_DEMOSTATS_LATEST
+      view_file: domain_scoring.SCORING_PREP_DEMOSTATS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_POSTAL_CODE_RI_V4_RISK_RANKING
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_POSTAL_CODE_RI_V4_RISK_RANKING_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_POSTAL_CODE_RI_V4_RISK_RANKING
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_POSTAL_CODE_RI_V4_RISK_RANKING_LATEST
+      view_file: domain_scoring.SCORING_PREP_POSTAL_CODE_RI_V4_RISK_RANKING_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANSACTION_SUMMARY_DATAMART
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANSACTION_SUMMARY_DATAMART_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANSACTION_SUMMARY_DATAMART
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_TRANSACTION_SUMMARY_DATAMART_LATEST
+      view_file: domain_scoring.SCORING_PREP_TRANSACTION_SUMMARY_DATAMART_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PRE_APP_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PRE_APP_SCORE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PRE_APP_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PRE_APP_SCORE_LATEST
+      view_file: domain_scoring.SCORING_PREP_PRE_APP_SCORE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_ACCOUNT_IDS_RANDOMIZED
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_ACCOUNT_IDS_RANDOMIZED_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_ACCOUNT_IDS_RANDOMIZED
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_ACCOUNT_IDS_RANDOMIZED_LATEST
+      view_file: domain_scoring.SCORING_PREP_ACCOUNT_IDS_RANDOMIZED_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_AREA_RISK_LOOKUP
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_AREA_RISK_LOOKUP_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_AREA_RISK_LOOKUP
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_AREA_RISK_LOOKUP_LATEST
+      view_file: domain_scoring.SCORING_PREP_AREA_RISK_LOOKUP_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CIF_SNAPSHOT
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CIF_SNAPSHOT_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CIF_SNAPSHOT
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CIF_SNAPSHOT_LATEST
+      view_file: domain_scoring.SCORING_PREP_CIF_SNAPSHOT_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_DECISION_KEYS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_DECISION_KEYS_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_DECISION_KEYS
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_DECISION_KEYS_LATEST
+      view_file: domain_scoring.SCORING_PREP_DECISION_KEYS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_EXISTING_PCMC_PCMA
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_EXISTING_PCMC_PCMA_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_EXISTING_PCMC_PCMA
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_EXISTING_PCMC_PCMA_LATEST
+      view_file: domain_scoring.SCORING_PREP_EXISTING_PCMC_PCMA_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PCO_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PCO_SCORE_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_PCO_SCORE
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_PCO_SCORE_LATEST
+      view_file: domain_scoring.SCORING_PREP_PCO_SCORE_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_01
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_01_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_01
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_01_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_01_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_02
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_02_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_02
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_02_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_02_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_03
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_03_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_03
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_03_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_03_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_04
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_04_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_04
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_04_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_04_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_05
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_05_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_05
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_05_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_05_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_06
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_06_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_06
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_06_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_06_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_07
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_07_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_07
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_07_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_07_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_08
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_08_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_08
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_08_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_08_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_09
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_09_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_09
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_09_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_09_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_10
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_10_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_10
+      view_ref: pcb-{env}-curated.domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_10_LATEST
+      view_file: domain_scoring.SCORING_PREP_CRED_DAS_HISTORY_BASE_10_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_INDEX4_T0040_UNNESTED_COMPARISON
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_INDEX4_T0040_UNNESTED_COMPARISON_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_INDEX4_T0040_UNNESTED_COMPARISON
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_INDEX4_T0040_UNNESTED_COMPARISON_LATEST
+      view_file: domain_scoring.OUTPUT_INDEX4_T0040_UNNESTED_COMPARISON_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_TRS_T0090_UNNESTED
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_TRS_T0090_UNNESTED_ALL
+    - table_ref: pcb-{env}-landing.domain_scoring.OUTPUT_TRS_T0090_UNNESTED
+      view_ref: pcb-{env}-curated.domain_scoring.OUTPUT_TRS_T0090_UNNESTED_LATEST
+      view_file: domain_scoring.OUTPUT_TRS_T0090_UNNESTED_LATEST.sql
+
+domain_approval_views:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "team-defenders-alerts"
+    - "P3"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_approval.BATCH_APPROVALS_STATUS
+      view_ref: pcb-{env}-curated.domain_approval.BATCH_APPROVALS_STATUS
+
+domain_fraud_risk_intelligence_views:
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - "team-ogres-alerts"
+    - "team-growth-and-sales"
+    - "P3"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_UPDATE_RESPONSE
+      view_ref: pcb-{env}-curated.domain_fraud_risk_intelligence.FRAUD_RISK_UPDATE_RESPONSE
+      view_file: domain_fraud_risk_intelligence.FRAUD_RISK_UPDATE_RESPONSE.sql
+    - table_ref: pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_RESPONSE
+      view_ref: pcb-{env}-curated.domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_RESPONSE_LOGIN_VIEW
+      view_file: domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_RESPONSE_LOGIN_VIEW.sql
+    - table_ref: pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_RESPONSE
+      view_ref: pcb-{env}-curated.domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_RESPONSE_APPLICATION_VIEW
+      view_file: domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_RESPONSE_APPLICATION_VIEW.sql
+    - table_ref: pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_PAYLOAD
+      view_ref: pcb-{env}-curated.domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_PAYLOAD
+      view_file: domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_PAYLOAD.sql
+    - table_ref: pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_TRUTH_DATA_INBOUND
+      view_ref: pcb-{env}-curated.domain_fraud_risk_intelligence.FRAUD_RISK_TRUTH_DATA_INBOUND
+
+domain_aml_views:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_aml.INTERAC_AML_REPORT
+      view_ref: pcb-{env}-curated.domain_aml.INTERAC_AML_REPORT
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Money Movement"
+    severity: "P3"
+    business_impact: "View creation dag"
+
+domain_cri_compliance_views:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "CRI"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    severity: 'P4'
+  tags:
+    - "team-defenders-alerts"
+    - "P4"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_ACCOUNT_MASTER
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_ACCOUNT_MASTER_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_ACCOUNT_MASTER
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_ACCOUNT_MASTER_LATEST
+      view_file: domain_cri_compliance.CRI_WRK_ACCOUNT_MASTER_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_MASTER
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_MASTER_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_MASTER
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_MASTER_LATEST
+      view_file: domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_MASTER_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_MODEL_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_MODEL_TRANSACTIONS_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_MODEL_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_MODEL_TRANSACTIONS_LATEST
+      view_file: domain_cri_compliance.CRI_WRK_MODEL_TRANSACTIONS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_TRANSACTIONS_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_TRANSACTIONS_LATEST
+      view_file: domain_cri_compliance.CRI_WRK_TRANSACTIONS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.ACCOUNT_CRI_EVALUATION
+      view_ref: pcb-{env}-curated.domain_cri_compliance.ACCOUNT_CRI_EVALUATION_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.ACCOUNT_CRI_EVALUATION
+      view_ref: pcb-{env}-curated.domain_cri_compliance.ACCOUNT_CRI_EVALUATION_LATEST
+      view_file: domain_cri_compliance.ACCOUNT_CRI_EVALUATION_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_STG_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_STG_TRANSACTIONS_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_STG_TRANSACTIONS
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_STG_TRANSACTIONS_LATEST
+      view_file: domain_cri_compliance.CRI_STG_TRANSACTIONS_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_FEES_INTEREST
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_FEES_INTEREST_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_FEES_INTEREST
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_FEES_INTEREST_LATEST
+      view_file: domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_FEES_INTEREST_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_STG_ACCOUNT_MASTER
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_STG_ACCOUNT_MASTER_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_STG_ACCOUNT_MASTER
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_STG_ACCOUNT_MASTER_LATEST
+      view_file: domain_cri_compliance.CRI_STG_ACCOUNT_MASTER_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.ACCOUNT_CRI_REFUND
+      view_ref: pcb-{env}-curated.domain_cri_compliance.ACCOUNT_CRI_REFUND_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.ACCOUNT_CRI_REFUND
+      view_ref: pcb-{env}-curated.domain_cri_compliance.ACCOUNT_CRI_REFUND_LATEST
+      view_file: domain_cri_compliance.ACCOUNT_CRI_REFUND_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_CLASSIFICATION
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_CLASSIFICATION_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_CLASSIFICATION
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_CLASSIFICATION_LATEST
+      view_file: domain_cri_compliance.CRI_WRK_LOOKUP_TCAT_TCODE_CLASSIFICATION_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_AUDIT_DATA_ISSUES
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_AUDIT_DATA_ISSUES_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_AUDIT_DATA_ISSUES
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_AUDIT_DATA_ISSUES_LATEST
+      view_file: domain_cri_compliance.CRI_AUDIT_DATA_ISSUES_LATEST.sql
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_AUDIT_NEW_TRANSACTION_TYPES
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_AUDIT_NEW_TRANSACTION_TYPES_ALL
+    - table_ref: pcb-{env}-landing.domain_cri_compliance.CRI_AUDIT_NEW_TRANSACTION_TYPES
+      view_ref: pcb-{env}-curated.domain_cri_compliance.CRI_AUDIT_NEW_TRANSACTION_TYPES_LATEST
+      view_file: domain_cri_compliance.CRI_AUDIT_NEW_TRANSACTION_TYPES_LATEST.sql
+
+domain_customer_contact_centre_views:
+  default_args:
+    owner: "team-centaurs"
+    capability: "customer-service"
+    sub_capability: "NA"
+    business_impact: "Reporting on contact centre calls impacted"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+  tables:
+    - table_ref: pcb-{env}-landing.domain_customer_contact_centre.CALL_CONVERSATION_STATE
+      view_ref: pcb-{env}-curated.domain_customer_contact_centre.CALL_CONVERSATION_STATE_LATEST
+      view_file: domain_customer_contact_centre.CALL_CONVERSATION_STATE_LATEST.sql

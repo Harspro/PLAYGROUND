@@ -1,0 +1,7 @@
+pre_purge_report_stats_etl:
+  activity_name: purge_report
+  bigquery:
+      source_project_id: pcb-{env}-landing
+      processing_project_id: pcb-{env}-processing
+      destination_project_id: pcb-{env}-curated
+  transformation_config: config/pre_purge_report_processing_trans.yaml

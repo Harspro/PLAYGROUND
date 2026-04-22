@@ -1,0 +1,96 @@
+context_parameter:
+     at31_debit_credit_indicator_val_1: "'C'"
+     at31_debit_credit_indicator_val_2: "'D'"
+     at31_terms_balance_code_val: "0"
+     cifp_customer_type_val: "0"
+     intrest_12m_val: "50"
+     at31_account_numb_val: "'518127','522879','518116','516179'"
+     at31_trns_acct_func_val: "'PFC','CFC','FCA','FDA','FCV','FDV','CCF','CPF','WCF','WPF'"
+     cifp_client_product_code_val: "'PCP','PCS','PCR','PCE','PCH','PCI','PFE'"
+     cifp_relationship_stat_val: "'','A'"
+     mast_account_suffix_val: "0"
+     am33_purchase_class_code_val: "'PR'"
+     am33_purchase_transaction_category_val: "1000"
+     am00_securitization_pool_id1_val: "'00000A'"
+     am33_cash_class_code_val: "'CA'"
+     am33_cash_transaction_category_val: "0002,0003,0004,0005"
+     securitized_val_1: "0"
+     securitized_val_2: "1"
+     account_type_1: "'REVOLVER'"
+     account_type_2: "'TRANSACTOR'"
+     card_type_default: "'SILVER'"
+     days_delinquent_id_1: "'Transfers'"
+     days_delinquent_id_default: "'180+ days'"
+
+transformation:
+  - task_name: trans_1_create_at31_dat
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_1_create_at31_dat.sql
+ 
+  - task_name: trans_2_create_at31_agg_trans
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_2_create_at31_agg_trans.sql
+        
+  - task_name: trans_3_create_intrest_12m
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_3_create_intrest_12m.sql
+
+  - task_name: trans_4_join_account_curr_card_curr
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_4_join_account_curr_card_curr.sql
+        
+  - task_name: trans_5_join_trans4_and_am00
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_5_join_trans4_and_am00.sql
+        
+  - task_name: trans_6_join_trans5_and_am33
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_6_join_trans5_and_am33.sql
+        
+  - task_name: trans_7_join_trans6_and_intrest_12m
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_7_join_trans6_and_intrest_12m.sql
+        
+  - task_name: trans_8_join_trans7_and_age_calc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_8_join_trans7_and_age_calc.sql
+        
+  - task_name: trans_9_join_trans8_and_card_type_calc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_9_join_trans8_and_card_type_calc.sql
+        
+  - task_name: trans_10_join_trans9_and_credit_score_calc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_10_join_trans9_and_credit_score_calc.sql
+
+  - task_name: trans_11_join_trans10_and_balance_calc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_11_join_trans10_and_balance_calc.sql
+
+  - task_name: trans_12_join_trans11_and_credit_limit_calc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_12_join_trans11_and_credit_limit_calc.sql
+        
+  - task_name: trans_13_join_trans12_and_days_delinquent_id_calc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_13_join_trans12_and_days_delinquent_id_calc.sql
+
+  - task_name: trans_14_load_data_in_curated_stg_from_trans13
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/trans_14_load_data_in_curated_stg_from_trans13.sql
+
+

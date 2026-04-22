@@ -1,0 +1,24 @@
+SELECT * EXCEPT(ROW_NUM)
+  FROM
+    (
+      SELECT
+        PHONE_CONTACT_HISTORY_UID,
+        CONTACT_UID,
+        COUNTRY_CODE,
+        AREA_CODE,
+        PHONE_NUMBER,EXTENSION,
+        CREATE_DT,
+        CREATE_USER_ID,
+        CREATE_FUNCTION_NAME,
+        UPDATE_DT,
+        UPDATE_USER_ID,
+        UPDATE_FUNCTION_NAME,
+        NOTIFICATION_OPT_IN_IND,
+        ACTION,
+        ACTION_DT,
+        MESSAGE_ID,
+        ROW_NUMBER() OVER(PARTITION BY PHONE_CONTACT_HISTORY_UID ORDER BY ACTION_DT DESC) AS ROW_NUM
+      FROM `pcb-{env}-landing.domain_customer_management.PHONE_CONTACT_HISTORY`
+    )
+  WHERE
+    ROW_NUM = 1

@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- édité avec XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) par Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSpy v2016 rel. 2 sp1 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified"
+  version="2025.1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5" xmlns:ns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="P.xsd" />
+	<xsd:include
+    schemaLocation="Groupes.xsd" />
+	<!-- @@@@    Transmission     @@@@ -->
+	<xsd:element
+    name="Transmission">
+		
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element
+          name="P"
+          type="PStruct">
+					
+				</xsd:element>
+				<xsd:choice>
+					<xsd:element
+            name="Groupe01"
+            type="Groupe01Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe02"
+            type="Groupe02Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe03"
+            type="Groupe03Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe05"
+            type="Groupe05Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe06"
+            type="Groupe06Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe07"
+            type="Groupe07Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe08"
+            type="Groupe08Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe10"
+            type="Groupe10Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe11"
+            type="Groupe11Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe13"
+            type="Groupe13Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe14"
+            type="Groupe14Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe15"
+            type="Groupe15Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe16"
+            type="Groupe16Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe18"
+            type="Groupe18Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe21"
+            type="Groupe21Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe22"
+            type="Groupe22Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe24"
+            type="Groupe24Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe25"
+            type="Groupe25Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe26"
+            type="Groupe26Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe27"
+            type="Groupe27Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe29"
+            type="Groupe29Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe31"
+            type="Groupe31Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe32"
+            type="Groupe32Struct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe4O"
+            type="Groupe4OStruct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+					<xsd:element
+            name="Groupe4E"
+            type="Groupe4EStruct"
+            maxOccurs="1000">
+						
+					</xsd:element>
+				</xsd:choice>
+			</xsd:sequence>
+			<xsd:attribute
+        name="VersionSchema"
+        type="xsd:token"
+        use="required"
+        fixed="2025.1">
+				
+			</xsd:attribute>
+		</xsd:complexType>
+		<xsd:key
+      name="Annee">
+			<xsd:selector
+        xpath="ns:P" />
+			<xsd:field
+        xpath="ns:Annee" />
+		</xsd:key>
+		<xsd:keyref
+      name="AnneeRef"
+      refer="Annee">
+			<xsd:selector
+        xpath="*/*" />
+			<xsd:field
+        xpath="ns:Annee" />
+		</xsd:keyref>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,92 @@
+tsys_pcb_mc_autopurge_purged_full_file_loading:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_autopurge_purged
+  folder_prefix: tsys_pcb_mc_autopurge_purged
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: AUTOPURGE_PURGED
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: AUTOPURGE_PURGED
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: header_group
+        segments: HEDR
+      - group_name: purge_group
+        segments: PURGE
+    segment_args:
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_autopurge_purged/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9
+        pcb.tsys.processor.layout.name: TRLR_REC
+      HEDR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_autopurge_purged/HEDR.CPY
+        pcb.tsys.processor.segment.name: 1
+        pcb.tsys.processor.layout.name: HEDR_REC
+      PURGE:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_autopurge_purged/PURGE.CPY
+        pcb.tsys.processor.segment.name: 5
+        pcb.tsys.processor.layout.name: AUTOPURGE_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      TRLR:
+        table_name: AP_PURGED_ACCT_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+      HEDR:
+        table_name: AP_PURGED_ACCT_HEDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+      PURGE:
+        table_name: AP_PURGED_ACCT
+        record_count_column: T_NUM_PURGE_ACC
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AP_PURGED_ACCT_HEDR
+            output_columns:
+              - H_RECORD_ID
+              - H_CLIENT_ID
+              - H_TRANSMIT_ID
+              - H_PROCESSING_DATE
+              - H_FILLER
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AP_PURGED_ACCT_TRLR
+            output_columns:
+              - T_RECORD_ID
+              - T_CLIENT_ID
+              - T_TRANSMIT_ID
+              - T_NUM_PURGE_ACC
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

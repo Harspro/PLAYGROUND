@@ -1,0 +1,322 @@
+[
+    {
+        "name": "INSTITUTION_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_ID",
+        "type": "STRING"
+    },
+    {
+        "name": "CUSTOMER_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "ACCOUNT_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_DATE_TIME",
+        "type": "STRING"
+    },
+    {
+        "name": "POSTED_DATE",
+        "type": "STRING"
+    },
+    {
+        "name": "REVERSE_DATE",
+        "type": "STRING"
+    },
+    {
+        "name": "REVERSE_TRANSACTION_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "TOTAL_VALUE",
+        "type": "STRING"
+    },
+    {
+        "name": "FOREIGN_TOTAL_VALUE",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_CURRENCY",
+        "type": "STRING"
+    },
+    {
+        "name": "CURRENCY_RATE",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_CODE",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_METHOD",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_TYPE",
+        "type": "STRING"
+    },
+    {
+        "name": "CARD_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "CHECK_RETURN_CODE",
+        "type": "STRING"
+    },
+    {
+        "name": "TIMES_RETURNED",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_DESCRIPTION_1",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_DESCRIPTION_2",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_DESCRIPTION_3",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_DESCRIPTION_4",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_DESCRIPTION_5",
+        "type": "STRING"
+    },
+    {
+        "name": "TELLER_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "BRANCH_OF_TRANSACTION",
+        "type": "STRING"
+    },
+    {
+        "name": "CONDUCTOR_CUSTOMER_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "CONDUCTOR_FIRST_NAME",
+        "type": "STRING"
+    },
+    {
+        "name": "CONDUCTOR_LAST_NAME",
+        "type": "STRING"
+    },
+    {
+        "name": "CONDUCTOR_TIN",
+        "type": "STRING"
+    },
+    {
+        "name": "PHOTO_IDENTIFICATION_TYPE",
+        "type": "STRING"
+    },
+    {
+        "name": "PHOTO_ID_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "PHOTO_ID_STATE",
+        "type": "STRING"
+    },
+    {
+        "name": "PHOTO_ID_COUNTRY",
+        "type": "STRING"
+    },
+    {
+        "name": "ATM_POS_TERMINAL_ID",
+        "type": "STRING"
+    },
+    {
+        "name": "ATM_POS_TERMINAL_ADDRESS",
+        "type": "STRING"
+    },
+    {
+        "name": "ATM_POS_TERMINAL_CITY",
+        "type": "STRING"
+    },
+    {
+        "name": "ATM_POS_TERMINAL_STATE",
+        "type": "STRING"
+    },
+    {
+        "name": "ATM_POS_TERMINAL_COUNTRY",
+        "type": "STRING"
+    },
+    {
+        "name": "MERCHANT_CATEGORY_CODE",
+        "type": "STRING"
+    },
+    {
+        "name": "POS_ENTRY_MODE",
+        "type": "STRING"
+    },
+    {
+        "name": "POS_CARD_PRESENCE_INDICATOR",
+        "type": "STRING"
+    },
+    {
+        "name": "AUTHORIZATION_CODE",
+        "type": "STRING"
+    },
+    {
+        "name": "RESPONSE_CODE",
+        "type": "STRING"
+    },
+    {
+        "name": "REQUEST_AUTHORIZATION_AMOUNT",
+        "type": "STRING"
+    },
+    {
+        "name": "REQUEST_COMPLETION_AMOUNT",
+        "type": "STRING"
+    },
+    {
+        "name": "ADDRESS_VERIFICATION_SERVICE_CODE",
+        "type": "STRING"
+    },
+    {
+        "name": "PROCESSOR_AUTHENTICATION_FIELD",
+        "type": "STRING"
+    },
+    {
+        "name": "MERCHANT_NAME",
+        "type": "STRING"
+    },
+    {
+        "name": "CHECK_ITEM_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "INSTITUTION_ITEM_SEQUENCE_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "CHECK_SEQUENCE_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "CHECK_ACCOUNT_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "CHECK_ROUTING_TRANSIT_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "PAYEE_FIRST_NAME",
+        "type": "STRING"
+    },
+    {
+        "name": "PAYEE_LAST_NAME",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSFER_BRANCH_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSFER_CUSTOMER_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSFER_ACCOUNT_BRANCH",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSFER_ACCOUNT_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "PRINCIPAL_AMOUNT",
+        "type": "STRING"
+    },
+    {
+        "name": "INTEREST_AMOUNT",
+        "type": "STRING"
+    },
+    {
+        "name": "OTHER_LOAN_AMOUNT",
+        "type": "STRING"
+    },
+    {
+        "name": "SYSTEM_ID",
+        "type": "STRING"
+    },
+    {
+        "name": "FINTECH_PROGRAM",
+        "type": "STRING"
+    },
+    {
+        "name": "EXTERNAL_BANK_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "EXTERNAL_CUSTOMER_NAME",
+        "type": "STRING"
+    },
+    {
+        "name": "DEVICE_ID",
+        "type": "STRING"
+    },
+    {
+        "name": "IP_ADDRESS",
+        "type": "STRING"
+    },
+    {
+        "name": "USERNAME",
+        "type": "STRING"
+    },
+    {
+        "name": "SESSION_DATE_TIME",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_REF_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_EMAIL",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_PHONE",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_BANK_ACCOUNT",
+        "type": "STRING"
+    },
+    {
+        "name": "PCF_MONEY_MOVE_REF_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "DEVICE_TYPE",
+        "type": "STRING"
+    },
+    {
+        "name": "RUN_ID",
+        "type": "STRING"
+    },
+    {
+        "name": "RAIL_TYPE",
+        "type": "STRING"
+    },
+    {
+        "name": "FILENAME",
+        "type": "STRING"
+    },
+    {
+        "name": "FILE_SENT_DATE",
+        "type": "DATE"
+    }
+]

@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- édité avec XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) par Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R01 @@@@           -->
+	<xsd:complexType
+    name="R01Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Identification">
+				
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element
+              name="Employe">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="NAS"
+                    type="NasType">
+										
+									</xsd:element>
+									<xsd:element
+                    name="No"
+                    type="Char20Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+									<xsd:element
+                    name="NomFamille"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Prenom"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Initiale"
+                    type="Char1Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element
+              name="RaisonSociale">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="AutreNoId"
+                    type="NoIdentificationType"
+                    minOccurs="0">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Nom1"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Nom2"
+                    type="Char30Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Adresse"
+        type="Adresse2Struct">
+				
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R01MntStruct">
+				
+			</xsd:element>
+			<xsd:element
+        name="CaseRensCompl"
+        minOccurs="0"
+        maxOccurs="4">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="CodeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="Char5Type">
+									<xsd:pattern
+                    value="[Aa]\-[1-79]|[Aa]-1[0-4]|[Bb]-[1-2]|[Dd]\-[1-3]|[Gg]-[1-3]|[Kk]-1|[Ll]\-[2-47-9]|[Ll]\-10|[Oo]\-[2-46-9]|[Oo]\-10|[Rr][Zz]\-[Cc][A-Da-d]|[Rr][Zz]\-[Rr][A-Da-dG-Vg-vXx]|[Rr]-1|[Vv]-1|200|201|211|235" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="DonneeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:minLength
+                    value="1" />
+									<xsd:maxLength
+                    value="15" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R01MntStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="A_RevenuEmploi"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="BA_CotisationRRQ"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="BB_CotisationRRQSuppl"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="C_CotisationAssEmploi"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="D_CotisationRPA"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="E_ImpotQue"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="F_CotisationSyndicale"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="G_SalaireAdmisRRQ"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="H_CotisationRQAP"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="I_SalaireAdmisRQAP"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="J_RegimeAssMaladie"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="K_Voyage"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="L_AutreAvantage"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="M_Commission"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="N_DonBienfaisance"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="O_AutreRevenu"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="MontantCaseO"
+              type="Decimal9Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="SourceCaseO">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:pattern
+                    value="C[A-D]|R[A-D]|R[G-V]|RX|RZ|c[a-d]|r[a-d]|r[g-v]|rx|rz" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="P_RegimeAssInterEntr"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="Q_SalaireDiffere"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="R_RevenuReserveOuLocal"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="S_PourboireRecu"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="T_PourboireAttribue"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="V_NourritureLogement"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="W_Vehicule"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

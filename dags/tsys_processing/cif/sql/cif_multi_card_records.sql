@@ -1,0 +1,21 @@
+CREATE OR REPLACE TABLE
+  `{multi_card_table_id}` OPTIONS ( expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL {expiration_hours} HOUR),
+    description = "temp table for storing multiple active cards" ) AS (
+  SELECT
+    * EXCEPT(CIFP_RELATIONSHIP_STAT, REC_LOAD_TIMESTAMP),
+    'T' AS CIFP_RELATIONSHIP_STAT,
+    CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  FROM
+    `{source_table_id}`
+  WHERE
+    CIFP_ACCOUNT_ID6 || CIFP_ACCOUNT_NUM || CIFP_CUSTOMER_ID_2 IN (
+    SELECT
+      CIFP_ACCOUNT_ID6 || CIFP_TRANS_FROM_ACCT_NO || CIFP_CUSTOMER_ID_2
+    FROM
+      `{source_table_id}`
+    WHERE
+      CIFP_TRANS_FROM_ACCT_NO IS NOT NULL )
+    AND CIFP_CUSTOMER_TYPE = 0
+    AND ( CIFP_RELATIONSHIP_STAT = 'A'
+      OR CIFP_RELATIONSHIP_STAT IS NULL
+      OR CIFP_RELATIONSHIP_STAT = '' ) );

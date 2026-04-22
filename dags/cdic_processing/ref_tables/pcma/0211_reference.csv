@@ -1,0 +1,20 @@
+Personal_ID_Type_Code|MI_Personal_ID_Type|Description|CDIC_Personal_ID_Type_Code
+8|CAN-BIRTH-CERTIFICATE|Canadian Birth Certificate|1
+9|CAN-CERT-REG-BIRTH-ABROAD|Canadian Certificate of Registration of Birth Abroad|2
+6|CAN-CITIZENSHIP-CARD|Canadian Citizenship Card|5
+7|CAN-CERT-OF-INDIAN-STATUS|Canadian Certificate of Indian Status|6
+10|CREDIT-CARD|Credit Card|8
+2|CAN-PASSPORT|Canadian Passport|13
+14|FOREIGN-PASSPORT|Foreign Passport|14
+5|CAN-PERMANENT-RESIDENT-CARD|Canadian Permanent Resident Card|15
+4|DRIVER-LICENSE|Driver's License|22
+1|SIN|Social Insurance Number (SIN)|24
+3|BANK-CARD-NUMBER|Bank Card Number|25
+37|GOV-CAN-PROV-ID|Government Issued Identification from Canadian Province|28
+36|NATIONAL-ID-NUMBER|National Identification Number - Foreign|29
+30|LI|Liquor ID Card|30
+31|SC|Service Card|31
+26|PC|Provincial Health Card|32
+27|CF|Canadian Forces Card|33
+28|PT|Provincial/Territorial Photo ID Card|34
+29|AM|Age of Majority Card|35

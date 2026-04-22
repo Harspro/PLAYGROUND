@@ -1,0 +1,255 @@
+db839_store_attributed_dm_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.STORE_ATTRIBUTED_DM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CIFP_DATE_OPEN
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STORE_ATTRIBUTED_DM
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '10 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db839_home_store_attributed_dm_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.HOME_STORE_ATTRIBUTED_DM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CIFP_DATE_OPEN
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: HOME_STORE_ATTRIBUTED_DM
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '10 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db839_mak_digital_profile_sept16_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.MAK_Digital_Profile_Sept16
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DT_OPEN
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MAK_DIGITAL_PROFILE_SEPT16
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '25 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db839_at31_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: MasterCard.dbo.At31
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STAMP
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: AT31
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '10 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db839_cdl_reg_customerid_20190120_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.CDL_REG_CUSTOMERID_20190120
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CDL_REG_DT
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_REG_CUSTOMERID_20190120
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '10 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_multi_prod_dash_pcmc_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.MULTI_PROD_DASH_PCMC
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DT_OPEN
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MULTI_PROD_DASH_PCMC
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '10 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ca_ivr_lobs_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.CA_IVR_LOBS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CA_IVR_LOBS
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '15 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_revised_app_report_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.REVISED_APP_REPORT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: APP_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REVISED_APP_REPORT
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '20 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_custom_contact_detail_records_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: IVRReport.dbo.CUSTOM_CONTACT_DETAIL_RECORDS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CALLSTARTDATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CUSTOM_CONTACT_DETAIL_RECORDS
+    add_columns:
+      - '`Interval` as INTERVAL_ID'
+    drop_columns:
+      - Interval
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '35 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mbr_pcma_consolidation2_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.MBR_PCMA_CONSOLIDATION2
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: NEW_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MBR_PCMA_CONSOLIDATION2
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '50 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db839_ts2_card_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Mastercard.dbo.ts2_card
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STAMP
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TS2_CARD
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db839_cons_trans_dtl_card_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.CONS_TRANS_DTL_Card
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: TRANS_DT
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CONS_TRANS_DTL_CARD
+  batch:
+    time_from: '05:00:00'
+    time_to: '05:00:00'
+  dag:
+    schedule_interval: '50 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"

@@ -1,0 +1,31 @@
+pcb_dgtl_mc_estmtavail_file_generator:
+  activity_name: estmt_avail_generator
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    severity: "P2"
+    business_impact: "pcmc and pcma statement idx file will not be processed and no statement availability file will be generated"
+    customer_impact: "Customers will not receive processed statement data"
+  tags: ["Communications", "ETL"]
+  dag:
+    read_pause_deploy_config: True
+    schedule_interval: null
+  transformation_config: "config/pcb_dgtl_mc_estmtavail_transformation_config.yaml"
+  processing_bucket: pcb-{env}-staging
+  PROCESSING_INTERIM_DIR: pcmc_estmt/stmt_avail/extract
+  PROCESSING_OUTPUT_DIR: pcmc_estmt/stmt_avail/extract
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: mft-pcb-inbound{env_suffix}
+  destination_folder: mft_pcb_estmtavail
+  mft_outbound_bucket: mft-pcb-outbound{env_suffix}
+  estmt_outbound_folder: pcb_dgtl_mc_estmtavail
+  output_file:
+    project_id: pcb-{env}-landing
+    table_detail:
+      HEDR: pcb-{env}-processing.domain_account_management.STMT_AVAIL_DATA_HEDR
+      DETL: pcb-{env}-processing.domain_account_management.STMT_AVAIL_DATA_BODY
+      TRLR: pcb-{env}-processing.domain_account_management.STMT_AVAIL_DATA_TRLR
+    column: RECORD
+    output_filename: "pcb_dgtl_mc_estmtavail"
+    filename_extension: "{file_env}"

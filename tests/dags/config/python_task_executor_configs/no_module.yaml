@@ -1,0 +1,8 @@
+tasks:
+  - task_id: "call_replace_all_env_in_dict"
+    python_callable:
+      module: util.test1234
+      method: test_method
+    args:
+      "config": { "env": "pcb-{env}-curated" }
+      "deploy_env": "dev"

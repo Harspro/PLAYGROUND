@@ -1,0 +1,393 @@
+tsys_pcb_mc_adm_appmemo_file_loading:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags: ['team-growth-and-sales']
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_adm_appmemo
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ADM_APPLICATION_MEMO
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ADM_APPLICATION_MEMO
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      GVL:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_appmemo/GVL.CPY
+        pcb.tsys.processor.segment.name: GVL
+        pcb.tsys.processor.layout.name: GVL_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_appmemo/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    data_load_type: APPEND_ONLY
+    tables:
+      GVL:
+        table_name: GEN_VAL_DETAIL
+        record_count_column: REC_CNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto') AS REC_CHNG_TMS
+      TRLR:
+        table_name: GEN_VAL_HEAD_TRAIL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+
+tsys_pcb_mc_adm_applog_file_loading:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "tsys_pcb_mc_adm_applog file loading will be impacted"
+    customer_impact: "None"
+    severity: 'P3'
+  tags: ['team-growth-and-sales']
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_adm_applog
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: APP_LOG_DETAILS
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: APP_LOG_DETAILS
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      ALOG:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_applogfiles/ALOG.CPY
+        pcb.tsys.processor.segment.name: ALOG
+        pcb.tsys.processor.layout.name: ALOG_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_applogfiles/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    data_load_type: APPEND_ONLY
+    tables:
+      ALOG:
+        table_name: APP_LOG_DETAIL
+        record_count_column: REC_CNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto') AS REC_CHNG_TMS
+      TRLR:
+        table_name: APP_LOG_HEAD_TRAIL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+
+tsys_pcb_mc_adm_disp_file_loading:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "tsys_pcb_mc_adm_disp_file file loading will be impacted"
+    customer_impact: "None"
+  tags: ['team-growth-and-sales']
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_adm_disp
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ADM_DISPOSITION
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ADM_DISPOSITION
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      ADDR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/ADDR.CPY
+        pcb.tsys.processor.segment.name: ADDR
+        pcb.tsys.processor.layout.name: ADDR_REC
+      APPI:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/APPI.CPY
+        pcb.tsys.processor.segment.name: APPI
+        pcb.tsys.processor.layout.name: APPI_REC
+      BLTR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/BLTR.CPY
+        pcb.tsys.processor.segment.name: BLTR
+        pcb.tsys.processor.layout.name: BLTR_REC
+      DATA:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/DATA.CPY
+        pcb.tsys.processor.segment.name: DATA
+        pcb.tsys.processor.layout.name: DATA_REC
+      DCSN:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/DCSN.CPY
+        pcb.tsys.processor.segment.name: DCSN
+        pcb.tsys.processor.layout.name: DCSN_REC
+      EMPL:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/EMPL.CPY
+        pcb.tsys.processor.segment.name: EMPL
+        pcb.tsys.processor.layout.name: EMPL_REC
+      MEMO:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/MEMO.CPY
+        pcb.tsys.processor.segment.name: MEMO
+        pcb.tsys.processor.layout.name: MEMO_REC
+      NAME:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/NAME.CPY
+        pcb.tsys.processor.segment.name: NAME
+        pcb.tsys.processor.layout.name: NAME_REC
+      STOP:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/STOP.CPY
+        pcb.tsys.processor.segment.name: STOP
+        pcb.tsys.processor.layout.name: STOP_REC
+      TS2T:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/TS2T.CPY
+        pcb.tsys.processor.segment.name: TS2T
+        pcb.tsys.processor.layout.name: TS2T_REC
+      USER:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/USER.CPY
+        pcb.tsys.processor.segment.name: USER
+        pcb.tsys.processor.layout.name: USER_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_disp/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    data_load_type: APPEND_ONLY
+    tables:
+      TRLR:
+        table_name: ADM_STD_DISP_HEAD_TRAIL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+      ADDR:
+        table_name: ADM_STD_DISP_ADDR_INFO
+        record_count_column: ADDR_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+          - INT64(NULL) AS ADR_DTC_SEQUENCE
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_1
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_2
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_3
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_4
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_5
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_6
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_7
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_8
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_9
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_10
+          - INT64(NULL) AS ADR_DTC_SEQUENCE_11
+      APPI:
+        table_name: ADM_STD_DISP_APP_DATA
+        record_count_column: APPI_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+          - INT64(NULL) AS APA_UKC_COMP_SEQ_NUM
+          - INT64(NULL) AS APA_UKC_CUST_ID
+          - INT64(NULL) AS APA_UKC_SEQ_NUM
+          - INT64(NULL) AS APA_UKB_NUM_OF_REQUEST
+          - STRING(NULL) AS APA_UKC_REQUEST_COMPONENT
+          - STRING(NULL) AS APA_UKB_REQUEST_COMPONENT
+          - STRING(NULL) AS APA_UKC_CUST_TYPE
+          - STRING(NULL) AS APA_UKC_REC_TYPE
+          - STRING(NULL) AS APA_UKB_REC_TYPE
+          - STRING(NULL) AS APA_UKC_TYPE_SEGMENT
+          - STRING(NULL) AS APA_UKB_TYPE_SEGMENT
+      BLTR:
+        table_name: ADM_STD_DISP_BAL_TRNS_INFO
+        record_count_column: BLTR_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+      DATA:
+        table_name: ADM_STD_DISP_DT_ELMT
+        record_count_column: DATA_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+      DCSN:
+        table_name: ADM_STD_DISP_DECI_DATA
+        record_count_column: DSCN_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+      EMPL:
+        table_name: ADM_STD_DISP_EMPM_INFO
+        record_count_column: EMPL_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+      MEMO:
+        table_name: ADM_STD_DISP_MEMO
+        record_count_column: MEMO_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+      NAME:
+        table_name: ADM_STD_DISP_CUST_INFO
+        record_count_column: NAME_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+          - STRING(NULL) AS DTC_CUST_PIN_BLOCK_BYTES
+      STOP:
+        table_name: ADM_STD_DISP_STOP_RECORD
+        record_count_column: STOP_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+      TS2T:
+        table_name: ADM_STD_DISP_TS2T_TMPL_INFO
+        record_count_column: TS2T_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+      USER:
+        table_name: ADM_STD_DISP_USER
+        record_count_column: USER_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CREATE_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHANGE_TMS
+
+tsys_pcb_mc_adm_appelement_file_loading:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "tsys_pcb_mc_adm_appelement file loading will be impacted"
+    customer_impact: "None"
+    severity: 'P3'
+  tags: ['team-growth-and-sales']
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_adm_appelement
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: APP_ELEMENT
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: APP_ELEMENT
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      SCOR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_appelement/SCOR.CPY
+        pcb.tsys.processor.segment.name: SCOR
+        pcb.tsys.processor.layout.name: SVL_RECORD_SCOR
+      SCRD:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_appelement/SCRD.CPY
+        pcb.tsys.processor.segment.name: SCRD
+        pcb.tsys.processor.layout.name: SVL_RECORD_SCRD
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_appelement/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: TRAILER
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    data_load_type: APPEND_ONLY
+    tables:
+      SCOR:
+        table_name: SCORES_VAL_DTL_SCOR
+        record_count_column: REC_CNT_SCOR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+      SCRD:
+        table_name: SCORES_VAL_DTL_SCRD
+        record_count_column: REC_CNT_SCOD
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+      TRLR:
+        table_name: SCORES_VAL_HEAD_TRAIL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+
+tsys_pcb_mc_adm_operatorlog_file_loading:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "tsys_pcb_mc_adm_operatorlog file loading will be impacted"
+    customer_impact: "None"
+    severity: 'P2'
+  tags: ['team-growth-and-sales']
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_adm_operatorlog
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: OPERATOR_LOG_DETAILS
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: OPERATOR_LOG_DETAILS
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      OLOG:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_operatorlog/OLOG.CPY
+        pcb.tsys.processor.segment.name: OLOG
+        pcb.tsys.processor.layout.name: OLOG_RECORD
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_operatorlog/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    data_load_type: APPEND_ONLY
+    tables:
+      OLOG:
+        table_name: OPERATOR_LOG_DETAIL
+        record_count_column: REC_CNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto') AS REC_CHNG_TMS
+      TRLR:
+        table_name: OPERATOR_LOG_HEAD_TRAIL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS

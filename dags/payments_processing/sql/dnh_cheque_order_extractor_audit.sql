@@ -1,0 +1,7 @@
+SELECT
+  COUNT(1) AS OUTBOUND_RECORD_COUNT,
+  COUNT(1) AS OUTBOUND_TOTAL_AMOUNT
+FROM
+  `pcb-{env}-landing.domain_payments.DH_DAILYORDERS_DETL`
+WHERE
+  FILE_CREATE_DT='{file_create_dt}';

@@ -1,0 +1,13 @@
+-- Populate the new columns by splitting ESC_FRAUD_REASON_CODE
+-- ESC_FRAUD_REASON_CODE is 20 bytes: 5+5+5+3+2
+-- Run this in BigQuery for each environment (dev, qa, prod)
+-- Replace {env} with the appropriate environment name
+
+UPDATE `pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG`
+SET
+  LG3_TKN_SERVICE_PROVIDER_ID = SUBSTR(ESC_FRAUD_REASON_CODE, 1, 5),
+  LG3_TKN_VERIF_METHOD = SUBSTR(ESC_FRAUD_REASON_CODE, 6, 5),
+  LG3_TKN_AUTH_FACTOR = SUBSTR(ESC_FRAUD_REASON_CODE, 11, 5),
+  LG3_PLUGIN_MSG_RESPONSE = SUBSTR(ESC_FRAUD_REASON_CODE, 16, 3),
+  LG3_PLUGIN_AUTH_RESPONSE = SUBSTR(ESC_FRAUD_REASON_CODE, 19, 2)
+WHERE ESC_FRAUD_REASON_CODE IS NOT NULL;

@@ -1,0 +1,10 @@
+landing_project_id: 'pcb-{env}-landing'
+processing_project_id: 'pcb-{env}-processing'
+staging_bucket: 'pcb-{env}-staging-extract'
+outbound_bucket: "cra-outbound-pcb{env_suffix}"
+
+# Schema version mapping for each tax year
+# Update this when receiving new XSD versions from Revenu Québec
+schema_versions:
+  2025: "2025.1"
+  2026: "2026.1"  # Update when 2026 XSD is received

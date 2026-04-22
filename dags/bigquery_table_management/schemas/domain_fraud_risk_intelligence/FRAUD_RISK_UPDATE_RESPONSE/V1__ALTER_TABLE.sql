@@ -1,0 +1,2 @@
+
+ALTER TABLE pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_UPDATE_RESPONSE DROP COLUMN CustomerReportedEventStatusDate;

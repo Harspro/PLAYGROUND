@@ -1,0 +1,75 @@
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from aml_processing import feed_commons as commons
+from aml_processing.identity.domain_aml_identity_reset.domain_aml_identity_reset import AMLIdentityReset
+
+# Creating DAG
+tags = commons.TAGS.copy()
+tags.append("domain_aml")
+# Modify the default_args dictionary
+custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+custom_default_args['business_impact'] = 'This is an on-demand process to reset AML Identity Feed tables in domain_aml in case it is required'
+docs = 'This DAG purges Identity Feed tables.'
+with DAG(
+        dag_id="domain_aml_identity_reset",
+        default_args=custom_default_args,
+        description='DAG to load Experian IDV Data to curated CUST_IDV_INFO',
+        dagrun_timeout=timedelta(hours=23, minutes=30),
+        catchup=False,
+        start_date=datetime(2023, 1, 1, tzinfo=commons.TORONTO_TZ),
+        tags=tags,
+        doc_md=docs,
+        schedule=None,
+        max_active_runs=1,
+        is_paused_upon_creation=True
+) as dag:
+
+    aml_identity_reset = AMLIdentityReset()
+
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+    pipeline_complete = EmptyOperator(task_id='end')
+
+    adm_ctl_table_reset_task = PythonOperator(
+        task_id="task_adm_ctl_table_reset",
+        python_callable=aml_identity_reset.task_adm_ctl_table_reset,
+        op_args=['aml_processing/identity/domain_aml_identity_reset/reset_table_query.sql'],
+        trigger_rule="all_success"
+    )
+
+    adm_digital_ctl_table_reset_task = PythonOperator(
+        task_id="task_adm_digital_ctl_table_reset",
+        python_callable=aml_identity_reset.task_adm_digital_ctl_table_reset,
+        op_args=['aml_processing/identity/domain_aml_identity_reset/reset_table_query.sql'],
+        trigger_rule="all_success"
+    )
+
+    aml_idv_excp_table_reset_task = PythonOperator(
+        task_id="task_aml_idv_excp_table_reset",
+        python_callable=aml_identity_reset.task_aml_idv_excp_table_reset,
+        op_args=['aml_processing/identity/domain_aml_identity_reset/reset_table_query.sql'],
+        trigger_rule="all_success"
+    )
+
+    aml_idv_info_table_reset_task = PythonOperator(
+        task_id="task_aml_idv_info_table_reset",
+        python_callable=aml_identity_reset.task_aml_idv_info_table_reset,
+        op_args=['aml_processing/identity/domain_aml_identity_reset/reset_table_query.sql'],
+        trigger_rule="all_success"
+    )
+
+    aml_cust_idv_info_table_reset_task = PythonOperator(
+        task_id="task_aml_cust_idv_info_table_reset",
+        python_callable=aml_identity_reset.task_aml_cust_idv_info_table_reset,
+        op_args=['aml_processing/identity/domain_aml_identity_reset/reset_table_query.sql'],
+        trigger_rule="all_success"
+    )
+
+    pipeline_start >> \
+        adm_ctl_table_reset_task >> \
+        adm_digital_ctl_table_reset_task >> \
+        aml_idv_excp_table_reset_task >> \
+        aml_idv_info_table_reset_task >> \
+        aml_cust_idv_info_table_reset_task >> \
+        pipeline_complete

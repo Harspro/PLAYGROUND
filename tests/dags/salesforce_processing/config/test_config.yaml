@@ -1,0 +1,26 @@
+tags:
+  - tag
+default_args:
+  owner: "alerts"
+  capability: "capability"
+  sub_capability: "sub-capability"
+  severity: "P3"
+  business_impact: "business impact"
+  customer_impact: "customer impact"
+dag:
+  read_pause_deploy_config: True
+  wait_for_completion: True
+  poke_interval: 30
+  staging_bucket: pcb-{env}-staging
+  file_load_config:
+    loading_task_id: 'loading_task_id'
+    loading_dag_id: 'loading_dag_id'
+  kafka_config:
+    kafka_writer_task_id: 'task-id'
+    kafka_trigger_dag_id: 'trigger-dag-id'
+    kafka_cluster_name: "cluster-name"
+  trigger_config:
+    bucket: "bucket-name"
+    name: "name"
+    folder_name: "folder-name"
+    file_name: "file-name"

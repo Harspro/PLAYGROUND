@@ -1,0 +1,33 @@
+transaction_risk_score_writer_file_status_kafka_writer:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "Transaction Risk Scoring"
+    business_impact: "Will open the business to financial risk that can result into monetary loss if customer risk score was not updated"
+    customer_impact: "None"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/risk-management/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/risk-management/trs_writer_file_status_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.message.schema.type: JSON
+    pcb.file.kafka.connector.schema.file.path: trs_writer_file_status_file_schema.avsc 
+  dag:
+    kafka_writer_task: kafka_writer_trs_vendor_file_status
+    read_pause_deploy_config: True
+    tags: ["Transaction Risk Score" , "P3" ]
+    job_size: extra_small
+    dataproc_cluster_name: trs-writer-file-status
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_scoring
+    table_id: trs_writer_file_status_temp
+    query_file: transaction_risk_score_processor/sql/trs_writer_file_status.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: trs-vendor-file-status
+    file_name: trs-vendor-file-status

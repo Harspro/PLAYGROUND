@@ -1,0 +1,39 @@
+c2p_profile_delete_event_kafka_writer:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P3"
+    sub_capability: "account-management"
+    business_impact: "This loads C2P profile delete events onto kafka topic: dp-core-{env}-click-to-pay-customer-event"
+    customer_impact: "In the event of a failure, customer profiles with same email and phone number combination would not be deleted from Mastercard zone"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/c2p_back_book_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/c2p_back_book_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/c2p_back_book/c2p_back_book_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: c2p_back_book_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: c2p_back_book_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: customerId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: c2p_back_book_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_c2p_profile_delete_event
+    tags: [ "team-digital-adoption-alerts" ]
+    job_size: extra_small
+    dataproc_cluster_name: c2p-profile-delete-event
+    skip_kafka_writer_if_empty: true
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_account_management
+    query_file: digital_adoption/sql/click_to_pay/c2p_profile_delete_event_kafka.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: digital-adoption
+    file_name: c2p-profile-delete-event

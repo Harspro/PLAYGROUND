@@ -1,0 +1,2940 @@
+pcma_cdic_0500_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0500 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0500_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0100_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0100 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0100_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+switch_growth_create_view:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "SWITCH_GROWTH"
+    sub_capability: "SWITCH_GROWTH Views"
+    severity: "P2"
+    business_impact: "One Time View creation DAG for pcf_current_switch_file"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Data Transfer Pipeline for Switch Growth"
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "create_view_pcf_current_switch_file"
+      query_file: "switch_growth_processing/sql/create_view_pcf_current_switch_file.sql"
+      target_service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-curated
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}" : "nonprod"
+        uat:
+          "{deploy-env}" : "nonprod"
+        prod:
+          "{deploy-env}" : "prod"
+
+switch_growth_data_processing:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "SWITCH_GROWTH"
+    sub_capability: "SWITCH_GROWTH switch_growth_data_processing pipeline"
+    severity: "P2"
+    business_impact: "Daily Refresh View pcf_current_switch_file data load into vendor switch growth table."
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    schedule_interval: "00 10,15 * * *"
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Data Transfer Pipeline for Switch Growth"
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "submit_to_vendor"
+      query_file: "switch_growth_processing/sql/submit_to_vendor.sql"
+      target_service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: switch-pcfinancial
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{table_vendor_pcf_current_switch_file}" : "switch-pcfinancial.test_shared_pcf.pcf_current_switch_file"
+        uat:
+          "{table_vendor_pcf_current_switch_file}" : "switch-pcfinancial.test_shared_pcf.pcf_current_switch_file"
+        prod:
+          "{table_vendor_pcf_current_switch_file}" : "switch-pcfinancial.shared_pcbank_prod.pcf_current_switch_file"
+    - task_id: "log_row_count"
+      query: "SELECT * FROM {table_vendor_pcf_current_switch_file}"
+      target_service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: switch-pcfinancial
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{table_vendor_pcf_current_switch_file}" : "switch-pcfinancial.test_shared_pcf.pcf_current_switch_file"
+        uat:
+          "{table_vendor_pcf_current_switch_file}" : "switch-pcfinancial.test_shared_pcf.pcf_current_switch_file"
+        prod:
+          "{table_vendor_pcf_current_switch_file}" : "switch-pcfinancial.shared_pcbank_prod.pcf_current_switch_file"
+    - task_id: "append_to_audit_table"
+      query_file: "switch_growth_processing/sql/append_to_audit_table.sql"
+      replacements:
+        "{run_id}": "{{ run_id }}"
+
+pcma_cdic_0900_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0900 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0900_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0110_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0110 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0110_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0120_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0120 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0120_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0121_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0121 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0121_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0130_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0130 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0130_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+product_upgrade_offer_processing:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    severity: "P2"
+    business_impact: "Product Upgrade offers cant be made available for the eligible customers, denying any upsells"
+    customer_impact: "Customers wont be able to see their eligible Product Upgrade offers"
+    retries: 1
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    schedule_interval: "0 1 1 * *"
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Data Load Pipeline for Product Upgrade Offers"
+    tags: ["team-digital-adoption-alerts"]
+  bigquery_tasks:
+    - task_id: "load_ref_table"
+      query_file: "digital_adoption/sql/customer_offer_detail.sql"
+    - task_id: "load_main_table"
+      query_file: "digital_adoption/sql/product_upgrade_offers.sql"
+
+pcma_cdic_0800_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0800 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0800_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0140_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0140 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0140_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0400_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0400 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0400_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0400-*.txt"
+
+pcma_cdic_0201_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0201 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0201_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0201-*.txt"
+
+pcma_cdic_0152_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0152 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0152_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0152-*.txt"
+
+pcma_cdic_0211_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0211 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0211_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0211-*.txt"
+
+pcma_cdic_0232_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0232 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0232_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0232-*.txt"
+
+pcma_cdic_0235_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0235 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0235_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0235-*.txt"
+
+pcma_cdic_0221_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0221 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0221_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0221-*.txt"
+
+pcma_cdic_0234_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0234 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0234_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0234-*.txt"
+
+pcma_cdic_0233_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0233 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0233_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0233-*.txt"
+
+pcma_cdic_0212_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0212 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0212_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0212-*.txt"
+
+pcma_cdic_0237_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0237 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0237_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0237-*.txt"
+
+pcma_cdic_0600_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0600 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0600_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0600-*.txt"
+
+pcma_cdic_0238_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0238 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0238_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0238-*.txt"
+
+pcma_cdic_0241_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0241 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0241_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0241-*.txt"
+
+aml_transaction_feed_control_table_update_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "aml"
+    severity: "P2"
+    business_impact: "Customer transactions information in Verafin will not be up-to-date"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "AML `pcb-{env}-processing.domain_aml.TRANSACTION_FEED_CONTROL_TABLE` update"
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "update_transaction_feed_control_table"
+      query_file: "aml_processing/transaction/update_transaction_feed_control_table/update_transaction_feed_control_table.sql"
+
+pcma_cdic_0231_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0231 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0231_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0231-*.txt"
+
+pcma_cdic_0236_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0236 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0236_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0236-*.txt"
+
+pcma_cdic_0153_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0153 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0153_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0153-*.txt"
+
+pcma_cdic_0202_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0202 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0202_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0202-*.txt"
+
+pcma_cdic_0242_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0242 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0242_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0242-*.txt"
+
+pcma_cdic_0401_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0401 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0401_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0401-*.txt"
+
+pcma_cdic_0501_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0501 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0501_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0501-*.txt"
+
+pcma_cdic_0999_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.domain_cdic.PCMA_CDIC_0999 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0999_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0999-*.txt"
+
+pcma_cdic_0110_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0110 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0110_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0110-*.txt"
+
+pcma_cdic_0240_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0240 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0240_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0240-*.txt"
+
+pcma_cdic_0239_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0239 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0239_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0239-*.txt"
+
+pcma_cdic_0100_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0100 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0100_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0100-*.txt"
+
+pcma_cdic_0140_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0140 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0140_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0140-*.txt"
+
+pcma_cdic_0500_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0500 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0500_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0500-*.txt"
+
+pcma_cdic_0900_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0900 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0900_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0900-*.txt"
+
+pcma_cdic_0120_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0120 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0120_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0120-*.txt"
+
+pcma_cdic_0121_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0121 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0121_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0121-*.txt"
+
+pcma_cdic_0201_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0201 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0201_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0202_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0202 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0202_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0211_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0211 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0211_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0221_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0221 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0221_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0501_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0501 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0501_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0999_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0999 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0999_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+loyalty_manual_transaction_update_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "manual_transaction"
+    severity: "P2"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "This job helps to update the Manual Transaction table for records which are published to Kafka."
+    tags: ["Loyalty"]
+  bigquery_tasks:
+    - task_id: "update_manual_transaction_table"
+      query_file: "loyalty_processing/manual_campaign/update_manual_transaction_table.sql"
+
+pcma_cdic_0800_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0800 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0800_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0800-*.txt"
+
+pcma_cdic_0130_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0130 file extract."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/extract/cdic_0130_query.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/cdic/pcma/extract/cdic-0130-*.txt"
+
+pcma_cdic_0212_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0212 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0212_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0231_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0231 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0231_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0232_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0232 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0232_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0233_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0233 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0233_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0234_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0234 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0234_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0235_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0235 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0235_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0236_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0236 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0236_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0237_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0237 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0237_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0238_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0238 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0238_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0239_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0239 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0239_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0240_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0240 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0240_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0241_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0241 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0241_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0242_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0242 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0242_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+pcma_cdic_0401_cots_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0401 data load."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "load_bq_table"
+      query_file: "cdic_processing/config/sql_queries/pcma/load/cdic_0401_query.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+loyalty_manual_transaction_create_view:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "loyalty Views"
+    severity: "P2"
+    business_impact: "One Time View creation DAG for loyalty_manual_transaction"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Data Transfer Pipeline for manual Transaction"
+  bigquery_tasks:
+    - task_id: "create_view_loyalty_manual_transaction"
+      query_file: "loyalty_processing/manual_campaign/pds_view_creator.sql"
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}" : "nonprod"
+          "{pds-dataset}": "TEMP_TEST_POINTS"
+        uat:
+          "{deploy-env}" : "nonprod"
+          "{pds-dataset}": "TEMP_TEST_POINTS"
+        prod:
+          "{deploy-env}" : "prod"
+          "{pds-dataset}": "POINTS_AWARDING"
+
+loyalty_manual_transaction_merge_table_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "TBD"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG helps to Merge the loyalty manual transaction Control table with help of business view."
+  bigquery_tasks:
+    - task_id: "merge_manual_transaction_table"
+      query_file: "loyalty_processing/manual_campaign/merge_manual_transaction_table.sql"
+
+loyalty_manual_transaction_table_update:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "TBD"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG helps to Update the loyalty manual transaction Control table with help of business view."
+  bigquery_tasks:
+    - task_id: "update_row_hash_manual_transaction_table"
+      query_file: "loyalty_processing/manual_campaign/update_row_hash_manual_transaction_table.sql"
+
+update_payroll_trans_ref_num:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Payments"
+    sub_capability: "Data Movement"
+    severity: "P2"
+    business_impact: "Discrepancies to payroll report ( this is one time job)"
+    customer_impact: "No longer to be used , this is one time dag "
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "AT31 Payroll Transaction Reference Number Update"
+  bigquery_tasks:
+    - task_id: "update_bq_table"
+      query_file: "at31_update/sql/trans_ref_num_update.sql"
+
+loyalty_load_offers_manually:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P3"
+    business_impact: "missmatch in data for targeted offers"
+    customer_impact: "Customers wont be matched to the offers"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Loading existing offers to BQ"
+  bigquery_tasks:
+    - task_id: "load_existing_offer"
+      query_file: "loyalty_processing/manual_offer_loading/manual_offer_loading.sql"
+
+savings_cdic_0400_truncate_table_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "SAVINGS CDIC pcb-{env}-curated.cots_cdic.CDIC_0400 table truncate."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "truncate_bq_table"
+      query_file: "cdic_processing/config/sql_queries/cdic_0400_truncate_table_query.sql"
+
+loyalty_update_targeted_offer_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P3"
+    business_impact: "missmatch in data for targeted offers"
+    customer_impact: "customers will be matched with wrong offers"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Updating existing offers to BQ"
+  bigquery_tasks:
+    - task_id: "update_existing_offer"
+      query_file: "loyalty_processing/manual_offer_loading/manual_offer_update.sql"
+
+loyalty_no_fee_data_backup_points_comp:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "TBD"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG helps to take backup of No fee PCMA records from  the loyalty_points_earned table."
+  bigquery_tasks:
+    - task_id: "loyalty_points_earned_create_backup_table"
+      query_file: "loyalty_processing/loyalty_points_earned/loyalty_points_earned_create_backup_table.sql"
+
+loyalty_no_fee_data_removal_points_comp:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "TBD"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG helps to delete the No fee PCMA records from loyalty_points_earned table."
+  bigquery_tasks:
+    - task_id: "loyalty_points_earned_truncate_table"
+      query_file: "loyalty_processing/loyalty_points_earned/loyalty_points_earned_truncate_table.sql"
+
+returncff_loading_job:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Account Management - Digital Adoption"
+    sub_capability: "NA"
+    severity: "P2"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Processing ReturnCFF file from Broadridge post file loading"
+    tags: [ "team-digital-adoption-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "returncff_intermediate"
+      query_file: "cme_processing/sql/returncff_intermediate.sql"
+      replacements:
+        "{file_name}": "{{ dag_run.conf['file_name'] }}"
+    - task_id: "stmt_cme_feedback_distinct"
+      query_file: "cme_processing/sql/stmt_cme_feedback_distinct.sql"
+    - task_id: "stmt_cme_feedback_d"
+      query_file: "cme_processing/sql/stmt_cme_feedback_d.sql"
+    - task_id: "update_stmt_cme_feedback_stg_d"
+      query_file: "cme_processing/sql/stmt_cme_feedback_stg_d.sql"
+    - task_id: "stmt_cme_feedback_n"
+      query_file: "cme_processing/sql/stmt_cme_feedback_n.sql"
+    - task_id: "insert_stmt_cme_feedback_stg_n"
+      query_file: "cme_processing/sql/stmt_cme_feedback_stg_n.sql"
+    - task_id: "stmt_cme_feedback_inter_y"
+      query_file: "cme_processing/sql/stmt_cme_feedback_inter_y.sql"
+    - task_id: "stmt_cme_feedback_y"
+      query_file: "cme_processing/sql/stmt_cme_feedback_y.sql"
+    - task_id: "update_stmt_cme_feedback_stg_y"
+      query_file: "cme_processing/sql/stmt_cme_feedback_stg_y.sql"
+    - task_id: "stmt_update_cust_inter"
+      query_file: "cme_processing/sql/stmt_update_cust_inter.sql"
+    - task_id: "stmt_update_cust"
+      query_file: "cme_processing/sql/stmt_update_cust.sql"
+    - task_id: "insert_stmt_update_cme_feedback"
+      query_file: "cme_processing/sql/stmt_update_cme_feedback.sql"
+
+loyalty_benefit_expiry_extract_job:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Account Management"
+    sub_capability: "Account Management"
+    severity: "P2"
+    business_impact: "Potential compliance issue"
+    customer_impact: "Customer will miss out the notification regarding the loyalty offer expiry"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-09-01"
+    catchup: false
+    description: "DAG to extract accounts whose loyalty benefits are expiring in next 5/21 days"
+    tags: [ "team-digital-adoption-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "digital_adoption/sql/loyalty_benefit_expiry_notification.sql"
+      replacements:
+          "{deploy_env_storage_suffix}": "{{ (var.json.GCP_CONFIG).deploy_env_storage_suffix }}"
+
+update_billC86_fields:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "Updating these fields will ensure all customers receive the notification and we remain compliant."
+    customer_impact: "Customers will receive their notice of expiry."
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG updates the Bill C-86 and Bill C-86 Days for 4 Offer Ids"
+  bigquery_tasks:
+    - task_id: "update_Bill86_4_OfferIds"
+      query_file: "loyalty_processing/targeted_offer/update_bill86_4_offerids.sql"
+
+update_welcome_offer_points:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "customers may call in to the contact centre"
+    customer_impact: "customers will not earn welcome offer points if this is not fixed"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG updates min, max spends and offer codes for specific records in prod"
+    tags: [ "team-convergence-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "update_min_max_spends"
+      query_file: "loyalty_processing/targeted_offer/update_offers_prod_min_max_spend.sql"
+    - task_id: "update_offer_codes"
+      query_file: "loyalty_processing/targeted_offer/update_prod_offerCodes.sql"
+
+rl3_data_processing:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "This DAG processes T5 data to produce the RL3 tax statement file."
+    customer_impact: "In the event of a failure RL3 tax statement data will not be available."
+    severity: "P2"
+    retries: 3
+    retry_delay: 60
+    params: {
+      "year": ,
+      "noreleve": ,
+      "norelevepdf":
+    }
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "This DAG processes T5 data to produce the RL3 tax statement file."
+    tags: [ "team-digital-adoption-alerts" , "P2" ]
+    max_active_runs: 1
+    is_paused_upon_creation: true
+  bigquery_tasks:
+    - task_id: "rl3_slip_processing_table_create"
+      query_file: "digital_adoption_tax_statements/sql/rl3_slip_processing_query.sql"
+      replacements:
+        "{year}": "{{ dag_run.conf['year'] }}"
+        "{noreleve}": "{{ dag_run.conf['noreleve'] }}"
+        "{norelevepdf}": "{{ dag_run.conf['norelevepdf'] }}"
+    - task_id: "rl3_header_processing_table_create"
+      query_file: "digital_adoption_tax_statements/sql/rl3_header_processing_query.sql"
+      replacements:
+        "{year}": "{{ dag_run.conf['year'] }}"
+    - task_id: "rl3_trailer_processing_table_create"
+      query_file: "digital_adoption_tax_statements/sql/rl3_trailer_processing_query.sql"
+      replacements:
+        "{year}": "{{ dag_run.conf['year'] }}"
+
+rl3_data_landing:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "This DAG processes T5 data to produce the RL3 tax statement file."
+    customer_impact: "In the event of a failure RL3 tax statement data will not be available."
+    severity: "P2"
+    retries: 3
+    retry_delay: 60
+    params: {
+      "year": ,
+      "noreleve":
+    }
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "This DAG processes T5 data to produce the RL3 tax statement file."
+    tags: [ "team-digital-adoption-alerts" , "P2" ]
+    max_active_runs: 1
+    is_paused_upon_creation: true
+  bigquery_tasks:
+    - task_id: "rl3_slip_landing_table_update"
+      query_file: "digital_adoption_tax_statements/sql/rl3_slip_landing_query.sql"
+    - task_id: "rl3_header_landing_table_update"
+      query_file: "digital_adoption_tax_statements/sql/rl3_header_landing_query.sql"
+    - task_id: "rl3_trailer_landing_table_update"
+      query_file: "digital_adoption_tax_statements/sql/rl3_trailer_landing_query.sql"
+
+sa00_creation_from_stmt_daily:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Estatement"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "REG & CGO job will fail due to missing table"
+    customer_impact: "Estatement will not be processed"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "This DAG will create SA00 from STMT_DAILY(done by IDL) and required for first time REG/CGO DAG run"
+    tags: [ "team-digital-adoption-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "sa00_creation_from_stmt_daily"
+      query_file: "tsys_processing/sql/pcmc_stmt_SA00_CREATION_FROM_STMT_DAILY.sql"
+
+update_no_offer_points:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "customers will be rewarded with in store offers"
+    customer_impact: "customers will get the offer that were told to get them in store"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG updates points offer in store for customer"
+    tags: [ "team-convergence-alerts" , "P2" ]
+  bigquery_tasks:
+    - task_id: "update_customer_offers"
+      query_file: "loyalty_processing/targeted_offer/update_no_points_customer_offers.sql"
+
+all_score_trs_t0090_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TRS scoring solution pcb-{env}-curated.domain_scoring.TRANSACTION_RISK_SCORING_INPUT file extract."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "all_score_processor/sql/trs_t0090/output_data_processing/all_score_trs_t0090_extract.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/all_score/trs/extract/transaction-risk-score-*.txt"
+        "{client_id}": "7607"
+        "{record_type}": "SC01"
+        "{reject_code}": ""
+        "{account_number}": ""
+        "{filler_1}": ""
+        "{filler_2}": ""
+        "{primary_customer_id}": "0"
+        "{customer_type}": "0"
+        "{filler_3}": ""
+        "{score_type}": "T0090"
+        "{score_calc_date}": "0"
+        "{score_calc_time}": "0"
+        "{score_raw_sign}": "+"
+        "{score_aligned_sign}":  "+"
+        "{score_source}": ""
+        "{rating_grade}": ""
+        "{bureau_id}": "0"
+        "{market_address_code}": ""
+        "{acct_relation_code}": ""
+        "{operator_id}": ""
+        "{user_defined_s1_sign}": "+"
+        "{user_defined_s1}": "0"
+        "{user_defined_s2_sign}": "+"
+        "{user_defined_s2}": "0"
+        "{tts_dollar_value}": ""
+        "{inquiry_flag}": "N"
+        "{low_range_sign}": "+"
+        "{low_score_range}": "0"
+        "{high_range_sign}": "+"
+        "{high_score_range}": "0"
+        "{percentile_ranking}": "0"
+        "{filler_4}": ""
+        "{score_type_2}": ""
+
+all_score_trs_t0090_scoring_prep_prizm_unique_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "Customers request may be rejected"
+    retries: 5
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "DAG to load PRIZM UNIQUE static data to BQ table."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "scoring_prep_prizm_unique"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_prizm_unique.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{dag_id}": "{{ dag.dag_id }}"
+
+all_score_trs_t0090_scoring_prep_mth_acquisition_eq_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "credit-risk"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "Customers request may be rejected"
+    retries: 5
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "DAG to load all_score_prep_mth_acquisition_eq static data to BQ table."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "scoring_prep_mth_acquisition_eq"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_mth_acquisition_eq.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{dag_id}": "{{ dag.dag_id }}"
+
+all_score_trs_t0090_scoring_prep_pcmc_data_depot_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "credit-risk"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "Customers request may be rejected e.g. CLI"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Credit Risk Scoring pcb-{env}-landing.domain_scoring.SCORING_PREP_PCMC_DATA_DEPOT data load."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "scoring_prep_pcmc_data_depot"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_pcmc_data_depot.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{dag_id}": "{{ dag.dag_id }}"
+
+all_score_trs_t0090_scoring_prep_am00_pre_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "Customers request may be rejected"
+    retries: 5
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "DAG to load AM00 pre static data to BQ table."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "scoring_prep_am00_pre"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_am00_pre.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{dag_id}": "{{ dag.dag_id }}"
+
+loyalty_remove_wellwise_merchant:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "Rewards/Loyalty"
+    severity: "P3"
+    business_impact: "This will impact the loading of LCL/SDM merchants. Campaign service merchant list will be out of sync and all new LCL/ SDM merchants will not be updated in campaign service."
+    customer_impact: "None"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG updates merchant list and removes specific merchant_id records"
+    tags: [ "team-convergence-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "update_merchant_list"
+      query_file: "globalpay_processing/sql_files/global_payment_remove_wellwise_merchants.sql"
+
+loyalty_customer_merge_split_data_clean_up:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    severity: "P3"
+    business_impact: "TBD"
+    customer_impact: "None"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG clean up the wrong status in the customer merge split table"
+    tags: [ "team-digital-adoption-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "customer_merge_split_data_clean_up"
+      query_file: "digital_adoption/sql/customer_merge_split_data_clean_up.sql"
+
+c2p_privacy_notification_extract_job:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Customer Management"
+    sub_capability: "Customer Management"
+    severity: "P3"
+    business_impact: "Potential compliance issue"
+    customer_impact: "Customer will miss out the notification regarding the Click To Pay auto enrollment"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-09-01"
+    catchup: false
+    description: "DAG to extract customers who are eligible for Click To Pay auto enrollment"
+    tags: [ "team-digital-adoption-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "digital_adoption/sql/click_to_pay/c2p_privacy_update_notification.sql"
+      replacements:
+          "{deploy_env_storage_suffix}": "{{ (var.json.GCP_CONFIG).deploy_env_storage_suffix }}"
+          "{start_seq_no}": "{{ dag_run.conf['start_seq_no'] }}"
+          "{end_seq_no}": "{{ dag_run.conf['end_seq_no'] }}"
+
+all_score_generate_monthly_pcmc_data_depot_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "Customers request may be rejected e.g. CLI"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Monthly Scheduled BigQuery Task Executor DAG for PCMC Data Depot Load"
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "pull-adm-data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_adm_data_depot.sql"
+    - task_id: "pull-tsys-data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_tsys_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "pull-experian-data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_experian_data_depot.sql"
+    - task_id: "pull-cli-data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_cli_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "pull-score-bcn-data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_score_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        "{score}": "BCN"
+        "{score_name}": "CB"
+        "{score_type}": "T0030"
+        "{score_app_type}": "T0080"
+        "{score_app_name}": "BUREAU_SCORE"
+    - task_id: "pull-score-bni-data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_score_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        "{score}": "BNI"
+        "{score_name}": "BNI"
+        "{score_type}": "T0010"
+        "{score_app_type}": "T0081"
+        "{score_app_name}": "BNI_SCORE"
+    - task_id: "prep_data_depot_cycle_data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_cycle_data_depot.sql"
+      replacements:
+          "{mode}": "{{dag_run.conf['mode']}}"
+          "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+          "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "prep_data_depot_transaction_data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_transaction_data_depot.sql"
+      replacements:
+          "{mode}": "{{dag_run.conf['mode']}}"
+          "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+          "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "prep_data_depot_demographic_data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_demographic_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "prep_data_depot_combined_data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_combined_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "prep_data_depot_historical_data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_historical_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "load_bq_table_scoring_prep_pcmc_data_depot"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/all_score_prep_monthly_pcmc_generate_table_data_depot.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+
+offer_assignment_update:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "TBD"
+    severity: "P2"
+    business_impact: "Updating the offer will ensure all impacted customers receive correct points distribution and we remain compliant."
+    customer_impact: "Customers are credited with correct offer and points."
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG updates offer for impacted customers"
+  bigquery_tasks:
+    - task_id: "update_offer_assignment"
+      query_file: "loyalty_processing/targeted_offer/update_offer_assignment.sql"
+
+all_score_trs_t0090_scoring_prep_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "credit-risk"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "Customers request may be rejected e.g. CLI"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Credit Risk Scoring load for various TRS_T0090 data prep tables."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "scoring_prep_wk_tsys_am00"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_am00.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_am01"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_am01.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_am02"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_am02.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_ace_final"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_ace_final.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_demgfx"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_demgfx.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_cycle"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_cycle.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_cycle_trans"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_cycle_trans.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_chgoff_full"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_chgoff_full.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        "{mode}": "{{dag_run.conf['mode']}}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_trans"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_trans.sql"
+      replacements:
+        "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+        "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        "{mode}": "{{dag_run.conf['mode']}}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_test_digit"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_test_digit.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_chgoff_suffix"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_chgoff_suffix.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_chgoff_fr"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_chgoff_fr.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_mthend_full"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_mthend_full.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_mthend_suffix"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_mthend_suffix.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_acquisition"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_acquisition.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_score_lnk"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_score_lnk.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_raw_score"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_raw_score.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_cli_offer_data"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_cli_offer_data.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_cli_events"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_cli_events.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_tsys_bni_score"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_score.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+        "{score}": "BNI"
+        "{score_name}": "BNI"
+        "{score_type}": "T0010"
+        "{score_app_type}": "T0081"
+        "{score_app_name}": "BNI_SCORE"
+    - task_id: "scoring_prep_wk_tsys_cb_score"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_tsys_score.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+        "{score}": "BCN"
+        "{score_name}": "CB"
+        "{score_type}": "T0030"
+        "{score_app_type}": "T0080"
+        "{score_app_name}": "BUREAU_SCORE"
+    - task_id: "scoring_prep_wk_mmm"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_mmm.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_mth6"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_mth6.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_hist_3mth"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_hist_3mth.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_wk_hist_6mth"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_wk_hist_6mth.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_mth_current_scoring"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_mth_current_scoring.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_customer_list_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_customer_list_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_mth_current_scoring_to_pcmc_data_depot"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_mth_current_scoring_to_pcmc_data_depot.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+    - task_id: "scoring_prep_score_pop_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_score_pop_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+    - task_id: "scoring_prep_trans_hist_base"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_trans_hist_base.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_cust_trans_full_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_cust_trans_full_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_lcl_store_list"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_lcl_store_list.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_trans_summary_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_trans_summary_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_grocery_trans_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_grocery_trans_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_trans_grocery_cash_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_trans_grocery_cash_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_lcl_store_spend_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_lcl_store_spend_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_non_lcl_store_spend_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_non_lcl_store_spend_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_grocery_for_lcl_nonlcl_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_grocery_for_lcl_nonlcl_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_lcl_nonlcl_grocery_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_lcl_nonlcl_grocery_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_all_trans_vars_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_all_trans_vars_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_non_grocery_mcc_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_non_grocery_mcc_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_combined_features_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_combined_features_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_segmented_input_daily"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_segmented_input_daily.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "scoring_prep_input_trs_t0090_features"
+      query_file: "all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_input_trs_t0090_features.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+offer_assignment_manual_csv_load:
+  default_args:
+    owner: "team-convergence-alerts"
+    business_impact: "Offer assignment/update for impacted customers"
+    customer_impact: "Customers are assigned with correct offers"
+    capability: "loyalty"
+    sub_capability: "rewards"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2026-01-01"
+    catchup: false
+    description: "This DAG is to assign/update offer assignment to customers manually"
+    tags: ["Loyalty"]
+  bigquery_tasks:
+    - task_id: "create-external-table"
+      query_file: "loyalty_processing/targeted_offer/create_offer_assignment_from_csv.sql"
+    - task_id: "update-existing-offers"
+      query_file: "loyalty_processing/targeted_offer/update_offer_assignment_from_csv.sql"
+    - task_id: "insert-new-offers"
+      query_file: "loyalty_processing/targeted_offer/insert_offer_assignment_from_csv.sql"
+
+esso_fuel_transaction_update_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "ESSO"
+    severity: "P3"
+    business_impact: "No Impact"
+    customer_impact: "customers will not get the accurate points for their transactions at ESSO"
+    retries: 1
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "this DAG updates inaccurate transactions in the ESSO_FUEL_TRANSACTION table"
+    tags: [ "team-convergence-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "update_esso_transactions"
+      query_file: "loyalty_processing/esso_fuel_transaction/update_esso_fuel_transaction.sql"
+
+all_score_index4_t0040_scoring_prep_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "credit-risk"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "None"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 1440
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Credit Risk Scoring load for various INDEX4_T0040 data prep tables."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "insert_scoring_prep_credscore_calculated_metrics"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_credscore_calculated_metrics.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_credscore_engineered_features"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_credscore_engineered_features.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_01"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_01.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_02"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_02.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_03"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_03.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_04"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_04.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_05"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_05.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_06"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_06.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_07"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_07.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_08"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_08.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_09"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_09.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cred_das_history_base_10"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cred_das_history_base_10.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_decision_keys"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_decision_keys.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+    - task_id: "insert_scoring_prep_pre_app_score"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_pre_app_score.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-project}": "pcb-dev-curated"
+          "{creditrisk-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+          "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-project}": "pcb-uat-curated"
+          "{creditrisk-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+          "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{creditrisk-project}": "pcb-prod-creditrisk"
+          "{creditrisk-dataset}": "STRAT_PCO_PULL"
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}":  "{{ dag_run.conf['report_year'] }}"
+          "{report_month}":  "{{ dag_run.conf['report_month'] }}"
+    - task_id: "insert_scoring_prep_transaction_summary_datamart"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_transaction_summary_datamart.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-scoring-project}": "pcb-dev-curated"
+          "{creditrisk-scoring-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-scoring-project}": "pcb-uat-curated"
+          "{creditrisk-scoring-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{creditrisk-scoring-project}": "pcb-prod-creditrisk-scoring"
+          "{creditrisk-scoring-dataset}": "SHARE_CUST_RISK_SCR"
+          "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_credscore_demostats"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_demostats.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}" : "nonprod"
+          "{creditrisk-scoring-project}": "pcb-dev-curated"
+          "{creditrisk-scoring-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{deploy-env}" : "nonprod"
+          "{creditrisk-scoring-project}": "pcb-uat-curated"
+          "{creditrisk-scoring-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{deploy-env}" : "prod"
+          "{creditrisk-scoring-project}": "pcb-prod-creditrisk-scoring"
+          "{creditrisk-scoring-dataset}": "test_dataset"
+          "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_cif_snapshot"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_cif_snapshot.sql"
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}": "{{ dag_run.conf['report_year'] }}"
+          "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        uat:
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}": "{{ dag_run.conf['report_year'] }}"
+          "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        prod:
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}": "{{ dag_run.conf['report_year'] }}"
+          "{report_month}": "{{ dag_run.conf['report_month'] }}"
+    - task_id: "insert_scoring_prep_existing_pcmc_pcma"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_existing_pcmc_pcma.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-project}": "pcb-dev-curated"
+          "{creditrisk-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}": "{{ dag_run.conf['report_year'] }}"
+          "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-project}": "pcb-uat-curated"
+          "{creditrisk-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}": "{{ dag_run.conf['report_year'] }}"
+          "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{creditrisk-project}": "pcb-prod-creditrisk"
+          "{creditrisk-dataset}": "SHARE_CUST_RISK_ACQ"
+          "{dag_id}": "{{ dag.dag_id }}"
+          "{report_year}": "{{ dag_run.conf['report_year'] }}"
+          "{report_month}": "{{ dag_run.conf['report_month'] }}"
+    - task_id: "insert_scoring_prep_postal_code_ri_v4_risk_ranking"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_postal_code_ri_v4_risk_ranking.sql"
+      target_service_account: pcb-all-score-sa@pcb-{env}-processing.iam.gserviceaccount.com
+      target_project: pcb-{env}-landing
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-scoring-project}": "pcb-dev-curated"
+          "{creditrisk-scoring-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{deploy-env}": "nonprod"
+          "{creditrisk-scoring-project}": "pcb-uat-curated"
+          "{creditrisk-scoring-dataset}": "domain_scoring"
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{deploy-env}": "prod"
+          "{creditrisk-scoring-project}": "pcb-prod-creditrisk-scoring"
+          "{creditrisk-scoring-dataset}": "test_dataset"
+          "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_pco_score"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_pco_score.sql"
+      replacements:
+        "{report_year}": "{{ dag_run.conf['report_year'] }}"
+        "{report_month}": "{{ dag_run.conf['report_month'] }}"
+        "{score_date}": "{{ dag_run.conf['score_date'] }}"
+        "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_area_risk_lookup"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_area_risk_lookup.sql"
+      env_specific_replacements: True
+      replacements:
+        dev:
+          "{dag_id}": "{{ dag.dag_id }}"
+        uat:
+          "{dag_id}": "{{ dag.dag_id }}"
+        prod:
+          "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_scoring_prep_input_index4_t0040_features"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_input_index4_t0040_features.sql"
+      replacements:
+          "{dag_id}": "{{ dag.dag_id }}"
+
+all_score_index4_t0040_post_model_inference:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "credit-risk"
+    business_impact: "Index4 T0040 post-model inference outputs will not be available for analysis and validation"
+    customer_impact: "No direct customer impact - internal analytics only"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 600
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Index4 T0040 post-model inference data processing: account ID randomization and unnested comparison table generation."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "insert_scoring_prep_account_ids_randomized"
+      query_file: "all_score_processor/sql/index4_t0040/scoring_features/scoring_prep_account_ids_randomized.sql"
+      replacements:
+          "{dag_id}": "{{ dag.dag_id }}"
+    - task_id: "insert_output_trs_t0040_unnested_comparison"
+      query_file: "all_score_processor/sql/index4_t0040/output_data_processing/all_score_index4_t0040_unnested_comparison.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+all_score_trs_t0090_post_model_inference:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "credit-risk"
+    business_impact: "TRS T0090 post-model inference outputs will not be available for analysis and validation"
+    customer_impact: "No direct customer impact - internal analytics only"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TRS T0090 post-model inference data processing: unnested output table generation for business analytics."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  bigquery_tasks:
+    - task_id: "insert_output_trs_t0090_unnested"
+      query_file: "all_score_processor/sql/trs_t0090/output_data_processing/all_score_trs_t0090_unnested.sql"
+      replacements:
+        "{dag_id}": "{{ dag.dag_id }}"
+
+one_time_create_function_get_report_month:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "TRS T0090"
+    severity: "P3"
+    business_impact: "Enables monthly PCMC report and scoring prep to use get_report_month in Data Depot."
+    customer_impact: "None"
+  dag:
+    dagrun_timeout: 600
+    description: "One-time DAG to create/replace domain_scoring.get_report_month in landing (Data Depot)."
+    tags: ["team-defenders-alerts" , "P3" , "bigquery", "one-time", "scoring", "trs_t0090", "get_report_month"]
+  bigquery_tasks:
+    - task_id: create_function_get_report_month
+      query_file: all_score_processor/sql/trs_t0090/scoring_features/scoring_prep_create_function_get_report_month.sql
+      project_id: pcb-{env}-landing
+      dataset_id: domain_scoring
+
+all_score_index4_t0040_extract_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Index4 T0040 file generation will be blocked without extracted data"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Index4 T0040 scoring solution pcb-{env}-curated.domain_scoring.OUTPUT_INDEX4_T0040 file extract."
+    tags: ["team-defenders-alerts", "P3", "index4-t0040", "extract"]
+    read_pause_deploy_config: True
+  bigquery_tasks:
+    - task_id: "extract_bq_table"
+      query_file: "all_score_processor/sql/index4_t0040/output_data_processing/all_score_index4_t0040_extract.sql"
+      replacements:
+        "{output_uri_processing}": "gs://pcb-{env}-staging-extract/all_score/index4_t0040/extract/output-*.txt"
+        "{client_id}": "7607"
+        "{record_type}": "SC01"
+        "{reject_code}": ""
+        "{account_number}": ""
+        "{filler_1}": ""
+        "{filler_2}": ""
+        "{primary_customer_id}": "0"
+        "{customer_type}": "0"
+        "{filler_3}": ""
+        "{score_type}": "T0040"
+        "{score_calc_date}": "0"
+        "{score_calc_time}": "0"
+        "{score_raw_sign}": "+"
+        "{score_aligned_sign}": "+"
+        "{score_source}": ""
+        "{rating_grade}": ""
+        "{bureau_id}": "10"
+        "{market_address_code}": ""
+        "{score_reason_3}": ""
+        "{score_reason_4}": ""
+        "{reason_diff_1_sign}": "+"
+        "{reason_diff_1}": ""
+        "{reason_diff_2_sign}": "+"
+        "{reason_diff_2}": ""
+        "{reason_diff_3_sign}": "+"
+        "{reason_diff_3}": ""
+        "{reason_diff_4_sign}": "+"
+        "{reason_diff_4}": ""
+        "{acct_relation_code}": ""
+        "{operator_id}": ""
+        "{user_defined_1}": ""
+        "{user_defined_2}": ""
+        "{user_defined_3}": ""
+        "{user_defined_s1_sign}": "+"
+        "{user_defined_s1}": "0"
+        "{user_defined_s2_sign}": "+"
+        "{user_defined_s2}": "0"
+        "{tts_dollar_value}": "0"
+        "{inquiry_flag}": ""
+        "{low_range_sign}": "+"
+        "{low_score_range}": "0"
+        "{high_range_sign}": "+"
+        "{high_score_range}": "0"
+        "{percentile_ranking}": "0"
+        "{filler_4}": ""
+        "{score_type_2}": ""
+
+esso_customers_missing_points:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "ESSO"
+    severity: "P4"
+    business_impact: "No Impact, since this is analytical data"
+    customer_impact: "No Impact, since this is analytical data"
+    retries: 1
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2026-01-01"
+    catchup: false
+    schedule_interval: "00 15 * * 1"
+    description: "Weekly reconciliation of PCF Esso transactions with PCO to identify missing loyalty points"
+    tags: [ "team-convergence-alerts" , "P4" ]
+  bigquery_tasks:
+    - task_id: "insert_customers_missing_transactions"
+      query_file: "loyalty_processing/esso_customers_missing_points.sql"
+      env_specific_replacements: true
+      replacements:
+        common:
+          "{days_transaction}": "7"
+        dev:
+          "{table_cnsld_latest}": "pcb-dev-landing.domain_loyalty.cnsld_ee_wallt_acct_tran_latst"
+          "{campaign_num}": "'102632022'"
+        uat:
+          "{table_cnsld_latest}": "pcb-uat-landing.domain_loyalty.cnsld_ee_wallt_acct_tran_latst"
+          "{campaign_num}": "'102632022'"
+        prod:
+          "{table_cnsld_latest}": "lt-dia-lake-prd-consume.transactional_loyalty.cnsld_ee_wallt_acct_tran_latst"
+          "{campaign_num}": "'111223382'"

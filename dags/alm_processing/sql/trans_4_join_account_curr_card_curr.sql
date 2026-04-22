@@ -1,0 +1,28 @@
+CREATE OR REPLACE VIEW `pcb-{env}-processing.cots_alm_tbsm.ASSET_CC_RECV_TRANS_4` AS
+SELECT 
+    AC.CIFP_ACCOUNT_ID5,
+    AC.CIFP_CUR_CASH_ADV_CTD,
+    AC.CIFP_PURCHASE_APR,
+    AC.CIFP_CASH_APR,
+    AC.CIFP_DATE_OPEN,
+    AC.CIFP_MINIMUM_PAY_DUE,
+    AC.CIFP_CURRENT_BALANCE,
+    AC.CIFP_CURRENT_CRED_SC,
+    AC.CIFP_CONS_DAYS_PASTDUE,
+    AC.CIFP_CREDIT_LIMIT,
+    CA.CIFP_STATE,
+    CA.CIFP_CUSTOMER_ID_2,
+    CA.CIFP_ACCOUNT_ID6,
+    CA.REC_LOAD_TIMESTAMP
+FROM 
+    pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR AC
+JOIN 
+    pcb-{env}-curated.domain_account_management.CIF_CARD_CURR CA 
+ON
+    AC.CIFP_ACCOUNT_ID5 = CA.CIFP_ACCOUNT_ID6
+WHERE 
+    AC.CIFP_CLIENT_PRODUCT_CODE IN ({cifp_client_product_code_val})
+    AND
+    (CA.CIFP_RELATIONSHIP_STAT IS NULL
+    OR CA.CIFP_RELATIONSHIP_STAT IN ({cifp_relationship_stat_val}))
+    AND CA.CIFP_CUSTOMER_TYPE = {cifp_customer_type_val}

@@ -1,0 +1,21 @@
+pcb_ops_monsbm_file_generation:
+  pcmc:
+    bank_number: 7637
+    esid: 7637AD
+  eda:
+    bank_number: 9384
+    esid: 9384AD
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  transformation_config: fee_reversal/transformation_rules/fee_reversal_transformation_rules.yaml
+  character_set: 'cp037'
+  email:
+    subject: "TSYS DRAFT5 Submission Request (C86 {product})"
+    approver: ""
+    description: "Draft5 - C86 Refund"
+    batch_type: "Draft5 - C86 Refund"
+    purpose: "For {product} - Refund"
+    recipients:
+      dev: "Rasika.chaudhari@loblaw.ca"
+      uat: "radhika.solanki@pcbank.ca, Madhu.Chatterjee@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"

@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R10 @@@@           -->
+	<xsd:complexType
+    name="R10Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Cotisant">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="NAS"
+              type="NasType">
+							
+						</xsd:element>
+						<xsd:element
+              name="NoReference"
+              type="Char10Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NomFamille"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Prenom"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Initiale"
+              type="Char1Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct"
+              minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="RentierNonCotisant"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="NAS"
+              type="NasType">
+							
+						</xsd:element>
+						<xsd:element
+              name="NomFamille"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Prenom"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Initiale"
+              type="Char1Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R10MntStruct" />
+			<xsd:element
+        name="RecuREER"
+        minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="MontantContribution"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NoContratAdhesion"
+              type="Char20Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="TransfertCoursAnnee"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NoRecuREER"
+              type="Char12Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="DateEmissionRecu"
+              type="DateType"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R10MntStruct">
+		<xsd:choice>
+			<xsd:element
+        name="FSTQ"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="AnneeVersement"
+              type="Indicateur1-2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="A_SommeVersee"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="B_CreditImpotCaseA"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C_RembAction"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="D_CreditImpotAnnule"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="E_ActionRemplacement"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="SourceCaseE"
+              type="Indicateur1-2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="F_ImpotSpecialCaseE"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Indicateur"
+              type="IndicateurI-RType"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Date"
+              type="DateType"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Fondaction"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="AnneeVersement"
+              type="Indicateur1-2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="G_SommeVersee"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="H_CreditImpotCaseG"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="I_RembAction"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="J_CreditImpotAnnule"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="K_ActionRemplacement"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="SourceCaseK"
+              type="Indicateur1-2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="L1_ImpotSpecialCaseK"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="L2_ImpotSpecialCaseK"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="L3_ImpotSpecialCaseK"
+              type="Decimal9Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Indicateur"
+              type="IndicateurI-RType"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Date"
+              type="DateType"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+</xsd:schema>

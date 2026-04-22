@@ -1,0 +1,24 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+- folder_name: trs-t90/approved
+  filename_pattern: ^trs_exec_.*\.json$
+  dags_to_trigger: [all_score_trs_t0090_business_approval_workflow_job]
+
+- folder_name: trs-t90/rejected
+  filename_pattern: ^trs_exec_.*\.json$
+  dags_to_trigger: [all_score_trs_t0090_business_rejection_workflow_job]
+
+- folder_name: index4-t40/approved
+  filename_pattern: ^trs_exec_.*\.json$
+  dags_to_trigger: [all_score_index4_t0040_business_approval_workflow_job]
+
+- folder_name: index4-t40/rejected
+  filename_pattern: ^trs_exec_.*\.json$
+  dags_to_trigger: [all_score_index4_t0040_business_rejection_workflow_job]

@@ -1,0 +1,7 @@
+landing_zone_tsys_tcs_purge_case_details_cleanup:
+  table_ref: pcb-{env}-landing.domain_dispute.TSYS_TCS_PURGE_CASE_DETAILS
+  filter: "REC_LOAD_TIMESTAMP IN ('2025-11-06T22:00:51.063866','2025-11-06T22:01:11.719277')"
+
+landing_zone_tsys_tcs_purge_case_image_metadata_cleanup:
+  table_ref: pcb-{env}-landing.domain_dispute.TSYS_TCS_PURGE_CASE_IMAGE_METADATA
+  filter: "REC_LOAD_TIMESTAMP = '2026-02-05T02:03:58'"

@@ -1,0 +1,5 @@
+tasks:
+  - task_id: "call_replace_all_env_in_dict"
+    args:
+      "config": { "env": "pcb-{env}-curated" }
+      "deploy_env": "dev"

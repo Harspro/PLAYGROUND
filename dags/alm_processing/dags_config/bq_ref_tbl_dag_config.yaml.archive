@@ -1,0 +1,62 @@
+alm_account_balance_ref_table_load:
+  file:
+    prefix: alm_account_balance_ref
+  bigquery:
+    destination_project_id: pcb-{env}-landing
+    destination_dataset_id: domain_treasury
+    table_name: ALM_ACCOUNT_BALANCE_REF
+    ref_tables_folder: alm_processing/ref_tables
+
+alm_credit_score_ref_table_load:
+  file:
+    prefix: alm_credit_score_ref
+  bigquery:
+    destination_project_id: pcb-{env}-landing
+    destination_dataset_id: domain_treasury
+    table_name: ALM_CREDIT_SCORE_REF
+    ref_tables_folder: alm_processing/ref_tables
+
+alm_card_type_ref_table_load:
+  file:
+    prefix: alm_card_type_ref
+  bigquery:
+    destination_project_id: pcb-{env}-landing
+    destination_dataset_id: domain_treasury
+    table_name: ALM_CARD_TYPE_REF
+    ref_tables_folder: alm_processing/ref_tables
+
+alm_age_of_portfolio_ref_table_load:
+  file:
+    prefix: alm_age_of_portfolio_ref
+  bigquery:
+    destination_project_id: pcb-{env}-landing
+    destination_dataset_id: domain_treasury
+    table_name: ALM_AGE_OF_PORTFOLIO_REF
+    ref_tables_folder: alm_processing/ref_tables
+
+alm_credit_limit_ref_table_load:
+  file:
+    prefix: alm_credit_limit_ref
+  bigquery:
+    destination_project_id: pcb-{env}-landing
+    destination_dataset_id: domain_treasury
+    table_name: ALM_CREDIT_LIMIT_REF
+    ref_tables_folder: alm_processing/ref_tables
+
+alm_days_delq_am02_bal_cur_ref_table_load:
+  file:
+    prefix: alm_days_delq_am02_bal_cur_ref
+  bigquery:
+    destination_project_id: pcb-{env}-landing
+    destination_dataset_id: domain_treasury
+    table_name: ALM_DAYS_DELQ_AM02_BAL_CUR_REF
+    ref_tables_folder: alm_processing/ref_tables
+
+alm_days_delq_am00_statc_cur_ref_table_load:
+  file:
+    prefix: alm_days_delq_am00_statc_cur_ref
+  bigquery:
+    destination_project_id: pcb-{env}-landing
+    destination_dataset_id: domain_treasury
+    table_name: ALM_DAYS_DELQ_AM00_STATC_CUR_REF
+    ref_tables_folder: alm_processing/ref_tables

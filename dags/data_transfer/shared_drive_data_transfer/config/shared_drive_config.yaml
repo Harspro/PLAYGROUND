@@ -1,0 +1,167 @@
+p_delete:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB08/Delete"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBPDSSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "pds.svc.password"
+
+n_erm:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB06/Enterprise Risk Management\\PCB\\Corporate - ERM"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBERMSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "erm.svc.password"
+
+m_common:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB05/Common"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBPDSSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "pds.svc.password"
+
+l_decision_support:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB04/Decision Support"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBPDSSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "pds.svc.password"
+
+m_decision_support:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB05/Decision Support"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBPDSSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "pds.svc.password"
+
+k_acquisition:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB03/Risk Management/Acquisition"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBRISKSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "risk.svc.password"
+
+i_collections:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB01/Risk Management/Collections"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBRISKSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "risk.svc.password"
+
+i_portfolio_management:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB01/Risk Management/Portfolio Management"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBRISKSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "risk.svc.password"
+
+i_reporting_forecasting:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB01/Risk Management\\Reporting & Forecasting"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBRISKSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "risk.svc.password"
+
+i_scoring:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB01/Risk Management/Scoring"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBRISKSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "risk.svc.password"
+
+j_fraud:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DFSPCB02/FRAUD\\Corporate\\F25 Risk Management"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBFRAUDSHARE
+      secret_path: "/secret/data/terminus/ctera"
+      secret_key: "fraud.svc.password"
+
+dfspcbalmuat:
+    nonprod:
+      ctera_shared_folder: "DFSPCBALMUAT/UAT/poc_data_movement"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIUAT
+      secret_path: "/uat-secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPIUAT"
+    prod:
+      ctera_shared_folder: "DESPCB05/Decision Support"
+      hostname: "vllscetpr02.ngco.com"
+      username: LCE\SVCPCBALMSHAREAPIPROD
+      secret_path: "/secret/data/alm"
+      secret_key: "SVCPCBALMSHAREAPI"

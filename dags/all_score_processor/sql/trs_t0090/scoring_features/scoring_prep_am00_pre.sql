@@ -1,0 +1,17 @@
+INSERT INTO
+  `pcb-{env}-landing.domain_scoring.SCORING_PREP_AM00_PRE`
+  (
+  MAST_ACCOUNT_ID,
+  APP_NUMBER,
+  OPEN_DT,
+  REC_LOAD_TIMESTAMP,
+  JOB_ID
+)
+SELECT DISTINCT
+  CAST(am00_pre2018.MAST_ACCOUNT_ID AS STRING) AS MAST_ACCOUNT_ID,
+  CAST(am00_pre2018.APP_NUMBER AS STRING) AS APP_NUMBER,
+  am00_pre2018.open_dt AS OPEN_DT,
+  CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP,
+  '{dag_id}' AS JOB_ID
+FROM
+  `pcb-{deploy-env}-creditrisk-scoring.DD_TABLE.AM00_PRE2018` as am00_pre2018;

@@ -1,0 +1,5 @@
+feeds_list: >-
+  BPAY, BTFR, EPUL, EPSH, NPFI, NPFO, INAD, INAR, INSE, INMR, INCA, INRC, INRR
+destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+bq_table.name: TRANSACTION_FEED_USER_TRACEABILITY
+bq_table.partitioning_column: POSTED_DATE

@@ -1,0 +1,66 @@
+import pendulum
+from airflow import DAG, settings
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from airflow.utils.trigger_rule import TriggerRule
+from airflow.utils.task_group import TaskGroup
+import logging
+from util.constants import (STAGING_BUCKET, STAGING_FOLDER, BIGQUERY,
+                            BQ_DESTINATION_DATASET, BQ_DESTINATION_TABLE_NAME,
+                            FILE, PREFIX, FREQUENCY, OUTBOUND_BUCKET, OUTBOUND_FOLDER)
+from alm_processing.utils import constants as alm_constants
+from alm_processing.utils import alm_util as almutils
+from alm_processing.utils import bq_util as bqutil
+from etl_framework.etl_dag_base import ETLDagBase
+
+
+class AlmETLDataLoader(ETLDagBase):
+    def __init__(self, module_name, config_path, config_filename, dag_default_args):
+        super().__init__(module_name, config_path, config_filename, dag_default_args)
+
+    def preprocessing_job(self, config: dict, upstream_task: list):
+        pass
+
+    def postprocessing_job(self, config: dict, upstream_task: list):
+        activity_var = config.get(alm_constants.ACTIVITY_NAME, '')
+
+        task_grp_id = f'{activity_var}_post_trans_job'
+
+        with TaskGroup(group_id=task_grp_id):
+            task = PythonOperator(
+                task_id=f"{activity_var}_update_stage_tbl_hdr_trl_metadata",
+                python_callable=almutils.update_stage_tbl_metadata,
+                op_args=[config[BIGQUERY][BQ_DESTINATION_DATASET],
+                         config[BIGQUERY][BQ_DESTINATION_TABLE_NAME],
+                         config[FILE][PREFIX],
+                         config[FILE][FREQUENCY]])
+            upstream_task.append(task)
+
+            task = PythonOperator(
+                task_id=f"{activity_var}_load_data_from_stgtbl_to_maintbl",
+                python_callable=almutils.copy_data_stgtbl_to_maintbl,
+                op_args=[config[BIGQUERY][BQ_DESTINATION_DATASET],
+                         config[BIGQUERY][BQ_DESTINATION_TABLE_NAME]])
+            upstream_task.append(task)
+
+            task = PythonOperator(
+                task_id=f"{activity_var}_export_table_to_gcs",
+                python_callable=bqutil.export_bq_table_parquet,
+                op_args=[config[STAGING_BUCKET],
+                         config[STAGING_FOLDER],
+                         config[BIGQUERY][BQ_DESTINATION_DATASET],
+                         config[BIGQUERY][BQ_DESTINATION_TABLE_NAME],
+                         config[FILE][PREFIX],
+                         config[FILE][FREQUENCY], config])
+            upstream_task.append(task)
+
+            task = PythonOperator(
+                task_id=f"{activity_var}_copy_object_to_outbound_bucket_task",
+                python_callable=almutils.copy_and_cleanup,
+                op_args=[config[STAGING_BUCKET],
+                         config[STAGING_FOLDER],
+                         config[OUTBOUND_BUCKET],
+                         config[OUTBOUND_FOLDER], config])
+            upstream_task.append(task)
+
+        return upstream_task

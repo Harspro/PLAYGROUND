@@ -1,0 +1,36 @@
+truncate-bigquery-fundsmove-tables-job:
+  dag_owner: "team-defenders-alerts"
+  tags:
+    - P3
+  backup_enabled: "true"
+  tables:
+    - pcb-{env}-landing.domain_payments.AUTHORIZATION_FULFILLMENT
+    - pcb-{env}-landing.domain_payments.BILLPAY_FULFILLMENT
+    - pcb-{env}-landing.domain_payments.BILLPAY_OPACCT_REQ
+    - pcb-{env}-landing.domain_payments.BILLPAY_OPACCT_REQSTATUS
+    - pcb-{env}-landing.domain_payments.CARD_DEPOSIT_FULFILLMENT
+    - pcb-{env}-landing.domain_payments.CPA_AUTOPAY_REQ
+    - pcb-{env}-landing.domain_payments.CPA_AUTOPAY_REQ_STATUS
+    - pcb-{env}-landing.domain_payments.EDI_PYMT_INB_REQ
+    - pcb-{env}-landing.domain_payments.EDI_PYMT_INB_REQ_STATUS
+    - pcb-{env}-landing.domain_payments.EFT_EXTORIGIN_REQ
+    - pcb-{env}-landing.domain_payments.EFT_EXTORIGIN_REQ_STAT
+    - pcb-{env}-landing.domain_payments.EFT_PCBORIGIN_IN_REQ
+    - pcb-{env}-landing.domain_payments.EFT_PCBORIGIN_IN_REQ_STAT
+    - pcb-{env}-landing.domain_payments.EFT_PCBORIGIN_OUT_REQ_STAT
+    - pcb-{env}-landing.domain_payments.FUNDSMOVE_AUTHORIZATION
+    - pcb-{env}-landing.domain_payments.FUNDSMOVE_GL_REQ
+    - pcb-{env}-landing.domain_payments.FUNDSMOVE_GL_REQ_STATUS
+    - pcb-{env}-landing.domain_payments.FUNDSMOVE_INSTRUCTION
+    - pcb-{env}-landing.domain_payments.INTERAC_DEPOSIT_REQ
+    - pcb-{env}-landing.domain_payments.INTERAC_DEPOSIT_REQ_STATUS
+    - pcb-{env}-landing.domain_payments.INTERAC_INSTRUCTION_RECV
+    - pcb-{env}-landing.domain_payments.INTERAC_INSTRUCTION_SEND
+    - pcb-{env}-landing.domain_payments.INTERAC_RECIPIENT
+    - pcb-{env}-landing.domain_payments.INTERAC_SEND_XFER_REQ
+    - pcb-{env}-landing.domain_payments.INTERAC_SEND_XFER_REQ_STAT
+    - pcb-{env}-landing.domain_payments.MOVEMONEY_FULFILLMENT
+    - pcb-{env}-landing.domain_payments.PCF_FUNDSMOVE_AUTH_REQ
+    - pcb-{env}-landing.domain_customer_management.PLATFORM_USER_LOGIN
+    - pcb-{env}-landing.domain_payments.TELPAY_PYMT_INB_REQ
+    - pcb-{env}-landing.domain_payments.TELPAY_PYMT_INB_REQ_STATUS

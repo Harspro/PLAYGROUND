@@ -1,0 +1,39 @@
+cli_offer_event_kafka_publish:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P4"
+    sub_capability: "account-management"
+    business_impact: "This dag loads tsys event 974(CLI) into kafka topic: dp-core-{env}-credit-limit-increase-offer."
+    customer_impact: "In the event of a failure, latest CLI offer for the customers will not be available in the DP."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/cli_offer/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/cli_offer/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/cli_offer/cli_offer_event_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/cli_offer/cli_offer_event_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/cli_offer/cli_offer_event_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: cli_offer_event_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: cli_offer_event_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: id
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+    pcb.file.kafka.connector.schema.file.path: cli_offer_event_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_cli_event
+    read_pause_deploy_config: False
+    tags: [ "Digital-Adoption" ]
+    job_size: extra_small
+    dataproc_cluster_name: cli-offer-event
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_account_management
+    query_file: digital_adoption/sql/cli_offer_kafka.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: digital-adoption
+    file_name: cli-offer-event

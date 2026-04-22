@@ -1,0 +1,19 @@
+landing_zone_CREDSCORE_DAS_restore:
+  dag_owner: "team-defenders-alerts"
+  tables:
+    - pcb-{env}-landing.domain_scoring.CREDSCORE_DAS
+
+landing_zone_CREDSCORE_T0010_restore:
+  dag_owner: "team-defenders-alerts"
+  tables:
+    - pcb-{env}-landing.domain_scoring.CREDSCORE_T0010
+
+landing_zone_CREDSCORE_T0030_restore:
+  dag_owner: "team-defenders-alerts"
+  tables:
+    - pcb-{env}-landing.domain_scoring.CREDSCORE_T0030
+
+processing_zone_TRANSACTION_FEED_CONTROL_TABLE_restore:
+  dag_owner: "team-defenders-alerts"
+  tables:
+    - pcb-{env}-processing.domain_aml.TRANSACTION_FEED_CONTROL_TABLE

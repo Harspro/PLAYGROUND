@@ -1,0 +1,46 @@
+spark_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/table-comparator-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/table-comparator/application-loyalty-db610-pcl.yaml
+  main_class: com.pcb.batch.spark.table.comparator.ComparatorSparkBatchApplication
+  application_config: application-loyalty-db610-pcl.yaml
+  job_history_path: gs://pcb-{env}-staging-extract/job_history/
+
+default_args:
+  owner: "team-convergence-alerts"
+  capability: "Loyalty"
+  severity: "P2"
+  sub_capability: "Rewards"
+  business_impact: "This will impact the loading of ESSO merchants into DB610 PCL.MERCHANT_CODE table. The merchant list is used to block ESSO transactions from getting the points from these locations."
+  customer_impact: "If ESSO adds a new store and we receive transactions, the PC points will be awarded (Costing implication: Customer gets extra points)."
+
+read_pause_deploy_config: True
+
+job_size: "extra_small"
+
+tags: ["Loyalty"]
+
+args:
+  batch_size: 5
+
+dataproc_cluster_name: "esso-merchant-c"
+
+test-cases:
+  - case.name: LOYALTY-PCL-MERCHANT-CODE
+    source.database: DB610
+    source.table: PCL.MERCHANT_CODE
+    bigquery.table: pcb-{env}-curated:domain_loyalty.MERCHANT
+    select.columns: MRCH_ID
+    is.enabled: True
+    anti.right: TRUE
+    write.to.source: TRUE
+    query.split.regex: ":"
+    source.dataframe: MRCH_ID
+    target.dataframe: >-
+      MRCH_ID:
+      CONCAT('ESSO - ', MRCH_ID) as MRCH_NM:
+      CAST(Null as integer) as MCC:
+      'A' as STAT:
+      'gcp_loyalty_{env}' as REC_CHNG_ID:
+      FROM_UTC_TIMESTAMP(CURRENT_TIMESTAMP(), 'America/Toronto') as REC_CHNG_TMS

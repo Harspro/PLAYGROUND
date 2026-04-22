@@ -1,0 +1,22 @@
+gcs_to_gcs_test_dag:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    description: "GCS to GCS task DAG. This DAG will copy files from one bucket to another."
+    tags: [ "team-defenders-alerts", "P2" ]
+    dagrun_timeout: 120
+    source_bucket: "test_gcs_to_gcs_inbound"
+    source_object: "*"
+    source_objects: []
+    destination_bucket: "test_gcs_to_gcs_outbound"
+    destination_object: ""
+    move_object: False
+    replace: ""
+    match_glob: ""

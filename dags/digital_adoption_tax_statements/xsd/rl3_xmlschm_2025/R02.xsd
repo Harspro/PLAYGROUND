@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2016 rel. 2 sp1 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R02 @@@@           -->
+	<xsd:complexType
+    name="R02Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Beneficiaire">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="NAS"
+              type="NasType">
+							
+						</xsd:element>
+						<xsd:element
+              name="No"
+              type="Char20Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NomFamille"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Prenom"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Initiale"
+              type="Char1Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R02MntStruct"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="RRQ_RPC"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="IndiceRetroactivite">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:enumeration
+                    value="O" />
+									<xsd:enumeration
+                    value="N" />
+									<xsd:enumeration
+                    value="o" />
+									<xsd:enumeration
+                    value="n" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="NombreRetroactivite"
+              minOccurs="0">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:integer">
+									<xsd:minInclusive
+                    value="1" />
+									<xsd:maxInclusive
+                    value="99" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="Retroactivite"
+              minOccurs="0"
+              maxOccurs="6">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="Annee"
+                    type="Numeric4Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Montant"
+                    type="Decimal8Type">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="CaseRensCompl"
+        minOccurs="0"
+        maxOccurs="4">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="CodeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="Char5Type">
+									<xsd:pattern
+                    value="[Aa]\-1|[Bb]\-[1-4]|[Cc]\-[1-36-9]|[Cc]\-4[A-Fa-f]|[Cc]\-10|201|210|235" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="DonneeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:minLength
+                    value="1" />
+									<xsd:maxLength
+                    value="15" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R02MntStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="A_PrestRPA"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="B_PrestationsOuRentes"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="C_AutrePaiement"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="D_RembPrimeConjoint"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="E_PrestDeces"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="F_RembCotisInutilise"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="G_RevocationREER_FERR"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="H_AutreRevenu"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="I_DroitDeduction"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="J_ImpotQueRetenuSource"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="K_RevenuApresDeces"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="L_RetraitREEP"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="M_LibereImpot"
+        type="Decimal9Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="N_NASConjoint"
+        type="NasType"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="O_RetraitRAP"
+        type="Decimal12Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="Provenance">
+				
+				<xsd:simpleType>
+					<xsd:restriction
+            base="xsd:string">
+						<xsd:enumeration
+              value="FERR-A" />
+						<xsd:enumeration
+              value="FERR-D" />
+						<xsd:enumeration
+              value="FERR-F" />
+						<xsd:enumeration
+              value="RAP" />
+						<xsd:enumeration
+              value="RE" />
+						<xsd:enumeration
+              value="REEP" />
+						<xsd:enumeration
+              value="REER-A" />
+						<xsd:enumeration
+              value="REER-D" />
+						<xsd:enumeration
+              value="REER-F" />
+						<xsd:enumeration
+              value="REPA" />
+						<xsd:enumeration
+              value="RO" />
+						<xsd:enumeration
+              value="RPA" />
+						<xsd:enumeration
+              value="RPAC" />
+						<xsd:enumeration
+              value="RPC" />
+						<xsd:enumeration
+              value="RPDB" />
+						<xsd:enumeration
+              value="RPNA" />
+						<xsd:enumeration
+              value="RRQ" />
+						<xsd:enumeration
+              value="RVDAA" />
+						<xsd:enumeration
+              value="RVER" />
+						<xsd:enumeration
+              value="ferr-a" />
+						<xsd:enumeration
+              value="ferr-d" />
+						<xsd:enumeration
+              value="ferr-f" />
+						<xsd:enumeration
+              value="rap" />
+						<xsd:enumeration
+              value="re" />
+						<xsd:enumeration
+              value="reep" />
+						<xsd:enumeration
+              value="reer-a" />
+						<xsd:enumeration
+              value="reer-d" />
+						<xsd:enumeration
+              value="reer-f" />
+						<xsd:enumeration
+              value="repa" />
+						<xsd:enumeration
+              value="ro" />
+						<xsd:enumeration
+              value="rpa" />
+						<xsd:enumeration
+              value="rpac" />
+						<xsd:enumeration
+              value="rpc" />
+						<xsd:enumeration
+              value="rpdb" />
+						<xsd:enumeration
+              value="rpna" />
+						<xsd:enumeration
+              value="rrq" />
+						<xsd:enumeration
+              value="rvdaa" />
+						<xsd:enumeration
+              value="rver" />
+						<xsd:enumeration
+              value="Autre" />
+						<xsd:enumeration
+              value="AUTRE" />
+						<xsd:enumeration
+              value="autre" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

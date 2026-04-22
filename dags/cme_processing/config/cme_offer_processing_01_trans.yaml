@@ -1,0 +1,42 @@
+transformation:
+   - task_name: fetch_cli_offers_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+        script_path: sql/cme01_cli_offer_data_fetch.sql
+   - task_name: fetch_aau_offers_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+         script_path: sql/cme01_aau_offer_data_fetch.sql
+   - task_name: fetch_pch_offers_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+         script_path: sql/cme01_pch_offer_data_fetch.sql
+   - task_name: fetch_all_offers_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+         script_path: sql/cme01_all_offer_data_fetch.sql
+   - task_name: join_customer_cust_lookup_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/cme_customer_custlookup_join.sql
+   - task_name: join_cmestage_custlookup_join_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/cme_batch_stg_custlookup_join.sql
+   - task_name: extract_offer_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/cme_batch_offer_join.sql
+   - task_name: prepare_cme_customer_data_update
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/cme_customer_data_update_stg.sql
+   - task_name: prepare_cme_customer_lookup_data_load
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/cme_customer_lookup_append_data.sql
+   - task_name: prepare_cme_disposition_data_load
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/cme_dispostion_append_first.sql
+

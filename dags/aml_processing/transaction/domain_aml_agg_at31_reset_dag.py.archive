@@ -1,0 +1,82 @@
+from datetime import datetime
+
+from aml_processing.transaction.bq_util import run_bq_dml_with_log
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from aml_processing import feed_commons as commons
+from aml_processing.transaction.agg_domain_at31 import BQTABLE_TRANSACTION_AGG_CONTROL, AGG_BQTABLE_AT31
+
+
+class DomainAMLAggAT31Reset():
+
+    @staticmethod
+    def get_ctl_reset_sql() -> str:
+        sql = f"""
+             DELETE
+             FROM `{BQTABLE_TRANSACTION_AGG_CONTROL}` c
+             WHERE  1 = 1
+        """
+        return sql
+
+    @staticmethod
+    def reset_ctl_table():
+        sql = DomainAMLAggAT31Reset.get_ctl_reset_sql()
+        run_bq_dml_with_log(f"Resetting aggregate txn control table:'{BQTABLE_TRANSACTION_AGG_CONTROL}'",
+                            f"Completed resetting aggregate txn control table:'{BQTABLE_TRANSACTION_AGG_CONTROL}'",
+                            sql)
+
+    @staticmethod
+    def get_agg_at31_table_reset_sql() -> str:
+        sql = f"""
+             DELETE
+             FROM `{AGG_BQTABLE_AT31}` c
+             WHERE  1 = 1
+        """
+        return sql
+
+    @staticmethod
+    def reset_agg_at31_table():
+        sql = DomainAMLAggAT31Reset.get_agg_at31_table_reset_sql()
+        run_bq_dml_with_log(f"Resetting aggregate txn table:'{AGG_BQTABLE_AT31}'",
+                            f"Completed resetting aggregate txn table:'{AGG_BQTABLE_AT31}'",
+                            sql)
+
+
+# Creating DAG
+tags = commons.TAGS.copy()
+tags.append("domain_aml")
+# Modify the default_args dictionary
+custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+custom_default_args['business_impact'] = 'This is an on-demand process to reset AML Transaction Aggregation table in case it is required.  Transaction feeds to Verafin will not accurate if AML Transaction aggregate table is not up-to-date.'
+
+with DAG(
+        "domain_aml_agg_at31_reset",
+        is_paused_upon_creation=True,
+        description="Reset aggregate pipeline (control table and agg table) for transactions from AT31 within domain_aml dataset",
+        default_args=custom_default_args,
+        start_date=datetime(2023, 1, 1, tzinfo=commons.TORONTO_TZ),
+        end_date=None,
+        schedule=None,
+        tags=tags,
+        max_active_runs=1,
+        catchup=False
+) as dag:
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+    pipeline_complete = EmptyOperator(task_id='end')
+
+    agg_at31_ctl_reset_task = PythonOperator(
+        task_id="run_agg_at31_ctl_reset",
+        python_callable=DomainAMLAggAT31Reset.reset_ctl_table,
+        op_args=[],
+        trigger_rule="all_success"
+    )
+
+    agg_at31_table_reset_task = PythonOperator(
+        task_id="run_agg_at31_table_reset",
+        python_callable=DomainAMLAggAT31Reset.reset_agg_at31_table,
+        op_args=[],
+        trigger_rule="all_success"
+    )
+
+    pipeline_start >> agg_at31_ctl_reset_task >> agg_at31_table_reset_task >> pipeline_complete

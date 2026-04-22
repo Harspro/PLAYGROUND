@@ -1,0 +1,20 @@
+WITH LABELED_DATA AS (
+    SELECT
+        SEQ_NUM,
+        ACCOUNT_ID,
+        CUSTOMER_ID,
+        CYCLE,
+        PRINTED_DATE,
+        PROCESSED_TMS,
+        NUM_OF_PAGES,
+        NUM_OF_INSERTS,
+        NUM_OF_OFFERS,
+        MSG_INSERT_ID,
+        OFFER_ID,
+        REASON,
+        CONTENTS_TYPE,
+        EXTRA_PAGE_ID,
+        ROW_NUMBER() OVER (PARTITION BY SEQ_NUM ORDER BY PRINTED_DATE DESC) AS REC_RANK
+    FROM
+        `pcb-{env}-landing.domain_marketing.STMT_CME_FEEDBACK` )
+SELECT * EXCEPT(REC_RANK) FROM LABELED_DATA WHERE REC_RANK=1

@@ -1,0 +1,23 @@
+tsys_triad_variable_limits:
+  cda_external_table:
+    table_name: pcb-{env}-processing.domain_account_management.TRIAD_CDA_EXT
+    datasource: gs://pcb-{env}-staging-extract/triad/cda_outcome/*.parquet
+  calc_limits:
+    sql_fname: tsys_processing/sql/tsys_triad_limits.sql
+    cda_table_name: pcb-{env}-landing.domain_account_management.TSYS_CDA_OUTCOMES_TRIAD_RPT
+    output_path: gs://pcb-{env}-staging-extract/triad/cda_variable_limits/*.parquet
+    output_table: pcb-{env}-processing.domain_account_management.TRIAD_PCMA_VARIABLE_LIMITS_EXT
+    cust_cnt_threshold: 100000
+  store_limits:
+    table_name: pcb-{env}-landing.domain_account_management.TRIAD_PCMA_VARIABLE_LIMITS
+  trigger_dag:
+    dag_id: pcma_variable_limits_kafka_writer
+    cluster_name: pcma-variable-limits-c
+  description: DAG to calculate PCMA variable limits
+  business_impact: Calculate daily and weekly variable limits for funds transfer
+  customer_impact: In the event of a failure, funds transfer limits for PCF customers will not be updated
+  capability: Payments
+  sub_capability: EMT
+  severity: P3
+  tags:
+    - gold-alchemists, P3

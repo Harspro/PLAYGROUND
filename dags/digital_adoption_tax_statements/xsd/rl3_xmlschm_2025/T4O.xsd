@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v5 rel. 4 U (http://www.xmlspy.com) by Ministère du Revenu (MINISTERE DU REVENU DU QUEBEC) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du T4O         @@@@           -->
+	<xsd:complexType
+    name="T4OStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NbReleves"
+        type="Int9Type">
+				
+			</xsd:element>
+			<xsd:element
+        name="Organisme">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="NoId"
+              type="NoIdentificationType">
+							
+						</xsd:element>
+						<xsd:element
+              name="TypeDossier"
+              type="xsd:string"
+              fixed="RS">
+							
+						</xsd:element>
+						<xsd:element
+              name="NoDossier"
+              type="NoDossierType">
+							
+						</xsd:element>
+						<xsd:element
+              name="Nom1"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Nom2"
+              type="Char30Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

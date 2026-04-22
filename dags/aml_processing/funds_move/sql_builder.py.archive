@@ -1,0 +1,133 @@
+from util.miscutils import read_variable_or_file
+from typing import List
+
+# Constants
+DEPLOY_ENV = read_variable_or_file('gcp_config')['deployment_environment_name']
+TABLE_FUNDS_MOVE_CTL = f"pcb-{DEPLOY_ENV}-processing.domain_aml.FUNDS_MOVE_CTL"
+
+PROJECT_LANDING = f"pcb-{DEPLOY_ENV}-landing"
+PROJECT_CURATED = f"pcb-{DEPLOY_ENV}-curated"
+COLS_EXCLUDE = [x.upper() for x in ['timestamp', 'opType', 'currenttimestamp']]
+
+
+def sql_create_ctl_table() -> str:
+    sql = f"""CREATE TABLE IF NOT EXISTS {TABLE_FUNDS_MOVE_CTL}
+    ( RUN_ID STRING,
+      TABLE_NAME STRING,
+      CREATE_DT DATE,
+      POSITION STRING,
+      TIMESTAMP STRING,
+      CURRENTTIMESTAMP STRING,
+      OPTYPE STRING,
+      LAST_POS_FLAG STRING
+    ) PARTITION BY CREATE_DT
+    """
+    return sql
+
+
+def sql_insert_into_ctl(dataset_view_name: str, table_name: str) -> str:
+    sql = f""" INSERT INTO {TABLE_FUNDS_MOVE_CTL}(RUN_ID,TABLE_NAME,POSITION,TIMESTAMP,LAST_POS_FLAG,CURRENTTIMESTAMP,OPTYPE,CREATE_DT)
+               SELECT @dag_run_id,
+                      '{table_name}',
+                      POSITION,
+                      TIMESTAMP,
+                      'N',
+                      CURRENTTIMESTAMP,
+                      OPTYPE,
+                      CURRENT_DATE('America/Toronto')
+              FROM {PROJECT_LANDING}.{dataset_view_name} l
+              WHERE NOT EXISTS ( SELECT 1 FROM  {TABLE_FUNDS_MOVE_CTL} c
+                                 WHERE c.TABLE_NAME = '{table_name}'
+                                    AND c.POSITION = l.POSITION
+                                    AND c.TIMESTAMP = l.TIMESTAMP
+                                    AND c.CURRENTTIMESTAMP = l.CURRENTTIMESTAMP
+                                    AND c.OPTYPE = l.OPTYPE
+                               )
+    """
+    return sql
+
+
+def sql_create_curated_table(curated_dataset_view_name: str, curated_dataset_table_name: str) -> str:
+    cols_except = ",".join(COLS_EXCLUDE)
+    sql = f"""CREATE TABLE IF NOT EXISTS {PROJECT_CURATED}.{curated_dataset_table_name}
+              AS SELECT * EXCEPT({cols_except})
+              FROM {PROJECT_LANDING}.{curated_dataset_view_name}
+              WHERE 1 = 0
+    """
+    return sql
+
+
+def sql_update_ctl(curated_dataset_view_name: str, land_table_name: str, key_cols: str) -> str:
+    sql = f"""UPDATE {TABLE_FUNDS_MOVE_CTL} c
+              SET c.LAST_POS_FLAG =  'Y'
+              FROM (
+                   SELECT
+                        cx.RUN_ID,
+                        cx.TABLE_NAME,
+                        lr.POSITION,
+                        lr.TIMESTAMP,
+                        lr.CURRENTTIMESTAMP,
+                        lr.OPTYPE,
+                       ROW_NUMBER() OVER(PARTITION BY {key_cols}
+                             ORDER BY
+                              lr.POSITION DESC,
+                              lr.TIMESTAMP DESC,
+                              lr.CURRENTTIMESTAMP DESC
+                              ) POS_RANK
+                   FROM `{PROJECT_LANDING}.{curated_dataset_view_name}` lr INNER JOIN {TABLE_FUNDS_MOVE_CTL} cx on cx.POSITION = lr.POSITION
+                                                                                                        AND cx.TIMESTAMP = lr.TIMESTAMP
+                                                                                                        AND cx.CURRENTTIMESTAMP = lr.CURRENTTIMESTAMP
+                                                                                                        AND cx.OPTYPE = lr.OPTYPE
+                   WHERE cx.TABLE_NAME = '{land_table_name}'
+                       AND cx.CREATE_DT = CURRENT_DATE('America/Toronto')
+                       AND cx.run_id = @dag_run_id
+                  ) cr
+              WHERE   c.POSITION   = cr.POSITION
+                  AND c.TIMESTAMP = cr.TIMESTAMP
+                  AND c.CURRENTTIMESTAMP = cr.CURRENTTIMESTAMP
+                  AND c.OPTYPE = cr.OPTYPE
+                  AND c.TABLE_NAME = cr.TABLE_NAME
+                  AND c.CREATE_DT = CURRENT_DATE('America/Toronto')
+                  AND c.TABLE_NAME= '{land_table_name}'
+                  AND c.RUN_ID = cr.RUN_ID
+                  AND cr.POS_RANK = 1
+                  AND c.RUN_ID = @dag_run_id
+    """
+    return sql
+
+
+def sql_delete_curated_table(curated_dataset_table_name: str, curated_dataset_view_name: str, land_table_name: str, key_cols_match: str) -> str:
+    sql = f"""DELETE FROM {PROJECT_CURATED}.{curated_dataset_table_name} cr
+              WHERE EXISTS ( SELECT 1
+                             FROM {PROJECT_LANDING}.{curated_dataset_view_name} l INNER JOIN {TABLE_FUNDS_MOVE_CTL} c
+                                        ON c.POSITION = l.POSITION
+                                         AND c.TIMESTAMP = l.TIMESTAMP
+                                         AND c.CURRENTTIMESTAMP = l.CURRENTTIMESTAMP
+                                         AND c.OPTYPE = l.OPTYPE
+                                         AND c.RUN_ID = @dag_run_id
+                                         AND c.LAST_POS_FLAG = 'Y'
+                                         AND c.TABLE_NAME = '{land_table_name}'
+                                         AND c.CREATE_DT = CURRENT_DATE('America/Toronto')
+                             WHERE {key_cols_match}
+                           )
+        """
+    return sql
+
+
+def sql_insert_curated_table(curated_dataset_table_name: str, curated_dataset_view_name: str, land_table_name: str, cur_col_list: List[str]) -> str:
+    cols = ",".join(cur_col_list)
+    select_cols = ",".join([f"l.{x}" for x in cur_col_list])
+    sql = f"""INSERT INTO {PROJECT_CURATED}.{curated_dataset_table_name} ({cols})
+              SELECT {select_cols}
+              FROM `{curated_dataset_view_name}` l INNER JOIN `{TABLE_FUNDS_MOVE_CTL}` c
+                                        ON c.POSITION = l.POSITION
+                                         AND c.TIMESTAMP = l.TIMESTAMP
+                                         AND c.CURRENTTIMESTAMP = l.CURRENTTIMESTAMP
+                                         AND c.OPTYPE = l.OPTYPE
+                                         AND c.RUN_ID = @dag_run_id
+                                         AND c.LAST_POS_FLAG = 'Y'
+                                         AND c.TABLE_NAME = '{land_table_name}'
+                                         AND c.CREATE_DT = CURRENT_DATE('America/Toronto')
+              WHERE L.opType in ('I','U')
+        """
+    return sql

@@ -1,0 +1,65 @@
+context_parameter:
+     db_053: "'PR053'"
+
+transformation: 
+  - task_name: data_ingestion_check_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/data_ingestion_check_053.sql
+ 
+  - task_name: trans_1_union_pcmc_reg_exp_pcmc_reg_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_1_union_pcmc_reg_exp_pcmc_reg_053.sql
+ 
+  - task_name: trans_2_unpivot_expb_indicators_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_2_unpivot_expb_indicators_053.sql
+ 
+  - task_name: trans_3_join_trans2_and_expb_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_3_join_trans2_and_expb_053.sql
+ 
+  - task_name: trans_4_join_trans3_and_cif_card_curr_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_4_join_trans3_and_cif_card_curr_053.sql
+ 
+  - task_name: trans_5_join_trans4_and_app_xref_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_5_join_trans4_and_app_xref_053.sql
+ 
+  - task_name: trans_6_join_trans5_and_app_opt_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_6_join_trans5_and_app_opt_053.sql
+ 
+  - task_name: trans_7_join_trans6_and_trans1_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_7_join_trans6_and_trans1_053.sql
+ 
+  - task_name: trans_8_join_trans7_and_adjud_ctl_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_8_join_trans7_and_adjud_ctl_053.sql
+ 
+  - task_name: trans_9_join_trans8_and_signature_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_9_join_trans8_and_signature_053.sql
+ 
+  - task_name: trans_10_join_trans9_and_dir_check_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/trans_10_join_trans9_and_dir_check_053.sql
+ 
+  - task_name: load_trans10_cnst_events_analytics_053
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/load_trans10_cnst_events_analytics_053.sql
+
+

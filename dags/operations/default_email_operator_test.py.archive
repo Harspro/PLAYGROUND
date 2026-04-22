@@ -1,0 +1,47 @@
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from datetime import datetime, timedelta
+from pcf_operators.email.DefaultEmailOperator import DefaultEmailOperator
+
+DAG_DEFAULT_ARGS = {
+    "owner": "team-centaurs",
+    'capability': 'TBD',
+    'severity': 'P3',
+    'sub_capability': 'TBD',
+    'business_impact': 'TBD',
+    'customer_impact': 'TBD',
+    "start_date": datetime(2021, 6, 26),
+    "email": [],
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "max_active_runs": 5,
+    "retries": 0,
+    "retry_delay": timedelta(seconds=10),
+    "retry_exponential_backoff": True,
+    "catchup": False,
+}
+
+with DAG(dag_id='default_email_operator_test',
+         schedule=None,
+         params={"email_sender": '',
+                 "email_recipients": '',
+                 "email_subject": '',
+                 "email_body": ''},
+         default_args=DAG_DEFAULT_ARGS,
+         start_date=datetime(2025, 1, 1),
+         dagrun_timeout=timedelta(hours=5),
+         max_active_runs=1,
+         catchup=False,
+         is_paused_upon_creation=True) as dag:
+    start = EmptyOperator(task_id='start')
+    end = EmptyOperator(task_id='end')
+
+    send_email_task = DefaultEmailOperator(
+        task_id="send_email",
+        email_sender="{{ dag_run.conf['email_sender'] }}",
+        email_recipients="{{ dag_run.conf['email_recipients'] }}",
+        email_subject="{{ dag_run.conf['email_subject'] }}",
+        email_body="{{ dag_run.conf['email_body'] }}",
+    )
+
+    start >> send_email_task >> end

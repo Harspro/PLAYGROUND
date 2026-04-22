@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du D18 @@@@           -->
+	<xsd:complexType
+    name="D18Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Beneficiaire">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:choice>
+							<xsd:element
+                name="Personne">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NAS"
+                      type="NasType">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NomFamille"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Prenom"
+                      type="Char30Type">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="RaisonSociale">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="AutreNoId"
+                      type="Char10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

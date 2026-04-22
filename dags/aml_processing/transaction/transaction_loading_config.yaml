@@ -1,0 +1,450 @@
+aml_transaction_posp_feed:
+  feed.name: POSP
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_posp
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_POSP_FEED
+  scheduling_interval: "0 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_posr_feed:
+  feed.name: POSR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_posr
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_POSR_FEED
+  scheduling_interval: "5 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_edi_feed:
+  feed.name: EDI
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_edip
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_EDI_FEED
+  scheduling_interval: "10 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_abm_feed:
+  feed.name: ABM
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_abmt
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_ABM_FEED
+  scheduling_interval: "15 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_bpay_feed:
+  feed.name: BPAY
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_bpay
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_BPAY_FEED
+  scheduling_interval: "20 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_btfr_feed:
+  feed.name: BTFR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_btfr
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_BTFR_FEED
+  scheduling_interval: "25 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_tlpy_feed:
+  feed.name: TLPY
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_tlpy
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_TLPY_FEED
+  scheduling_interval: "30 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_epul_feed:
+  feed.name: EPUL
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_epul
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_EPUL_FEED
+  scheduling_interval: "35 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_mcbr_feed:
+  feed.name: MCBR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_mcbr
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_MCBR_FEED
+  scheduling_interval: "40 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_ccbr_feed:
+  feed.name: CCBR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_ccbr
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_CCBR_FEED
+  scheduling_interval: "45 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_ecbr_feed:
+  feed.name: ECBR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_ecbr
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_ECBR_FEED
+  scheduling_interval: "50 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_pad_feed:
+  feed.name: PAD
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_padt
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_PAD_FEED
+  scheduling_interval: "55 9 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_mmov_feed:
+  feed.name: MMOV
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_mmov
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_MMOV_FEED
+  scheduling_interval: "0 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_inad_feed:
+  feed.name: INAD
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_inad
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_INAD_FEED
+  scheduling_interval: "5 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_inar_feed:
+  feed.name: INAR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_inar
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_INAR_FEED
+  scheduling_interval: "10 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_inrr_feed:
+  feed.name: INRR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_inrr
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_INRR_FEED
+  scheduling_interval: "15 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_inca_feed:
+  feed.name: INCA
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_inca
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_INCA_FEED
+  scheduling_interval: "20 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_inrc_feed:
+  feed.name: INRC
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_inrc
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_INRC_FEED
+  scheduling_interval: "25 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_inmr_feed:
+  feed.name: INMR
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_inmr
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_INMR_FEED
+  scheduling_interval: "30 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_inse_feed:
+  feed.name: INSE
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_inse
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_INSE_FEED
+  scheduling_interval: "35 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_na_feed:
+  feed.name: NA
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_catc
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_NA_FEED
+  scheduling_interval: "40 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_epsh_feed:
+  feed.name: EPSH
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_epsh
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_EPSH_FEED
+  scheduling_interval: "45 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_npfi_feed:
+  feed.name: NPFI
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_npfi
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_NPFI_FEED
+  scheduling_interval: "50 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_npfo_feed:
+  feed.name: NPFO
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_npfo
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_NPFO_FEED
+  scheduling_interval: "55 10 * * 2-6"
+  pause_dag_by_config: False
+aml_transaction_mvmn_feed:
+  feed.name: MVMN
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veratran
+  bq_to_gcs.folder: aml/transaction
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veratran_mvmn
+  filename.extension: "{file_env}"
+  bq_source_table: AT31
+  bq_source_dataset: pcb-{env}-landing.domain_account_management
+  bq_transaction_control_table: TRANSACTION_FEED_CONTROL_TABLE
+  bq_transaction_control_dataset: pcb-{env}-processing.domain_aml
+  destination_bq_table_dataset: pcb-{env}-curated.cots_aml_verafin
+  bq_table.name: TRANSACTION_MVMN_FEED
+  scheduling_interval: "00 11 * * 2-6"
+  pause_dag_by_config: False

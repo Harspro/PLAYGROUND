@@ -1,0 +1,16 @@
+SELECT
+  ApplicationId,
+  LoginUsername,
+  SessionId,
+  FraudRiskAssessmentUID,
+  RequestId,
+  ResponsePayload,
+  ApiFunctionCall,
+  OriginatedFlow,
+  Errors,
+  Status,
+  RequestTimestamp,
+  ResponseTimestamp,
+  INGESTION_TIMESTAMP
+FROM
+  `pcb-{env}-landing.domain_fraud_risk_intelligence.FRAUD_RISK_ASSESSMENT_PAYLOAD`;

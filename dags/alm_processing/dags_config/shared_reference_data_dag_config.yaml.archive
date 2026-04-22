@@ -1,0 +1,20 @@
+alm_pcb_ref_table_change_monthly_load:
+  activity_name: ref_table_load
+  file:
+    prefix: "off-bal-sheet-ref-table-change"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_ref_table
+  transformation_config: transformation_rules/alm_ref_table_transformation_rules.yaml
+  bigquery:
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "REF_ALM_INTEREST_RATE_BY_FI"
+  inbound_file:
+    format: csv
+    skip_leading_rows: 1
+    delimiter: ","
+    validation_file: validation_ref_table_treasury.yaml
+    prefix: "treasury_pcb_alm_ref_table_change_submit"

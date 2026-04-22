@@ -1,0 +1,109 @@
+aml_ref_experian_country_code_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/aml_processing/ref_tables/REF_EXPERIAN_COUNTRY_CODE.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - {"name": "ID1PLACE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PROVINCE", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "COUNTRY_CODE_3", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "COUNTRY_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_aml
+    table_name: REF_EXPERIAN_ID_PLACE
+    data_load_type: FULL_REFRESH
+
+aml_account_status_description_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/aml_processing/ref_tables/ACCOUNT_STATUS_DESCRIPTION.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - {"name": "TS2_STATUS", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TS2_REASON_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "TS2_DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_aml
+    table_name: ACCOUNT_STATUS_DESCRIPTION
+    data_load_type: FULL_REFRESH
+
+aml_case_agent_names_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/aml_processing/ref_tables/CASE_AGENT_NAMES.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - {"name": "CASE_AGENT_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "EMAIL_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_aml
+    table_name: CASE_AGENT_NAMES
+    data_load_type: FULL_REFRESH
+
+idcs_events_idl_loading_job:
+  default_args:
+    owner: "team-orges-alerts"
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/idcs_data/Login.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - { "name": "traceabilityId_temp", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "eventDateTime", "type": "TIMESTAMP", "mode": "NULLABLE" }
+      - { "name": "traceabilityId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "correlationId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "username", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "pcfCustomerId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "customerId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "deviceId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "trustedDevice", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ipAddress", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "country", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "city", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "province", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "actionResult", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "otpNotificationChannel", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "otpNotificationChannelValue", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "channelType", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "actionName", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_iam
+    table_name: IAM_AUTHENTICATION
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION
+        ) AS METADATA
+    drop_columns:
+      - traceabilityId_temp

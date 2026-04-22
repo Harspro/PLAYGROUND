@@ -1,0 +1,154 @@
+feed.contact:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veracontact
+  bq_to_gcs.folder: aml/contact
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veracontact
+  filename.extension: "{file_env}"
+  bq_table.name: CONTACT_FEED
+  # File Settings (location inside the dag folder)
+  headers.source.file_path: aml_processing/csv_headers_files/contact_headers.csv.gz
+  headers.destination.file_path: aml/contact/contact_headers.csv.gz
+  sql.file_path: aml_processing/sql/contact_idl.sql
+feed.address:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veraaddress
+  bq_to_gcs.folder: aml/address
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veraaddress
+  filename.extension: "{file_env}"
+  bq_table.name: ADDRESS_FEED
+  # File Settings (location inside the dag folder)
+  headers.source.file_path: aml_processing/csv_headers_files/address_headers.csv.gz
+  headers.destination.file_path: aml/address/address_headers.csv.gz
+  sql.file_path: aml_processing/sql/address_idl.sql
+feed.customer:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veracust
+  bq_to_gcs.folder: aml/customer
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veracust
+  filename.extension: "{file_env}"
+  bq_table.name: CUSTOMER_FEED
+  # File Settings (location inside the dag folder)
+  headers.source.file_path: aml_processing/csv_headers_files/customer_headers.csv.gz
+  headers.destination.file_path: aml/customer/customer_headers.csv.gz
+  sql.file_path: aml_processing/sql/customer_idl.sql
+feed.account-pcmc:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veraacctln
+  bq_to_gcs.folder: aml/account-pcmc
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veraacctln
+  filename.extension: "{file_env}"
+  bq_table.name: ACCOUNT_PCMC_FEED
+  # File Settings (location inside the dag folder)
+  headers.source.file_path: aml_processing/csv_headers_files/account-pcmc_headers.csv.gz
+  headers.destination.file_path: aml/account-pcmc/account-pcmc_headers.csv.gz
+  sql.file_path: aml_processing/sql/account_pcmc_idl.sql
+feed.joint:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_verajoint
+  bq_to_gcs.folder: aml/joint
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_verajoint
+  filename.extension: "{file_env}"
+  bq_table.name: JOINT_FEED
+  # File Settings (location inside the dag folder)
+  headers.source.file_path: aml_processing/csv_headers_files/joint_headers.csv.gz
+  headers.destination.file_path: aml/joint/joint_headers.csv.gz
+  sql.file_path: aml_processing/sql/joint_idl.sql
+feed.account-pcma:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veraacctcdddasav
+  bq_to_gcs.folder: aml/account-pcma
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veraacctcdddasav
+  filename.extension: "{file_env}"
+  bq_table.name: ACCOUNT_PCMA_FEED
+  # File Settings (location inside the dag folder)
+  headers.source.file_path: aml_processing/csv_headers_files/account-pcma_headers.csv.gz
+  headers.destination.file_path: aml/account-pcma/account-pcma_headers.csv.gz
+  sql.file_path: aml_processing/sql/account_pcma_idl.sql
+feed.identity:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_veraidentity
+  bq_to_gcs.folder: aml/identity
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_veraidentity
+  filename.extension: "{file_env}"
+  bq_table.name: IDENTITY_FEED
+  headers.source.file_path: aml_processing/csv_headers_files/identity_headers.csv.gz
+  headers.destination.file_path: aml/identity/identity_headers.csv.gz
+  sql.file_path: dummy
+feed.case:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_case
+  bq_to_gcs.folder: aml/case
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_case
+  filename.extension: "{file_env}"
+  bq_table.name: CASE_FEED
+  headers.source.file_path: aml_processing/csv_headers_files/case_headers.csv.gz
+  headers.destination.file_path: aml/case/case.csv.gz
+  sql.file_path: dummy
+feed.person:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_case_person
+  bq_to_gcs.folder: aml/person
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_case_person
+  filename.extension: "{file_env}"
+  bq_table.name: PERSON_FEED
+  headers.source.file_path: aml_processing/csv_headers_files/person_headers.csv.gz
+  headers.destination.file_path: aml/person/person.csv.gz
+  sql.file_path: dummy
+feed.person_derived:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_case_person
+  bq_to_gcs.folder: aml/person
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_case_person
+  filename.extension: "{file_env}"
+  bq_table.name: PERSON_DERIVED_FEED
+  headers.source.file_path: aml_processing/csv_headers_files/person_headers.csv.gz
+  headers.destination.file_path: aml/person/person.csv.gz
+  sql.file_path: dummy
+
+feed.note:
+  bq_destination_dataset.name: cots_aml_verafin
+  staging.bucket: pcb-{env}-staging-extract
+  staging.folder: aml/pcb_verafin_case_note
+  bq_to_gcs.folder: aml/note
+  outbound.bucket: verafin-outbound-pcb{env_suffix}
+  outbound.folder: pcb_verafin_aml
+  filename.prefix: pcb_verafin_case_note
+  filename.extension: "{file_env}"
+  bq_table.name: NOTE_FEED
+  headers.source.file_path: aml_processing/csv_headers_files/note_headers.csv.gz
+  headers.destination.file_path: aml/note/note.csv.gz
+  sql.file_path: dummy
+common:
+  monitoring.bq_table: AML_MONITORING
+  monitoring.bq_dataset: cots_aml_verafin
+  monitoring.bq_table.schema_file_path: aml_processing/aml_monitoring_schema.json

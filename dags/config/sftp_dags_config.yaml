@@ -1,0 +1,133 @@
+dev:
+  hostname: vlhesasdv03.ngco.com
+  username: centaurs
+  secret_path: "/dev-secret/data/pds/rsa_keys"
+uat:
+  hostname: vlhesasdv03.ngco.com
+  username: centaurs
+  secret_path: "/uat-secret/data/pds/rsa_keys"
+prod:
+  hostname: vlhesasdv03.ngco.com
+  username: centaurs
+  secret_path: "/secret/data/pds/rsa_keys"
+
+# Business Shared Drives
+p_delete:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsdmt
+    secret_path: "/secret/data/terminus/pds-delete/vault-keys"
+
+l_decision_support:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsdsg
+    secret_path: "/secret/data/terminus/pds/vault-keys"
+
+m_decision_support:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsdsg
+    secret_path: "/secret/data/terminus/pds/vault-keys"
+  
+m_common:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsdsg
+    secret_path: "/secret/data/terminus/pds/vault-keys"
+
+n_erm:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnserm
+    secret_path: "/secret/data/terminus/erm/vault-keys"
+
+k_acquisition:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsrkaq
+    secret_path: "/secret/data/terminus/acq/vault-keys"
+
+i_collections:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsrkpm
+    secret_path: "/secret/data/terminus/credit-risk/vault-keys"
+
+i_portfolio_management:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsrkpm
+    secret_path: "/secret/data/terminus/credit-risk/vault-keys"
+
+i_reporting_forecasting:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsrkrt
+    secret_path: "/secret/data/terminus/credit-risk-ecl/vault-keys"
+
+i_scoring:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsrksc
+    secret_path: "/secret/data/terminus/credit-risk-scoring/vault-keys"
+
+j_fraud:
+  nonprod:
+    hostname: vlhesasdv03.ngco.com
+    username: centaurs
+    secret_path: "/uat-secret/data/pds/rsa_keys"
+  prod:
+    hostname: 162.53.13.104
+    username: tmnsrkfr
+    secret_path: "/secret/data/terminus/fraud/vault-keys"
+
+sign_246:
+  nonprod:
+    hostname: lclvad246.ngco.com
+    username: vortex
+    secret_path: "/uat-secret/data/vortex/rsa-keys"
+  prod:
+    hostname: lclvap246.ngco.com
+    username: vortex
+    secret_path: "/secret/data/vortex/rsa_keys"

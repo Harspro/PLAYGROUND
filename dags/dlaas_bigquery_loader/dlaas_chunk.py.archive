@@ -1,0 +1,350 @@
+from datetime import timedelta, datetime
+
+import pendulum
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.providers.google.cloud.operators.dataproc import (
+    DataprocSubmitJobOperator,
+    DataprocCreateClusterOperator
+)
+from airflow.utils.task_group import TaskGroup
+from dateutil.relativedelta import relativedelta
+from google.cloud import bigquery
+
+import util.constants as consts
+from util.bq_utils import (parse_join_config,
+                           create_external_table,
+                           apply_column_transformation,
+                           apply_join_transformation,
+                           apply_timestamp_transformation)
+from util.logging_utils import build_spark_logging_info
+from util.miscutils import (
+    replace_all_env_in_dict,
+    get_ephemeral_cluster_config,
+    read_variable_or_file,
+    get_default_dlaas_spark_job
+)
+
+DEFAULT_ARGS = {
+    'owner': 'team-centaurs',
+    'capability': 'TBD',
+    'severity': 'P3',
+    'sub_capability': 'TBD',
+    'business_impact': 'TBD',
+    'customer_impact': 'TBD',
+    'depends_on_past': False,
+    "email": [],
+    "email_on_failure": False,
+    "email_on_retry": False
+}
+
+gcp_config = read_variable_or_file(consts.GCP_CONFIG)
+deploy_env = gcp_config[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+dataproc_config = read_variable_or_file(consts.DATAPROC_CONFIG)
+
+
+def apply_transformations(bigquery_client, transformation_config: dict):
+    transformed_data = create_external_table(bigquery_client, transformation_config.get(consts.EXTERNAL_TABLE_ID),
+                                             transformation_config.get(consts.DATA_FILE_LOCATION))
+
+    add_columns = transformation_config.get(consts.ADD_COLUMNS)
+    drop_columns = transformation_config.get(consts.DROP_COLUMNS)
+
+    if add_columns or drop_columns:
+        column_transform_view = apply_column_transformation(bigquery_client, transformed_data, add_columns,
+                                                            drop_columns)
+        transformed_data = column_transform_view
+
+    join_spec = transformation_config.get(consts.JOIN_SPECIFICATION)
+    if join_spec:
+        join_transform_view = apply_join_transformation(bigquery_client, transformed_data, join_spec)
+        transformed_data = join_transform_view
+
+    transformed_data = apply_timestamp_transformation(bigquery_client, transformed_data)
+
+    return transformed_data
+
+
+def parse_merge_config(merge_config):
+    if not merge_config:
+        return
+
+    merge_join_columns = merge_config.get(consts.JOIN_COLUMNS)
+    print(f'merge_join_columns = {merge_join_columns}')
+    merge_join_columns_str = ""
+    if merge_join_columns:
+        merge_join_conditions = [f'T.{x}=S.{x}' for x in merge_join_columns]
+        merge_join_columns_str = " AND ".join(merge_join_conditions)
+    print(f'merge_join_columns_str = {merge_join_columns_str}')
+
+    update_merge_statement = ""
+    update_merge_config = merge_config.get(consts.MERGE_MATCHED)
+    if update_merge_config:
+        update_merge_statement = (
+            f"WHEN MATCHED THEN "
+            f"UPDATE SET T.{update_merge_config.get(consts.MATCHED_TARGET_COLUMN)} "
+            f"= S.{update_merge_config.get(consts.MATCHED_SOURCE_COLUMN)}"
+        )
+
+    return {
+        consts.JOIN_CLAUSE: merge_join_columns_str,
+        consts.UPDATE_STATEMENT: update_merge_statement
+    }
+
+
+def build_fetching_job(**context):
+    config = context.get(consts.CONFIG)
+    config = replace_all_env_in_dict(config, deploy_env)
+    gcs_config = config.get(consts.GCS)
+    tgrp_id = context.get('tgrp_id')
+    if not gcs_config:
+        gcs_config = {
+            consts.BUCKET: f"pcb-{deploy_env}-staging-extract",
+            consts.STAGING_FOLDER: f"{config[consts.FETCH_SPARK_JOB][consts.ARGS].get(consts.DLAAS_JDBC_USER)}/chunk"
+        }
+        config[consts.GCS] = gcs_config
+
+    spark_config = get_default_dlaas_spark_job(deploy_env)
+
+    spark_config.update(config[consts.FETCH_SPARK_JOB])
+    source_schema, source_tablename = spark_config[consts.ARGS].get(consts.SCHEMA_QUALIFIED_TABLE_NAME).split('.')
+    staging_folder = f"gs://{gcs_config[consts.BUCKET]}/{gcs_config[consts.STAGING_FOLDER]}/{source_schema}/{source_tablename}/{tgrp_id}"
+
+    arg_list = [spark_config[consts.APPLICATION_CONFIG], staging_folder]
+
+    if consts.ARGS in spark_config:
+        for k, v in spark_config[consts.ARGS].items():
+            arg_list.append(f'{k}={v}')
+
+    if not any(consts.DB_READ_PARALLELISM in arg for arg in arg_list):
+        arg_list.append(consts.DB_READ_PARALLELISM + '=4')
+
+    if consts.PROPERTIES not in spark_config:
+        spark_config[consts.PROPERTIES] = consts.DEFAULT_SPARK_SETTINGS
+
+    arg_list = build_spark_logging_info(dag_id='{{dag.dag_id}}', default_args=DEFAULT_ARGS, arg_list=arg_list)
+
+    spark_job_dict = {
+        consts.REFERENCE: {consts.PROJECT_ID: dataproc_config.get(consts.PROJECT_ID)},
+        consts.PLACEMENT: {consts.CLUSTER_NAME: consts.DLAAS_CHUNK_CLUSTER_NAME},
+        consts.SPARK_JOB: {
+            consts.JAR_FILE_URIS: spark_config[consts.JAR_FILE_URIS],
+            consts.MAIN_CLASS: spark_config[consts.MAIN_CLASS],
+            consts.FILE_URIS: spark_config[consts.FILE_URIS],
+            consts.ARGS: arg_list,
+            consts.PROPERTIES: spark_config[consts.PROPERTIES]
+        }
+    }
+    return spark_job_dict
+
+
+def build_transformation_config(bq_client, context):
+    tgrp_id = context.get('tgrp_id')
+    config = context.get(consts.CONFIG)
+    config = replace_all_env_in_dict(config, deploy_env)
+    gcs_config = config.get(consts.GCS)
+    if not gcs_config:
+        gcs_config = {
+            consts.BUCKET: f"pcb-{deploy_env}-staging-extract",
+            consts.STAGING_FOLDER: f"{config[consts.FETCH_SPARK_JOB][consts.ARGS].get(consts.DLAAS_JDBC_USER)}/chunk"
+        }
+        config[consts.GCS] = gcs_config
+    bq_config = config[consts.BIGQUERY]
+    spark_config = config[consts.FETCH_SPARK_JOB]
+
+    source_schema, source_tablename = spark_config[consts.ARGS].get(consts.SCHEMA_QUALIFIED_TABLE_NAME).split('.')
+    parquet_files_path = f"gs://{gcs_config[consts.BUCKET]}/{gcs_config[consts.STAGING_FOLDER]}/{source_schema}/{source_tablename}/{tgrp_id}/*.parquet"
+
+    bq_project_name = bq_config.get(consts.PROJECT_ID) or gcp_config[consts.LANDING_ZONE_PROJECT_ID]
+    bq_proc_project_name = gcp_config[consts.PROCESSING_ZONE_PROJECT_ID]
+    bq_table_name = bq_config[consts.TABLE_NAME]
+
+    bq_ext_table_id = f"{bq_proc_project_name}.{bq_config[consts.DATASET_ID]}.{bq_table_name}_{consts.EXTERNAL_TABLE_SUFFIX}"
+    bq_table_id = f"{bq_project_name}.{bq_config[consts.DATASET_ID]}.{bq_table_name}"
+
+    partition_field = bq_config.get('partition_field')
+    clustering_fields = bq_config.get('clustering_fields')
+    print(f'partition: {partition_field}, cluster: {clustering_fields}')
+    partition_str = f"PARTITION BY {partition_field}" if partition_field else ''
+    clustering_str = "CLUSTER BY " + ", ".join(clustering_fields) if clustering_fields else ''
+    print(f'partition: {partition_str}, cluster: {clustering_str}')
+
+    additional_columns = bq_config.get(consts.ADD_COLUMNS) or []
+    add_file_name_config = bq_config.get(consts.ADD_FILE_NAME_COLUMN)
+    if add_file_name_config:
+        additional_columns.append(f"'{parquet_files_path}' AS {add_file_name_config.get(consts.ALIAS)}")
+
+    exclude_columns = bq_config.get(consts.DROP_COLUMNS)
+
+    join_spec = parse_join_config(bq_client, bq_config.get(consts.JOIN), bq_table_id)
+    merge_spec = parse_merge_config(config.get(consts.MERGE))
+
+    return {
+        consts.EXTERNAL_TABLE_ID: bq_ext_table_id,
+        consts.DATA_FILE_LOCATION: parquet_files_path,
+        consts.ADD_COLUMNS: additional_columns,
+        consts.DROP_COLUMNS: exclude_columns,
+        consts.DESTINATION_TABLE: {
+            consts.PARTITION: partition_str,
+            consts.CLUSTERING: clustering_str,
+            consts.ID: bq_table_id
+        },
+        consts.JOIN_SPECIFICATION: join_spec,
+        consts.MERGE_SPECIFICATION: merge_spec
+    }
+
+
+def build_loading_job(**context):
+    bq_client = bigquery.Client()
+    transformation_config = build_transformation_config(bq_client, context)
+    transformed_view = apply_transformations(bq_client, transformation_config)
+
+    config = context.get(consts.CONFIG)
+    config = replace_all_env_in_dict(config, deploy_env)
+    config = config[consts.BIGQUERY]
+    override = config.get('override')
+
+    if not override:
+        loading_sql = f"""
+            CREATE TABLE IF NOT EXISTS
+                `{transformation_config.get(consts.DESTINATION_TABLE).get(consts.ID)}`
+            {transformation_config.get(consts.DESTINATION_TABLE).get(consts.PARTITION)}
+            {transformation_config.get(consts.DESTINATION_TABLE).get(consts.CLUSTERING)}
+            AS
+                SELECT {transformed_view.get(consts.COLUMNS)}
+                FROM {transformed_view.get(consts.ID)}
+                LIMIT 0;
+
+            INSERT INTO `{transformation_config.get(consts.DESTINATION_TABLE).get(consts.ID)}`
+            SELECT {transformed_view.get(consts.COLUMNS)}
+            FROM {transformed_view.get(consts.ID)};
+        """
+    else:
+        loading_sql = f"""
+            CREATE OR REPLACE TABLE
+                `{transformation_config.get(consts.DESTINATION_TABLE).get(consts.ID)}`
+            {transformation_config.get(consts.DESTINATION_TABLE).get(consts.PARTITION)}
+            {transformation_config.get(consts.DESTINATION_TABLE).get(consts.CLUSTERING)}
+            AS
+                SELECT {transformed_view.get(consts.COLUMNS)}
+                FROM {transformed_view.get(consts.ID)}
+                LIMIT 0;
+
+            INSERT INTO `{transformation_config.get(consts.DESTINATION_TABLE).get(consts.ID)}`
+            SELECT {transformed_view.get(consts.COLUMNS)}
+            FROM {transformed_view.get(consts.ID)};
+        """
+
+    query_job = bq_client.query(loading_sql)
+    query_job.result()
+
+
+def date_checker(tgrp_id: str, chunk_idx, **context):
+    load_job_params = list(context['dag_run'].conf.get('conf').values())[0]
+    config = load_job_params['batch']
+    fromdt = datetime.strptime(config.get('start_date'), '%Y-%m-%d').date()
+    todt = datetime.strptime(config.get('end_date'), '%Y-%m-%d').date()
+    chunk_size = config.get('chunk_size_in_months')
+
+    chunk_start_delta = chunk_idx * chunk_size
+    curr_chunk_from_date = fromdt + relativedelta(months=+chunk_start_delta)
+    curr_chunk_to_date = fromdt + relativedelta(months=+(chunk_start_delta + chunk_size))
+
+    if (curr_chunk_to_date > todt):
+        curr_chunk_to_date = todt
+
+    curr_chunk_lowerbound = str(curr_chunk_from_date) + " 00:00:00"
+    curr_chunk_upperbound = str(curr_chunk_to_date) + " 00:00:00"
+
+    load_job_params = list(context['dag_run'].conf.get('conf').values())[0]
+    pcol = load_job_params[consts.FETCH_SPARK_JOB]['args'][consts.PCB_PARTITION_COLUMN]
+
+    load_job_params[consts.FETCH_SPARK_JOB][consts.ARGS][consts.PCB_LOWER_BOUND] = curr_chunk_lowerbound
+    load_job_params[consts.FETCH_SPARK_JOB][consts.ARGS][consts.PCB_UPPER_BOUND] = curr_chunk_upperbound
+    load_job_params[consts.FETCH_SPARK_JOB][consts.ARGS][
+        consts.PCB_WHERE_CONDITION] = f"{pcol} >= '{fromdt}' AND {pcol} < '{todt}'"
+    context['ti'].xcom_push(key="config", value=load_job_params)
+
+    if (curr_chunk_from_date > todt):
+        return f'{tgrp_id}.end_load_task'
+
+    return f'{tgrp_id}.{consts.CLUSTER_CREATING_TASK_ID}'
+
+
+def create_loading_tasks():
+    tgroups = []
+    for chunk_idx in range(consts.DLAAS_NUM_CHUNKS):
+        tgrp_id = f'c{chunk_idx}'
+        with TaskGroup(group_id=tgrp_id) as tgrp:
+            date_checker_task = BranchPythonOperator(
+                task_id='date_checker_task',
+                python_callable=date_checker,
+                op_kwargs={'tgrp_id': tgrp_id, 'chunk_idx': chunk_idx},
+                provide_context=True
+            )
+
+            cluster_creating_task = DataprocCreateClusterOperator(
+                task_id=consts.CLUSTER_CREATING_TASK_ID,
+                project_id=dataproc_config.get(consts.PROJECT_ID),
+                cluster_config=get_ephemeral_cluster_config(deploy_env,
+                                                            gcp_config.get(consts.NETWORK_TAG)),
+                region=dataproc_config.get(consts.LOCATION),
+                cluster_name=consts.DLAAS_CHUNK_CLUSTER_NAME
+            )
+
+            end_load_task = EmptyOperator(task_id='end_load_task')
+
+            date_checker_task >> [cluster_creating_task, end_load_task]
+
+            prepare_fetching_config = PythonOperator(
+                task_id='prepare_fetching_config',
+                python_callable=build_fetching_job,
+                provide_context='True',
+                do_xcom_push='True',
+                op_kwargs={'tgrp_id': tgrp_id,
+                           consts.CONFIG: f"{{{{ ti.xcom_pull(task_ids='{tgrp_id}.date_checker_task', key='config') }}}}"}
+            )
+
+            fetching_task = DataprocSubmitJobOperator(
+                task_id="fetch_db",
+                job=f"{{{{ ti.xcom_pull(task_ids='{tgrp_id}.prepare_fetching_config', key='return_value') }}}}",
+                region=dataproc_config.get(consts.LOCATION),
+                project_id=dataproc_config.get(consts.PROJECT_ID),
+                gcp_conn_id=gcp_config.get(consts.PROCESSING_ZONE_CONNECTION_ID)
+            )
+
+            loading_task = PythonOperator(
+                task_id='load_into_bq',
+                python_callable=build_loading_job,
+                op_kwargs={'tgrp_id': tgrp_id,
+                           consts.CONFIG: f"{{{{ ti.xcom_pull(task_ids='{tgrp_id}.date_checker_task', key='config') }}}}"}
+            )
+
+            cluster_creating_task >> prepare_fetching_config >> fetching_task >> loading_task >> end_load_task
+
+        tgroups.append(tgrp)
+    return tgroups
+
+
+with DAG(
+        dag_id='dlaas_chunk',
+        default_args=DEFAULT_ARGS,
+        schedule=None,
+        start_date=datetime(2023, 1, 1, tzinfo=pendulum.timezone('America/Toronto')),
+        is_paused_upon_creation=False,
+        catchup=False,
+        render_template_as_native_obj=True,
+        dagrun_timeout=timedelta(hours=24)
+) as dag:
+    start_point = EmptyOperator(task_id='start')
+    end_point = EmptyOperator(task_id='end')
+
+    loading_task_groups = create_loading_tasks()
+
+    leading_task = start_point
+    for tgrp in loading_task_groups:
+        leading_task >> tgrp
+        leading_task = tgrp
+
+    leading_task >> end_point

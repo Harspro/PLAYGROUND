@@ -1,0 +1,1742 @@
+at31_schema_migration:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: AT31
+  partition_field: FILE_CREATE_DT
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+    - AT31_DATE_TRANSACTION
+    - AT31_TRANSACTION_CODE
+    - AT31_MERCHANT_ID
+  transformations:
+    - timestamp
+
+experian_aml_canada_post_schema_migration:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_AML_CANADA_POST
+  partition_field: DATE_TRUNC(DELIVERY_DATE, MONTH)
+  transformations:
+    - timestamp
+
+aml_trnx_agg_control_ts_to_datetime:
+  project_id: pcb-{env}-processing
+  dataset_id: domain_aml
+  table_name: TRANSACTION_AGG_CONTROL_TEMP
+  transformations:
+    - timestamp
+
+aml_trnx_feed_control_ts_to_datetime:
+  project_id: pcb-{env}-processing
+  dataset_id: domain_aml
+  table_name: transaction_feed_control_table
+  transformations:
+    - timestamp
+
+aml_agg_at31_ts_to_datetime:
+  project_id: pcb-{env}-curated
+  dataset_id: domain_aml
+  table_name: AGG_AT31
+  transformations:
+    - timestamp
+
+experian_pcmc_registration_ts_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_PCMC_REGISTRATION
+  partition_field: RANGE_BUCKET(PC_MC_CUST_APPL_ID, GENERATE_ARRAY(0, 2147483647, 500000))
+  transformations:
+    - timestamp
+
+experian_base_ts_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_BASE
+  partition_field: RANGE_BUCKET(APP_NUMBER, GENERATE_ARRAY(0, 2147483647, 500000))
+  transformations:
+    - timestamp
+
+experian_aml_account_xref_ts_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_AML_ACCOUNT_XREF
+  transformations:
+    - timestamp
+
+experian_bureau_ts_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_BUREAU
+  partition_field: RANGE_BUCKET(APP_NUMBER, GENERATE_ARRAY(0, 2147483647, 500000))
+  transformations:
+    - timestamp
+
+experian_daily_history_ts_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_DAILY_HISTORY
+  partition_field: RANGE_BUCKET(APP_NUMBER, GENERATE_ARRAY(0, 2147483647, 500000))
+  transformations:
+    - timestamp
+
+experian_realtime_result_pcmceid_ts_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_REALTIME_RESULT_PCMCEID
+  partition_field: RANGE_BUCKET(PC_MC_CUST_APPL_ID, GENERATE_ARRAY(0, 2147483647, 500000))
+  transformations:
+    - timestamp
+
+experian_results_ts_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: EXPERIAN_RESULTS
+  partition_field: RANGE_BUCKET(APP_NUMBER, GENERATE_ARRAY(0, 2147483647, 500000))
+  transformations:
+    - timestamp
+
+adm_std_disp_dt_elmt_adjust_clustering:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_STD_DISP_DT_ELMT
+  clustering_fields:
+    - ELE_ELEMENT_NAME
+    - APA_APP_NUM
+
+gen_val_detail_adjust_clustering:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: GEN_VAL_DETAIL
+  clustering_fields:
+    - ELEMENT_NAME
+    - APP_NUM
+
+transaction_feed_control_table_add_columns:
+  project_id: pcb-{env}-processing
+  dataset_id: domain_aml
+  table_name: TRANSACTION_FEED_CONTROL_TABLE
+  transformations:
+    - column:
+        add_columns:
+          - CASE
+              WHEN RUN_ID LIKE 'scheduled%' THEN 'scheduled'
+              WHEN RUN_ID LIKE 'manual%' THEN 'manual'
+            END AS DAG_RUN_TYPE
+          - FEED AS RAIL_TYPE
+        drop_columns:
+          - JOB_NAME
+          - FEED
+
+purgelist_amd_add_columns:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: PURGELIST_ADM
+  transformations:
+    - column:
+        add_columns:
+          - String(null) as PURGE_CYCLE
+          - "'N' as IS_TERMINUS"
+
+purgelist_experian_add_columns:
+  dataset_id: domain_customer_acquisition
+  project_id: pcb-{env}-landing
+  table_name: PURGELIST_EXPERIAN
+  transformations:
+    - column:
+        add_columns:
+          - String(null) as PURGE_CYCLE
+          - "'N' as IS_TERMINUS"
+
+purgelist_eapps_add_columns:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: PURGELIST_EAPPS
+  transformations:
+    - column:
+        add_columns:
+          - String(null) as PURGE_CYCLE
+          - "'N' as IS_TERMINUS"
+
+idv_document_change_dataset:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_communication
+  target_dataset_id: domain_validation_verification
+  table_name: IDV_DOCUMENT
+  partition_field: DATE_TRUNC(CREATE_DT, MONTH)
+
+idv_event_change_dataset:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_communication
+  target_dataset_id: domain_validation_verification
+  table_name: IDV_EVENT
+  partition_field: DATE_TRUNC(OCCURRED_ON, MONTH)
+
+domain_aml_agg_at31_partition_dataset:
+  project_id: pcb-{env}-curated
+  dataset_id: domain_aml
+  table_name: AGG_AT31
+  partition_field: DATETIME_TRUNC(REC_LOAD_TIMESTAMP, DAY)
+  clustering_fields:
+    - RAIL_TYPE
+
+aml_case_feed_change_dataset:
+  project_id: pcb-{env}-curated
+  dataset_id: AMLDataset
+  target_dataset_id: cots_aml_verafin
+  table_name: CASE_FEED
+
+aml_person_feed_change_dataset:
+  project_id: pcb-{env}-curated
+  dataset_id: AMLDataset
+  target_dataset_id: cots_aml_verafin
+  table_name: PERSON_FEED
+
+aml_person_derived_feed_change_dataset:
+  project_id: pcb-{env}-curated
+  dataset_id: AMLDataset
+  target_dataset_id: cots_aml_verafin
+  table_name: PERSON_DERIVED_FEED
+
+aml_note_feed_change_dataset:
+  project_id: pcb-{env}-curated
+  dataset_id: AMLDataset
+  target_dataset_id: cots_aml_verafin
+  table_name: NOTE_FEED
+
+tsys_pcb_mc_acct_hist_ah02_hist_bkp_add_column:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: AH02_HIST_BKP
+  transformations:
+    - column:
+        add_columns:
+          - AH02_HIST_INS_RATE_ACTI_FLG_1 as AH02_HIST_INS_RATE_ACTIVE_FLAG_1
+          - AH02_HIST_INS_RATE_ACTI_FLG_2 as AH02_HIST_INS_RATE_ACTIVE_FLAG_2
+          - AH02_HIST_INS_RATE_ACTI_FLG_3 as AH02_HIST_INS_RATE_ACTIVE_FLAG_3
+          - AH02_HIST_INS_RATE_ACTI_FLG_4 as AH02_HIST_INS_RATE_ACTIVE_FLAG_4
+          - AH02_HIST_INS_RATE_ACTI_FLG_5 as AH02_HIST_INS_RATE_ACTIVE_FLAG_5
+          - AH02_HIST_INS_RATE_ACTI_FLG_6 as AH02_HIST_INS_RATE_ACTIVE_FLAG_6
+          - AH02_HIST_INS_RATE_ACTI_FLG_7 as AH02_HIST_INS_RATE_ACTIVE_FLAG_7
+          - AH02_HIST_INS_AMT_LAST_PREM_1 as AH02_HIST_INS_AMT_LAST_PREMIUM_1
+          - AH02_HIST_INS_AMT_LAST_PREM_2 as AH02_HIST_INS_AMT_LAST_PREMIUM_2
+          - AH02_HIST_INS_AMT_LAST_PREM_3 as AH02_HIST_INS_AMT_LAST_PREMIUM_3
+          - AH02_HIST_INS_AMT_LAST_PREM_4 as AH02_HIST_INS_AMT_LAST_PREMIUM_4
+          - AH02_HIST_INS_AMT_LAST_PREM_5 as AH02_HIST_INS_AMT_LAST_PREMIUM_5
+          - AH02_HIST_INS_AMT_LAST_PREM_6 as AH02_HIST_INS_AMT_LAST_PREMIUM_6
+          - AH02_HIST_INS_AMT_LAST_PREM_7 as AH02_HIST_INS_AMT_LAST_PREMIUM_7
+          - AH02_HIST_INS_JNT_SINGLE_ID_1 as AH02_HIST_INS_JOINT_SINGLE_ID_1
+          - AH02_HIST_INS_JNT_SINGLE_ID_2 as AH02_HIST_INS_JOINT_SINGLE_ID_2
+          - AH02_HIST_INS_JNT_SINGLE_ID_3 as AH02_HIST_INS_JOINT_SINGLE_ID_3
+          - AH02_HIST_INS_JNT_SINGLE_ID_4 as AH02_HIST_INS_JOINT_SINGLE_ID_4
+          - AH02_HIST_INS_JNT_SINGLE_ID_5 as AH02_HIST_INS_JOINT_SINGLE_ID_5
+          - AH02_HIST_INS_JNT_SINGLE_ID_6 as AH02_HIST_INS_JOINT_SINGLE_ID_6
+          - AH02_HIST_INS_JNT_SINGLE_ID_7 as AH02_HIST_INS_JOINT_SINGLE_ID_7
+        drop_columns:
+          - AH02_HIST_INS_RATE_ACTI_FLG_1
+          - AH02_HIST_INS_RATE_ACTI_FLG_2
+          - AH02_HIST_INS_RATE_ACTI_FLG_3
+          - AH02_HIST_INS_RATE_ACTI_FLG_4
+          - AH02_HIST_INS_RATE_ACTI_FLG_5
+          - AH02_HIST_INS_RATE_ACTI_FLG_6
+          - AH02_HIST_INS_RATE_ACTI_FLG_7
+          - AH02_HIST_INS_JNT_SINGLE_ID_1
+          - AH02_HIST_INS_JNT_SINGLE_ID_2
+          - AH02_HIST_INS_JNT_SINGLE_ID_3
+          - AH02_HIST_INS_JNT_SINGLE_ID_4
+          - AH02_HIST_INS_JNT_SINGLE_ID_5
+          - AH02_HIST_INS_JNT_SINGLE_ID_6
+          - AH02_HIST_INS_JNT_SINGLE_ID_7
+          - AH02_HIST_INS_AMT_LAST_PREM_1
+          - AH02_HIST_INS_AMT_LAST_PREM_2
+          - AH02_HIST_INS_AMT_LAST_PREM_3
+          - AH02_HIST_INS_AMT_LAST_PREM_4
+          - AH02_HIST_INS_AMT_LAST_PREM_5
+          - AH02_HIST_INS_AMT_LAST_PREM_6
+          - AH02_HIST_INS_AMT_LAST_PREM_7
+
+tsys_pcb_mc_acct_hist_ah02_hist_bkp_add_column_reverse:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: AH02_HIST_BKP
+  transformations:
+    - column:
+        add_columns:
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_1 as AH02_HIST_INS_RATE_ACTI_FLG_1
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_2 as AH02_HIST_INS_RATE_ACTI_FLG_2
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_3 as AH02_HIST_INS_RATE_ACTI_FLG_3
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_4 as AH02_HIST_INS_RATE_ACTI_FLG_4
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_5 as AH02_HIST_INS_RATE_ACTI_FLG_5
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_6 as AH02_HIST_INS_RATE_ACTI_FLG_6
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_7 as AH02_HIST_INS_RATE_ACTI_FLG_7
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_1 as AH02_HIST_INS_AMT_LAST_PREM_1
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_2 as AH02_HIST_INS_AMT_LAST_PREM_2
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_3 as AH02_HIST_INS_AMT_LAST_PREM_3
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_4 as AH02_HIST_INS_AMT_LAST_PREM_4
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_5 as AH02_HIST_INS_AMT_LAST_PREM_5
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_6 as AH02_HIST_INS_AMT_LAST_PREM_6
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_7 as AH02_HIST_INS_AMT_LAST_PREM_7
+          - AH02_HIST_INS_JOINT_SINGLE_ID_1 as AH02_HIST_INS_JNT_SINGLE_ID_1
+          - AH02_HIST_INS_JOINT_SINGLE_ID_2 as AH02_HIST_INS_JNT_SINGLE_ID_2
+          - AH02_HIST_INS_JOINT_SINGLE_ID_3 as AH02_HIST_INS_JNT_SINGLE_ID_3
+          - AH02_HIST_INS_JOINT_SINGLE_ID_4 as AH02_HIST_INS_JNT_SINGLE_ID_4
+          - AH02_HIST_INS_JOINT_SINGLE_ID_5 as AH02_HIST_INS_JNT_SINGLE_ID_5
+          - AH02_HIST_INS_JOINT_SINGLE_ID_6 as AH02_HIST_INS_JNT_SINGLE_ID_6
+          - AH02_HIST_INS_JOINT_SINGLE_ID_7 as AH02_HIST_INS_JNT_SINGLE_ID_7
+        drop_columns:
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_1
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_2
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_3
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_4
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_5
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_6
+          - AH02_HIST_INS_RATE_ACTIVE_FLAG_7
+          - AH02_HIST_INS_JOINT_SINGLE_ID_1
+          - AH02_HIST_INS_JOINT_SINGLE_ID_2
+          - AH02_HIST_INS_JOINT_SINGLE_ID_3
+          - AH02_HIST_INS_JOINT_SINGLE_ID_4
+          - AH02_HIST_INS_JOINT_SINGLE_ID_5
+          - AH02_HIST_INS_JOINT_SINGLE_ID_6
+          - AH02_HIST_INS_JOINT_SINGLE_ID_7
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_1
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_2
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_3
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_4
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_5
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_6
+          - AH02_HIST_INS_AMT_LAST_PREMIUM_7
+
+billpay_fulfillment_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: BILLPAY_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(FUNDSMOVE_PROCESSING_DT) , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+billpay_opacct_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: BILLPAY_OPACCT_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(REQUEST_ON) , 'America/Toronto') AS REQUEST_ON
+          - DATETIME(TIMESTAMP(PYMT_DT) , 'America/Toronto') AS PYMT_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - REQUEST_ON
+          - PYMT_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+billpay_opacct_reqstatus_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: BILLPAY_OPACCT_REQSTATUS
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_pcborigin_in_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_PCBORIGIN_IN_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(FUNDSMOVE_PROCESSING_DT) , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - DATETIME(TIMESTAMP(SETTLE_ON) , 'America/Toronto') AS SETTLE_ON
+          - DATETIME(TIMESTAMP(EXECUTED_ON) , 'America/Toronto') AS EXECUTED_ON
+          - DATETIME(TIMESTAMP(REQUEST_ON) , 'America/Toronto') AS REQUEST_ON
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - SETTLE_ON
+          - EXECUTED_ON
+          - REQUEST_ON
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_pcborigin_in_req_stat_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_PCBORIGIN_IN_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_pcborigin_out_req_stat_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_PCBORIGIN_OUT_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_extorigin_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_EXTORIGIN_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(FUNDSMOVE_PROCESSING_DT) , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - DATETIME(TIMESTAMP(REQUEST_ON) , 'America/Toronto') AS REQUEST_ON
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - REQUEST_ON
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_extorigin_req_stat_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_EXTORIGIN_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_instruction_recv_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_INSTRUCTION_RECV
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_deposit_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_DEPOSIT_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(INTERAC_TRANSACTION_DT) , 'America/Toronto') AS INTERAC_TRANSACTION_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - INTERAC_TRANSACTION_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_deposit_req_status_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_DEPOSIT_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(FI_TRANSACTION_DT) , 'America/Toronto') AS FI_TRANSACTION_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FI_TRANSACTION_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_instruction_send_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_INSTRUCTION_SEND
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_recipient_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_RECIPIENT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_send_xefr_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_SEND_XFER_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(TRANSFER_REQUEST_EXPIRY_DATE) , 'America/Toronto') AS TRANSFER_REQUEST_EXPIRY_DATE
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+          - DATETIME(TIMESTAMP(ACCOUNT_OPEN_DT) , 'America/Toronto') AS ACCOUNT_OPEN_DT
+        drop_columns:
+          - TRANSFER_REQUEST_EXPIRY_DATE
+          - CREATE_DT
+          - UPDATE_DT
+          - ACCOUNT_OPEN_DT
+
+interac_send_xefr_req_stat_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_SEND_XFER_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+          - DATETIME(TIMESTAMP(PARTICIPANT_TRANSACTION_DATE) , 'America/Toronto') AS PARTICIPANT_TRANSACTION_DATE
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+          - PARTICIPANT_TRANSACTION_DATE
+
+card_deposit_fulfillment_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: CARD_DEPOSIT_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(FUNDSMOVE_PROCESSING_DT) , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+telpay_pymt_inb_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: TELPAY_PYMT_INB_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(ORIG_FI_DT) , 'America/Toronto') AS ORIG_FI_DT
+          - DATETIME(TIMESTAMP(RUN_TMSTMP) , 'America/Toronto') AS RUN_TMSTMP
+          - DATETIME(TIMESTAMP(EFF_PYMT_DT) , 'America/Toronto') AS EFF_PYMT_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - ORIG_FI_DT
+          - RUN_TMSTMP
+          - EFF_PYMT_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+telpay_pymt_inb_req_status_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: TELPAY_PYMT_INB_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+edi_pymt_inb_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EDI_PYMT_INB_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(ORIG_FI_DT) , 'America/Toronto') AS ORIG_FI_DT
+          - DATETIME(TIMESTAMP(EFF_PYMT_DT) , 'America/Toronto') AS EFF_PYMT_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - ORIG_FI_DT
+          - EFF_PYMT_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+edi_pymt_inb_req_status_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EDI_PYMT_INB_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+movemoney_fulfillment_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: MOVEMONEY_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(FUNDSMOVE_PROCESSING_DT) , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+cpa_autopay_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: CPA_AUTOPAY_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+cpa_autopay_req_status_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: CPA_AUTOPAY_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_gl_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_GL_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(FUNDSMOVE_PROCESSING_DT) , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - DATETIME(TIMESTAMP(REQUEST_ON) , 'America/Toronto') AS REQUEST_ON
+          - DATETIME(TIMESTAMP(TRANS_DT) , 'America/Toronto') AS TRANS_DT
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - REQUEST_ON
+          - TRANS_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_gl_req_status_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_GL_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_instruction_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_INSTRUCTION
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+pcf_fundsmove_auth_req_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: PCF_FUNDSMOVE_AUTH_REQ
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+authorization_fulfillment_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: AUTHORIZATION_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_authorization_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_AUTHORIZATION
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(NEXT_FUNDSMOVE_SCHEDULED_ON) , 'America/Toronto') AS NEXT_FUNDSMOVE_SCHEDULED_ON
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - NEXT_FUNDSMOVE_SCHEDULED_ON
+          - CREATE_DT
+          - UPDATE_DT
+
+platform_user_login_change_timestamp_to_datetime:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_management
+  table_name: PLATFORM_USER_LOGIN
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(TIMESTAMP(WEB_LAST_LOGIN_DATE) , 'America/Toronto') AS WEB_LAST_LOGIN_DATE
+          - DATETIME(TIMESTAMP(MOBILE_LAST_LOGIN_DATE) , 'America/Toronto') AS MOBILE_LAST_LOGIN_DATE
+          - DATETIME(TIMESTAMP(CREATE_DT) , 'America/Toronto') AS CREATE_DT
+          - DATETIME(TIMESTAMP(UPDATE_DT) , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - WEB_LAST_LOGIN_DATE
+          - MOBILE_LAST_LOGIN_DATE
+          - CREATE_DT
+          - UPDATE_DT
+
+billpay_fulfillment_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: BILLPAY_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(FUNDSMOVE_PROCESSING_DT , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+billpay_opacct_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: BILLPAY_OPACCT_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(REQUEST_ON , 'America/Toronto') AS REQUEST_ON
+          - TIMESTAMP(PYMT_DT , 'America/Toronto') AS PYMT_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - REQUEST_ON
+          - PYMT_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+billpay_opacct_reqstatus_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: BILLPAY_OPACCT_REQSTATUS
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_pcborigin_in_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_PCBORIGIN_IN_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(FUNDSMOVE_PROCESSING_DT , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - TIMESTAMP(SETTLE_ON , 'America/Toronto') AS SETTLE_ON
+          - TIMESTAMP(EXECUTED_ON , 'America/Toronto') AS EXECUTED_ON
+          - TIMESTAMP(REQUEST_ON , 'America/Toronto') AS REQUEST_ON
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - SETTLE_ON
+          - EXECUTED_ON
+          - REQUEST_ON
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_pcborigin_in_req_stat_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_PCBORIGIN_IN_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_pcborigin_out_req_stat_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_PCBORIGIN_OUT_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_extorigin_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_EXTORIGIN_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(FUNDSMOVE_PROCESSING_DT , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - TIMESTAMP(REQUEST_ON , 'America/Toronto') AS REQUEST_ON
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - REQUEST_ON
+          - CREATE_DT
+          - UPDATE_DT
+
+eft_extorigin_req_stat_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_EXTORIGIN_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_instruction_recv_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_INSTRUCTION_RECV
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_deposit_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_DEPOSIT_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(INTERAC_TRANSACTION_DT , 'America/Toronto') AS INTERAC_TRANSACTION_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - INTERAC_TRANSACTION_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_deposit_req_status_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_DEPOSIT_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(FI_TRANSACTION_DT , 'America/Toronto') AS FI_TRANSACTION_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FI_TRANSACTION_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_instruction_send_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_INSTRUCTION_SEND
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_recipient_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_RECIPIENT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+interac_send_xefr_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_SEND_XFER_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(TRANSFER_REQUEST_EXPIRY_DATE , 'America/Toronto') AS TRANSFER_REQUEST_EXPIRY_DATE
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+          - TIMESTAMP(ACCOUNT_OPEN_DT , 'America/Toronto') AS ACCOUNT_OPEN_DT
+        drop_columns:
+          - TRANSFER_REQUEST_EXPIRY_DATE
+          - CREATE_DT
+          - UPDATE_DT
+          - ACCOUNT_OPEN_DT
+
+interac_send_xefr_req_stat_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_SEND_XFER_REQ_STAT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+          - TIMESTAMP(PARTICIPANT_TRANSACTION_DATE , 'America/Toronto') AS PARTICIPANT_TRANSACTION_DATE
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+          - PARTICIPANT_TRANSACTION_DATE
+
+card_deposit_fulfillment_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: CARD_DEPOSIT_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(FUNDSMOVE_PROCESSING_DT , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+telpay_pymt_inb_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: TELPAY_PYMT_INB_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(ORIG_FI_DT , 'America/Toronto') AS ORIG_FI_DT
+          - TIMESTAMP(RUN_TMSTMP , 'America/Toronto') AS RUN_TMSTMP
+          - TIMESTAMP(EFF_PYMT_DT , 'America/Toronto') AS EFF_PYMT_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - ORIG_FI_DT
+          - RUN_TMSTMP
+          - EFF_PYMT_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+telpay_pymt_inb_req_status_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: TELPAY_PYMT_INB_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+edi_pymt_inb_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EDI_PYMT_INB_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(ORIG_FI_DT , 'America/Toronto') AS ORIG_FI_DT
+          - TIMESTAMP(EFF_PYMT_DT , 'America/Toronto') AS EFF_PYMT_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - ORIG_FI_DT
+          - EFF_PYMT_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+edi_pymt_inb_req_status_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EDI_PYMT_INB_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+movemoney_fulfillment_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: MOVEMONEY_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(FUNDSMOVE_PROCESSING_DT , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+cpa_autopay_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: CPA_AUTOPAY_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+cpa_autopay_req_status_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: CPA_AUTOPAY_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_gl_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_GL_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(FUNDSMOVE_PROCESSING_DT , 'America/Toronto') AS FUNDSMOVE_PROCESSING_DT
+          - TIMESTAMP(REQUEST_ON , 'America/Toronto') AS REQUEST_ON
+          - TIMESTAMP(TRANS_DT , 'America/Toronto') AS TRANS_DT
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - FUNDSMOVE_PROCESSING_DT
+          - REQUEST_ON
+          - TRANS_DT
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_gl_req_status_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_GL_REQ_STATUS
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_instruction_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_INSTRUCTION
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+pcf_fundsmove_auth_req_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: PCF_FUNDSMOVE_AUTH_REQ
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+authorization_fulfillment_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: AUTHORIZATION_FULFILLMENT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - CREATE_DT
+          - UPDATE_DT
+
+fundsmove_authorization_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: FUNDSMOVE_AUTHORIZATION
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NEXT_FUNDSMOVE_SCHEDULED_ON , 'America/Toronto') AS NEXT_FUNDSMOVE_SCHEDULED_ON
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - NEXT_FUNDSMOVE_SCHEDULED_ON
+          - CREATE_DT
+          - UPDATE_DT
+
+platform_user_login_change_datetime_to_timestamp:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_management
+  table_name: PLATFORM_USER_LOGIN
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(WEB_LAST_LOGIN_DATE , 'America/Toronto') AS WEB_LAST_LOGIN_DATE
+          - TIMESTAMP(MOBILE_LAST_LOGIN_DATE , 'America/Toronto') AS MOBILE_LAST_LOGIN_DATE
+          - TIMESTAMP(CREATE_DT , 'America/Toronto') AS CREATE_DT
+          - TIMESTAMP(UPDATE_DT , 'America/Toronto') AS UPDATE_DT
+        drop_columns:
+          - WEB_LAST_LOGIN_DATE
+          - MOBILE_LAST_LOGIN_DATE
+          - CREATE_DT
+          - UPDATE_DT
+
+adm_rt_response_uns_add_rti_metadata:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_RT_RESPONSE_UNS
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+app_cust_info_add_rti_metadata:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APP_CUST_INFO
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+fraud_queue_searchable_value:
+  project_id: pcb-{env}-landing
+  dataset_id: cots_fraud_ffm
+  table_name: FRAUD_QUEUE_SEARCHABLE_VALUE
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(SEARCH_VALUE_DTTM) AS SEARCH_VALUE_DT
+
+curated_product_transaction_change_datetime_to_date:
+  project_id: pcb-{env}-curated
+  dataset_id: domain_account_management
+  table_name: PRODUCT_TRANSACTION
+  partition_field: POSTED_DATE
+  transformations:
+    - column:
+        add_columns:
+          - DATE(AUTHORIZED_DATE) AS AUTHORIZED_DATE
+          - DATE(POSTED_DATE) AS POSTED_DATE
+          - DATE(TRANSACTED_DATE) AS TRANSACTED_DATE
+          - DATE(BILLING_CYCLE_DATE) AS BILLING_CYCLE_DATE
+        drop_columns:
+          - AUTHORIZED_DATE
+          - POSTED_DATE
+          - TRANSACTED_DATE
+          - BILLING_CYCLE_DATE
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am00_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am01_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am02_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am0e_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am0a_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am04_pd_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am08_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am0f_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0F_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am0br_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BR_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_amobh_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BH_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am33_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+domain_account_management_tsys_pcb_mc_acctmaster_daily_am35_rec_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM35_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+accountmasterdataset_tsys_pcb_mc_acctmaster_daily_am00_rec_schema_update:
+  project_id: pcb-{env}-curated
+  dataset_id: AccountMasterDataset
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+accountmasterdataset_tsys_pcb_mc_acctmaster_daily_am01_rec_schema_update:
+  project_id: pcb-{env}-curated
+  dataset_id: AccountMasterDataset
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+accountmasterdataset_tsys_pcb_mc_acctmaster_daily_am02_rec_schema_update:
+  project_id: pcb-{env}-curated
+  dataset_id: AccountMasterDataset
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+accountmasterdataset_tsys_pcb_mc_acctmaster_daily_am04_pd_schema_update:
+  project_id: pcb-{env}-curated
+  dataset_id: AccountMasterDataset
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+accountmasterdataset_tsys_pcb_mc_acctmaster_daily_am0a_rec_schema_update:
+  project_id: pcb-{env}-curated
+  dataset_id: AccountMasterDataset
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+accountmasterdataset_tsys_pcb_mc_acctmaster_daily_am0e_rec_schema_update:
+  project_id: pcb-{env}-curated
+  dataset_id: AccountMasterDataset
+  table_name: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC
+  partition_field: RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+  clustering_fields:
+    - MAST_ACCOUNT_ID
+
+application_product_evt_add_rti_metadata:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_PRODUCT_EVT
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+re_idv_required_accounts_add_drop_columns:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: RE_IDV_REQUIRED_ACCOUNTS
+  partition_field: DATETIME_TRUNC(INGESTION_TIMESTAMP, DAY)
+  transformations:
+    - column:
+        add_columns:
+          - STRING(NULL) AS IDV_REQUEST_UID
+          - METADATA AS METADATA
+          - INGESTION_TIMESTAMP AS INGESTION_TIMESTAMP
+        drop_columns:
+          - DP_ACCOUNT_ID
+          - IDV_REQUEST_NO
+          - METADATA
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+application_submission_evt_add_rti_metadata:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_SUBMISSION_EVT
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+application_product_alter_ingestion_timestamp_column:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_PRODUCT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+application_submission_alter_ingestion_timestamp_column:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_SUBMISSION
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+final_pre_purge_report_add_columns:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: PRE_PURGE_REPORT
+  transformations:
+    - column:
+        add_columns:
+          - DATE(null) as MAX_CLOSURE_CRVK_DATE
+          - REPORT_DATE AS REPORT_DATE
+        drop_columns:
+          - REPORT_DATE
+
+domain_account_management_operator_inquiry_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: OPERATOR_INQUIRY
+  partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+  clustering_fields:
+    - ACCOUNT_NUMBER
+    - ID
+    - CICS_TRAN_CODE
+    - DATE_EVENT
+
+app_cust_info_alter_ingestion_timestamp_column:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APP_CUST_INFO
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+application_product_ingestion_timestamp_column_to_datetime:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_PRODUCT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+application_submission_ingestion_timestamp_column_to_datetime:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_SUBMISSION
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+application_submission_evt_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_SUBMISSION_EVT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+application_product_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_PRODUCT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+application_submission_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_SUBMISSION
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+domain_customer_acquisition_product_application_req_schema_update:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: PRODUCT_APPLICATION_REQ
+  partition_field: DATE_TRUNC(CREATE_DT, MONTH)
+  clustering_fields:
+    - PRODUCT_APPLICATION_REQ_UID
+    - PRODUCT_APPLICATION_ID
+
+domain_marketing_stmt_cme_feedback_schema_update:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+  project_id: pcb-{env}-landing
+  dataset_id: domain_marketing
+  table_name: STMT_CME_FEEDBACK
+  partition_field: DATETIME_TRUNC(PROCESSED_TMS, MONTH)
+  clustering_fields:
+    - ACCOUNT_ID
+
+domain_marketing_audit_mac_actions_schema_update:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+  project_id: pcb-{env}-landing
+  dataset_id: domain_marketing
+  table_name: AUDIT_MAC_ACTIONS
+  partition_field: DATETIME_TRUNC(REC_CREATE_TMS, MONTH)
+  clustering_fields:
+      - ACTION_ID
+      - LOGIN_ID
+      - ACTION_DESC
+      - SEARCH_STRING
+
+domain_marketing_login_log_schema_update:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+  project_id: pcb-{env}-landing
+  dataset_id: domain_marketing
+  table_name: LOGIN_LOG
+  partition_field: DATETIME_TRUNC(REC_CREATE_TMS, MONTH)
+  clustering_fields:
+    - LOGIN_ID
+    - SUCCESS_IND
+    - EXIT_POINT_ID
+    - ST_CD
+
+domain_fraud_ffm_monetary_auth_req_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_fraud
+  table_name: FFM_MONETARY_AUTH_REQ
+  partition_field: DATE_TRUNC(CREATE_DT, MONTH)
+  clustering_fields:
+    - FFM_MONETARY_AUTH_REQ_UID
+    - CREDIT_FFM_ACCOUNT_NO
+    - DEBIT_FFM_ACCOUNT_NO
+    - CREDIT_ACCOUNT_NO
+
+domain_fraud_ffm_monetary_auth_req_stat_schema_update:
+  project_id: pcb-{env}-landing
+  dataset_id: domain_fraud
+  table_name: FFM_MONETARY_AUTH_REQ_STAT
+  partition_field: DATETIME_TRUNC(CREATE_DT, MONTH)
+  clustering_fields:
+    - FFM_MONETARY_AUTH_REQ_STAT_UID
+    - FFM_MONETARY_AUTH_REQ_UID
+    - REASON_MESSAGE
+    - STATUS
+
+domain_card_management_INSTANT_ISSUANCE_DAGS_CONTROL_schema_udpate:
+  default_args:
+    owner: "gremlins"
+    capability: "account-management'"
+    sub_capability: "card-management'"
+    business_impact: "This will impact instant card issuance for SCMS"
+    customer_impact: "NA"
+  tags:
+    - gremlins
+  project_id: pcb-{env}-landing
+  dataset_id: domain_card_management
+  table_name: INSTANT_ISSUANCE_DAGS_CONTROL
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS dagExecutionTime
+          - STRING(NULL) AS triggerType
+          - INT64(NULL) AS replacementCount

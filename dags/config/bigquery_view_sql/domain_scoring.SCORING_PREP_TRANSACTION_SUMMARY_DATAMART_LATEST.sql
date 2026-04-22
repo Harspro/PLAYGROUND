@@ -1,0 +1,14 @@
+  WITH
+  scoring_prep_transaction_summary_datamart_latest_load AS (
+  SELECT
+    MAX(scoring_prep_transaction_summary_datamart.REC_LOAD_TIMESTAMP) AS LATEST_REC_LOAD_TIMESTAMP
+  FROM
+    `pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANSACTION_SUMMARY_DATAMART` AS scoring_prep_transaction_summary_datamart )
+SELECT
+  * EXCEPT(LATEST_REC_LOAD_TIMESTAMP)
+FROM
+  `pcb-{env}-landing.domain_scoring.SCORING_PREP_TRANSACTION_SUMMARY_DATAMART` AS scoring_prep_transaction_summary_datamart
+INNER JOIN
+  scoring_prep_transaction_summary_datamart_latest_load AS scoring_prep_transaction_summary_datamart_ll
+ON
+  scoring_prep_transaction_summary_datamart.REC_LOAD_TIMESTAMP = scoring_prep_transaction_summary_datamart_ll.LATEST_REC_LOAD_TIMESTAMP;

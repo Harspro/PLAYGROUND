@@ -1,0 +1,70 @@
+pcb_dst_crm_output_file_creation_post_extractor:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "CRM will not be sent to broadridge for further processing"
+    customer_impact: "Delay in receiving e-statement"
+    severity: "P2"
+  tags: ["Digital Adoption - DA" , "P2" ]
+  job_size: large
+  processing_bucket: pcb-{env}-staging
+  cluster_name: pcb-dst-pcmc-stmt-output-loader-c
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  PROCESSING_INTERIM_DIR: pcb_dst_pcmc_processing/stmt_post/extract
+  PROCESSING_OUTPUT_DIR: pcb_dst_pcmc_processing/stmt_post/extract/{cycle}
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: mft-pcb-outbound{env_suffix}
+  validation:
+    tables_check: "'tsys_pcb_pcmc_stmt_reg_file_loading', 'tsys_pcb_pcmc_stmt_cgo_file_loading'"
+    count_check: 2
+    param_table: pcb-{env}-curated.JobControlDataset.DAGS_HISTORY
+    file_create_dt_table: pcb-{env}-landing.domain_account_management.SA00
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    batch_num_table: PCMC_STMT_POST_PARAM
+    data_load_type: APPEND_ONLY
+    segment_dependency_groups:
+      - group_name: header
+        segments: HEDR, OFFER_RECORDS, CUSTOMER_RECORDS
+      - group_name: detail
+        segments: DETL
+      - group_name: trailer
+        segments: TRLR
+      - group_name: output
+        segments: OUTPUT
+    segment_args:
+      HEDR:
+        input_table_name: SA00
+        output_table_name: PCB_DST_CRM_STMT_HEDR
+      OFFER_RECORDS:
+        output_table_name: OFFER_RECORDS
+      CUSTOMER_RECORDS:
+        output_table_name: CUSTOMER_RECORDS
+      DETL:
+        output_table_name: PCB_DST_CRM_STMT_DETL
+      TRLR:
+        input_table_name: SA99
+        output_table_name: PCB_DST_CRM_STMT_TRLR
+      OUTPUT:
+        output_table_name: PCB_DST_CRM_STMT_OUTPUT
+  output_file:
+    project_id: pcb-{env}-landing
+    order_by: ORDER BY SEQ_NUM
+    table_order:
+      - "OUTPUT"
+    table_detail:
+      OUTPUT: pcb-{env}-processing.domain_account_management.PCB_DST_CRM_STMT_OUTPUT_DBEXT
+    column: record
+    output_filename: "psf_dst_pcb_crm_{cycle}"
+    filename_extension: "{file_env}"
+  cycle_details:
+    - cycle_job: VI71
+      domain: landing
+      table: domain_account_management.SA10
+      column: SA10_BILLING_CYCLE
+  trigger_dag_id: pcb_dst_zip_extractor
+  outbound_trigger: False

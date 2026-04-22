@@ -1,0 +1,142 @@
+equifax_cred_das_file_loading:
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: expcbanktsystt.eqxcan.ds.SCDS
+  folder_prefix: equifax_das
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CREDSCORE_DAS
+      pcb.tsys.processor.segment.name: DAS
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CREDSCORE_DAS
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: das_group
+        segments: DAS
+    segment_args:
+      DAS:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_credscore_das/DAS.CPY
+        pcb.tsys.processor.segment.name: DAS
+        pcb.tsys.processor.layout.name: CREDSCORE_DAS_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_credscore_das/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: DAS_TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_scoring
+    data_load_type: APPEND_ONLY
+    tables:
+      DAS:
+        table_name: CREDSCORE_DAS
+        record_count_column: NUMBER_DETAIL_RECORDS
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - SAFE_CAST(CB_FILE_NUMBER AS INT64) AS CB_FILE_NUMBER
+          - SAFE_CAST(AH01_ACTUAL_APR AS NUMERIC) AS AH01_ACTUAL_APR
+          - SAFE_CAST(AH01_AMT_NSF_PAYMENTS AS NUMERIC) AS AH01_AMT_NSF_PAYMENTS
+          - SAFE_CAST(AH01_AMT_OVERLIM AS NUMERIC) AS AH01_AMT_OVERLIM
+          - SAFE_CAST(AH01_AMT_PSTDUE_1 AS NUMERIC) AS AH01_AMT_PSTDUE_1
+          - SAFE_CAST(AH01_AMT_PSTDUE_2 AS NUMERIC) AS AH01_AMT_PSTDUE_2
+          - SAFE_CAST(AH01_AMT_PSTDUE_3 AS NUMERIC) AS AH01_AMT_PSTDUE_3
+          - SAFE_CAST(AH01_AMT_PSTDUE_4 AS NUMERIC) AS AH01_AMT_PSTDUE_4
+          - SAFE_CAST(AH01_AMT_PSTDUE_5 AS NUMERIC) AS AH01_AMT_PSTDUE_5
+          - SAFE_CAST(AH01_AMT_PSTDUE_6 AS NUMERIC) AS AH01_AMT_PSTDUE_6
+          - SAFE_CAST(AH01_AMT_PSTDUE_7 AS NUMERIC) AS AH01_AMT_PSTDUE_7
+          - SAFE_CAST(AH01_AMT_PSTDUE_8 AS NUMERIC) AS AH01_AMT_PSTDUE_8
+          - SAFE_CAST(AH01_AMT_PSTDUE_9 AS NUMERIC) AS AH01_AMT_PSTDUE_9
+          - SAFE_CAST(AH01_AMT_PSTDUE_10 AS NUMERIC) AS AH01_AMT_PSTDUE_10
+          - SAFE_CAST(AH01_AMT_PSTDUE_11 AS NUMERIC) AS AH01_AMT_PSTDUE_11
+          - SAFE_CAST(AH01_AMT_PSTDUE_12 AS NUMERIC) AS AH01_AMT_PSTDUE_12
+          - SAFE_CAST(AH01_AMT_PAYMENTS AS NUMERIC) AS AH01_AMT_PAYMENTS
+          - SAFE_CAST(AH01_BALNC_CURR AS NUMERIC) AS AH01_BALNC_CURR
+          - SAFE_CAST(AH01_BALNC_PREV_STATEMENT AS NUMERIC) AS AH01_BALNC_PREV_STATEMENT
+          - SAFE_CAST(AH01_WEIGHTED_AVG_APR AS NUMERIC) AS AH01_WEIGHTED_AVG_APR
+          - SAFE_CAST(AM00_CASH_LIM AS NUMERIC) AS AM00_CASH_LIM
+          - SAFE_CAST(AM02_AMT_CASH_LTD AS NUMERIC) AS AM02_AMT_CASH_LTD
+          - SAFE_CAST(AM02_AMT_CASH_YTD AS NUMERIC) AS AM02_AMT_CASH_YTD
+          - SAFE_CAST(AM02_AMT_CONV_CHECKS_LTD AS NUMERIC) AS AM02_AMT_CONV_CHECKS_LTD
+          - SAFE_CAST(AM02_AMT_CONV_CHECKS_YTD AS NUMERIC) AS AM02_AMT_CONV_CHECKS_YTD
+          - SAFE_CAST(AM02_AMT_FCHG_BILLED_PYE AS NUMERIC) AS AM02_AMT_FCHG_BILLED_PYE
+          - SAFE_CAST(AM02_AMT_FCHG_BILLED_YTD AS NUMERIC) AS AM02_AMT_FCHG_BILLED_YTD
+          - SAFE_CAST(AM02_AMT_FCHG_PAID_LTD AS NUMERIC) AS AM02_AMT_FCHG_PAID_LTD
+          - SAFE_CAST(AM02_AMT_FCHG_PAID_PYE AS NUMERIC) AS AM02_AMT_FCHG_PAID_PYE
+          - SAFE_CAST(AM02_AMT_FCHG_PAID_YTD AS NUMERIC) AS AM02_AMT_FCHG_PAID_YTD
+          - SAFE_CAST(AM02_AMT_LAST_CASH AS NUMERIC) AS AM02_AMT_LAST_CASH
+          - SAFE_CAST(AM02_AMT_LAST_NSF_PAYMENT AS NUMERIC) AS AM02_AMT_LAST_NSF_PAYMENT
+          - SAFE_CAST(AM02_AMT_LAST_PAYMENT AS NUMERIC) AS AM02_AMT_LAST_PAYMENT
+          - SAFE_CAST(AM02_AMT_NSF_PAYMENTS_CTD AS NUMERIC) AS AM02_AMT_NSF_PAYMENTS_CTD
+          - SAFE_CAST(AM02_AMT_NSF_PAYMENTS_LTD AS NUMERIC) AS AM02_AMT_NSF_PAYMENTS_LTD
+          - SAFE_CAST(AM02_AMT_NSF_PAYMENTS_PYE AS NUMERIC) AS AM02_AMT_NSF_PAYMENTS_PYE
+          - SAFE_CAST(AM02_AMT_NSF_PAYMENTS_YTD AS NUMERIC) AS AM02_AMT_NSF_PAYMENTS_YTD
+          - SAFE_CAST(AM02_AMT_PAYMENTS_CTD AS NUMERIC) AS AM02_AMT_PAYMENTS_CTD
+          - SAFE_CAST(AM02_AMT_PAYMENTS_LTD AS NUMERIC) AS AM02_AMT_PAYMENTS_LTD
+          - SAFE_CAST(AM02_AMT_PAYMENTS_PYE AS NUMERIC) AS AM02_AMT_PAYMENTS_PYE
+          - SAFE_CAST(AM02_AMT_PAYMENTS_YTD AS NUMERIC) AS AM02_AMT_PAYMENTS_YTD
+          - SAFE_CAST(AM02_AMT_PURCHASES_LTD AS NUMERIC) AS AM02_AMT_PURCHASES_LTD
+          - SAFE_CAST(AM02_AMT_PURCHASES_YTD AS NUMERIC) AS AM02_AMT_PURCHASES_YTD
+          - SAFE_CAST(AM02_BALNC_CURR AS NUMERIC) AS AM02_BALNC_CURR
+          - SAFE_CAST(AM02_BALNC_PREV_STATEMENT AS NUMERIC) AS AM02_BALNC_PREV_STATEMENT
+          - SAFE_CAST(AT31_AMT_TRANSACTION AS NUMERIC) AS AT31_AMT_TRANSACTION
+        drop_columns:
+          - CB_FILE_NUMBER
+          - AH01_ACTUAL_APR
+          - AH01_AMT_NSF_PAYMENTS
+          - AH01_AMT_OVERLIM
+          - AH01_AMT_PSTDUE_1
+          - AH01_AMT_PSTDUE_2
+          - AH01_AMT_PSTDUE_3
+          - AH01_AMT_PSTDUE_4
+          - AH01_AMT_PSTDUE_5
+          - AH01_AMT_PSTDUE_6
+          - AH01_AMT_PSTDUE_7
+          - AH01_AMT_PSTDUE_8
+          - AH01_AMT_PSTDUE_9
+          - AH01_AMT_PSTDUE_10
+          - AH01_AMT_PSTDUE_11
+          - AH01_AMT_PSTDUE_12
+          - AH01_AMT_PAYMENTS
+          - AH01_BALNC_CURR
+          - AH01_BALNC_PREV_STATEMENT
+          - AH01_WEIGHTED_AVG_APR
+          - AM00_CASH_LIM
+          - AM02_AMT_CASH_LTD
+          - AM02_AMT_CASH_YTD
+          - AM02_AMT_CONV_CHECKS_LTD
+          - AM02_AMT_CONV_CHECKS_YTD
+          - AM02_AMT_FCHG_BILLED_PYE
+          - AM02_AMT_FCHG_BILLED_YTD
+          - AM02_AMT_FCHG_PAID_LTD
+          - AM02_AMT_FCHG_PAID_PYE
+          - AM02_AMT_FCHG_PAID_YTD
+          - AM02_AMT_LAST_CASH
+          - AM02_AMT_LAST_NSF_PAYMENT
+          - AM02_AMT_LAST_PAYMENT
+          - AM02_AMT_NSF_PAYMENTS_CTD
+          - AM02_AMT_NSF_PAYMENTS_LTD
+          - AM02_AMT_NSF_PAYMENTS_PYE
+          - AM02_AMT_NSF_PAYMENTS_YTD
+          - AM02_AMT_PAYMENTS_CTD
+          - AM02_AMT_PAYMENTS_LTD
+          - AM02_AMT_PAYMENTS_PYE
+          - AM02_AMT_PAYMENTS_YTD
+          - AM02_AMT_PURCHASES_LTD
+          - AM02_AMT_PURCHASES_YTD
+          - AM02_BALNC_CURR
+          - AM02_BALNC_PREV_STATEMENT
+          - AT31_AMT_TRANSACTION
+      TRLR:
+        table_name: CREDSCORE_DAS_HEADER_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+          - SAFE_CAST(FILE_NUMBER AS INT64) AS CB_FILE_NUMBER

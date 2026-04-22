@@ -1,0 +1,614 @@
+account-master-dataset-clean-up-job:
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC_PREVIOUS
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BH_REC
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BH_REC_PREVIOUS
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BR_REC
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BR_REC_PREVIOUS
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0F_REC
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0F_REC_PREVIOUS
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC_PREVIOUS
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM35_REC
+  - pcb-{env}-curated.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM35_REC_PREVIOUS
+
+drop-ref-occupation-soc-code:
+  - pcb-{env}-landing.domain_customer_management.REF_OCCUPATION_SOC_CODE
+
+drop-goal-account-table-job:
+  - pcb-{env}-landing.domain_account_management.GOAL_ACCOUNT
+
+drop-curated-fundsmove-authorization-table:
+  - pcb-{env}-curated.domain_payments.FUNDSMOVE_AUTHORIZATION
+
+drop-acct-master-dataset-temp-tables:
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BH_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BR_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0F_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC
+  - pcb-{env}-processing.AccountMasterDataset.TSYS_PCB_MC_ACCTMASTER_DAILY_AM35_REC
+
+drop-acct-misc-dataset-temp-tables:
+  - pcb-{env}-processing.AccountMiscDataset.TSYS_ACCT_MISC_MA00_REC
+  - pcb-{env}-processing.AccountMiscDataset.TSYS_ACCT_MISC_MA01_REC
+  - pcb-{env}-processing.AccountScoresDataset.TS2_ACCTSCORES_SC01_REC
+
+drop-cust-master-dataset-temp-tables:
+  - pcb-{env}-processing.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM00_REC
+  - pcb-{env}-processing.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM02_REC
+  - pcb-{env}-processing.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM05_REC
+  - pcb-{env}-processing.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM06_REC
+  - pcb-{env}-processing.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM07_REC
+
+drop-triad-dataset-temp-tables:
+  - pcb-{env}-processing.TriadReportDataset.TS2_RPTREC
+
+drop-acct-management-temp-tables:
+  - pcb-{env}-processing.domain_account_management.AH00
+  - pcb-{env}-processing.domain_account_management.AH01
+  - pcb-{env}-processing.domain_account_management.AH02_ADJ_PASTDUE
+  - pcb-{env}-processing.domain_account_management.AH02_CHG_OFF
+  - pcb-{env}-processing.domain_account_management.AH02_COLL_AGENCY
+  - pcb-{env}-processing.domain_account_management.AH02_CREDLIM_CHG
+  - pcb-{env}-processing.domain_account_management.AH02_REAGE
+  - pcb-{env}-processing.domain_account_management.AT31
+  - pcb-{env}-processing.domain_account_management.CIF_CARD_UNION_TEST
+  - pcb-{env}-processing.domain_account_management.TS2_ACCTSCORES_SC01_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_ACCT_MISC_MA00_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_ACCT_MISC_MA01_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BH_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BR_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM0F_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC
+  - pcb-{env}-processing.domain_account_management.TSYS_PCB_MC_ACCTMASTER_DAILY_AM35_REC
+
+drop-cust-acquisition-temp-tables:
+  - pcb-{env}-processing.domain_customer_acquisition.APP_LOG_HEAD_TRAIL
+  - pcb-{env}-processing.domain_customer_acquisition.GEN_VAL_HEAD_TRAIL_TABLE
+  - pcb-{env}-processing.domain_customer_acquisition.LTTR_OVRD_HEAD_TRAIL_LTO
+
+drop-cust-management-temp-tables:
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM00_REC
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM02_REC
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM05_REC
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM06_REC
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM07_REC
+
+drop-ctt-ccdr-view:
+  - pcb-{env}-curated.cots_customer_service_ctt.CUSTOM_CONTACT_DETAIL_RECORDS
+
+drop-account-history-obsolete-tables:
+  - pcb-{env}-landing.domain_account_management.AH00
+  - pcb-{env}-landing.domain_account_management.AH01
+  - pcb-{env}-landing.domain_account_management.AH02_ADJ_PASTDUE
+  - pcb-{env}-landing.domain_account_management.AH02_CHG_OFF
+  - pcb-{env}-landing.domain_account_management.AH02_COLL_AGENCY
+  - pcb-{env}-landing.domain_account_management.AH02_CREDLIM_CHG
+  - pcb-{env}-landing.domain_account_management.AH02_REAGE
+
+drop-customer-master-landing-old-tables:
+  - pcb-{env}-landing.domain_customer_management.CM00
+  - pcb-{env}-landing.domain_customer_management.CM01
+  - pcb-{env}-landing.domain_customer_management.CM02
+  - pcb-{env}-landing.domain_customer_management.CM03
+  - pcb-{env}-landing.domain_customer_management.CM04
+  - pcb-{env}-landing.domain_customer_management.CM05
+  - pcb-{env}-landing.domain_customer_management.CM06
+  - pcb-{env}-landing.domain_customer_management.CM07
+  - pcb-{env}-landing.domain_customer_management.CM34
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM00_REC
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM02_REC
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM05_REC
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM06_REC
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM07_REC
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM00_REC_PREVIOUS
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM02_REC_PREVIOUS
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM05_REC_PREVIOUS
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM06_REC_PREVIOUS
+  - pcb-{env}-landing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM07_REC_PREVIOUS
+
+drop-customer-master-processing-old-tables:
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM00_REC_EXT
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM02_REC_EXT
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM05_REC_EXT
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM06_REC_EXT
+  - pcb-{env}-processing.domain_customer_management.TSYS_CUSTMASTER_DAILY_CM07_REC_EXT
+
+drop-customer-master-curated-old-tables:
+  - pcb-{env}-curated.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM00_REC
+  - pcb-{env}-curated.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM02_REC
+  - pcb-{env}-curated.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM05_REC
+  - pcb-{env}-curated.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM06_REC
+  - pcb-{env}-curated.CustomerMasterDataset.TSYS_CUSTMASTER_DAILY_CM07_REC
+
+drop-AMLDataset-curated-tables:
+- pcb-{env}-curated.AMLDataset.TRANSACTION_MVMN_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_INMR_FEED
+- pcb-{env}-curated.AMLDataset.IDENTITY_FEED
+- pcb-{env}-curated.AMLDataset.ACCOUNT_PCMA_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_NPFI_FEED
+- pcb-{env}-curated.AMLDataset.stg_at31
+- pcb-{env}-curated.AMLDataset.CUSTOMER_FEED
+- pcb-{env}-curated.AMLDataset.For_QA_ReferenceAlone_TXN_Feed_Control_Table_25Nov
+- pcb-{env}-curated.AMLDataset.ContactFeedJobResults
+- pcb-{env}-curated.AMLDataset.TRANSACTION_INRC_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_NA_FEED
+- pcb-{env}-curated.AMLDataset.ADDRESS_FEED
+- pcb-{env}-curated.AMLDataset.PERSON_DERIVED_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_MMOV_FEED
+- pcb-{env}-curated.AMLDataset.AML_MONITORING
+- pcb-{env}-curated.AMLDataset.TRANSACTION_BPAY_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_PAD_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_CCBR_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_EPUL_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_EPSH_FEED
+- pcb-{env}-curated.AMLDataset.NOTE_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_TLPY_FEED
+- pcb-{env}-curated.AMLDataset.CASE_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_INSE_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_NPFO_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_EDI_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_POSP_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_INAR_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_BTFR_FEED
+- pcb-{env}-curated.AMLDataset.CONTACT_FEED
+- pcb-{env}-curated.AMLDataset.stg_account_info
+- pcb-{env}-curated.AMLDataset.TRANSACTION_ECBR_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_MCBR_FEED
+- pcb-{env}-curated.AMLDataset.PERSON_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_ABM_FEED
+- pcb-{env}-curated.AMLDataset.JOINT_FEED
+- pcb-{env}-curated.AMLDataset.stg_primary_account_info
+- pcb-{env}-curated.AMLDataset.TRANSACTION_INAD_FEED
+- pcb-{env}-curated.AMLDataset.ACCOUNT_PCMC_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_POSR_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_INRR_FEED
+- pcb-{env}-curated.AMLDataset.TRANSACTION_INCA_FEED
+- pcb-{env}-curated.AMLDataset.stg_merchant_info
+- pcb-{env}-curated.AMLDataset.Contact
+- pcb-{env}-curated.AMLDataset.test_table
+- pcb-{env}-curated.AMLDataset.dst_at31
+- pcb-{env}-curated.AMLDataset.agg_at31
+- pcb-{env}-curated.AMLDataset.tables_list
+- pcb-{env}-curated.AMLDataset.ACCOUNT_STATUS_DESCRIPTION
+- pcb-{env}-curated.AMLDataset.test_customer_table
+- pcb-{env}-curated.AMLDataset.AML_AGG_DOMAIN_CONTROL_TABLE
+- pcb-{env}-curated.AMLDataset.another_test_table
+- pcb-{env}-curated.AMLDataset.saad_table_comparator_test_source
+- pcb-{env}-curated.AMLDataset.CONTACT_P
+- pcb-{env}-curated.AMLDataset.V_PERSON_FEED_DERIVED
+- pcb-{env}-curated.AMLDataset.PROCESSED_TRANSACTION_FEED
+- pcb-{env}-curated.AMLDataset.CONTACT_TEST
+- pcb-{env}-curated.AMLDataset.stg_at31_vinson
+- pcb-{env}-curated.AMLDataset.agg_at31_temp
+- pcb-{env}-curated.AMLDataset.CONTACT_FEED_GCS
+
+drop-risk-adaptive-table:
+  - pcb-{env}-curated.domain_scoring.RISK_ADAPTIVE
+
+drop-credscore-file-info-views:
+  - pcb-{env}-curated.domain_scoring.CREDSCORE_FILEINFO
+
+drop-fundsmove-curated-tables:
+  - pcb-{env}-curated.domain_payments.BILLPAY_FULFILLMENT
+  - pcb-{env}-curated.domain_payments.BILLPAY_OPACCT_REQ
+  - pcb-{env}-curated.domain_payments.BILLPAY_OPACCT_REQSTATUS
+  - pcb-{env}-curated.domain_payments.EFT_PCBORIGIN_IN_REQ
+  - pcb-{env}-curated.domain_payments.EFT_PCBORIGIN_IN_REQ_STAT
+  - pcb-{env}-curated.domain_payments.EFT_PCBORIGIN_OUT_REQ_STAT
+  - pcb-{env}-curated.domain_payments.EFT_EXTORIGIN_REQ
+  - pcb-{env}-curated.domain_payments.EFT_EXTORIGIN_REQ_STAT
+  - pcb-{env}-curated.domain_payments.INTERAC_INSTRUCTION_RECV
+  - pcb-{env}-curated.domain_payments.INTERAC_DEPOSIT_REQ
+  - pcb-{env}-curated.domain_payments.INTERAC_DEPOSIT_REQ_STATUS
+  - pcb-{env}-curated.domain_payments.INTERAC_INSTRUCTION_SEND
+  - pcb-{env}-curated.domain_payments.INTERAC_RECIPIENT
+  - pcb-{env}-curated.domain_payments.INTERAC_SEND_XFER_REQ
+  - pcb-{env}-curated.domain_payments.INTERAC_SEND_XFER_REQ_STAT
+  - pcb-{env}-curated.domain_payments.CARD_DEPOSIT_FULFILLMENT
+  - pcb-{env}-curated.domain_payments.TELPAY_PYMT_INB_REQ
+  - pcb-{env}-curated.domain_payments.TELPAY_PYMT_INB_REQ_STATUS
+  - pcb-{env}-curated.domain_payments.EDI_PYMT_INB_REQ
+  - pcb-{env}-curated.domain_payments.EDI_PYMT_INB_REQ_STATUS
+  - pcb-{env}-curated.domain_payments.MOVEMONEY_FULFILLMENT
+  - pcb-{env}-curated.domain_payments.CPA_AUTOPAY_REQ
+  - pcb-{env}-curated.domain_payments.CPA_AUTOPAY_REQ_STATUS
+  - pcb-{env}-curated.domain_payments.FUNDSMOVE_GL_REQ
+  - pcb-{env}-curated.domain_payments.FUNDSMOVE_GL_REQ_STATUS
+  - pcb-{env}-curated.domain_payments.FUNDSMOVE_INSTRUCTION
+  - pcb-{env}-curated.domain_payments.PCF_FUNDSMOVE_AUTH_REQ
+  - pcb-{env}-curated.domain_payments.AUTHORIZATION_FULFILLMENT
+  - pcb-{env}-curated.domain_payments.FUNDSMOVE_AUTHORIZATION
+  - pcb-{env}-curated.domain_customer_management.PLATFORM_USER_LOGIN
+
+drop-landing-lcl-stores-list-table:
+  - pcb-{env}-landing.domain_retail.LCL_STORES_LIST
+
+drop-curated-lcl-stores-list-sample-table:
+  - pcb-{env}-curated.domain_retail.LCL_STORES_LIST-SAMPLE-TABLE
+
+drop-curated-lcl-stores-list-view:
+  - pcb-{env}-curated.domain_retail.LCL_STORES_LIST
+
+drop-aml-dataset-fundsmove-curated-tables:
+  - pcb-{env}-curated.domain_aml.BILLPAY_FULFILLMENT
+  - pcb-{env}-curated.domain_aml.BILLPAY_OPACCT_REQ
+  - pcb-{env}-curated.domain_aml.BILLPAY_OPACCT_REQSTATUS
+  - pcb-{env}-curated.domain_aml.EFT_PCBORIGIN_IN_REQ
+  - pcb-{env}-curated.domain_aml.EFT_PCBORIGIN_IN_REQ_STAT
+  - pcb-{env}-curated.domain_aml.EFT_PCBORIGIN_OUT_REQ_STAT
+  - pcb-{env}-curated.domain_aml.EFT_EXTORIGIN_REQ
+  - pcb-{env}-curated.domain_aml.EFT_EXTORIGIN_REQ_STAT
+  - pcb-{env}-curated.domain_aml.INTERAC_INSTRUCTION_RECV
+  - pcb-{env}-curated.domain_aml.INTERAC_DEPOSIT_REQ
+  - pcb-{env}-curated.domain_aml.INTERAC_DEPOSIT_REQ_STATUS
+  - pcb-{env}-curated.domain_aml.INTERAC_INSTRUCTION_SEND
+  - pcb-{env}-curated.domain_aml.INTERAC_RECIPIENT
+  - pcb-{env}-curated.domain_aml.INTERAC_SEND_XFER_REQ
+  - pcb-{env}-curated.domain_aml.INTERAC_SEND_XFER_REQ_STAT
+  - pcb-{env}-curated.domain_aml.CARD_DEPOSIT_FULFILLMENT
+  - pcb-{env}-curated.domain_aml.TELPAY_PYMT_INB_REQ
+  - pcb-{env}-curated.domain_aml.TELPAY_PYMT_INB_REQ_STATUS
+  - pcb-{env}-curated.domain_aml.EDI_PYMT_INB_REQ
+  - pcb-{env}-curated.domain_aml.EDI_PYMT_INB_REQ_STATUS
+  - pcb-{env}-curated.domain_aml.MOVEMONEY_FULFILLMENT
+  - pcb-{env}-curated.domain_aml.CPA_AUTOPAY_REQ
+  - pcb-{env}-curated.domain_aml.CPA_AUTOPAY_REQ_STATUS
+  - pcb-{env}-curated.domain_aml.FUNDSMOVE_GL_REQ
+  - pcb-{env}-curated.domain_aml.FUNDSMOVE_GL_REQ_STATUS
+  - pcb-{env}-curated.domain_aml.FUNDSMOVE_INSTRUCTION
+  - pcb-{env}-curated.domain_aml.PCF_FUNDSMOVE_AUTH_REQ
+  - pcb-{env}-curated.domain_aml.AUTHORIZATION_FULFILLMENT
+  - pcb-{env}-curated.domain_aml.FUNDSMOVE_AUTHORIZATION
+  - pcb-{env}-curated.domain_aml.PLATFORM_USER_LOGIN
+
+drop-mm-dataset-payment-landing-tables:
+  - pcb-{env}-landing.domain_payments.CONVCHQ_CONF_DETL
+  - pcb-{env}-landing.domain_payments.CONVCHQ_CONF_HEDR
+  - pcb-{env}-landing.domain_payments.CONVCHQ_CONF_TRLR
+  - pcb-{env}-landing.domain_payments.CONVCHQ_CONF_TR_HDR
+  - pcb-{env}-landing.domain_payments.CONVCHQ_CONF_TR_TRLR
+  - pcb-{env}-landing.domain_payments.PAPER_PYMT_TX
+
+drop-ref-correspondence-code-table-job:
+  - pcb-{env}-landing.domain_customer_acquisition.REF_CORRESPONDENCE_CODE
+
+drop-bigquery-billpay-instruction-table-job:
+  - pcb-{env}-landing.domain_payments.BILLPAY_INSTRUCTION
+
+drop-bigquery-customer-history-table-job:
+  - pcb-{env}-landing.domain_customer_management.CUSTOMER_HISTORY
+
+drop-bigquery-fundsmove-schedule-table-job:
+  - pcb-{env}-landing.domain_payments.FUNDSMOVE_SCHEDULE
+
+drop-bigquery-email-contact-history-table-job:
+  - pcb-{env}-landing.domain_customer_management.EMAIL_CONTACT_HISTORY
+
+drop-bigquery-dns-acct-cust-id-xref-table:
+  - pcb-{env}-landing.domain_dns.DNS_ACCT_CUST_ID_XREF
+  - pcb-{env}-landing.domain_dns.DNS_ACCT
+
+drop-bigquery-domain-communication-table-job:
+  - pcb-{env}-landing.domain_communication.ACCOUNT_CUSTOMER_PREF_PARAM
+  - pcb-{env}-landing.domain_communication.ACCT_CUST_PREF_PARAM_HISTORY
+  - pcb-{env}-landing.domain_communication.ACCOUNT_CUSTOMER_PREFERENCE
+  - pcb-{env}-landing.domain_communication.ACCOUNT_CUSTOMER_PREF_CONTACT
+# finished dags have been archived
+
+drop-bigquery-domain-customer-management-table-job:
+  - pcb-{env}-landing.domain_customer_management.CUSTOMER_EMPLOYMENT_HISTORY
+
+drop-curated-domain-customer-management-table:
+  - pcb-{env}-curated.domain_customer_management.CUSTOMER_EMPLOYMENT_HISTORY
+  - pcb-{env}-curated.domain_customer_management.CUSTOMER_EMPLOYMENT_HISTORY-SAMPLE-TABLE
+
+drop-bigquery-domain-account-management-table-job:
+  - pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREFERENCE
+  - pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREF_CONTACT
+
+drop-curated-domain-communication-table:
+  - pcb-{env}-curated.domain_communication.ACCOUNT_CUSTOMER_PREF_PARAM
+  - pcb-{env}-curated.domain_communication.ACCT_CUST_PREF_PARAM_HISTORY
+  - pcb-{env}-curated.domain_communication.ACCOUNT_CUSTOMER_PREFERENCE
+  - pcb-{env}-curated.domain_communication.ACCOUNT_CUSTOMER_PREF_CONTACT
+
+drop-curated-domain-account-management-table:
+  - pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER_PREFERENCE
+  - pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER_PREF_CONTACT
+
+drop-curated-sample-table-domain-communication-table:
+  - pcb-{env}-curated.domain_communication.ACCOUNT_CUSTOMER_PREF_PARAM-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_communication.ACCT_CUST_PREF_PARAM_HISTORY-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_communication.ACCOUNT_CUSTOMER_PREFERENCE-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_communication.ACCOUNT_CUSTOMER_PREF_CONTACT-SAMPLE-TABLE
+
+drop-curated-sample-table-domain-account-management-table:
+  - pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER_PREFERENCE-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.ACCOUNT_CUSTOMER_PREF_CONTACT-SAMPLE-TABLE
+
+drop-account-transaction-backup-table-job:
+  - pcb-{env}-landing.domain_account_management.AT31_BACKUP
+
+drop-account-transaction-table-job:
+  - pcb-{env}-landing.domain_account_management.AT00
+  - pcb-{env}-landing.domain_account_management.AT21
+
+drop-bigquery-cots-customer-service-blockworx-sample-table-job:
+  - pcb-{env}-curated.cots_customer_service_blockworx.PAF_MESSAGE_CONTENT-SAMPLE-TABLE
+
+drop-bigquery-cots-customer-service-blockworx-table-job:
+  - pcb-{env}-landing.cots_customer_service_blockworx.PAF_MESSAGE_CONTENT
+
+drop-bigquery-cots-customer-service-blockworx-table-job-paf:
+  - pcb-{env}-landing.cots_customer_service_blockworx.PAF_BUS_PROCESS
+
+drop-bigquery-cots-customer-service-blockworx-view-job:
+  - pcb-{env}-curated.cots_customer_service_blockworx.PAF_MESSAGE_CONTENT
+
+drop-bigquery-dam-table-job:
+  - pcb-{env}-landing.domain_account_management.AM0BU
+  - pcb-{env}-landing.domain_account_management.AM0BW
+  - pcb-{env}-landing.domain_account_management.AM0BX
+  - pcb-{env}-landing.domain_account_management.AM0C
+  - pcb-{env}-landing.domain_account_management.AM0E
+  - pcb-{env}-landing.domain_account_management.AM0F
+  - pcb-{env}-landing.domain_account_management.AM00
+  - pcb-{env}-landing.domain_account_management.AM01
+  - pcb-{env}-landing.domain_account_management.AM02
+  - pcb-{env}-landing.domain_account_management.AM04_OL
+  - pcb-{env}-landing.domain_account_management.AM04_PD
+  - pcb-{env}-landing.domain_account_management.AM0BH
+  - pcb-{env}-landing.domain_account_management.AM0BI
+  - pcb-{env}-landing.domain_account_management.AM0BJ
+  - pcb-{env}-landing.domain_account_management.AM0BP
+  - pcb-{env}-landing.domain_account_management.AM0BR
+  - pcb-{env}-landing.domain_account_management.AM32
+  - pcb-{env}-landing.domain_account_management.AM33
+  - pcb-{env}-landing.domain_account_management.AM38
+  - pcb-{env}-landing.domain_account_management.AM35
+  - pcb-{env}-landing.domain_account_management.AM3A
+  - pcb-{env}-landing.domain_account_management.AM3B
+  - pcb-{env}-landing.domain_account_management.AM04_PTP
+  - pcb-{env}-landing.domain_account_management.AM04_S
+  - pcb-{env}-landing.domain_account_management.AM08
+  - pcb-{env}-landing.domain_account_management.AM09
+  - pcb-{env}-landing.domain_account_management.AM0A
+
+drop-bigquery-domain-account-management-ap-purged-landing-job:
+  - pcb-{env}-landing.domain_account_management.AP_PURGED_ACCT
+  - pcb-{env}-landing.domain_account_management.AP_PURGED_ACCT_HEDR
+  - pcb-{env}-landing.domain_account_management.AP_PURGED_ACCT_TRLR
+
+drop-bigquery-domain-account-management-ap-purged-view-job:
+  - pcb-{env}-curated.domain_account_management.AP_PURGED_ACCT
+  - pcb-{env}-curated.domain_account_management.AP_PURGED_ACCT-SAMPLE-TABLE
+
+drop-bigquery-domain-account-management-table-job:
+  - pcb-{env}-landing.domain_account_management.POST_MON
+
+drop-bigquery-domain-customer-acquisition-pcmc_registration_landing-job:
+  - pcb-{env}-landing.domain_customer_acquisition.PCMC_REGISTRATION
+
+drop-bigquery-domain-customer-acquisition-pcmc_registration_view-job:
+  - pcb-{env}-curated.domain_customer_acquisition.PCMC_REGISTRATION
+  - pcb-{env}-curated.domain_customer_acquisition.PCMC_REGISTRATION-SAMPLE-TABLE
+
+drop-bigquery-domain-customer-acquisition-table-job:
+  - pcb-{env}-landing.domain_customer_acquisition.APPLICANT_DETAIL_TAX_INFO
+
+drop-bigquery-domain-dns-table-job:
+  - pcb-{env}-landing.domain_dns.DNS_EVENT_DETAIL
+  - pcb-{env}-landing.domain_dns.DNS_EVENT
+
+drop-bigquery-domain-fraud-sample-table-job:
+  - pcb-{env}-curated.domain_fraud.CARDGUARD_FRAUDFLAG-SAMPLE-TABLE
+
+drop-bigquery-domain-fraud-table-job:
+  - pcb-{env}-landing.domain_fraud.CARDGUARD_FRAUDFLAG
+
+drop-bigquery-domain-fraud-view-job:
+  - pcb-{env}-curated.domain_fraud.CARDGUARD_FRAUDFLAG
+
+drop-bigquery-domain-loyalty-pcf-points-tx-landing-job:
+  - pcb-{env}-landing.domain_loyalty.PCF_POINTS_TX
+
+drop-bigquery-domain-loyalty-table-job:
+  - pcb-{env}-landing.domain_loyalty.PCF_PRODUCT
+
+drop-curated-dam-table:
+  - pcb-{env}-curated.domain_account_management.AM0BU
+  - pcb-{env}-curated.domain_account_management.AM0BW
+  - pcb-{env}-curated.domain_account_management.AM0BX
+  - pcb-{env}-curated.domain_account_management.AM0C
+  - pcb-{env}-curated.domain_account_management.AM0E
+  - pcb-{env}-curated.domain_account_management.AM0F
+  - pcb-{env}-curated.domain_account_management.AM00
+  - pcb-{env}-curated.domain_account_management.AM01
+  - pcb-{env}-curated.domain_account_management.AM02
+  - pcb-{env}-curated.domain_account_management.AM04_OL
+  - pcb-{env}-curated.domain_account_management.AM04_PD
+  - pcb-{env}-curated.domain_account_management.AM0BH
+  - pcb-{env}-curated.domain_account_management.AM0BI
+  - pcb-{env}-curated.domain_account_management.AM0BJ
+  - pcb-{env}-curated.domain_account_management.AM0BP
+  - pcb-{env}-curated.domain_account_management.AM0BR
+  - pcb-{env}-curated.domain_account_management.AM32
+  - pcb-{env}-curated.domain_account_management.AM33
+  - pcb-{env}-curated.domain_account_management.AM38
+  - pcb-{env}-curated.domain_account_management.AM35
+  - pcb-{env}-curated.domain_account_management.AM3A
+  - pcb-{env}-curated.domain_account_management.AM3B
+  - pcb-{env}-curated.domain_account_management.AM04_PTP
+  - pcb-{env}-curated.domain_account_management.AM04_S
+  - pcb-{env}-curated.domain_account_management.AM08
+  - pcb-{env}-curated.domain_account_management.AM09
+  - pcb-{env}-curated.domain_account_management.AM0A
+
+drop-curated-sample-table-dam-table:
+  - pcb-{env}-curated.domain_account_management.AM0BU-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0BW-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0BX-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0C-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0E-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0F-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM00-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM01-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM02-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM04_OL-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM04_PD-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0BH-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0BI-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0BJ-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0BP-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0BR-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM32-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM33-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM38-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM35-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM3A-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM3B-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM04_PTP-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM04_S-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM08-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM09-SAMPLE-TABLE
+  - pcb-{env}-curated.domain_account_management.AM0A-SAMPLE-TABLE
+
+drop-bigquery-domain-technical-table-job:
+  - pcb-{env}-landing.domain_technical.PUBLICATION
+
+drop-bigquery-domain-account-management-prodenh-enroll-conf-landing-job:
+  - pcb-{env}-landing.domain_account_management.PRODENH_ENROLL_CONF
+
+drop-bigquery-domain-customer-service-table-job:
+  - pcb-{env}-landing.domain_customer_service.INTERCEPTOR_AGENT
+
+drop-landing-zone-events-table-job:
+  - pcb-{env}-landing.domain_account_management.EVENTS
+
+drop-curated-zone-trs-input-table-job:
+  - pcb-{env}-curated.domain_scoring.TRANSACTION_RISK_SCORING_INPUT
+
+drop-bigquery-domain-account-management-at41-mc-lodge-landing-job:
+  - pcb-{env}-landing.domain_account_management.AT41_MC_LODGE
+
+drop-curated-zone-biquery-views-job:
+  - pcb-{env}-curated.domain_payments.BI_QUERY_EDI
+  - pcb-{env}-curated.domain_payments.BI_QUERY_TELPAY
+  - pcb-{env}-curated.domain_payments.BI_QUERY_EFT
+  - pcb-{env}-curated.domain_payments.BI_QUERY_PAPER_PAYMENT
+
+drop-curated-zone-biquery-alm-demand-saving-table:
+  - pcb-{env}-curated.cots_alm_tbsm.LIABILITY_SAVING_DEPOSITS
+
+drop-rms-table-job:
+  - pcb-{env}-landing.domain_account_management.PCH_RMS_KEYCONTROL
+  - pcb-{env}-landing.domain_account_management.RMS_NEW_ACCOUNT_01
+  - pcb-{env}-landing.domain_account_management.RMS_MEMO_02
+  - pcb-{env}-landing.domain_account_management.RMS_TRANSACTION_03
+  - pcb-{env}-landing.domain_account_management.RMS_MAINT_ACCOUNT_04
+  - pcb-{env}-landing.domain_account_management.RMS_LEGAL_05
+  - pcb-{env}-landing.domain_account_management.TSYS_RMS_HEDR
+  - pcb-{env}-landing.domain_account_management.TSYS_RMS_TRLR
+
+drop-curated-zone-biquery-alm-demand-saving-table:
+  - pcb-{env}-curated.cots_alm_tbsm.LIABILITY_SAVING_DEPOSITS
+
+drop-landing-zone-activity-log-event-table-job:
+  - pcb-{env}-landing.domain_audit.ACTIVITY_LOG_EVENT
+
+drop-sa10-table-job:
+  - pcb-{env}-landing.domain_account_management.SA10
+
+drop-curated-zone-biquery-alm-cc-recv-table:
+  - pcb-{env}-curated.cots_alm_tbsm.CREDIT_CARD_RECV
+
+drop-curated-zone-biquery-alm-dd-table:
+  - pcb-{env}-curated.cots_alm_tbsm.LIABILITY_DEMAND_DEPOSITS
+
+drop-curated-zone-points-staging-view:
+  - pcb-{env}-curated.domain_loyalty.POINTS_STAGING
+
+drop-curated-zone-biquery-alm-bbg-rate-table:
+  - pcb-{env}-curated.cots_alm_tbsm.BBG_MARKET_RATE
+
+drop-landing-zone-biquery-alm-bbg-rate-hist-table:
+  - pcb-{env}-landing.cots_alm_tbsm.BBG_MARKET_RATE_HIST
+
+drop-obsolete-cif-tables:
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20230815073753
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20230816073515
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20231121083903
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20231122083243
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20240924074414
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20240925073306
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20250423070729
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_CURR_20250424070605
+  - pcb-{env}-curated.domain_account_management.CIF_ACCOUNT_BACKUP
+  - pcb-{env}-curated.domain_account_management.CIF_CARD_BACKUP
+  - pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_RAW_DATA
+  - pcb-{env}-landing.domain_account_management.CIF_CARD_RAW_DATA
+
+drop-curated-zone-biquery-batchauth-views:
+  - pcb-{env}-curated.domain_account_management.BATCH_AUTHORIZATION_LOG
+  - pcb-{env}-curated.domain_account_management.BATCH_AUTHORIZATION_LOG-SAMPLE-TABLE
+
+drop-landing-zone-biquery-batchauth-tables:
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_MC_AC
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_MC_TA
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_MC_TC
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_MC_TE
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_MC_TV
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_MC_MISC
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG_TRLR
+  - pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG
+
+drop-obsolete-cif-raw-tables:
+  - pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_RAW_DATA
+  - pcb-{env}-landing.domain_account_management.CIF_CARD_RAW_DATA
+
+drop-curated-zone-biquery-alm-cc-recv-table:
+  - pcb-{env}-curated.cots_alm_tbsm.CREDIT_CARD_RECV
+
+drop-curated-zone-biquery-alm-dd-table:
+  - pcb-{env}-curated.cots_alm_tbsm.LIABILITY_DEMAND_DEPOSITS
+
+drop-curated-zone-bigquery-re-idv-required-accounts-view:
+  - pcb-{env}-curated.domain_customer_acquisition.RE_IDV_REQUIRED_ACCOUNTS
+
+drop-curated-zone-biquery-instant-issuance-table:
+  - pcb-{env}-curated.domain_card_management.INSTANT_ISSUANCE_RECONCILIATION_AUDIT
+
+drop-processing-zone-app-cust-info-data-patch-table:
+  - pcb-{env}-processing.domain_customer_acquisition.APP_CUST_INFO_FOR_PATCH
+
+drop-data-freshness-table-landing:
+  - pcb-{env}-landing.domain_technical.DATA_FRESHNESS
+
+drop-data-freshness-table-curated:
+  - pcb-{env}-curated.domain_technical.DATA_FRESHNESS
+
+drop-declined-offer-table-landing:
+  - pcb-{env}-landing.domain_loyalty.PC_DECLINED_APPLICATION_OFFER_ASSIGNMENT
+
+drop-optimum-identities-event-table-landing:
+  - pcb-{env}-landing.domain_loyalty.PC_OPTIMUM_IDENTITIES_EVENT
+
+drop-account-customer-pref-tables-landing:
+  - pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREF_CONTACT
+  - pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREF_PARAM
+  - pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_PREFERENCE

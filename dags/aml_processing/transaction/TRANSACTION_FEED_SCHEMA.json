@@ -1,0 +1,306 @@
+[
+  {
+    "name": "INSTITUTION_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "CUSTOMER_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "ACCOUNT_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_DATE_TIME",
+    "type": "STRING"
+  },
+  {
+    "name": "POSTED_DATE",
+    "type": "STRING"
+  },
+  {
+    "name": "REVERSE_DATE",
+    "type": "STRING"
+  },
+  {
+    "name": "REVERSE_TRANSACTION_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TOTAL_VALUE",
+    "type": "STRING"
+  },
+  {
+    "name": "FOREIGN_TOTAL_VALUE",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_CURRENCY",
+    "type": "STRING"
+  },
+  {
+    "name": "CURRENCY_RATE",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_CODE",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_METHOD",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_TYPE",
+    "type": "STRING"
+  },
+  {
+    "name": "CARD_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "CHECK_RETURN_CODE",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TIMES_RETURNED",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TRANSACTION_DESCRIPTION_1",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_DESCRIPTION_2",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_DESCRIPTION_3",
+    "type": "STRING"
+  },
+  {
+    "name": "TRANSACTION_DESCRIPTION_4",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TRANSACTION_DESCRIPTION_5",
+    "type": "STRING"
+  },
+  {
+    "name": "TELLER_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "BRANCH_OF_TRANSACTION",
+    "type": "INTEGER"
+  },
+  {
+    "name": "CONDUCTOR_CUSTOMER_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "CONDUCTOR_FIRST_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "CONDUCTOR_LAST_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "CONDUCTOR_TIN",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PHOTO_IDENTIFICATION_TYPE",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PHOTO_ID_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PHOTO_ID_STATE",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PHOTO_ID_COUNTRY",
+    "type": "INTEGER"
+  },
+  {
+    "name": "ATM_POS_TERMINAL_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "ATM_POS_TERMINAL_ADDRESS",
+    "type": "STRING"
+  },
+  {
+    "name": "ATM_POS_TERMINAL_CITY",
+    "type": "STRING"
+  },
+  {
+    "name": "ATM_POS_TERMINAL_STATE",
+    "type": "STRING"
+  },
+  {
+    "name": "ATM_POS_TERMINAL_COUNTRY",
+    "type": "STRING"
+  },
+  {
+    "name": "MERCHANT_CATEGORY_CODE",
+    "type": "STRING"
+  },
+  {
+    "name": "POS_ENTRY_MODE",
+    "type": "STRING"
+  },
+  {
+    "name": "POS_CARD_PRESENCE_INDICATOR",
+    "type": "INTEGER"
+  },
+  {
+    "name": "AUTHORIZATION_CODE",
+    "type": "STRING"
+  },
+  {
+    "name": "RESPONSE_CODE",
+    "type": "STRING"
+  },
+  {
+    "name": "REQUEST_AUTHORIZATION_AMOUNT",
+    "type": "INTEGER"
+  },
+  {
+    "name": "REQUEST_COMPLETION_AMOUNT",
+    "type": "INTEGER"
+  },
+  {
+    "name": "ADDRESS_VERIFICATION_SERVICE_CODE",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PROCESSOR_AUTHENTICATION_FIELD",
+    "type": "INTEGER"
+  },
+  {
+    "name": "MERCHANT_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "CHECK_ITEM_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "INSTITUTION_ITEM_SEQUENCE_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "CHECK_SEQUENCE_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "CHECK_ACCOUNT_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "CHECK_ROUTING_TRANSIT_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PAYEE_FIRST_NAME",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PAYEE_LAST_NAME",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TRANSFER_BRANCH_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TRANSFER_CUSTOMER_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TRANSFER_ACCOUNT_BRANCH",
+    "type": "INTEGER"
+  },
+  {
+    "name": "TRANSFER_ACCOUNT_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PRINCIPAL_AMOUNT",
+    "type": "INTEGER"
+  },
+  {
+    "name": "INTEREST_AMOUNT",
+    "type": "INTEGER"
+  },
+  {
+    "name": "OTHER_LOAN_AMOUNT",
+    "type": "INTEGER"
+  },
+  {
+    "name": "SYSTEM_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "FINTECH_PROGRAM",
+    "type": "INTEGER"
+  },
+  {
+    "name": "EXTERNAL_BANK_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "EXTERNAL_CUSTOMER_NAME",
+    "type": "INTEGER"
+  },
+  {
+    "name": "DEVICE_ID",
+    "type": "INTEGER"
+  },
+  {
+    "name": "IP_ADDRESS",
+    "type": "INTEGER"
+  },
+  {
+    "name": "USERNAME",
+    "type": "INTEGER"
+  },
+  {
+    "name": "SESSION_DATE_TIME",
+    "type": "INTEGER"
+  },
+  {
+    "name": "INTERAC_REF_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "INTERAC_EMAIL",
+    "type": "INTEGER"
+  },
+  {
+    "name": "INTERAC_PHONE",
+    "type": "INTEGER"
+  },
+  {
+    "name": "INTERAC_BANK_ACCOUNT",
+    "type": "INTEGER"
+  },
+  {
+    "name": "PCF_MONEY_MOVE_REF_NUMBER",
+    "type": "INTEGER"
+  },
+  {
+    "name": "DEVICE_TYPE",
+    "type": "INTEGER"
+  }
+]

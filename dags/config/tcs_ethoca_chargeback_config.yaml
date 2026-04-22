@@ -1,0 +1,14 @@
+tcs_ethoca_chargeback_dispute_loader:
+  landing_bucket: ethc-outbound-pcb{env_suffix}
+  dataset_id: domain_dispute
+  table_name: TCS_DISPUTE_DTL_ETHOCA
+  sub_capability: EMT
+  capability: Payments
+  severity: P2
+  business_impact: Loading latest TCS Dispute non-fraud dispute transaction to Ethoca failed
+  customer_impact: This issue causes financial impact as without this file being sent, the fraud team are not able to recover any funds for the customer reported disputes and have to process more chargebacks for the affected customers.
+  tags:
+    - gold-alchemists, P2
+  sql_file_path: tsys_processing/sql/tcs-ethoca-chargeback-stg-reporting.sql
+  reject_sql_path: tsys_processing/sql/tcs-ethoca-rejectrecord-reporting.sql
+  valid_sql_path: tsys_processing/sql/tcs-ethoca-chargeback-reporting.sql

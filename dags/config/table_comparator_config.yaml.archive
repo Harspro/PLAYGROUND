@@ -1,0 +1,793 @@
+spark_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/table-comparator-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/table-comparator/application.yaml
+  main_class: com.pcb.batch.spark.table.comparator.ComparatorSparkBatchApplication
+  application_config: application.yaml
+  job_history_path: gs://pcb-{env}-staging-extract/job_history/
+
+dag:
+  schedule_interval: '0 8 * * *'
+
+test-cases:
+  - case.name: ODS-ADDRESS-CONTACT-HISTORY-001
+    source.database: ODS
+    source.table: CARDINAL.ADDRESS_CONTACT_HISTORY
+    bigquery.table: pcb-{env}-curated:ODSDataset.ADDRESS_CONTACT_HISTORY
+    select.columns: ADDRESS_CONTACT_HISTORY_UID,CONTACT_UID
+    is.enabled: False
+  - case.name: ODS-CONTACT-HISTORY-001
+    source.database: ODS
+    source.table: CARDINAL.CONTACT_HISTORY
+    bigquery.table: pcb-{env}-curated:ODSDataset.CONTACT_HISTORY
+    select.columns: CONTACT_HISTORY_UID,CONTACT_UID
+    is.enabled: False
+  - case.name: ODS-CUSTOMER-EMPLOYMENT-HISTORY-001
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_EMPLOYMENT_HISTORY
+    bigquery.table: pcb-{env}-curated:ODSDataset.CUSTOMER_EMPLOYMENT_HISTORY
+    select.columns: CUSTOMER_EMP_HISTORY_UID,CUSTOMER_EMPLOYMENT_UID
+    is.enabled: False
+  - case.name: ODS-CUSTOMER-HISTORY-001
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_HISTORY
+    bigquery.table: pcb-{env}-curated:ODSDataset.CUSTOMER_HISTORY
+    select.columns: CUSTOMER_HISTORY_UID,CUSTOMER_UID
+    is.enabled: False
+  - case.name: ODS-EMAIL-CONTACT-HISTORY-001
+    source.database: ODS
+    source.table: CARDINAL.EMAIL_CONTACT_HISTORY
+    bigquery.table: pcb-{env}-curated:ODSDataset.EMAIL_CONTACT_HISTORY
+    select.columns: EMAIL_CONTACT_HISTORY_UID,CONTACT_UID
+    is.enabled: False
+  - case.name: ODS-PHONE-CONTACT-HISTORY-001
+    source.database: ODS
+    source.table: CARDINAL.PHONE_CONTACT_HISTORY
+    bigquery.table: pcb-{env}-curated:ODSDataset.PHONE_CONTACT_HISTORY
+    select.columns: PHONE_CONTACT_HISTORY_UID,CONTACT_UID
+    is.enabled: False
+  - case.name: ODS-POLITICAL-EXPOSED-POSITION-001
+    source.database: ODS
+    source.table: CARDINAL.POLITICAL_EXPOSED_POSITION
+    bigquery.table: pcb-{env}-curated:ODSDataset.POLITICAL_EXPOSED_POSITION
+    select.columns: POLITICAL_EXPOSED_POSITION_UID
+    is.enabled: True
+  - case.name: ODS-REF-EMPLOYMENT-INDUSTRY-001
+    source.database: ODS
+    source.table: CARDINAL.REF_EMPLOYMENT_INDUSTRY
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_EMPLOYMENT_INDUSTRY
+    select.columns: REF_EMPLOYMENT_INDUSTRY_UID
+    is.enabled: True
+  - case.name: ODS-REF-EMPLOYMENT-INDUSTRY-LABEL-001
+    source.database: ODS
+    source.table: CARDINAL.REF_EMPLOYMENT_INDUSTRY_LABEL
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_EMPLOYMENT_INDUSTRY_LABEL
+    select.columns: REF_EMPLOYMENT_IND_LBL_UID,REF_EMPLOYMENT_INDUSTRY_UID
+    is.enabled: True
+  - case.name: ODS-REF-EMPLOYMENT-STATUS-LABEL-001
+    source.database: ODS
+    source.table: CARDINAL.REF_EMPLOYMENT_STATUS_LABEL
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_EMPLOYMENT_STATUS_LABEL
+    select.columns: REF_EMPLOYMENT_STATUS_LBL_UID,REF_EMPLOYMENT_STATUS_UID
+    is.enabled: True
+  - case.name: ODS-TRAVEL-NOTIFICATION-001
+    source.database: ODS
+    source.table: CARDINAL.TRAVEL_NOTIFICATION
+    bigquery.table: pcb-{env}-curated:ODSDataset.TRAVEL_NOTIFICATION
+    select.columns: TRAVEL_NOTIFICATION_UID,CUSTOMER_UID
+    where.condition: "CREATE_DT<'{current_date} 23:59:59'"
+    is.enabled: True
+
+  - case.name: ODS-BILLER-001
+    source.database: ODS
+    source.table: CARDINAL.BILLER
+    bigquery.table: pcb-{env}-curated:ODSDataset.BILLER
+    select.columns: BILLER_UID,BILLER_NO
+    is.enabled: False
+  - case.name: ODS-CUSTOMER-BILLER-001
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_BILLER
+    bigquery.table: pcb-{env}-curated:ODSDataset.CUSTOMER_BILLER
+    select.columns: CUSTOMER_BILLER_UID,CUSTOMER_UID
+    where.condition: "CREATE_DT<'{current_date} 23:59:59'"
+    is.enabled: True
+
+  - case.name: ODS-GOAL-001
+    source.database: ODS
+    source.table: CARDINAL.GOAL
+    bigquery.table: pcb-{env}-curated:ODSDataset.GOAL
+    select.columns: GOAL_UID,GOAL_CATEGORY_UID
+    is.enabled: False
+  - case.name: ODS-GOAL-ACCOUNT-001
+    source.database: ODS
+    source.table: CARDINAL.GOAL_ACCOUNT
+    bigquery.table: pcb-{env}-curated:ODSDataset.GOAL_ACCOUNT
+    select.columns: GOAL_ACCOUNT_UID,GOAL_UID
+    is.enabled: False
+  - case.name: ODS-CUSTOMER-ID-VERIFICATION-001
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_ID_VERIFICATION
+    bigquery.table: pcb-{env}-curated:ODSDataset.CUSTOMER_ID_VERIFICATION
+    select.columns: CUSTOMER_ID_VERIFICATION_UID,CUSTOMER_UID
+    is.enabled: False
+  - case.name: ODS-REF-NOTIFI-CHANNEL-CD-001
+    source.database: ODS
+    source.table: CARDINAL.REF_NOTIFI_CHANNEL_CD
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_NOTIFI_CHANNEL_CD
+    select.columns: REF_NOTIFI_CHANNEL_CD_UID,NOTIFICATION_CHANNEL_CD
+    is.enabled: True
+  - case.name: ODS-INTERCEPTOR-AGENT-001
+    source.database: ODS
+    source.table: CARDINAL.INTERCEPTOR_AGENT
+    bigquery.table: pcb-{env}-curated:ODSDataset.INTERCEPTOR_AGENT
+    select.columns: INTERCEPTOR_AGENT_UID,PLATFORM_USER_UID
+    is.enabled: False
+  - case.name: ODS-WORK-SHIFT-001
+    source.database: ODS
+    source.table: CARDINAL.WORK_SHIFT
+    bigquery.table: pcb-{env}-curated:ODSDataset.WORK_SHIFT
+    select.columns: WORK_SHIFT_UID,START_DT
+    where.condition: "CREATE_DT<'{current_date} 23:59:59'"
+    is.enabled: True
+
+  - case.name: ODS-REF-RETAIL-STORE-001
+    source.database: ODS
+    source.table: CARDINAL.REF_RETAIL_STORE
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_RETAIL_STORE
+    select.columns: REF_RETAIL_STORE_UID,REF_BANNER_UID
+    is.enabled: True
+  - case.name: ODS-REF-BANNER-001
+    source.database: ODS
+    source.table: CARDINAL.REF_BANNER
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_BANNER
+    select.columns: REF_BANNER_UID,NAME
+    is.enabled: True
+  - case.name: ODS-BATCH-RUN-LOG-001
+    source.database: ODS
+    source.table: CARDINAL.BATCH_RUN_LOG
+    bigquery.table: pcb-{env}-curated:ODSDataset.BATCH_RUN_LOG
+    select.columns: BATCH_RUN_LOG_UID,BATCH_RUN_NO
+    where.condition: "CREATE_DT<'{current_date} 23:59:59'"
+    is.enabled: True
+
+  - case.name: ODS-FUNDSMOVE-LIMIT-001
+    source.database: ODS
+    source.table: CARDINAL.FUNDSMOVE_LIMIT
+    bigquery.table: pcb-{env}-curated:ODSDataset.FUNDSMOVE_LIMIT
+    select.columns: FUNDSMOVE_LIMIT_UID,FUNDSMOVE_LIMIT_NO
+    is.enabled: False
+  - case.name: ODS-PRODUCT-HIERARCHY-LEVEL-001
+    source.database: ODS
+    source.table: CARDINAL.PRODUCT_HIERARCHY_LEVEL
+    bigquery.table: pcb-{env}-curated:ODSDataset.PRODUCT_HIERARCHY_LEVEL
+    select.columns: PRODUCT_HIERARCHY_LEVEL_UID,PARENT_HIERARCHY_LEVEL_UID
+    is.enabled: False
+  - case.name: ODS-REF-CPA-TRANSACTION-TYPE-001
+    source.database: ODS
+    source.table: CARDINAL.REF_CPA_TRANSACTION_TYPE
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_CPA_TRANSACTION_TYPE
+    select.columns: REF_CPA_TRANSACTION_TYPE_UID,CPA_TRANSACTION_TYPE_CD
+    is.enabled: False
+  - case.name: ODS-REF-EFT-REQTYPE-CD-001
+    source.database: ODS
+    source.table: CARDINAL.REF_EFT_REQTYPE_CD
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_EFT_REQTYPE_CD
+    select.columns: REF_EFT_REQTYPE_CD_UID,EFT_REQTYPE_CD
+    is.enabled: False
+  - case.name: ODS-REF-GL-ACTION-CD-001
+    source.database: ODS
+    source.table: CARDINAL.REF_GL_ACTION_CD
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_GL_ACTION_CD
+    select.columns: REF_GL_ACTION_CD_UID,GL_ACTION_CD
+    is.enabled: False
+  - case.name: ODS-REF-PCF-AUTH-REQ-KEY-001
+    source.database: ODS
+    source.table: CARDINAL.REF_PCF_AUTH_REQ_KEY
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_PCF_AUTH_REQ_KEY
+    select.columns: REF_PCF_AUTH_REQ_KEY_UID,FUNDSMOVE_TYPE_ID
+    is.enabled: False
+  - case.name: ODS-REF-PUBLICATION-TYPE-001
+    source.database: ODS
+    source.table: CARDINAL.REF_PUBLICATION_TYPE
+    bigquery.table: pcb-{env}-curated:ODSDataset.REF_PUBLICATION_TYPE
+    select.columns: REF_PUBLICATION_TYPE_UID,CODE
+    is.enabled: False
+
+  - case.name: ODS-ACCOUNT-SNAPSHOT-001
+    source.database: ODS
+    source.table: CARDINAL.ACCOUNT_SNAPSHOT
+    bigquery.table: pcb-{env}-curated:ODSDataset.ACCOUNT_SNAPSHOT
+    select.columns: ACCOUNT_SNAPSHOT_UID,ACCOUNT_NO
+    is.enabled: False
+
+  - case.name: ODS-CPA-AUTOPAY-FULFILLMENT-001
+    source.database: ODS
+    source.table: CARDINAL.CPA_AUTOPAY_FULFILLMENT
+    bigquery.table: pcb-{env}-curated:ODSDataset.CPA_AUTOPAY_FULFILLMENT
+    select.columns: CPA_AUTOPAY_FULFILLMENT_UID,FULFILLMENT_NO
+    is.enabled: False
+
+  - case.name: ODS-EFT-EXTACCT-LINK-REQ-001
+    source.database: ODS
+    source.table: CARDINAL.EFT_EXTACCT_LINK_REQ
+    bigquery.table: pcb-{env}-curated:ODSDataset.EFT_EXTACCT_LINK_REQ
+    select.columns: EFT_EXTACCT_LINK_REQ_UID,CUSTOMER_UID
+    is.enabled: False
+
+  - case.name: ODS-EFT-EXTERNAL-ACCOUNT-001
+    source.database: ODS
+    source.table: CARDINAL.EFT_EXTERNAL_ACCOUNT
+    bigquery.table: pcb-{env}-curated:ODSDataset.EFT_EXTERNAL_ACCOUNT
+    select.columns: EFT_EXTERNAL_ACCOUNT_UID,CUSTOMER_UID
+    is.enabled: False
+
+  - case.name: ODS-EFT-INSTRUCTION-001
+    source.database: ODS
+    source.table: CARDINAL.EFT_INSTRUCTION
+    bigquery.table: pcb-{env}-curated:ODSDataset.EFT_INSTRUCTION
+    select.columns: FUNDSMOVE_INSTRUCTION_UID,ACCOUNT_UID
+    is.enabled: False
+
+  - case.name: ODS-EFT-PCBORIGIN-OUT-REQ-001
+    source.database: ODS
+    source.table: CARDINAL.EFT_PCBORIGIN_OUT_REQ
+    bigquery.table: pcb-{env}-curated:ODSDataset.EFT_PCBORIGIN_OUT_REQ
+    select.columns: EFT_PCBORIGIN_OUT_REQ_UID,EFT_FULFILLMENT_UID
+    is.enabled: False
+
+  - case.name: ODS-INTERAC-RECONCILIATION-001
+    source.database: ODS
+    source.table: CARDINAL.INTERAC_RECONCILIATION
+    bigquery.table: pcb-{env}-curated:ODSDataset.INTERAC_RECONCILIATION
+    select.columns: INTERAC_RECONCILIATION_UID,RECONCILIATION_ID
+    is.enabled: False
+
+  - case.name: ODS-INTERAC-SETTLEMENT-001
+    source.database: ODS
+    source.table: CARDINAL.INTERAC_SETTLEMENT
+    bigquery.table: pcb-{env}-curated:ODSDataset.INTERAC_SETTLEMENT
+    select.columns: INTERAC_SETTLEMENT_UID,PARTICIPANT_ID
+    is.enabled: False
+
+  - case.name: ODS-NOTIFICATION-001
+    source.database: ODS
+    source.table: CARDINAL_NOTIF.NOTIFICATION
+    bigquery.table: pcb-{env}-curated:CardinalNotifDataset.NOTIFICATION
+    select.columns: NOTIFICATION_UID,DESCRIPTION
+    is.enabled: True
+
+  - case.name: ODS-IDV-EVENT-001
+    source.database: ODS
+    source.table: IDVMGMT.IDV_EVENT
+    bigquery.table: pcb-{env}-curated:IDVMGMTDataset.IDV_EVENT
+    select.columns: IDV_REQUEST_EVT_UID,OWNER_ID
+    is.enabled: False
+  - case.name: ODS-IDV-REQUEST-001
+    source.database: ODS
+    source.table: IDVMGMT.IDV_REQUEST
+    bigquery.table: pcb-{env}-curated:IDVMGMTDataset.IDV_REQUEST
+    select.columns: IDV_REQUEST_UID,IDV_REQUEST_NO
+    is.enabled: False
+  - case.name: ODS-IDV-SUBMISSION-001
+    source.database: ODS
+    source.table: IDVMGMT.IDV_SUBMISSION
+    bigquery.table: pcb-{env}-curated:IDVMGMTDataset.IDV_SUBMISSION
+    select.columns: IDV_SUBMISSION_UID,IDV_REQUEST_UID
+    is.enabled: False
+  - case.name: ODS-IDV-ONFIDO-CHECK-001
+    source.database: ODS
+    source.table: IDVMGMT.ONFIDO_CHECK
+    bigquery.table: pcb-{env}-curated:IDVMGMTDataset.ONFIDO_CHECK
+    select.columns: ONFIDO_CHECK_UID,ONFIDO_APPLICANT_UID
+    is.enabled: False
+  - case.name: ODS-PAF-BUS-PROCESS-001
+    source.database: UWORK
+    source.table: UWORK.PAF_BUS_PROCESS
+    bigquery.table: pcb-{env}-curated:UWORKDataset.PAF_BUS_PROCESS
+    select.columns: BUS_PROCESS_ID,VENDOR_PROCESS_ID
+    is.enabled: False
+  - case.name: TIMESTAMP-FIX-NOTIFICATION
+    source.database: ODS
+    source.table: CARDINAL_NOTIF.NOTIFICATION
+    bigquery.table: pcb-{env}-landing.domain_communication.NOTIFICATION
+    select.columns: '*'
+    order.by: NOTIFICATION_UID, CREATE_DT DESC
+    limit: 20
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-ACCESS_MEDIUM
+    source.database: ODS
+    source.table: CARDINAL.ACCESS_MEDIUM
+    bigquery.table: pcb-{env}-landing.domain_account_management.ACCESS_MEDIUM
+    select.columns: '*'
+    order.by: ACCESS_MEDIUM_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-ACCOUNT
+    source.database: ODS
+    source.table: CARDINAL.ACCOUNT
+    bigquery.table: pcb-{env}-landing.domain_account_management.ACCOUNT
+    select.columns: '*'
+    order.by: ACCOUNT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-ACCOUNT_CUSTOMER
+    source.database: ODS
+    source.table: CARDINAL.ACCOUNT_CUSTOMER
+    bigquery.table: pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER
+    select.columns: '*'
+    order.by: ACCOUNT_CUSTOMER_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-ACCOUNT_CUSTOMER_ROLE
+    source.database: ODS
+    source.table: CARDINAL.ACCOUNT_CUSTOMER_ROLE
+    bigquery.table: pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER_ROLE
+    select.columns: '*'
+    order.by: ACCOUNT_CUSTOMER_ROLE_UID, CREATE_DT DESC
+    limit: 6
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-ACCOUNT_IDENTIFIER
+    source.database: ODS
+    source.table: CARDINAL.ACCOUNT_IDENTIFIER
+    bigquery.table: pcb-{env}-landing.domain_account_management.ACCOUNT_IDENTIFIER
+    select.columns: '*'
+    order.by: ACCOUNT_IDENTIFIER_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-ACCOUNT_SNAPSHOT
+    source.database: ODS
+    source.table: CARDINAL.ACCOUNT_SNAPSHOT
+    bigquery.table: pcb-{env}-landing.domain_account_management.ACCOUNT_SNAPSHOT
+    select.columns: '*'
+    order.by: ACCOUNT_SNAPSHOT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-PRODUCT
+    source.database: ODS
+    source.table: CARDINAL.PRODUCT
+    bigquery.table: pcb-{env}-landing.domain_account_management.PRODUCT
+    select.columns: '*'
+    order.by: PRODUCT_UID, CREATE_DT DESC
+    limit: 10
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-PRODUCT_HIERARCHY_LEVEL
+    source.database: ODS
+    source.table: CARDINAL.PRODUCT_HIERARCHY_LEVEL
+    bigquery.table: pcb-{env}-landing.domain_account_management.PRODUCT_HIERARCHY_LEVEL
+    select.columns: '*'
+    order.by: PRODUCT_HIERARCHY_LEVEL_UID, CREATE_DT DESC
+    limit: 6
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-STATEMENT_CYCLE
+    source.database: ODS
+    source.table: CARDINAL.STATEMENT_CYCLE
+    bigquery.table: pcb-{env}-landing.domain_account_management.STATEMENT_CYCLE
+    select.columns: '*'
+    order.by: STATEMENT_CYCLE_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_MERCHANT_CATEGORY
+    source.database: ODS
+    source.table: CARDINAL.REF_MERCHANT_CATEGORY
+    bigquery.table: pcb-{env}-landing.domain_account_management.REF_MERCHANT_CATEGORY
+    select.columns: '*'
+    order.by: REF_MERCHANT_CATEGORY_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_MERCHANT_CATEGORY_GROUP
+    source.database: ODS
+    source.table: CARDINAL.REF_MERCHANT_CATEGORY_GROUP
+    bigquery.table: pcb-{env}-landing.domain_account_management.REF_MERCHANT_CATEGORY_GROUP
+    select.columns: '*'
+    order.by: REF_MERCHANT_CATEGORY_GRP_UID, CREATE_DT DESC
+    limit: 12
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-ADDRESS_CONTACT
+    source.database: ODS
+    source.table: CARDINAL.ADDRESS_CONTACT
+    bigquery.table: pcb-{env}-landing.domain_customer_management.ADDRESS_CONTACT
+    select.columns: '*'
+    order.by: CONTACT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CONTACT
+    source.database: ODS
+    source.table: CARDINAL.CONTACT
+    bigquery.table: pcb-{env}-landing.domain_customer_management.CONTACT
+    select.columns: '*'
+    order.by: CONTACT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CUSTOMER
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER
+    bigquery.table: pcb-{env}-landing.domain_customer_management.CUSTOMER
+    select.columns: '*'
+    order.by: CUSTOMER_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CUSTOMER_EMPLOYMENT
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_EMPLOYMENT
+    bigquery.table: pcb-{env}-landing.domain_customer_management.CUSTOMER_EMPLOYMENT
+    select.columns: '*'
+    order.by: CUSTOMER_EMPLOYMENT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CUSTOMER_IDENTIFIER
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_IDENTIFIER
+    bigquery.table: pcb-{env}-landing.domain_customer_management.CUSTOMER_IDENTIFIER
+    select.columns: '*'
+    order.by: CUSTOMER_IDENTIFIER_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CUSTOMER_PREFERENCE
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_PREFERENCE
+    bigquery.table: pcb-{env}-landing.domain_customer_management.CUSTOMER_PREFERENCE
+    select.columns: '*'
+    order.by: CUSTOMER_PREFERENCE_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CUSTOMER_PREFERENCE_PARAM
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_PREFERENCE_PARAM
+    bigquery.table: pcb-{env}-landing.domain_customer_management.CUSTOMER_PREFERENCE_PARAM
+    select.columns: '*'
+    order.by: CUSTOMER_PREFERENCE_PARAM_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-EMAIL_CONTACT
+    source.database: ODS
+    source.table: CARDINAL.EMAIL_CONTACT
+    bigquery.table: pcb-{env}-landing.domain_customer_management.EMAIL_CONTACT
+    select.columns: '*'
+    order.by: CONTACT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-PHONE_CONTACT
+    source.database: ODS
+    source.table: CARDINAL.PHONE_CONTACT
+    bigquery.table: pcb-{env}-landing.domain_customer_management.PHONE_CONTACT
+    select.columns: '*'
+    order.by: CONTACT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-PLATFORM_USER
+    source.database: ODS
+    source.table: CARDINAL.PLATFORM_USER
+    bigquery.table: pcb-{env}-landing.domain_customer_management.PLATFORM_USER
+    select.columns: '*'
+    order.by: PLATFORM_USER_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-POLITICAL_EXPOSED_POSITION
+    source.database: ODS
+    source.table: CARDINAL.POLITICAL_EXPOSED_POSITION
+    bigquery.table: pcb-{env}-landing.domain_customer_management.POLITICAL_EXPOSED_POSITION
+    select.columns: '*'
+    order.by: POLITICAL_EXPOSED_POSITION_UID, CREATE_DT DESC
+    limit: 15
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_COUNTRY
+    source.database: ODS
+    source.table: CARDINAL.REF_COUNTRY
+    bigquery.table: pcb-{env}-landing.domain_customer_management.REF_COUNTRY
+    select.columns: '*'
+    order.by: REF_COUNTRY_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_EDUCATION_LEVEL
+    source.database: ODS
+    source.table: CARDINAL.REF_EDUCATION_LEVEL
+    bigquery.table: pcb-{env}-landing.domain_customer_management.REF_EDUCATION_LEVEL
+    select.columns: '*'
+    order.by: REF_EDUCATION_LEVEL_UID, CREATE_DT DESC
+    limit: 7
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_EMPLOYMENT_INDUSTRY
+    source.database: ODS
+    source.table: CARDINAL.REF_EMPLOYMENT_INDUSTRY
+    bigquery.table: pcb-{env}-landing.domain_customer_management.REF_EMPLOYMENT_INDUSTRY
+    select.columns: '*'
+    order.by: REF_EMPLOYMENT_INDUSTRY_UID, CREATE_DT DESC
+    limit: 18
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_EMPLOYMENT_INDUSTRY_LABEL
+    source.database: ODS
+    source.table: CARDINAL.REF_EMPLOYMENT_INDUSTRY_LABEL
+    bigquery.table: pcb-{env}-landing.domain_customer_management.REF_EMPLOYMENT_INDUSTRY_LABEL
+    select.columns: '*'
+    order.by: REF_EMPLOYMENT_IND_LBL_UID, CREATE_DT DESC
+    limit: 36
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_EMPLOYMENT_STATUS
+    source.database: ODS
+    source.table: CARDINAL.REF_EMPLOYMENT_STATUS
+    bigquery.table: pcb-{env}-landing.domain_customer_management.REF_EMPLOYMENT_STATUS
+    select.columns: '*'
+    order.by: REF_EMPLOYMENT_STATUS_UID, CREATE_DT DESC
+    limit: 7
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_EMPLOYMENT_STATUS_LABEL
+    source.database: ODS
+    source.table: CARDINAL.REF_EMPLOYMENT_STATUS_LABEL
+    bigquery.table: pcb-{env}-landing.domain_customer_management.REF_EMPLOYMENT_STATUS_LABEL
+    select.columns: '*'
+    order.by: REF_EMPLOYMENT_STATUS_LBL_UID, CREATE_DT DESC
+    limit: 14
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_OCCUPATION
+    source.database: ODS
+    source.table: CARDINAL.REF_OCCUPATION
+    bigquery.table: pcb-{env}-landing.domain_customer_management.REF_OCCUPATION
+    select.columns: '*'
+    order.by: REF_OCCUPATION_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-TRAVEL_NOTIFICATION
+    source.database: ODS
+    source.table: CARDINAL.TRAVEL_NOTIFICATION
+    bigquery.table: pcb-{env}-landing.domain_customer_management.TRAVEL_NOTIFICATION
+    select.columns: '*'
+    order.by: TRAVEL_NOTIFICATION_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-BATCH_RUN_LOG
+    source.database: ODS
+    source.table: CARDINAL.BATCH_RUN_LOG
+    bigquery.table: pcb-{env}-landing.domain_technical.BATCH_RUN_LOG
+    select.columns: '*'
+    order.by: BATCH_RUN_LOG_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_PUBLICATION_TYPE
+    source.database: ODS
+    source.table: CARDINAL.REF_PUBLICATION_TYPE
+    bigquery.table: pcb-{env}-landing.domain_technical.REF_PUBLICATION_TYPE
+    select.columns: '*'
+    order.by: REF_PUBLICATION_TYPE_UID, CREATE_DT DESC
+    limit: 85
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-BILLER
+    source.database: ODS
+    source.table: CARDINAL.BILLER
+    bigquery.table: pcb-{env}-landing.domain_payments.BILLER
+    select.columns: '*'
+    order.by: BILLER_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-BILLER_CATEGORIZATION
+    source.database: ODS
+    source.table: CARDINAL.BILLER_CATEGORIZATION
+    bigquery.table: pcb-{env}-landing.domain_payments.BILLER_CATEGORIZATION
+    select.columns: '*'
+    order.by: BILLER_CATEGORIZATION_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-BILLER_CATEGORY
+    source.database: ODS
+    source.table: CARDINAL.BILLER_CATEGORY
+    bigquery.table: pcb-{env}-landing.domain_payments.BILLER_CATEGORY
+    select.columns: '*'
+    order.by: BILLER_CATEGORY_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CPA_AUTOPAY_FULFILLMENT
+    source.database: ODS
+    source.table: CARDINAL.CPA_AUTOPAY_FULFILLMENT
+    bigquery.table: pcb-{env}-landing.domain_payments.CPA_AUTOPAY_FULFILLMENT
+    select.columns: '*'
+    order.by: CPA_AUTOPAY_FULFILLMENT_UID, CREATE_DT DESC
+    limit: 200
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CUSTOMER_BILLER
+    source.database: ODS
+    source.table: CARDINAL.CUSTOMER_BILLER
+    bigquery.table: pcb-{env}-landing.domain_payments.CUSTOMER_BILLER
+    select.columns: '*'
+    order.by: CUSTOMER_BILLER_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-EFT_EXTACCT_LINK_REQ
+    source.database: ODS
+    source.table: CARDINAL.EFT_EXTACCT_LINK_REQ
+    bigquery.table: pcb-{env}-landing.domain_payments.EFT_EXTACCT_LINK_REQ
+    select.columns: '*'
+    order.by: EFT_EXTACCT_LINK_REQ_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-EFT_EXTERNAL_ACCOUNT
+    source.database: ODS
+    source.table: CARDINAL.EFT_EXTERNAL_ACCOUNT
+    bigquery.table: pcb-{env}-landing.domain_payments.EFT_EXTERNAL_ACCOUNT
+    select.columns: '*'
+    order.by: EFT_EXTERNAL_ACCOUNT_UID, CREATE_DT DESC
+    limit: 200
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-EFT_INSTRUCTION
+    source.database: ODS
+    source.table: CARDINAL.EFT_INSTRUCTION
+    bigquery.table: pcb-{env}-landing.domain_payments.EFT_INSTRUCTION
+    select.columns: '*'
+    order.by: FUNDSMOVE_INSTRUCTION_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-EFT_PCBORIGIN_OUT_REQ
+    source.database: ODS
+    source.table: CARDINAL.EFT_PCBORIGIN_OUT_REQ
+    bigquery.table: pcb-{env}-landing.domain_payments.EFT_PCBORIGIN_OUT_REQ
+    select.columns: '*'
+    order.by: EFT_PCBORIGIN_OUT_REQ_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-FUNDSMOVE_LIMIT
+    source.database: ODS
+    source.table: CARDINAL.FUNDSMOVE_LIMIT
+    bigquery.table: pcb-{env}-landing.domain_payments.FUNDSMOVE_LIMIT
+    select.columns: '*'
+    order.by: FUNDSMOVE_LIMIT_UID, CREATE_DT DESC
+    limit: 25
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-FUNDSMOVE_TYPE
+    source.database: ODS
+    source.table: CARDINAL.FUNDSMOVE_TYPE
+    bigquery.table: pcb-{env}-landing.domain_payments.FUNDSMOVE_TYPE
+    select.columns: '*'
+    order.by: FUNDSMOVE_TYPE_UID, CREATE_DT DESC
+    limit: 15
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-INTERAC_AUTODEP_REGISTER
+    source.database: ODS
+    source.table: CARDINAL.INTERAC_AUTODEP_REGISTER
+    bigquery.table: pcb-{env}-landing.domain_payments.INTERAC_AUTODEP_REGISTER
+    select.columns: '*'
+    order.by: INTERAC_AUTODEP_REGISTER_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-INTERAC_RECONCILIATION
+    source.database: ODS
+    source.table: CARDINAL.INTERAC_RECONCILIATION
+    bigquery.table: pcb-{env}-landing.domain_payments.INTERAC_RECONCILIATION
+    select.columns: '*'
+    order.by: INTERAC_RECONCILIATION_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-INTERAC_SETTLEMENT
+    source.database: ODS
+    source.table: CARDINAL.INTERAC_SETTLEMENT
+    bigquery.table: pcb-{env}-landing.domain_payments.INTERAC_SETTLEMENT
+    select.columns: '*'
+    order.by: INTERAC_SETTLEMENT_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_BRANCH_ADDRESS
+    source.database: ODS
+    source.table: CARDINAL.REF_BRANCH_ADDRESS
+    bigquery.table: pcb-{env}-landing.domain_payments.REF_BRANCH_ADDRESS
+    select.columns: '*'
+    order.by: REF_BRANCH_ADDRESS_UID, CREATE_DT DESC
+    limit: 2
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_CPA_TRANSACTION_TYPE
+    source.database: ODS
+    source.table: CARDINAL.REF_CPA_TRANSACTION_TYPE
+    bigquery.table: pcb-{env}-landing.domain_payments.REF_CPA_TRANSACTION_TYPE
+    select.columns: '*'
+    order.by: REF_CPA_TRANSACTION_TYPE_UID, CREATE_DT DESC
+    limit: 20
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_EFT_REQTYPE_CD
+    source.database: ODS
+    source.table: CARDINAL.REF_EFT_REQTYPE_CD
+    bigquery.table: pcb-{env}-landing.domain_payments.REF_EFT_REQTYPE_CD
+    select.columns: '*'
+    order.by: REF_EFT_REQTYPE_CD_UID, CREATE_DT DESC
+    limit: 7
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_FINANCIAL_INSTITUTION
+    source.database: ODS
+    source.table: CARDINAL.REF_FINANCIAL_INSTITUTION
+    bigquery.table: pcb-{env}-landing.domain_payments.REF_FINANCIAL_INSTITUTION
+    select.columns: '*'
+    order.by: REF_FINANCIAL_INSTITUTION_UID, CREATE_DT DESC
+    limit: 20
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_GL_ACTION_CD
+    source.database: ODS
+    source.table: CARDINAL.REF_GL_ACTION_CD
+    bigquery.table: pcb-{env}-landing.domain_payments.REF_GL_ACTION_CD
+    select.columns: '*'
+    order.by: REF_GL_ACTION_CD_UID, CREATE_DT DESC
+    limit: 50
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_PCF_AUTH_REQ_KEY
+    source.database: ODS
+    source.table: CARDINAL.REF_PCF_AUTH_REQ_KEY
+    bigquery.table: pcb-{env}-landing.domain_payments.REF_PCF_AUTH_REQ_KEY
+    select.columns: '*'
+    order.by: REF_PCF_AUTH_REQ_KEY_UID, CREATE_DT DESC
+    limit: 24
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_CURRENCY
+    source.database: ODS
+    source.table: CARDINAL.REF_CURRENCY
+    bigquery.table: pcb-{env}-landing.domain_payments.REF_CURRENCY
+    select.columns: '*'
+    order.by: REF_CURRENCY_UID, CREATE_DT DESC
+    limit: 183
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-CUST_POLITICAL_EXPOSURE
+    source.database: ODS
+    source.table: CARDINAL.CUST_POLITICAL_EXPOSURE
+    bigquery.table: pcb-{env}-landing.domain_aml.CUST_POLITICAL_EXPOSURE
+    select.columns: '*'
+    order.by: CUST_POLITICAL_EXPOSURE_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_BANNER
+    source.database: ODS
+    source.table: CARDINAL.REF_BANNER
+    bigquery.table: pcb-{env}-landing.domain_retail.REF_BANNER
+    select.columns: '*'
+    order.by: REF_BANNER_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_RETAIL_STORE
+    source.database: ODS
+    source.table: CARDINAL.REF_RETAIL_STORE
+    bigquery.table: pcb-{env}-landing.domain_retail.REF_RETAIL_STORE
+    select.columns: '*'
+    order.by: REF_RETAIL_STORE_UID, CREATE_DT DESC
+    limit: 100
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-REF_NOTIFI_CHANNEL_CD
+    source.database: ODS
+    source.table: CARDINAL.REF_NOTIFI_CHANNEL_CD
+    bigquery.table: pcb-{env}-landing.domain_communication.REF_NOTIFI_CHANNEL_CD
+    select.columns: '*'
+    order.by: REF_NOTIFI_CHANNEL_CD_UID, CREATE_DT DESC
+    limit: 2
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-TAXPAYER_IDENTIFICATION
+    source.database: ODS
+    source.table: CARDINAL.TAXPAYER_IDENTIFICATION
+    bigquery.table: pcb-{env}-landing.domain_validation_verification.TAXPAYER_IDENTIFICATION
+    select.columns: '*'
+    order.by: TAXPAYER_IDENTIFICATION_UID, CREATE_DT DESC
+    limit: 200
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-APPLICANT_PERSONAL_IDENTIFIER
+    source.database: ODS
+    source.table: IDVMGMT.APPLICANT_PERSONAL_IDENTIFIER
+    bigquery.table: pcb-{env}-landing.domain_validation_verification.APPLICANT_PERSONAL_IDENTIFIER
+    select.columns: '*'
+    order.by: APPLICANT_IDENTIFIER_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: TIMESTAMP-FIX-WORK_SHIFT
+    source.database: ODS
+    source.table: CARDINAL.WORK_SHIFT
+    bigquery.table: pcb-{env}-landing.domain_customer_service.WORK_SHIFT
+    select.columns: '*'
+    order.by: WORK_SHIFT_UID, CREATE_DT DESC
+    limit: 1000
+    is.enabled: True
+  - case.name: GEN_VAL_DETAIL
+    source.database: DB053
+    source.table: ADM.GEN_VAL_DETAIL
+    bigquery.table: pcb-{env}-landing.domain_customer_acquisition.GEN_VAL_DETAIL
+    select.columns: APP_NUM, ELEMENT_NAME
+    order.by: APP_NUM, ELEMENT_NAME
+    limit: 5000
+    is.enabled: True
+  - case.name: GEN_VAL_HEAD_TRAIL
+    source.database: DB053
+    source.table: ADM.GEN_VAL_HEAD_TRAIL
+    bigquery.table: pcb-{env}-landing.domain_customer_acquisition.GEN_VAL_HEAD_TRAIL
+    select.columns: REC_LOAD_TMS, REC_CNT
+    order.by: REC_LOAD_TMS, REC_CNT
+    limit: 5000
+    is.enabled: True

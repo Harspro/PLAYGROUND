@@ -1,0 +1,79 @@
+instant_issuance_reconciliation_orchestration:
+  description: "Find partially missing card entries for instant issuance and send card replacement requests to Kafka."
+  tags: [ "instant-issuance", "SCMS" ]
+  source_type: "orchestration"
+  schedule_interval: 0 21 * * *
+  allow_manual_run: True
+  tolerance_window: 90
+  lookback_window: 0
+  missing_record_threshold: 200
+  read_pause_deploy_config: True
+  kafka_writer:
+    dag_id: instant_issuance_orchestration_bq_to_kafka
+    dataproc_cluster_name: scms-instant-issuance-reconciliation-orchest-c
+    gcs:
+      bucket: pcb-{env}-staging-extract
+      folder_name: instant_issuance_reconciliation/orchestration
+      file_name: instant-issuance-reconciliation-snapshot
+  big_query:
+    mapping:
+      orchestration_table_id: 'pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_ORCHESTRATION'
+      view_id: 'pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_RECONCILIATION_VIEW'
+      audit_table_id: 'pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_RECONCILIATION_AUDIT'
+      control_table_id: 'pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_DAGS_CONTROL'
+      output_uri_landing: 'gs://pcb-{env}-staging-extract/instant_issuance_reconciliation/orchestration/instant-issuance-reconciliation-snapshot-*.parquet'
+    audit_table_schema:
+      - { "name": "orchestrationId", "type": "INTEGER", "mode": "NULLABLE" }
+      - { "name": "cardNumber", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reasonCode", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reasonDescription", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "sourceType", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "auditTimestamp", "type": "TIMESTAMP", "mode": "NULLABLE" }
+    control_table_schema:
+      - { "name": "dagName", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "windowStartTime", "type": "TIMESTAMP", "mode": "REQUIRED" }
+      - { "name": "windowEndTime", "type": "TIMESTAMP", "mode": "REQUIRED" }
+      - { "name": "dagExecutionTime", "type": "TIMESTAMP", "mode": "NULLABLE" }
+      - { "name": "triggerType", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "replacementCount", "type": "INTEGER", "mode": "NULLABLE" }
+
+instant_issuance_reconciliation_rt11:
+  description: "Find completely missing card entries for instant issuance and send card replacement requests to Kafka."
+  tags: [ "instant-issuance", "SCMS" ]
+  source_type: "rt11"
+  schedule_interval: None
+  allow_manual_run: False
+  tolerance_window: 90
+  lookback_window: 0
+  missing_record_threshold: 200
+  read_pause_deploy_config: True
+  kafka_writer:
+    dag_id: instant_issuance_orchestration_bq_to_kafka
+    dataproc_cluster_name: scms-instant-issuance-reconciliation-rt11-c
+    gcs:
+      bucket: pcb-{env}-staging-extract
+      folder_name: instant_issuance_reconciliation/rt11
+      file_name: instant-issuance-reconciliation-snapshot
+  big_query:
+    mapping:
+      orchestration_table_id: 'pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_ORCHESTRATION'
+      view_id: 'pcb-{env}-curated.domain_customer_acquisition.INSTANT_ISSUANCE_RECONCILIATION_VIEW'
+      audit_table_id: 'pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_RECONCILIATION_AUDIT'
+      control_table_id: 'pcb-{env}-landing.domain_card_management.INSTANT_ISSUANCE_DAGS_CONTROL'
+      card_info_table_id: 'pcb-{env}-curated.domain_customer_acquisition.ADM_INST_CARD_INFO'
+      application_table_id: 'pcb-{env}-curated.domain_customer_acquisition.ADM_RT_RESPONSE_UNS'
+      output_uri_landing: 'gs://pcb-{env}-staging-extract/instant_issuance_reconciliation/rt11/instant-issuance-reconciliation-snapshot-*.parquet'
+    audit_table_schema:
+      - { "name": "orchestrationId", "type": "INTEGER", "mode": "NULLABLE" }
+      - { "name": "cardNumber", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reasonCode", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "reasonDescription", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "sourceType", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "auditTimestamp", "type": "TIMESTAMP", "mode": "NULLABLE" }
+    control_table_schema:
+      - { "name": "dagName", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "windowStartTime", "type": "TIMESTAMP", "mode": "REQUIRED" }
+      - { "name": "windowEndTime", "type": "TIMESTAMP", "mode": "REQUIRED" }
+      - { "name": "dagExecutionTime", "type": "TIMESTAMP", "mode": "NULLABLE" }
+      - { "name": "triggerType", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "replacementCount", "type": "INTEGER", "mode": "NULLABLE" }

@@ -1,0 +1,383 @@
+tsys_pcb_mc_acctmaster_monthly_file_loading_v2:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_acctmaster_monthly
+  bigquery_oracle_loader_dag_id: acct_master_monthly_bq_to_oracle
+  file_date_column: FILE_CREATE_DT
+  require_bigquery_oracle_loader: True
+  trigger_flag: True
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_MASTER_FULL
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_MASTER_FULL
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: AM0A_group
+        segments: AM0A
+      - group_name: detail_group
+        segments: AM00, AM01, AM02, AM04_OL, AM04_PD, AM04_PTP, AM04_S, AM08, AM09, AM0BH , AM0BI, AM0BJ, AM0BP, AM0BR, AM0BU, AM0BW, AM0BX, AM0C, AM0E, AM0F, AM32, AM33, AM35, AM38, AM3A, AM3B
+    segment_args:
+      AM00:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM00.cpy
+        pcb.tsys.processor.segment.name: AM00
+        pcb.tsys.processor.layout.name: AM00_REC
+      AM01:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM01.cpy
+        pcb.tsys.processor.segment.name: AM01
+        pcb.tsys.processor.layout.name: AM01_REC
+      AM02:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM02.cpy
+        pcb.tsys.processor.segment.name: AM02
+        pcb.tsys.processor.layout.name: AM02_REC
+      AM04_OL:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM04_OL.cpy
+        pcb.tsys.processor.segment.name: AM04
+        pcb.tsys.processor.layout.name: AM04_OL
+      AM04_PD:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM04_PD.cpy
+        pcb.tsys.processor.segment.name: AM04
+        pcb.tsys.processor.layout.name: AM04_PD
+      AM04_PTP:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM04_PTP.cpy
+        pcb.tsys.processor.segment.name: AM04
+        pcb.tsys.processor.layout.name: AM04_PTP
+      AM04_S:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM04_S.cpy
+        pcb.tsys.processor.segment.name: AM04
+        pcb.tsys.processor.layout.name: AM04_S
+      AM08:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM08.cpy
+        pcb.tsys.processor.segment.name: AM08
+        pcb.tsys.processor.layout.name: AM08_REC
+      AM09:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM09.cpy
+        pcb.tsys.processor.segment.name: AM09
+        pcb.tsys.processor.layout.name: AM09_REC
+      AM0A:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0A.cpy
+        pcb.tsys.processor.segment.name: AM0A
+        pcb.tsys.processor.layout.name: AM0A_REC
+      AM0BH:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BH.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BH_REC
+      AM0BI:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BI.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BI_REC
+      AM0BJ:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BJ.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BJ_REC
+      AM0BP:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BP.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BP_REC
+      AM0BR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BR.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BR_REC
+      AM0BU:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BU.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BU_REC
+      AM0BW:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BW.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BW_REC
+      AM0BX:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0BX.cpy
+        pcb.tsys.processor.segment.name: AM0B
+        pcb.tsys.processor.layout.name: AM0BX_REC
+      AM0C:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0C.cpy
+        pcb.tsys.processor.segment.name: AM0C
+        pcb.tsys.processor.layout.name: AM0C_REC
+      AM0E:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0E.cpy
+        pcb.tsys.processor.segment.name: AM0E
+        pcb.tsys.processor.layout.name: AM0E_REC
+      AM0F:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM0F.cpy
+        pcb.tsys.processor.segment.name: AM0F
+        pcb.tsys.processor.layout.name: AM0F_REC
+      AM32:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM32.cpy
+        pcb.tsys.processor.segment.name: AM32
+        pcb.tsys.processor.layout.name: AM32_REC
+      AM33:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM33.cpy
+        pcb.tsys.processor.segment.name: AM33
+        pcb.tsys.processor.layout.name: AM33_REC
+      AM35:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM35.cpy
+        pcb.tsys.processor.segment.name: AM35
+        pcb.tsys.processor.layout.name: AM35_REC
+      AM38:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM38.cpy
+        pcb.tsys.processor.segment.name: AM38
+        pcb.tsys.processor.layout.name: AM38_REC
+      AM3A:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM3A.cpy
+        pcb.tsys.processor.segment.name: AM3A
+        pcb.tsys.processor.layout.name: AM3A_REC
+      AM3B:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/MSTACCT_AM3B.cpy
+        pcb.tsys.processor.segment.name: AM3B
+        pcb.tsys.processor.layout.name: AM3B_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster_full/TRLR.cpy
+        pcb.tsys.processor.segment.name: 9999
+        pcb.tsys.processor.layout.name: MAST_TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      AM00:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM00
+        record_count_column: TRAILER_REC_CNT_X_1
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM01:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM01
+        record_count_column: TRAILER_REC_CNT_X_3
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM02:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM02
+        record_count_column: TRAILER_REC_CNT_X_4
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM04_OL:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_OL
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_8
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM04_PD:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_PD
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_8
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM04_PTP:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_PTP
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_8
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM04_S:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_S
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_8
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - AM04_DATE_LAST_INTO_PD_CATEG_10 AS AM04_DATE_LAST_INTO_PD_CATEG10
+          - AM04_DATE_LAST_INTO_PD_CATEG_11 AS AM04_DATE_LAST_INTO_PD_CATEG11
+          - AM04_DATE_LAST_INTO_PD_CATEG_12 AS AM04_DATE_LAST_INTO_PD_CATEG12
+        drop_columns:
+          - AM04_DATE_LAST_INTO_PD_CATEG_10
+          - AM04_DATE_LAST_INTO_PD_CATEG_11
+          - AM04_DATE_LAST_INTO_PD_CATEG_12
+      AM08:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM08
+        record_count_column: TRAILER_REC_CNT_X_12
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM09:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM09
+        record_count_column: TRAILER_REC_CNT_X_14
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0A:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0A
+        record_count_column: TRAILER_REC_CNT_X_9
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+      AM0BH:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BH
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0BI:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BI
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0BJ:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BJ
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0BP:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BP
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0BR:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BR
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0BU:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BU
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0BW:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BW
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0BX:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BX
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_15
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0C:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0C
+        record_count_column: TRAILER_REC_CNT_X_16
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_1 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR1
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_2 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR2
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_3 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR3
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_4 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR4
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_5 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR5
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_6 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR6
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_7 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR7
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_8 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR8
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_9 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR9
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_10 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR10
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_11 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR11
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_12 AS AM0C_AMT_FCHG_DEBITS_CTD_PUR12
+          - AM0C_AMT_FCHG_DEBITS_CTD_CSH_10 AS AM0C_AMT_FCHG_DEBITS_CTD_CSH10
+          - AM0C_AMT_FCHG_DEBITS_CTD_CSH_11 AS AM0C_AMT_FCHG_DEBITS_CTD_CSH11
+          - AM0C_AMT_FCHG_DEBITS_CTD_CSH_12 AS AM0C_AMT_FCHG_DEBITS_CTD_CSH12
+        drop_columns:
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_1
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_2
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_3
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_4
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_5
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_6
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_7
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_8
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_9
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_10
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_11
+          - AM0C_AMT_FCHG_DEBITS_CTD_PUR_12
+          - AM0C_AMT_FCHG_DEBITS_CTD_CSH_10
+          - AM0C_AMT_FCHG_DEBITS_CTD_CSH_11
+          - AM0C_AMT_FCHG_DEBITS_CTD_CSH_12
+      AM0E:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0E
+        record_count_column: TRAILER_REC_CNT_X_2
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM0F:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0F
+        record_count_column: TRAILER_REC_CNT_X_17
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM32:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM32
+        record_count_column: TRAILER_REC_CNT_X_5
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM33:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM33
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM35:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM35
+        record_count_column: TRAILER_REC_CNT_X_7
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM38:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM38
+        record_count_column: TRAILER_REC_CNT_X_13
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AM3A:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3A
+        record_count_column: TRAILER_REC_CNT_X_10
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0A
+            output_columns:
+              - AM0A_ACCOUNT_NUM
+            join_columns:
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AM00_APPLICATION_SUFFIX
+                to_col: t.AM00_APPLICATION_SUFFIX
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+        deduplication_columns:
+          - MAST_ACCOUNT_ID
+          - AM00_APPLICATION_SUFFIX
+          - AM0A_ACCOUNT_NUM
+      AM3B:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3B
+        record_count_column: TRAILER_REC_CNT_X_11
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0A
+            output_columns:
+              - AM0A_ACCOUNT_NUM
+            join_columns:
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AM00_APPLICATION_SUFFIX
+                to_col: t.AM00_APPLICATION_SUFFIX
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+        deduplication_columns:
+          - MAST_ACCOUNT_ID
+          - AM00_APPLICATION_SUFFIX
+          - AM0A_ACCOUNT_NUM
+          - AM3B_TIME_SECURITY_RPT_ENTERED
+          - AM3B_SECURITY_SEGMENT_TYPE
+      TRLR:
+        table_name: TSYS_PCB_MC_ACCTMASTER_MONTHLY_ACCOUNT_MASTER_TRAILER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

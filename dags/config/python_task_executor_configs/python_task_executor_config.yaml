@@ -1,0 +1,1562 @@
+pcma_cdic_0110_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0110 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0110_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0110-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01102310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0238_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0238 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0238_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0238-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02382310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0152_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0152 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0152_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0152-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01522310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0153_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0153 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0153_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0153-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01532310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0140_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0140 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0140_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0140-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01402310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0100_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0100 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0100_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0100-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01002310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0120_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0120 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0120_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0120-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01202310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0201_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0201 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0201_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0201-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02012310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0202_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0202 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0202_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0202-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02022310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0211_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0211 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0211_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0211-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02112310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0235_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0235 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0235_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0235-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02352310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0236_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0236 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0236_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0236-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02362310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0237_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0237 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0237_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0237-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02372310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0239_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0239 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0239_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0239-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02392310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0240_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0240 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0240_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0240-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02402310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0121_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0121 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0121_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0121-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01212310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0501_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0501 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0501_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0501-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}05012310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0999_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0999 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0999_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0999-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}09992310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0800_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0800 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0800_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0800-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}08002310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0900_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0900 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0900_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0900-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}09002310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0241_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0241 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0241_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0241-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02412310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0242_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0242 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0242_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0242-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02422310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0400_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0400 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0400_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0400-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}04002310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0401_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0401 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0401_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0401-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}04012310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0500_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0500 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0500_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0500-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}05002310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0600_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0600 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0600_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0600-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}06002310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0212_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0212 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0212_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0212-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02122310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0221_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0221 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0221_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0221-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02212310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0231_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0231 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0231_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0231-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02312310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0232_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0232 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0232_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0232-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02322310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0233_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0233 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0233_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0233-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02332310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0234_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0234 file consolidation."
+    tags: [ "team-defenders-alerts" , "P2" ]
+  tasks:
+    - task_id: "file_0234_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0234-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}02342310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_0130_file_consolidation_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "PCMA CDIC pcb-{env}-curated.cots_cdic.PCMA_CDIC_0130 file consolidation."
+    tags: [ "team-defenders-alerts", "P2" ]
+  tasks:
+    - task_id: "file_0130_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "cdic/pcma/extract", "file_prefix": "cdic-0130-"}
+        "dest_config": {"bucket": "cdic-outbound-pcb{env_suffix}", "folder_prefix": "pcma", "file_name": "PCBA{{ dag_run.conf['date_prefix'] }}01302310002.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+
+pcma_cdic_staging_cleanup_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P2"
+    business_impact: "Prevents duplicate records in CDIC processing"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Cleanup CDIC staging bucket before file extraction to prevent duplicate records"
+    tags: [ "team-defenders-alerts", "P2" ]
+  tasks:
+    - task_id: "cleanup_staging_bucket"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+        "bucket_name": "pcb-{env}-staging-extract"
+        "folder_prefix": "cdic/pcma/extract/"
+        # REQUIRED: Specify file patterns to clean specific CDIC files
+        # file_patterns cannot be empty or null - at least one pattern must be provided
+        "file_patterns": [
+          "cdic*"
+        ]
+
+TS2_at31_accttx_kafka_writer_control_table_update:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    sub_capability: "NA"
+    severity: "P2"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Pushes Dag completion record in jobControlDataset for TS2_at31_accttx_kafka_writer."
+    tags: [ "team-convergence-alerts" ]
+  tasks:
+    - task_id: "TS2_at31_accttx_kafka_writer_completion_record"
+      python_callable:
+        module: util.miscutils
+        method: save_job_to_control_table
+      args:
+        "job_params":
+          "dag_id": "{{ dag.dag_id }}"
+
+tcs_purge_image_metadata_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TCS Purge image medata preparation."
+    tags: [ "team-defenders-alerts", "P3" ]
+  tasks:
+    - task_id: "generate_bq_insert_from_filename"
+      python_callable:
+        module: util.miscutils
+        method: generate_bq_insert_from_filename
+      args:
+        "source_config": {"project": "pcb-{env}-landing", "bucket": "tsys-outbound-pcb{env_suffix}", "folder_prefix": "casepurge_images", "str_split_at_pattern": ['_','.'], "execution_datetime": "{{ execution_date.now('America/Toronto').strftime('%Y-%m-%dT%H:%M:%S') }}"}
+        "dest_config": {"table_name": "`pcb-{env}-landing.domain_dispute.TSYS_TCS_PURGE_CASE_IMAGE_METADATA`", "sql_file_path": "tsys_tcs_purge/sql/tsys_tcs_purging_image_metadata.sql"}
+
+tcs_purge_generate_and_upload_png_mock:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TCS Purge generate png file for mock run."
+    tags: [ "team-defenders-alerts", "P3" ]
+  tasks:
+    - task_id: "generate_and_upload_png_file_to_gcs_file_01"
+      python_callable:
+        module: util.miscutils
+        method: generate_and_upload_png
+      args:
+        "source_config": {"png_file_name": "C-9124_D-50578_2025011501.png", "png_content": "This is a sample png file generated for tcs purge mock run - January 2025."}
+        "dest_config": {"target_gcp_bucket": "tsys-outbound-pcb{env_suffix}", "target_gcp_path": "casepurge_images/C-9124_D-50578_2025011501.png"}
+    - task_id: "generate_and_upload_png_file_to_gcs_file_02"
+      python_callable:
+        module: util.miscutils
+        method: generate_and_upload_png
+      args:
+        "source_config": {"png_file_name": "C-9235_D-50689_2025011502.png", "png_content": "This is a sample png file generated for tcs purge mock run - January 2025."}
+        "dest_config": {"target_gcp_bucket": "tsys-outbound-pcb{env_suffix}", "target_gcp_path": "casepurge_images/C-9235_D-50689_2025011502.png"}
+    - task_id: "generate_and_upload_png_file_to_gcs_file_03"
+      python_callable:
+        module: util.miscutils
+        method: generate_and_upload_png
+      args:
+        "source_config": {"png_file_name": "C-9346_D-50790_2025011503.png", "png_content": "This is a sample png file generated for tcs purge mock run - January 2025."}
+        "dest_config": {"target_gcp_bucket": "tsys-outbound-pcb{env_suffix}", "target_gcp_path": "casepurge_images/C-9346_D-50790_2025011503.png"}
+    - task_id: "generate_and_upload_png_file_to_gcs_file_04"
+      python_callable:
+        module: util.miscutils
+        method: generate_and_upload_png
+      args:
+        "source_config": {"png_file_name": "C-9457_D-50891_2025011504.png", "png_content": "This is a sample png file generated for tcs purge mock run - January 2025."}
+        "dest_config": {"target_gcp_bucket": "tsys-outbound-pcb{env_suffix}", "target_gcp_path": "casepurge_images/C-9457_D-50891_2025011504.png"}
+    - task_id: "generate_and_upload_png_file_to_gcs_file_05"
+      python_callable:
+        module: util.miscutils
+        method: generate_and_upload_png
+      args:
+        "source_config": {"png_file_name": "C-9568_D-50992_2025011505.png", "png_content": "This is a sample png file generated for tcs purge mock run - January 2025."}
+        "dest_config": {"target_gcp_bucket": "tsys-outbound-pcb{env_suffix}", "target_gcp_path": "casepurge_images/C-9568_D-50992_2025011505.png"}
+
+tsys_tcs_casepurge_images_outbound_cleanup_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Prevents duplicate records in TCS Purge processing"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Cleanup TSYS outbound bucket before file loading to prevent duplicate records from previous runs"
+    tags: [ "team-defenders-alerts", "P3" ]
+  tasks:
+    - task_id: "cleanup_casepurge_images_bucket"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+        "bucket_name": "tsys-outbound-pcb{env_suffix}"
+        "folder_prefix": "casepurge_images/"
+        # No file_patterns provided - will clean entire directory
+
+tcs_purge_staging_extract_cleanup_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Prevents duplicate files in TCS Purge staging extract folder from previous runs"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Cleanup staging extract bucket before decompression to prevent duplicate files from previous runs"
+    tags: [ "team-defenders-alerts", "P3" ]
+  tasks:
+    - task_id: "cleanup_staging_extract_casepurge_images"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+        "bucket_name": "pcb-{env}-staging-extract"
+        "folder_prefix": "casepurge_images/"
+        # No file_patterns provided - will clean entire directory
+
+tcs_purge_invoke_cloud_function_decompression_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "To invoke google clound function to decompressed TCS Purge image file."
+    tags: [ "team-defenders-alerts", "P3" ]
+  tasks:
+    - task_id: "decompressed_tcs_purging_image_files"
+      python_callable:
+        module: util.cloud_function_utils
+        method: cloud_function_invoker
+      args:
+        "input_config": {
+          "location": "northamerica-northeast1",
+          "project_id": "pcb-{env}-processing",
+          "function_name": "compression-decompression-service",
+          "data": {
+            "source_bucket": "pcb-{env}-staging",
+            "source_file_name": "{{dag_run.conf['name']}}",
+            "destination_bucket": "pcb-{env}-staging-extract"
+          },
+          "headers": {},
+          "timeout": 3600
+        }
+
+loyalty_benefit_expiry_file_consolidation_job:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Account Management"
+    sub_capability: "Account Management"
+    severity: "P3"
+    business_impact: "Potential compliance issue"
+    customer_impact: "Customer will miss out the notification regarding the loyalty offer expiry"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "pcb_int_comms_loyalty_benefit_expiry_%s-*.csv file consolidation."
+    tags: [ "team-digital-adoption-alerts" , "P3" ]
+  tasks:
+    - task_id: "benefit_expiry_file_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": { "bucket": "communications-inbound-pcb{env_suffix}", "folder_prefix": "loyalty_benefit_expiry", "file_prefix": "pcb_int_comms_loyalty_benefit_expiry_" }
+        "dest_config": { "bucket": "communications-inbound-pcb{env_suffix}", "folder_prefix": "generic_communications", "file_name": "pcb_int_comms_loyalty_benefit_expiry_{{ dag_run.conf['date_prefix'] }}.csv" }
+        "win_compatible": true,
+        "replace_empty_with_blank": false
+
+loyalty_benefit_expiry_file_cleanup_job:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Account Management"
+    sub_capability: "Account Management"
+    severity: "P3"
+    business_impact: "Prevents duplicate records in loyalty benefit expiry notification processing"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Cleanup loyalty benefit expiry staging folder to prevent duplicate records"
+    tags: [ "team-digital-adoption-alerts", "P3" ]
+  tasks:
+    - task_id: "cleanup_staging_folder"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+        "bucket_name": "communications-inbound-pcb{env_suffix}"
+        "folder_prefix": "loyalty_benefit_expiry/"
+        "file_patterns": [
+          "pcb_int_comms_loyalty_benefit_expiry_*"
+        ]
+
+all_score_trs_t0090_file_writer_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+    tags: [ "team-defenders-alerts", "P3" ]
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "TRS scoring solution pcb-{env}-curated.domain_scoring.TRANSACTION_RISK_SCORING_INPUT file writer job."
+  tasks:
+    - task_id: "trs_consolidation_cleanup_job"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+         "bucket_name": "pcb-{env}-staging-extract"
+         "folder_prefix": "all_score/trs/consolidation/"
+         "file_patterns": [
+           "transaction-risk-score-consolidation*"
+         ]
+    - task_id: "fetch_datetime"
+      python_callable:
+        module: util.datetime_utils
+        method: current_datetime_toronto
+    - task_id: "output_file_name"
+      python_callable:
+        module: util.miscutils
+        method: read_env_filepattern
+      args:
+        "pattern": "pcb_tsys_pcmc_cust_trs_{{ ti.xcom_pull(task_ids='fetch_datetime', key='return_value').strftime('%Y%m%d%H%M%S') }}.{file_env}"
+        "deploy_env": "{env}"
+    - task_id: "trs_input_file_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "all_score/trs/extract", "file_prefix": "transaction-risk-score-"}
+        "dest_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "all_score/trs/consolidation", "file_name": "transaction-risk-score-consolidation.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+    - task_id: "fixed_width_conversion"
+      python_callable:
+        module: util.fixed_width_utils
+        method: convert_delimited_to_fixed_width
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "all_score/trs/consolidation", "file_name": "transaction-risk-score-consolidation.txt",
+                          "delimiter": "|",
+                          "skip_header": True,
+                          "header": [
+                            "7607",
+                            "9998",
+                            { "value": "", "length": 8, "pad_value": " ", "pad_type": "left" },
+                            "{{ ti.xcom_pull(task_ids='fetch_datetime', key='return_value').strftime('%Y%m%d') }}",
+                            "Y",
+                            { "value": "", "length": 275, "pad_value": " ", "pad_type": "left" }
+                          ],
+                          "footer": [
+                                  "7607",
+                                  "9999",
+                                  "SC01",
+                                  {"value": "{record_count}", "length": 9, "pad_value": "0", "pad_type": "left"},
+                                  "SC31",
+                                  {"value": "0", "length": 9, "pad_value": "0", "pad_type": "left"},
+                                  "SC32",
+                                  {"value": "0", "length": 9, "pad_value": "0", "pad_type": "left"},
+                                  {"value": "", "length": 253, "pad_value": " ", "pad_type": "left"}
+                                  ],
+                          "column_config":
+                             [     "CLIENT_ID:1:4: :R:string",
+                                   "RECORD_TYPE:5:4: :R:string",
+                                   "REJECT_CODE:9:2: :R:string",
+                                   "ACCOUNT_NUMBER:11:19: :R:string",
+                                   "FILLER_1:30:1: :R:string",
+                                   "ACCOUNT_IDENTIFIER:31:11:0:L:decimal(11,0)",
+                                   "FILLER_2:42:2: :R:string",
+                                   "PRIMARY_CUSTOMER_ID:44:9:0:L:string",
+                                   "CUSTOMER_TYPE:53:1:0:L:string",
+                                   "FILLER_3:54:26: :L:string",
+                                   "SCORE_TYPE:80:5: :R:string",
+                                   "SCORE_CALC_DATE:85:8:0:L:decimal(8,0)",
+                                   "SCORE_CALC_TIME:93:8:0:L:decimal(8,0)",
+                                   "SCORE_RAW_SIGN:101:1: :R:string",
+                                   "SCORE_RAW:102:7:0:L:string",
+                                   "SCORE_ALIGNED_SIGN:109:1: :R:string",
+                                   "SCORE_ALIGNED:110:7:0:L:decimal(7,0)",
+                                   "SCORE_SOURCE:117:5: :R:string",
+                                   "RATING_GRADE:122:7: :R:string",
+                                   "BUREAU_ID:129:2:0:L:string",
+                                   "MARKET_ADDRESS_CODE:131:5: :R:string",
+                                   "SCORE_REASON_1:136:5: :R:string",
+                                   "SCORE_REASON_2:141:5: :R:string",
+                                   "SCORE_REASON_3:146:5: :R:string",
+                                   "SCORE_REASON_4:151:5: :R:string",
+                                   "REASON_DIFF_1_SIGN:156:1: :R:string",
+                                   "REASON_DIFF_1:157:5:0:L:string",
+                                   "REASON_DIFF_2_SIGN:162:1: :R:string",
+                                   "REASON_DIFF_2:163:5:0:L:string",
+                                   "REASON_DIFF_3_SIGN:168:1: :R:string",
+                                   "REASON_DIFF_3:169:5:0:L:decimal(5,0)",
+                                   "REASON_DIFF_4_SIGN:174:1: :R:string",
+                                   "REASON_DIFF_4:175:5:0:L:decimal(5,0)",
+                                   "ACCT_RELATION_CODE:180:5: :R:string",
+                                   "OPERATOR_ID:185:6: :R:string",
+                                   "USER_DEFINED_1:191:7: :R:string",
+                                   "USER_DEFINED_2:198:7: :R:string",
+                                   "USER_DEFINED_3:205:7: :R:string",
+                                   "USER_DEFINED_S1_SIGN:212:1: :R:string",
+                                   "USER_DEFINED_S1:213:11:0:L:string",
+                                   "USER_DEFINED_S2_SIGN:224:1: :R:string",
+                                   "USER_DEFINED_S2:225:11:0:L:string",
+                                   "TTS_DOLLAR_VALUE:236:5: :L:string",
+                                   "INQUIRY_FLAG:241:1: :R:string",
+                                   "LOW_RANGE_SIGN:242:1: :R:string",
+                                   "LOW_SCORE_RANGE:243:7:0:L:string",
+                                   "HIGH_RANGE_SIGN:250:1: :R:string",
+                                   "HIGH_SCORE_RANGE:251:7:0:L:string",
+                                   "PERCENTILE_RANKING:258:3:0:L:string",
+                                   "FILLER_4:261:35: :R:string",
+                                   "SCORE_TYPE_2:296:5: :R:String"]
+                          }
+        "dest_config": {"bucket": "score-outbound-pcb-{env}", "folder_prefix": "trs_t0090/extract", "file_name": "{{ ti.xcom_pull(task_ids='output_file_name', key='return_value') }}"}
+
+c2p_privacy_update_notification_file_cleanup_job:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Customer Management"
+    sub_capability: "Customer Management"
+    severity: "P3"
+    business_impact: "Prevents duplicate records in Click To Pay privacy update notification processing"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Cleanup Click To Pay privacy update notification staging folder to prevent duplicate records"
+    tags: [ "team-digital-adoption-alerts", "P3" ]
+  tasks:
+    - task_id: "cleanup_staging_folder"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+        "bucket_name": "communications-inbound-pcb{env_suffix}"
+        "folder_prefix": "c2p_privacy_update_notification/"
+        "file_patterns": [
+          "pcb_int_comms_c2p_privacy_update_notification_*"
+        ]
+
+c2p_privacy_update_notification_file_consolidation_job:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Customer Management"
+    sub_capability: "Customer Management"
+    severity: "P3"
+    business_impact: "Potential compliance issue"
+    customer_impact: "Customer will miss out the notification regarding the Click To Pay auto enrollment"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "pcb_int_comms_c2p_privacy_notification_%s-*.csv file consolidation."
+    tags: [ "team-digital-adoption-alerts" , "P3" ]
+  tasks:
+    - task_id: "c2p_privacy_update_notification_file_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": { "bucket": "communications-inbound-pcb{env_suffix}", "folder_prefix": "c2p_privacy_update_notification", "file_prefix": "pcb_int_comms_c2p_privacy_update_notification_" }
+        "dest_config": { "bucket": "communications-inbound-pcb{env_suffix}", "folder_prefix": "generic_communications", "file_name": "pcb_int_comms_c2p_privacy_update_notification_{{ dag_run.conf['date_prefix'] }}.csv" }
+        "win_compatible": true,
+        "replace_empty_with_blank": false
+
+tsys_tcs_casepurge_records_inbound_cleanup_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Prevents duplicate records in TCS Purge processing"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Cleanup TSYS outbound bucket to prevent duplicate records from previous runs"
+    tags: [ "team-defenders-alerts", "P3" ]
+  tasks:
+    - task_id: "cleanup_casepurge_records_bucket"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+        "bucket_name": "tsys-inbound-pcb{env_suffix}"
+        "folder_prefix": "casepurge_records/"
+
+all_score_business_approval_log:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Logging status of business approval for All Score model output."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  tasks:
+    - task_id: "business_approval_log"
+      python_callable:
+        module: util.logging_utils
+        method: log_message
+      args:
+        "message": "Business has approved the All Score model output. Model scores are validated and ready for production use."
+        "log_level": "INFO"
+        "context": {"execution_date" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        "structured": true
+
+all_score_business_rejection_log:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Bank Loss Risk will increase"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Logging status of business rejection for All Score model output."
+    tags: [ "team-defenders-alerts" , "P3" ]
+  tasks:
+    - task_id: "business_rejection_log"
+      python_callable:
+        module: util.logging_utils
+        method: log_message
+      args:
+        "message": "Business has rejected the All Score model output. Model scores require investigation before production use."
+        "log_level": "WARNING"
+        "context": {"execution_date" : "{{ execution_date.now('America/Toronto').strftime('%Y%m%d%H%M%S') }}"}
+        "structured": true
+        
+all_score_index4_t0040_file_writer_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "credit-risk"
+    severity: "P3"
+    business_impact: "Index4 T0040 file generation will be blocked"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+    tags: ["team-defenders-alerts", "P3", "index4-t0040"]
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "Index4 T0040 scoring solution file writer job."
+    read_pause_deploy_config: True
+  tasks:
+    - task_id: "index4_t0040_consolidation_cleanup_job"
+      python_callable:
+        module: util.gcs_utils
+        method: cleanup_gcs_folder
+      args:
+        "bucket_name": "pcb-{env}-staging-extract"
+        "folder_prefix": "all_score/index4_t0040/consolidation/"
+        "file_patterns": [
+          "index4_t0040-output-consolidation*"
+        ]
+    - task_id: "fetch_datetime"
+      python_callable:
+        module: util.datetime_utils
+        method: current_datetime_toronto
+    - task_id: "output_file_name"
+      python_callable:
+        module: util.miscutils
+        method: read_env_filepattern
+      args:
+        "pattern": "pcb_tsys_pcmc_cust_trs_{{ ti.xcom_pull(task_ids='fetch_datetime', key='return_value').strftime('%Y%m%d%H%M%S') }}.{file_env}"
+        "deploy_env": "{env}"
+    - task_id: "index4_t0040_input_file_consolidation"
+      python_callable:
+        module: util.miscutils
+        method: compose_infinite_files_into_one
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "all_score/index4_t0040/extract", "file_prefix": "output-"}
+        "dest_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "all_score/index4_t0040/consolidation", "file_name": "index4_t0040-output-consolidation.txt"}
+        "win_compatible": true,
+        "replace_empty_with_blank": true
+    - task_id: "fixed_width_conversion"
+      python_callable:
+        module: util.fixed_width_utils
+        method: convert_delimited_to_fixed_width
+      args:
+        "source_config": {"bucket": "pcb-{env}-staging-extract", "folder_prefix": "all_score/index4_t0040/consolidation", "file_name": "index4_t0040-output-consolidation.txt",
+                          "delimiter": "|",
+                          "skip_header": True,
+                          "header": [
+                            "7607",
+                            "9998",
+                            { "value": "", "length": 8, "pad_value": " ", "pad_type": "left" },
+                            "{{ ti.xcom_pull(task_ids='fetch_datetime', key='return_value').strftime('%Y%m%d') }}",
+                            "Y",
+                            { "value": "", "length": 275, "pad_value": " ", "pad_type": "left" }
+                          ],
+                          "footer": [
+                            "7607",
+                            "9999",
+                            "SC01",
+                            {"value": "{record_count}", "length": 9, "pad_value": "0", "pad_type": "left"},
+                            "SC31",
+                            {"value": "0", "length": 9, "pad_value": "0", "pad_type": "left"},
+                            "SC32",
+                            {"value": "0", "length": 9, "pad_value": "0", "pad_type": "left"},
+                            {"value": "", "length": 253, "pad_value": " ", "pad_type": "left"}
+                          ],
+                          "column_config":
+                            [     "CLIENT_ID:1:4: :R:string",
+                                  "RECORD_TYPE:5:4: :R:string",
+                                  "REJECT_CODE:9:2: :R:string",
+                                  "ACCOUNT_NUMBER:11:19: :R:string",
+                                  "FILLER_1:30:1: :R:string",
+                                  "ACCOUNT_IDENTIFIER:31:11:0:L:string",
+                                  "FILLER_2:42:2: :R:string",
+                                  "PRIMARY_CUSTOMER_ID:44:9:0:L:decimal(9,0)",
+                                  "CUSTOMER_TYPE:53:1:0:L:decimal(1,0)",
+                                  "FILLER_3:54:26: :L:string",
+                                  "SCORE_TYPE:80:5: :R:string",
+                                  "SCORE_CALC_DATE:85:8:0:L:decimal(8,0)",
+                                  "SCORE_CALC_TIME:93:8:0:L:decimal(8,0)",
+                                  "SCORE_RAW_SIGN:101:1: :R:string",
+                                  "SCORE_RAW:102:7:0:L:decimal(7,0)",
+                                  "SCORE_ALIGNED_SIGN:109:1: :R:string",
+                                  "SCORE_ALIGNED:110:7:0:L:decimal(7,0)",
+                                  "SCORE_SOURCE:117:5: :R:string",
+                                  "RATING_GRADE:122:7: :R:string",
+                                  "BUREAU_ID:129:2:0:L:decimal(2,0)",
+                                  "MARKET_ADDRESS_CODE:131:5: :R:string",
+                                  "SCORE_REASON_1:136:5: :R:string",
+                                  "SCORE_REASON_2:141:5: :R:string",
+                                  "SCORE_REASON_3:146:5: :R:string",
+                                  "SCORE_REASON_4:151:5: :R:string",
+                                  "REASON_DIFF_1_SIGN:156:1: :R:string",
+                                  "REASON_DIFF_1:157:5:0:L:decimal(5,0)",
+                                  "REASON_DIFF_2_SIGN:162:1: :R:string",
+                                  "REASON_DIFF_2:163:5:0:L:decimal(5,0)",
+                                  "REASON_DIFF_3_SIGN:168:1: :R:string",
+                                  "REASON_DIFF_3:169:5:0:L:decimal(5,0)",
+                                  "REASON_DIFF_4_SIGN:174:1: :R:string",
+                                  "REASON_DIFF_4:175:5:0:L:decimal(5,0)",
+                                  "ACCT_RELATION_CODE:180:5: :R:string",
+                                  "OPERATOR_ID:185:6: :R:string",
+                                  "USER_DEFINED_1:191:7: :R:string",
+                                  "USER_DEFINED_2:198:7: :R:string",
+                                  "USER_DEFINED_3:205:7: :R:string",
+                                  "USER_DEFINED_S1_SIGN:212:1: :R:string",
+                                  "USER_DEFINED_S1:213:11:0:L:decimal(11,0)",
+                                  "USER_DEFINED_S2_SIGN:224:1: :R:string",
+                                  "USER_DEFINED_S2:225:11:0:L:decimal(11,0)",
+                                  "TTS_DOLLAR_VALUE:236:5: :L:decimal(5,0)",
+                                  "INQUIRY_FLAG:241:1: :R:string",
+                                  "LOW_RANGE_SIGN:242:1: :R:string",
+                                  "LOW_SCORE_RANGE:243:7:0:L:decimal(7,0)",
+                                  "HIGH_RANGE_SIGN:250:1: :R:string",
+                                  "HIGH_SCORE_RANGE:251:7:0:L:decimal(7,0)",
+                                  "PERCENTILE_RANKING:258:3:0:L:decimal(3,0)",
+                                  "FILLER_4:261:35: :R:string",
+                                  "SCORE_TYPE_2:296:5: :R:string"]
+        }
+        "dest_config": {"bucket": "score-outbound-pcb-{env}", "folder_prefix": "index4_t0040/extract", "file_name": "{{ ti.xcom_pull(task_ids='output_file_name', key='return_value') }}"}

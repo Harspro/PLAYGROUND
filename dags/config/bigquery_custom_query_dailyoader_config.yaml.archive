@@ -1,0 +1,3469 @@
+db839_cw_aml_invalid_dl_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_AML_INVALID_DL WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_AML_INVALID_DL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_bk_summary_province_aggregate_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_BK_SUMMARY_PROVINCE_AGGREGATE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_BK_SUMMARY_PROVINCE_AGGREGATE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_erm_aml_count_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ERM_AML_COUNT_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ERM_AML_COUNT_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_erm_aml_summary_id_type_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ERM_AML_SUMMARY_ID_TYPE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ERM_AML_SUMMARY_ID_TYPE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_erm_fraud_dashboard_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ERM_FRAUD_DASHBOARD WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ERM_FRAUD_DASHBOARD
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_erm_undrawn_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ERM_UNDRAWN_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ERM_UNDRAWN_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_bau_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_BAU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_BAU
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_transition_history_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_TRANSITION_HISTORY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_TRANSITION_HISTORY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_transition_l12m_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_TRANSITION_L12M WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_TRANSITION_L12M
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_activation_3m_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_ACTIVATION_3M WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_ACTIVATION_3M
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_approval_details_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_APPROVAL_DETAILS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_APPROVAL_DETAILS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_payments_summary_pd_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_PAYMENTS_SUMMARY_PD WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_PAYMENTS_SUMMARY_PD
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_pd_utilization_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_PD_UTILIZATION_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_PD_UTILIZATION_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_pd2_3_4p_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_PD2_3_4P_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_PD2_3_4P_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_ranking_ar_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_RANKING_AR_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_RANKING_AR_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_history_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_HISTORY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_HISTORY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_renew_stat_activate_week_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_RENEW_STAT_ACTIVATE_WEEK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_RENEW_STAT_ACTIVATE_WEEK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_renew_stat_activate_wow_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_RENEW_STAT_ACTIVATE_WOW WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_RENEW_STAT_ACTIVATE_WOW
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_true_down_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_TRUE_DOWN WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_TRUE_DOWN
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_true_up_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_TRUE_UP WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_TRUE_UP
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_xsell_log_week_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_XSELL_LOG_WEEK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_XSELL_LOG_WEEK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_operations_maintenance_event_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_OPERATIONS_MAINTENANCE_EVENT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_OPERATIONS_MAINTENANCE_EVENT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pc_optimum_points_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PC_OPTIMUM_POINTS_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PC_OPTIMUM_POINTS_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pobox_breakdown_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_POBOX_BREAKDOWN WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_POBOX_BREAKDOWN
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_bus_addr_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_BUS_ADDR_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_BUS_ADDR_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tw10_po_box_report_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TW10_PO_BOX_REPORT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TW10_PO_BOX_REPORT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_monthly_balance_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_MONTHLY_BALANCE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_MONTHLY_BALANCE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cr_ecl_bau_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CR_ECL_BAU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CR_ECL_BAU
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cr_ecl_old_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CR_ECL_OLD WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CR_ECL_OLD
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ecl_cr_monthly_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ECL_CR_MONTHLY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ECL_CR_MONTHLY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_summary_acct_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_SUMMARY_ACCT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_SUMMARY_ACCT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_issues_add_lkup_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_ISSUES_ADD_LKUP_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_ISSUES_ADD_LKUP_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_erm_pcma_uninsured_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ERM_PCMA_UNINSURED WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ERM_PCMA_UNINSURED
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_approval_summary_monthly_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_APPROVAL_SUMMARY_MONTHLY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_APPROVAL_SUMMARY_MONTHLY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_dgo_rating_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_DGO_RATING WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_DGO_RATING
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tw10_po_box_report_week_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TW10_PO_BOX_REPORT_WEEK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TW10_PO_BOX_REPORT_WEEK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cardinal_cclogin_active_wow_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CARDINAL_CCLOGIN_ACTIVE_WOW WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CARDINAL_CCLOGIN_ACTIVE_WOW
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_cf_monthly_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_CF_MONTHLY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_CF_MONTHLY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_daily_month_end_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_DAILY_MONTH_END WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_DAILY_MONTH_END
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_acq_qa_sample_num_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ACQ_QA_SAMPLE_NUM WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ACQ_QA_SAMPLE_NUM
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_approval_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_APPROVAL_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_APPROVAL_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_app_dl_pt_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_APP_DL_PT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_APP_DL_PT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ur_bau_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_UR_BAU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_UR_BAU
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ur_bau_prev_bau_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_UR_BAU_PREV_BAU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_UR_BAU_PREV_BAU
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ur_prev_bau_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_UR_PREV_BAU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_UR_PREV_BAU
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ur_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_UR WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_UR
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ur_prev_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_UR_PREV WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_UR_PREV
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cardinal_cclogin_active_act_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CARDINAL_CCLOGIN_ACTIVE_ACT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CARDINAL_CCLOGIN_ACTIVE_ACT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tms_sales_summary_final_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TMS_SALES_SUMMARY_FINAL WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TMS_SALES_SUMMARY_FINAL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cardinal_cclogin_active_reg_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CARDINAL_CCLOGIN_ACTIVE_REG WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CARDINAL_CCLOGIN_ACTIVE_REG
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_payment_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_PAYMENT_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_PAYMENT_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_rcvy_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_RCVY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_RCVY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_activation_rate_3m_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ACTIVATION_RATE_3M_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ACTIVATION_RATE_3M_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cl100k_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CL100K"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CL100K
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_overdraft_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_OVERDRAFT_SUMMARY"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_OVERDRAFT_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_foreign_address_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_FOREIGN_ADDRESS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_FOREIGN_ADDRESS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_bin_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_BIN_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_BIN_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_stats_report_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_STATS_REPORT_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_STATS_REPORT_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_trans_universe_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_TRANS_UNIVERSE_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_TRANS_UNIVERSE_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_trans_universe_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_TRANS_UNIVERSE_PCMC WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_TRANS_UNIVERSE_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_bin_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_BIN_PCMC WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_BIN_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_tenure_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_TENURE_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_TENURE_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_sot_card_request_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_SOT_CARD_REQUEST WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_SOT_CARD_REQUEST
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_acq_od_qa_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ACQ_OD_QA_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ACQ_OD_QA_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_qtr_cli_offer_cnt_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_QTR_CLI_OFFER_CNT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_QTR_CLI_OFFER_CNT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_balance_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_BALANCE_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_BALANCE_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_balance_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_BALANCE_PCMC WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_BALANCE_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_stats_report_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_STATS_REPORT_PCMC WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_STATS_REPORT_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cli_unq_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CLI_UNQ WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CLI_UNQ
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cli_offer_unq_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CLI_OFFER_UNQ WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CLI_OFFER_UNQ
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_sot_card_request_all_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_SOT_CARD_REQUEST_ALL WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_SOT_CARD_REQUEST_ALL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cli_type_unq_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CLI_TYPE_UNQ WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CLI_TYPE_UNQ
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_tenure_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_TENURE_PCMC WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_TENURE_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cm_address_foreign_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CM_ADDRESS_FOREIGN WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CM_ADDRESS_FOREIGN
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cr_ecl_new_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CR_ECL_NEW WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CR_ECL_NEW
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_growth_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_GROWTH WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_GROWTH
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_queue_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM IVRReport.dbo.Queue"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: QUEUE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dnis_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM IVRReport.dbo.DNIS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DNIS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_co_id_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM NDW.dbo.CO_ID"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CO_ID
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_tender_desc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Retail.dbo.tender_desc"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TENDER_DESC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_notice_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_NOTICE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_NOTICE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_mc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_MC"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_MC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_rep_id_list_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.REP_ID_LIST"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REP_ID_LIST
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_tsys_acct_closures_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.tsys_acct_closures"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TSYS_ACCT_CLOSURES
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_loblaw_calendar_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.loblaw_calendar"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: LOBLAW_CALENDAR
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_2021_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_2021"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_2021
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_2020_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_2020"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_2020
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_2019_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_2019"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_2019
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_pilot_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_PILOT"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_PILOT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mcc_sales_codes_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MCC_SALES_CODES"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MCC_SALES_CODES
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_imp_qbr_fuel_vol_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IMP_QBR_FUEL_VOL"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IMP_QBR_FUEL_VOL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_trans_summ_month_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMA_TRANS_SUMM_MONTH"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_TRANS_SUMM_MONTH
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_weekly_dp_summmary_copy_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WEEKLY_DP_SUMMMARY_copy"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WEEKLY_DP_SUMMMARY_COPY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_yan_pcmc_daily_edelivery_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.yan_PCMC_daily_edelivery"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: YAN_PCMC_DAILY_EDELIVERY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_yan_pcmc_daily_edelivery_date_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.yan_PCMC_daily_edelivery_DATE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: YAN_PCMC_DAILY_EDELIVERY_DATE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_master_queue_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.master_queue"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MASTER_QUEUE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pav_store_list_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PAV_STORE_LIST"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PAV_STORE_LIST
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_exhibits_yield_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.exhibits_yield"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: EXHIBITS_YIELD
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_exhibits_summary1_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.exhibits_summary1"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: EXHIBITS_SUMMARY1
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_exhibits_summary3_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.exhibits_summary3"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: EXHIBITS_SUMMARY3
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_point_xsell_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.POINT_XSELL"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: POINT_XSELL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_iol_pcmc_pen_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IOL_PCMC_PEN"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IOL_PCMC_PEN
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_point_mth_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.POINT_MTH"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: POINT_MTH
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_returnedmail_20160216_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.report_returnedmail_20160216"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_RETURNEDMAIL_20160216
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_final_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.final_PCMA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FINAL_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_optional_alert_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.optional_alert"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: OPTIONAL_ALERT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdr_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CCDR_PCMC"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDR_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_final_pcmc_weekly_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.final_PCMC_WEEKLY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FINAL_PCMC_WEEKLY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdr_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CCDR_PCMA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDR_PCMA
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_kpi_month_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMA_KPI_MONTH"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_KPI_MONTH
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdr_weekly_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CCDR_WEEKLY_PCMC"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDR_WEEKLY_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cw_kyc_update_weekly_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_UPDATE_WEEKLY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_UPDATE_WEEKLY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_pd3p_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_PD3P_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_PD3P_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_actual_ur_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ACTUAL_UR WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ACTUAL_UR
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_dual_source_bank_reference_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_DUAL_SOURCE_BANK_REFERENCE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_DUAL_SOURCE_BANK_REFERENCE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_issues_add_lkup_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_ISSUES_ADD_LKUP_PCMC WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_ISSUES_ADD_LKUP_PCMC
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_bau_yyyymm_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_BAU_YYYYMM WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_BAU_YYYYMM
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_s3_yyyymm_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_S3_YYYYMM WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_S3_YYYYMM
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_yyyymm_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_YYYYMM WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_YYYYMM
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_forecast_accuracy_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_FORECAST_ACCURACY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_FORECAST_ACCURACY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_forecast_accuracy_bau_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_FORECAST_ACCURACY_BAU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_FORECAST_ACCURACY_BAU
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_forecast_accuracy_s3_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_FORECAST_ACCURACY_S3 WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_FORECAST_ACCURACY_S3
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_third_party_payment_alert_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_THIRD_PARTY_PAYMENT_ALERT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_THIRD_PARTY_PAYMENT_ALERT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_acq_qa_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ACQ_QA_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ACQ_QA_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ra_recovery_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_RA_RECOVERY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_RA_RECOVERY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cardinal_notify_dp_failure_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CARDINAL_NOTIFY_DP_FAILURE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CARDINAL_NOTIFY_DP_FAILURE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_sap_load_audit_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_SAP_LOAD_AUDIT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_SAP_LOAD_AUDIT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_aml_dual_source_unknown_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_AML_DUAL_SOURCE_UNKNOWN WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_AML_DUAL_SOURCE_UNKNOWN
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_origination_by_channel_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_ORIGINATION_BY_CHANNEL WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_ORIGINATION_BY_CHANNEL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pc_x_points_report_x_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PC_X_POINTS_REPORT_X WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PC_X_POINTS_REPORT_X
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_rank_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_RANK_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_RANK_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_pd2_first_entry_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_PD2_FIRST_ENTRY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_PD2_FIRST_ENTRY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_regional_ar_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_REGIONAL_AR_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_REGIONAL_AR_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_foreign_address_cardinal_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_FOREIGN_ADDRESS_CARDINAL WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_FOREIGN_ADDRESS_CARDINAL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_jwr2032_consent_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_JWR2032_CONSENT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_JWR2032_CONSENT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_master_pc_x_points_report_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_MASTER_PC_X_POINTS_REPORT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_MASTER_PC_X_POINTS_REPORT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pc_points_report_master_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PC_POINTS_REPORT_MASTER WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PC_POINTS_REPORT_MASTER
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_delinquency_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_DELINQUENCY_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_DELINQUENCY_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_provincial_pd2p_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_PROVINCIAL_PD2P_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_PROVINCIAL_PD2P_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9x_actuals_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9X_ACTUALS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9X_ACTUALS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pc_optimum_reconiliation_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PC_OPTIMUM_RECONILIATION WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PC_OPTIMUM_RECONILIATION
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_actuals_sicr4c_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ACTUALS_SICR4C WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ACTUALS_SICR4C
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_offers_status_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_OFFERS_STATUS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_OFFERS_STATUS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9x_ecl_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9X_ECL WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9X_ECL
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_aml_dual_source_duplicate_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_AML_DUAL_SOURCE_DUPLICATE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_AML_DUAL_SOURCE_DUPLICATE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_sicr4c_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_SICR4C WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_SICR4C
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_rank_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_RANK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_RANK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_s3_rank_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_S3_RANK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_S3_RANK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_bk_summary_rank_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_BK_SUMMARY_RANK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_BK_SUMMARY_RANK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pc_x_td_pts_x_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PC_X_TD_PTS_X WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PC_X_TD_PTS_X
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_third_party_payment_lookup_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_THIRD_PARTY_PAYMENT_LOOKUP WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_THIRD_PARTY_PAYMENT_LOOKUP
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_sap_load_daily_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_SAP_LOAD_DAILY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_SAP_LOAD_DAILY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_actuals_s3_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ACTUALS_S3 WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ACTUALS_S3
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_aml_demarket_reactivation_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_AML_DEMARKET_REACTIVATION WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_AML_DEMARKET_REACTIVATION
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_actuals_bau_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ACTUALS_BAU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ACTUALS_BAU
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_master_renew_week_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_MASTER_RENEW_WEEK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_MASTER_RENEW_WEEK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ifrs9_ecl_s3_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IFRS9_ECL_S3 WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IFRS9_ECL_S3
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_xsell_log_wow_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_XSELL_LOG_WOW WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_XSELL_LOG_WOW
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_renew_activation_stats_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_RENEW_ACTIVATION_STATS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_RENEW_ACTIVATION_STATS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_aml_invalid_id_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_AML_INVALID_ID WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_AML_INVALID_ID
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_renew_stat_activate_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_RENEW_STAT_ACTIVATE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_RENEW_STAT_ACTIVATE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_return_mail_analysis_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_RETURN_MAIL_ANALYSIS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_RETURN_MAIL_ANALYSIS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tms_opp_list_file_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TMS_OPP_LIST_FILE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TMS_OPP_LIST_FILE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_cardinal_validation_dp_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_CARDINAL_VALIDATION_DP WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_CARDINAL_VALIDATION_DP
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_xsell_log_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_XSELL_LOG WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_XSELL_LOG
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tms_smart_list_file_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TMS_SMART_LIST_FILE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TMS_SMART_LIST_FILE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tci_agent_event_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TCI_AGENT_EVENT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TCI_AGENT_EVENT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_payroll_detach_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_PAYROLL_DETACH WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_PAYROLL_DETACH
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tms_opp_list_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TMS_OPP_LIST WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TMS_OPP_LIST
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_tms_smart_list_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_TMS_SMART_LIST WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_TMS_SMART_LIST
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_eapp_gui_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.eapp_gui"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: EAPP_GUI
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_giftcard_autoreport_alltab_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.GiftCard_AutoReport_AllTab"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: GIFTCARD_AUTOREPORT_ALLTAB
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_workshift_dm_sales_dashboard_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WORKSHIFT_DM_SALES_DASHBOARD"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WORKSHIFT_DM_SALES_DASHBOARD
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_store28ace_prr_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.STORE28ACE_PRR"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STORE28ACE_PRR
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_master_lob_202109TO11_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MASTER_LOB_202109TO11"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MASTER_LOB_202109TO11
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_xsell_tablet_vendor_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.Xsell_tablet_vendor"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: XSELL_TABLET_VENDOR
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_prr_xsell_tablet_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PRR_Xsell_tablet"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PRR_XSELL_TABLET
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mak_cc_trend_analysis_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MAK_CC_TREND_ANALYSIS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MAK_CC_TREND_ANALYSIS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_transfer_query_lob_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.TRANSFER_QUERY_LOB"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TRANSFER_QUERY_LOB
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_account_reg_20190120_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_account_reg_20190120"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_ACCOUNT_REG_20190120
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_customer_reg_20190120_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_customer_reg_20190120"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_CUSTOMER_REG_20190120
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_journey_totals_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.journey_totals"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: JOURNEY_TOTALS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_monthly_account_closures_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MONTHLY_ACCOUNT_CLOSURES"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MONTHLY_ACCOUNT_CLOSURES
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_asa_breakdown_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM IVRReport.dbo.ASA_Breakdown"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ASA_BREAKDOWN
+    add_columns:
+      - '`Interval` as INTERVAL_ID'
+    drop_columns:
+      - Interval
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cw_reg_issues_report_pcma_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_ISSUES_REPORT_PCMA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_ISSUES_REPORT_PCMA
+    add_columns:
+      - '`new` as new_nm'
+    drop_columns:
+      - new
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_reg_issues_report_pcmc_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_REG_ISSUES_REPORT_PCMC WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_REG_ISSUES_REPORT_PCMC
+    add_columns:
+      - '`new` as new_nm'
+    drop_columns:
+      - new
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cli25k_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CLI25K WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CLI25K
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ra_monthly_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT _NAME_,[30APR2025] as 'APR302025' from Generic.dbo.CW_RA_MONTHLY_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_RA_MONTHLY_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_acq_qa_sample_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT GROUP_CHECKS,APA_APP_NUM,APA_STRATEGY,APA_STATUS,APA_QUEUE_ID,APA_DATE_STATUS_YYYYMMDD,APA_TIME_STATUS_HHMMSS,APA_DATE_ENTERED_YYYYMMDD,APA_STRATEGY_VERSION,APA_DATE_FINAL_DISPOSITION,APA_DECISION_OFFICER,V9SEQ,CDF_APP_SOURCE_CODE,CDF_INSTANT_CREDIT_FLAG,CDF_EMPLOYMENT_STATUS,CDF_HOUSEHOLD_ANNUAL,DTC_ACCOUNT_NUM_OTHER,DTC_PROMO_SOLICITATION_CODE,CDF_STORE_NUM,PAV_IMAGENUM,TUID_SESSIONNUM,CDF_AML_EXT_CHECKIND,CDF_AML_LOYAL_CHECKIND,DTC_CUST_RELATION_TYPE,DTC_LANGUAGE_CODE,DTC_PREFIX,DTC_NAME,DTC_DATE_OF_BIRTH,DTC_SSN_SIN_TID,DTC_PHONE,DTC_CELLULAR_NUMBER,DTC_EMAIL_ADDRESS,DTC_HOME_TYPE,DTC_RENT_MORTGAGE_AMOUNT,DTC_BANKING_RELATIONSHIP,DTC_INCOME_SOURCE_1,DTC_INCOME_1,ID1_SERIAL,ID1_PROVINCE,DTC_JOB_TITLE,CDF_EMP_EDU_STATUS,DTC_REQUESTED_LIMIT,DTC_EMPLOYEE_TYPE,DTC_ADDRESS_LINE_1,DTC_ADDRESS_LINE_2,DTC_CITY,DTC_STATE,DTC_ZIP_POSTAL,DTC_ADDRESS_SEQUENCE,DTC_ADDRESS_DESCRIPTION,DTC_YEARS_AT_ADDRESS,DTC_MONTHS_AT_ADDRESS,DTC_COUNTRY,DTC_ADDRESS_LINE_1_2,DTC_ADDRESS_LINE_2_2,DTC_CITY_2,DTC_STATE_2,DTC_ZIP_POSTAL_2,DTC_COUNTRY_2,CDF_IP_ADDRESS,PREFIX_OTHER,ID1_TYPE,SIGNATURE_DATE,ID1_ISSUE_DATE,ID1_EXPIRY_DATE,ID1_IMAGE_REF,CDF_TABLET_ID,CDF_IMAGE_ID,CDF_OPT_PROD_ENROLL_DT,CDF_SEQUENTIAL_REC_NO,CDF_CREDENTIAL_CHANNEL,CDF_FIN_INSTITUTE_NAME,CDF_FIN_ACCT_NUM,CDF_NAME_ALIAS,CDF_BT_FLAG,CDF_BANNER_ID,CDF_CONSENT1_ID,CDF_CONSENT1_DESC,CDF_CONSENT1_DATE,CDF_CONSENT2_ID,CDF_CONSENT2_DESC,CDF_CONSENT2_DATE,CDF_CUSTOMER_PROD_CODE,CDF_ESTATEMENT_IND,CDF_LOYALTY_PROG_NAME,CDF_LOYALTY_PROG_ID,CDF_INTERCEPTOR_ID,CDF_LOBLAW_APP_ID,CDF_PREAPPROVE_IND,CDF_OPTIONAL_PROD_CODE,CDF_ENHANCED_PROD_CODE,CDF_PROMO_CUST_ID,OVRD_LIM_REASON,OVRD_LIM_VALUE,OVRD_PREBUR_AML,OVRD_MISSINFO,OVRD_DUPE,OVRD_CREDIT,OVRD_FRAUD,OVRD_HAWK,OVRD_POSTBUR_AML,PAV_PBRNUM,PAV_STORENUM,PAV_RECEIVE_DATE,CHQ_NUM,CHQ_BANKNUM,CHQ_ACCTNUM,CHQ_CLEAR_DATE,CHQ_IMAGENUM,TUID_SESSION_DATE,FRD_CALL1_TYPE,FRD_CALL1_REASON,FRD_CALL2_TYPE,FRD_CALL2_REASON,FRD_CALL3_TYPE,FRD_CALL3_REASON,HWK_CALL1_TYPE,HWK_CALL1_REASON,HWK_CALL2_TYPE,HWK_CALL2_REASON,HWK_CALL3_TYPE,HWK_CALL3_REASON,PRIM_BYPASS_ADDRESS_EDIT,AU1_CUST_RELATION_TYPE,AU1_NAME,AU1_PHONE,AU1_PREFIX,AU1_DATE_OF_BIRTH,AU1_ADDRESS_LINE_1,AU1_ADDRESS_LINE_2,AU1_CITY,AU1_STATE,AU1_ZIP_POSTAL,AU2_CUST_RELATION_TYPE,AU2_NAME,AU2_PHONE,AU2_PREFIX,AU2_DATE_OF_BIRTH,AU2_ADDRESS_LINE_1,AU2_ADDRESS_LINE_2,AU2_CITY,AU2_STATE,AU2_ZIP_POSTAL,AU3_CUST_RELATION_TYPE,AU3_NAME,AU3_PHONE,AU3_PREFIX,AU3_DATE_OF_BIRTH,AU3_ADDRESS_LINE_1,AU3_ADDRESS_LINE_2,AU3_CITY,AU3_STATE,AU3_ZIP_POSTAL,DTC_CURR_EMPLOYER_PHONE,DTC_CURR_EMPLOYER_NAME,DTC_CURR_EMP_PHN_EXTENSION,DTC_DATE_APPLICATION_RCVD,DTC_SCREENSET_FOR_APP_ENTRY,DTC_APPLICATION_SIGNED,DTC_VIP_TYPE,DTC_BXR_ACCOUNT_NUMBER_1,DTC_BXR_REQUESTED_BT_AMT_1,DTC_BXR_CREDITOR_NAME_1,AU1_BYPASS_ADDRESS_EDIT,AU2_BYPASS_ADDRESS_EDIT,AU3_BYPASS_ADDRESS_EDIT,Status_Date,Status_Month,yearmonth,APA_DATE_ENTERED_txt,APA_DATE_ENTERED_yyyy,APA_DATE_ENTERED_mm,APA_DATE_ENTERED_dd,Enter_Date,Enter_Month,app_status,_LABEL_,AGE,APP_SCORE,APP_SCORE2,APP_SCORE3,BNI_SCORE,BUREAU_SCORE,CLAV3_LIM_003,CLAV4_LIM_003,COMBO_5,COMBO_SCORE,COUNT_SAFESCAN_ID,DSR,FINAL_APP_SCORE,FINAL_CREDIT_LIMIT,LIM_003,MATURE_CLEAN_SCORE,ML_APP_SCORE,MONTHLY_INCOME,MONTHS_OLD_TRADE,PCO_CRED_TXNS,PCO_CRED_UTIL,PCO_DEBIT_SALES,PCO_LIM_003,PCO_MCH0_QTY,PCO_MCH0_SALESSHR,PCO_SCORE,PCO_TOT_COLLECT,PCO_TRADE,PDI_CURRENT_BAL,PDI_YTD_PAYMENTS,PRISM_11,PRISM_AFTER_HC_2016,PRISM_AGRICULTURE,PRISM_BLUECOLLAR,PRISM_CAR,PRISM_COLLEGE,PRISM_EMPLOY_PCT,PRISM_GREYCOLLAR,PRISM_HC_1961TO1980,PRISM_HC_1981TO2000,PRISM_HC_2001TO2016,PRISM_HC_BEFORE1961,PRISM_HH_INCOME,PRISM_HH_SIZE_1,PRISM_HH_SIZE_2,PRISM_HH_SIZE_3,PRISM_HH_SIZE_4,PRISM_HIGHSCHOOL,PRISM_HOME_BAND_HOUS,PRISM_HOME_OWN,PRISM_HOME_RENT,PRISM_HTYPE_DUPLEX_M,PRISM_HTYPE_HIGHRISE,PRISM_HTYPE_LOWRISE,PRISM_HTYPE_SEM_ROW,PRISM_HTYPE_SINGLEDT,PRISM_NOHIGHSCHOOL,PRISM_PUBLICTRANSIT,PRISM_SEGMENT,PRISM_SOMEUNIVERSITY,PRISM_TRADE_SCHOOL,PRISM_UNIVERSITY,PRISM_WHITECOLLAR,RANDOM_APPROVAL,RANDOM_APR,RANDOM_BUREAU,RANDOM_FRAUD,RANDOM_FRAUD2,RANDOM_LIMIT,RANDOM_LIMOVR,RANDOM_NBR,RANDOM_PRODUCT,RAW_CALC_DSR,RAW_CALC_LIMIT,TOT_AGG_EXP_CC,WORST_MAX_DELQ,PRE_CREDIT_LIMIT,PRISM_2,TOT_AGG_EXP_DB,TS2_DUPE_CHECK,CLEAN_THICK_SCORE,COMBO_4,IDX_SCORE,PRISM_10,COMBO_6,YOUNG_CLEAN_SCORE,COMBO_8,DIRTY_SCORE,PRISM_6,PA_CREDIT_LIMIT,PRISM_3,COMBO_2,PRISM_8,COMBO_3,PRISM_1,COMBO_7,PCO_SCORE_1_SEGMENT,PRISM_7,COMBO_1,PRISM_4,PRISM_5,PRISM_9,NOHIT_SCORE,EFT_PULL_DAILY,EFT_PULL_MONTHLY,NOSCORE_SCORE,[3F_HITS_CHECK] AS 'THREEF_HITS_CHECK',AGE_100PLUS_CHECK,AGE_MAJORITY_CHECK,AGGEXP_DEDUPE,AGG_EXP_CHECK,AGG_EXP_DECL,AML_CHECK,AML_COMPLIANT,AML_LETTER,APPROVE_ACTION,APPSCORE_CHECK,APP_DUPE_CHECK,APR_NODE,AUTH1_CHECK,AUTH2_CHECK,AUTH3_CHECK,AUTH_MEMO_CHECK,BANKRUPTCY_CHECK,BANNER_TYPE,BKLOSS_CHECK,BNI_CHECK,BUREAU_ERROR,BUREAU_MNTYPE,BUREAU_PULL,BUREAU_SELECTED,BUREAU_SS,BUREAU_STRAT,BYPASS_CRDECL,BYPASS_DUPETS2,BYPASS_DUPE_DUPETS2,BYPASS_FRAUD,BYPASS_MISSINFO,BYPASS_POSTCB_AML,BYPASS_PREBUREAU_AML,CB_CONTROL_ID,CB_DUPE_CHECK,CHANNEL_ADM,CHANNEL_GROUP,CHEQ_STATUS_CHECK,CITADEL_EXTRACT,CITADEL_PRODTYPE,CLAV4_NODE,COMBOMATRIX_SELECTED,COMBO_CHECK,CONS_STATEMENT,COUNTRY_CHECK,CREDITRISK_DECLINE,CREDIT_FREEZE_CHECK,CUSTOM_SS,DECLINE_NODES_CHECK,DIDV_CHECK_RES,DIDV_FACE_IND,DIGIIDV_IDV_REVIEW,DIGITAL_IDV_PII,DOB_MISMATCH,DS_ERROR,EMPLOYEE_IND,ENSTRM_ACCT_CHECK,ENSTRM_ADDR_MATCH,ENSTRM_DOB_MATCH,ENSTRM_NM_MATCH,ERR_ENSTRM,FINAL_PROD_CODE,FINSCAN_ACTION,FINSCAN_ID_PRIM,FRD_ACTION,FRD_DUPE_CHECK,FRD_EMAIL_DOMAIN,FRD_ENSTRM_ACT_CHECK,FRD_ENSTRM_ADR_MATCH,FRD_ENSTRM_DOB_MATCH,FRD_ENSTRM_LNM_MATCH,FRD_HIRISK_WARNING,FRD_NHNS_CHECK,FRD_RISK_CHECK,FRD_WARNING_COUNT,FRD_WARNING_DECLINE,FTF_DIGITAL_IDV,FTF_NFTF_INDICATOR,FTF_PAVILLION,GVLMN,GVL_COPY,GVL_PCF_CUST_ID,IDEXPIRY_CHECK,IDISSUE_CHECK,IDSERIAL_CHECK,IDTYPE_CHECK,ID_CHECK,INCOME_CHECK,JURISDICTION_CHECK,LANG_TIMEZONE,LIMIT_REVIEW_CHECK,LIMIT_STRAT,LIM_003_SEGMT_ID,LMTOVERRIDE_ERROR,MAJORDEROG_CHECK,MINTR_CHECK,MINTR_CHECK2,MISCNTRY,MISSINFO_CHECK,MISSINFO_LANG,NHNSBK_CHECK,NHNSCV_CHECK,NHNSFTF_CHECK,NHNSMAJ_CHECK,NHNSOC_CHECK,NHNSPR_CHECK,NM_ACCT_BNK_STMT,NM_ACCT_CHEQ,NM_ADDR_CRA,NM_ADDR_ID,NM_ADDR_MOBILE_DS,NM_ADDR_PPTY_TAX,NM_ADDR_TRADELINE1,NM_ADDR_TRADELINE2,NM_ADDR_TU_DS,NM_ADDR_UTILITY,NM_DOB_CRA,NM_DOB_ID,NM_DOB_MOBILE_DS,NM_DOB_TRADELINE1,NM_DOB_TRADELINE2,NSNHSIN_CHECK,PAV_PII,PAV_PII_REVIEW,PA_LIMIT_CHECK,PCB_EMP_IND,PCF_CUST_ID,PCO_CLA_NODE,PCO_MATCH,PCO_SC_STATUS,POA_CHECK,POA_IND,POBOXRR_CHECK,POSTAL_CODE_CHECK,PREAPPROVED,PRE_AML_CHECK,PRE_AML_REV_STATUS,PRE_FRD_ACTION,PRICE_IND,PRISM_LIFESTYLE,PRISM_SELECTED,PRISM_SOCIALGROUP,PROD_REQUEST,PULL_ENSTRM,PULL_FINSCAN,PULL_HWK,PULL_TU_DS,PULL_TU_IDX,QC_FTF_ID_CHECK,REBATE_IND,RISKSCR_CHECK,SCORECARD_ID,SCORECARD_SELECTED,SCORECARD_SELECTED_2,SCORECARD_SELECTED_3,SCORECARD_SL_2,SECURED_IND,SIN_MISMATCH,SIN_MOD10_CHECK,SOLICITATION_TYPE,SOURCE_TS2ALPHA,TELCO_CHECK_1,TELCO_CHECK_2,THINFILE_CHECK,TS2ALPHA_DEDUPE,TS2ALPHA_DEDUPE2,TU_IDX_ERROR,TU_SEGMENTATION,UKRAINE_IND,UNEMP_CHECK,VIP_CHECK,WATCH_STATUS_CHECK,WEST_CHECK2,WHOLESALE_CHECK,ABB_CHECK,ABB_IND,CDLKUP_GVLS,CREDIT_CHECK,ERR_TUIDX,EVAL_CARDLOOKUPS,EVAL_PREAPPROVE,HIGHFRAUD_CHECK,MISSINFO_CHECKF,NHNS_CHECK,NO_OD_BYPASS,OD_CHECK,OD_DECLINE,PCMAHOLD_IND,PREV_FA_CHECK,SOURCE_TS2ALPHAS,STDT_CHECK,BUREAU_HATYPE,CB_CONTROL_ID_SOFT,EVAL_CARDLOOKUP,CRDEC_OVERRIDE_CHECK,AML_REASON_CHECK2,DUPE_OVERRIDE_CHECK,FINSCAN_ID_AUTH1,HIGHFRD_EMAIL_SPLIT,AML_REASON_CHECK,MANUAL_SS,GVLHA,TU_CONTROL_ID,FRAUD_QUEUE,FRD_AML_ACTION,FRD_AML_CHECK,REQ_FRD_PROOF,VER_FRD_PROOF,FRD_AML_ACTION_2,DIGIIDV_REV_CHECK,MANUAL_DIGI,TS2DUP_OVERRIDE_CHCK,FRD_AML_ACTION_4,GVL_HA_SOFT,GVL_MN_SOFT,MN_CONTROL_ID_SOFT,DIGIIDV_REV_CHECK_2,PCMAHOLD_SPLIT,TS2_MATCH_CHECK,FRD_AML_ACTION_3,FRDFRDCNF_EMAIL_SPLT,CDLKUP_GVL,FRDPOT_EMAIL_SPLIT2,POA_REV_CHECK,POAHOLD_EMAIL_SPLIT,POA_REV_CHECK2,FRDFRDPOT_EMAIL_SPLT,NHNSVER_EMAIL_SPLIT,FINSCAN_ID_AUTH2,GVL_PCF_CUST_IDS,MANUAL_PAV,PAV_REV_CHECK,PAV_REV_CHECK2,FRDCRDECL_EMAIL_SPLT,FINSCAN_ID_AUTH3,FROZEN_EMAIL_SPLIT,ABB_REV_CHECK,FRDPTL_EMAIL_SPLIT,TS2_RET_LIMIT,CLIENT_PROD_CODE,Mastercard_Number,Mast_account_ID,HSO,Decline_Reason,lrj_REASON_CODE_1,admonly_decision2,admonly_decision3,mixed_decision2,mixed_decision3,rank,MSOT,TDSR,age_primary,income_monthly,BNI,APP_SCR,CREDIT_LIMIT_FINAL,CREDIT_LIMIT_RAW,RAW_CREDIT_LIMIT,aq300_1,aq300_2,aq300_3,aq300_4,aq300_5,aq300_6,aq300_7,aq300_8,aq300_9,aq300_10,aq302_1,aq302_2,aq302_3a,aq302_3b,aq302_4,aq302_5,aq302_6,aq302_7,aq302_8,aq302_9,aq304_1a,aq304_1b,aq304_1c,aq304_1d,aq304_1e,aq304_1f,aq304_1g,ADE_ANNUAL_INCOME_APPL,EB1_BAL_CREDIT_CARD,EB1_BAL_OTHER,EB1_BAL_LOC,EB1_MORTG_PAYMENT,TDSR_CAL,TDSR_CALC_2,yyyymmdd,occupation
+      FROM Generic.dbo.CW_ACQ_QA_SAMPLE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ACQ_QA_SAMPLE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_jwr2032_x_consent_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_JWR2032_X_CONSENT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_JWR2032_X_CONSENT
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_core_balance_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_CORE_BALANCE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_CORE_BALANCE
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_payroll_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_PAYROLL WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_PAYROLL
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_bill_payment_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_BILL_PAYMENT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_BILL_PAYMENT
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_product_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_PRODUCT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_PRODUCT
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_overdraft_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_OVERDRAFT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_OVERDRAFT
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_loyalty_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_LOYALTY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_LOYALTY
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+ db839_cw_pcma_app_source_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_APP_SOURCE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_APP_SOURCE
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_acq_actual_data_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_ACQ_ACTUAL_DATA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_ACQ_ACTUAL_DATA
+    add_columns:
+      - '`Limit` as Limit_id'
+    drop_columns:
+      - Limit
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_surprise_bk_data_summ_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_SURPRISE_BK_DATA_SUMM WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_SURPRISE_BK_DATA_SUMM
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_app_exceptions_breakdown_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_APP_EXCEPTIONS_BREAKDOWN WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_APP_EXCEPTIONS_BREAKDOWN
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pco_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCO_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCO_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_bk_summary_province_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_BK_SUMMARY_PROVINCE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_BK_SUMMARY_PROVINCE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_master_renew_daily_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_MASTER_RENEW_DAILY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_MASTER_RENEW_DAILY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_delete_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_DELETE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_DELETE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_optimum_process_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_OPTIMUM_PROCESS_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_OPTIMUM_PROCESS_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_cb_analysis_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_CB_ANALYSIS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_CB_ANALYSIS
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_ifrs9_ecl_s3_rank_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_IFRS9_ECL_S3_RANK WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_IFRS9_ECL_S3_RANK
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_dual_source_tl_tu_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_DUAL_SOURCE_TL_TU WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_DUAL_SOURCE_TL_TU
+    add_columns:
+      - '`new` as new_nm'
+    drop_columns:
+      - new
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_dual_source_tl_eq_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_DUAL_SOURCE_TL_EQ WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_DUAL_SOURCE_TL_EQ
+    add_columns:
+      - '`new` as new_nm'
+    drop_columns:
+      - new
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_dgo_dashboard_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_DGO_DASHBOARD WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_DGO_DASHBOARD
+    add_columns:
+      - '`order` as order_id'
+    drop_columns:
+      - order
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_ind_loss_rate_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_IND_LOSS_RATE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_IND_LOSS_RATE
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_co_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_CO_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_CO_SUMMARY
+    partition_field: DATE_TRUNC(PROCESS_DT, MONTH)
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_acq_performance_data_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_ACQ_PERFORMANCE_DATA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_ACQ_PERFORMANCE_DATA
+    add_columns:
+      - '`Limit` as Limit_id'
+      - '`Default` AS Default_id'
+    drop_columns:
+      - Limit
+      - Default
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_healthscore_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_HEALTHSCORE_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_HEALTHSCORE_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_acq_ar_data_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_ACQ_AR_DATA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_ACQ_AR_DATA
+    add_columns:
+      - '`Limit` as Limit_id'
+    drop_columns:
+      - Limit
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_age_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_AGE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_AGE
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_province_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_PROVINCE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_PROVINCE
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_account_balance_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_ACCOUNT_BALANCE WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_ACCOUNT_BALANCE
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_cf_by_cohort_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_CF_BY_COHORT WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_CF_BY_COHORT
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_pcma_psp_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_PCMA_PSP WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_PCMA_PSP
+    add_columns:
+      - '`current` as current_flag'
+    drop_columns:
+      - current
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_email_blast_stats_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_EMAIL_BLAST_STATS WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_EMAIL_BLAST_STATS
+    partition_field: DATE_TRUNC(REC_CREATE_TMS, MONTH)
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_kyc_update_daily_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_KYC_UPDATE_DAILY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_UPDATE_DAILY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_cw_erm_aml_summary_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CW_ERM_AML_SUMMARY WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: CW_ERM_AML_SUMMARY
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_ps_acq_exceptions_data_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PS_ACQ_EXCEPTIONS_DATA WHERE 1=0"
+  bigquery:
+    project_id: pcb-prod-erm
+    dataset_id: sql_server_tables
+    table_name: PS_ACQ_EXCEPTIONS_DATA
+    add_columns:
+      - '`Limit` as Limit_id'
+      - '`Default` as Default_id'
+    drop_columns:
+      - Limit
+      - Default
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "ERM"
+
+db839_pco_registered_table_data_patch:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCPlus.dbo.PCO_Registered WHERE Consumer_Registration_Dt >= Convert(DATE, '2025-03-07 00:00:00', 120) AND Consumer_Registration_Dt < Convert(DATE, '2025-06-01 00:00:00', 120)"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCO_REGISTERED
+    data_load_type: APPEND_ONLY
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"

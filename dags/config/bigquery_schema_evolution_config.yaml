@@ -1,0 +1,1254 @@
+application_product_evt_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_PRODUCT_EVT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+idv_request_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_REQUEST
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+idv_submission_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_SUBMISSION
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+adm_rt_response_uns_ingestion_timestamp_column_to_datetime:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_RT_RESPONSE_UNS
+  partition_field: DATE_TRUNC(REC_CREATE_TMS, DAY)
+  clustering_fields:
+    - APA_APP_NUM
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+adm_rt_response_uns_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_RT_RESPONSE_UNS
+  partition_field: DATE_TRUNC(REC_CREATE_TMS, DAY)
+  clustering_fields:
+    - APA_APP_NUM
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+idv_submission_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for RTI compatibility before backfill"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_SUBMISSION
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+idv_request_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for RTI compatibility before backfill"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_REQUEST
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+post_mon_schema_update:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "payments"
+    business_impact: 'Posted tx table will not be created in BQ'
+    customer_impact: 'No Impact'
+    severity: "P3"
+  tags:
+    - team-digital-adoption
+  project_id: pcb-{env}-landing
+  dataset_id: domain_account_management
+  table_name: POST_MON
+  partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+  clustering_fields:
+    - VIRTUAL_CARD_NUMBER
+  transformations:
+    - column:
+        drop_columns:
+          - REC_LOAD_TMS
+          - REC_CHNG_TMS
+          - PROCESS_NUM
+
+de_acq_adhoc_idv_event_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_EVENT
+  partition_field: DATE_TRUNC(OCCURRED_ON, MONTH)
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_idv_event_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for backfill of missing data"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_EVENT
+  partition_field: DATE_TRUNC(OCCURRED_ON, MONTH)
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+de_acq_adhoc_idv_document_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_DOCUMENT
+  partition_field: DATE_TRUNC(CREATE_DT, MONTH)
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_idv_document_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for RTI compatibility before backfill"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_DOCUMENT
+  partition_field: DATE_TRUNC(CREATE_DT, MONTH)
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+rl3_tax_slip_landing_personnenas_integer_column_to_string:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "tax_slips"
+    business_impact: "Convert PersonneNAS from INTEGER to STRING"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-digital-adoption
+  project_id: pcb-{env}-landing
+  dataset_id: domain_tax_slips
+  table_name: RL3_TAX_SLIP
+  transformations:
+    - column:
+        add_columns:
+          - STRING(NULL) AS PersonneNAS
+        drop_columns:
+          - PersonneNAS
+
+rl3_tax_trailer_landing_Noid_integer_column_to_string:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "tax_slips"
+    business_impact: "Convert NoId from INTEGER to STRING"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-digital-adoption
+  project_id: pcb-{env}-landing
+  dataset_id: domain_tax_slips
+  table_name: RL3_TAX_TRAILER
+  transformations:
+    - column:
+        add_columns:
+          - STRING(NULL) AS NoId
+        drop_columns:
+          - NoId
+
+de_acq_adhoc_adm_inst_card_info_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_INST_CARD_INFO
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_adm_inst_card_info_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for RTI compatibility after backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_INST_CARD_INFO
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+de_acq_adhoc_adm_inst_card_info_ingestion_timestamp_column_to_datetime:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from  TIMESTAMP to DATETIME for RTI compatibility before backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_INST_CARD_INFO
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_onfido_check_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: ONFIDO_CHECK
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_onfido_check_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for RTI compatibility after backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ONFIDO_CHECK
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+de_acq_adhoc_onfido_applicant_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: ONFIDO_APPLICANT
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_onfido_applicant_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for RTI compatibility after backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ONFIDO_APPLICANT
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+de_acq_adhoc_applicant_personal_identifier_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: APPLICANT_PERSONAL_IDENTIFIER
+  transformations:
+    - column:
+        add_columns:
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_applicant_personal_identifier_ingestion_timestamp_column_to_timestamp:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from DATETIME to TIMESTAMP for RTI compatibility after backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: APPLICANT_PERSONAL_IDENTIFIER
+  transformations:
+    - column:
+        add_columns:
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+de_acq_adhoc_applicant_personal_identifier_ingestion_timestamp_column_to_datetime:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from  TIMESTAMP to DATETIME for RTI compatibility before backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: APPLICANT_PERSONAL_IDENTIFIER
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_onfido_applicant_ingestion_timestamp_column_to_datetime:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from  TIMESTAMP to DATETIME for RTI compatibility before backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: ONFIDO_APPLICANT
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+de_acq_adhoc_onfido_check_ingestion_timestamp_column_to_datetime:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Convert INGESTION_TIMESTAMP from  TIMESTAMP to DATETIME for RTI compatibility before backfill"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: ONFIDO_CHECK
+  transformations:
+    - column:
+        add_columns:
+          - DATETIME(NULL) AS INGESTION_TIMESTAMP
+        drop_columns:
+          - INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_DATETIME
+
+uat_application_publish_response_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_PUBLISH_RESPONSE
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_isa_recording_number_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ISA_RECORDING_NUMBER
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_ada_chatbot_message_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_communication
+  table_name: ADA_CHATBOT_MESSAGE
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_voice_intent_history_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_service
+  table_name: VOICE_INTENT_HISTORY
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_endpoint_audit_admin_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_audit
+  table_name: ENDPOINT_AUDIT_ADMIN
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_iam_customer_verification_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_iam
+  table_name: IAM_CUSTOMER_VERIFICATION
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_esso_fuel_transactions_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_loyalty
+  table_name: ESSO_FUEL_TRANSACTIONS
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_pco_scoring_file_status_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_loyalty
+  table_name: PCO_SCORING_FILE_STATUS
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_pcb_eft_funds_in_rt_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: PCB_EFT_FUNDS_IN_RT
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_pcb_interac_funds_move_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: PCB_INTERAC_FUNDS_MOVE
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+uat_interac_recipient_changed_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: INTERAC_RECIPIENT_CHANGED
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+embossing_terminus_mapping_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_card_management
+  table_name: EMBOSSING_TERMINUS_MAPPING
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+instant_issuance_customer_info_for_requested_card_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_card_management
+  table_name: INSTANT_ISSUANCE_CUSTOMER_INFO_FOR_REQUESTED_CARD
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+instant_issuance_orchestration_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_card_management
+  table_name: INSTANT_ISSUANCE_ORCHESTRATION
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+instant_issuance_requested_card_details_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_card_management
+  table_name: INSTANT_ISSUANCE_REQUESTED_CARD_DETAILS
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+dns_updated_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_communication
+  table_name: DNS_UPDATED
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+email_status_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_communication
+  table_name: EMAIL_STATUS
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+adm_rt_response_uns_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: ADM_RT_RESPONSE_UNS
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+application_submission_payload_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_SUBMISSION_PAYLOAD
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+app_cust_info_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APP_CUST_INFO
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+provenir_response_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: PROVENIR_RESPONSE
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+pc_failed_transaction_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_loyalty
+  table_name: PC_FAILED_TRANSACTION
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+pc_optimum_identities_event_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_loyalty
+  table_name: PC_OPTIMUM_IDENTITIES_EVENT
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+eft_link_request_acct_transactions_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: EFT_LINK_REQUEST_ACCOUNT_TRANSACTIONS
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+pcb_funds_move_created_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_payments
+  table_name: PCB_FUNDS_MOVE_CREATED
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+idv_request_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_validation_verification
+  table_name: IDV_REQUEST
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+de_acq_adhoc_application_affiliate_report_data_add_rti_metadata:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "RTI data pipeline monitoring capabilities impacted"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_AFFILIATE_REPORT_DATA
+  transformations:
+    - column:
+        add_columns:
+          - STRING(NULL) AS promoCode
+          - STRUCT(
+            STRING(NULL) AS STREAM_NAME,
+            INT64(NULL) AS TOPIC_PARTITION,
+            INT64(NULL) AS PARTITION_OFFSET,
+            INT64(NULL) AS STREAM_OFFSET,
+            INT64(NULL) AS OFFSET_DIFF,
+            STRING(NULL) AS ENVIRONMENT,
+            INT64(NULL) AS TOPIC_VERSION,
+            STRING(NULL) AS USERVICE_CORRELATION_ID,
+            STRING(NULL) AS USERVICE_TRACEABILITY_ID
+            ) AS METADATA
+          - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+email_unsubscribed_event_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_communication
+  table_name: EMAIL_UNSUBSCRIBED_EVENT
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+pc_points_reprocess_reassign_default_expression_to_ingestion_timestamp:
+  default_args:
+    owner: "team-centaurs"
+    capability: "NA"
+    sub_capability: "NA"
+    business_impact: "Adding back the Default Expression for INGESTION_TIMESTAMP column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-centaurs
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_loyalty
+  table_name: PC_POINTS_REPROCESS
+  transformations:
+    - column:
+        alter_columns:
+          - INGESTION_TIMESTAMP SET DEFAULT CURRENT_TIMESTAMP
+
+click_to_pay_event_status_drop_constraint:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Dropping the NOT NULL constraint on phoneNumber and languageCode column"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-digital-adoption
+  skip_backup_and_create: True
+  project_id: pcb-{env}-landing
+  dataset_id: domain_customer_management
+  table_name: CLICK_TO_PAY_EVENT_STATUS
+  transformations:
+    - column:
+        alter_columns:
+          - phoneNumber DROP NOT NULL
+          - languageCode DROP NOT NULL
+
+de_acq_adhoc_application_affiliate_daily_report_data_add_new_columns:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "No direct business impact the report job will fail to persist the data"
+    customer_impact: "No direct customer impact"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+  project_id: pcb-{env}-curated
+  dataset_id: domain_customer_acquisition
+  table_name: APPLICATION_AFFILIATE_DAILY_REPORT_DATA
+  transformations:
+    - column:
+        add_columns:
+          - STRING(NULL) AS promoCode
+          - STRING(NULL) AS PRE_QUAL
+          - STRING(NULL) AS Upsold

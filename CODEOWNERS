@@ -1,0 +1,16 @@
+[Werewolves] @sairathan.sreeramoju @thanuson.sathasivam @aditya.gorthi @arko.roy
+.gitlab-ci.yml
+slack_notify.py
+CODEOWNERS
+
+[DE Leads] @daniel.zhao01 @sharif.mansour @izhaan.zubair @yash @vishal.patel1 @arshpreet.kaur @jigar.patel @adel.shahin @denis.solomin @fayazahmed.kamagal @akeleshwar.bhardwaj
+dags/
+plugins/
+tests/
+dags/jira_analytics @izhaan.zubair @aditya.garg @sanjay.santhoshkumar
+dags/jira_analytics_v2 @izhaan.zubair @aditya.garg @sanjay.santhoshkumar
+
+[DE Community Leads] @daniel.zhao01 @sharif.mansour
+dags/
+plugins/
+tests/

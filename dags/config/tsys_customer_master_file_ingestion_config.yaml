@@ -1,0 +1,292 @@
+tsys_pcb_mc_cusmaster_file_loading:
+  job_size: small
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_cusmaster_daily
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CUSTOMER_MASTER
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CUSTOMER_MASTER
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: cm04_group
+        segments: CM04
+      - group_name: cm04_dependents_group
+        segments: CM34
+      - group_name: rest_of_the_segments_group
+        segments: CM00, CM01, CM02, CM03, CM05, CM06, CM07
+    segment_args:
+      CM00:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM00.CPY
+        pcb.tsys.processor.segment.name: CM00
+        pcb.tsys.processor.layout.name: CM00_REC
+      CM01:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM01.CPY
+        pcb.tsys.processor.segment.name: CM01
+        pcb.tsys.processor.layout.name: CM01_REC
+      CM02:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM02.CPY
+        pcb.tsys.processor.segment.name: CM02
+        pcb.tsys.processor.layout.name: CM02_REC
+      CM03:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM03.CPY
+        pcb.tsys.processor.segment.name: CM03
+        pcb.tsys.processor.layout.name: CM03_REC
+      CM04:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM04.CPY
+        pcb.tsys.processor.segment.name: CM04
+        pcb.tsys.processor.layout.name: CM04_REC
+      CM34:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM34.CPY
+        pcb.tsys.processor.segment.name: CM34
+        pcb.tsys.processor.layout.name: CM34_REC
+      CM05:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM05.CPY
+        pcb.tsys.processor.segment.name: CM05
+        pcb.tsys.processor.layout.name: CM05_REC
+      CM06:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM06.CPY
+        pcb.tsys.processor.segment.name: CM06
+        pcb.tsys.processor.layout.name: CM06_REC
+      CM07:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM07.CPY
+        pcb.tsys.processor.segment.name: CM07
+        pcb.tsys.processor.layout.name: CM07_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9999
+        pcb.tsys.processor.layout.name: MAST_TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    data_load_type: APPEND_ONLY
+    tables:
+      CM00:
+        table_name: CM00
+        record_count_column: TRAILER_REC_CNT_1
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM01:
+        table_name: CM01
+        record_count_column: TRAILER_REC_CNT_2
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM02:
+        table_name: CM02
+        record_count_column: TRAILER_REC_CNT_3
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM03:
+        table_name: CM03
+        record_count_column: TRAILER_REC_CNT_4
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM04:
+        table_name: CM04
+        record_count_column: TRAILER_REC_CNT_5
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM34:
+        table_name: CM34
+        record_count_column: TRAILER_REC_CNT_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        join:
+          - project_id: pcb-{env}-processing
+            dataset_id: domain_customer_management
+            table_name: CM04_DBEXT
+            output_columns:
+              - CM04_DATE_CUST_NOTES
+              - CM04_TIME_CUST_NOTES
+            join_columns:
+              - from_col: s.FILE_LINE_NUMBER
+                to_col: t.FILE_LINE_NUMBER
+      CM05:
+        table_name: CM05
+        record_count_column: TRAILER_REC_CNT_7
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM06:
+        table_name: CM06
+        record_count_column: TRAILER_REC_CNT_8
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM07:
+        table_name: CM07
+        record_count_column: TRAILER_REC_CNT_9
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: CUSTOMER_MASTER_TRAILER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_cusmaster_monthly_file_loading:
+  job_size: small
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_cusmaster_monthly
+  folder_prefix: tsys_pcb_mc_cusmaster_monthly
+  bigquery_oracle_loader_dag_id: cust_master_bq_to_oracle
+  file_date_column: FILE_CREATE_DT
+  trigger_flag: True
+  require_bigquery_oracle_loader: True
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CUSTOMER_MASTER
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CUSTOMER_MASTER
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: cm04_group
+        segments: CM04
+      - group_name: cm04_dependents_group
+        segments: CM34
+      - group_name: rest_of_the_segments_group
+        segments: CM00, CM01, CM02, CM03, CM05, CM06, CM07
+    segment_args:
+      CM00:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM00.CPY
+        pcb.tsys.processor.segment.name: CM00
+        pcb.tsys.processor.layout.name: CM00_REC
+      CM01:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM01.CPY
+        pcb.tsys.processor.segment.name: CM01
+        pcb.tsys.processor.layout.name: CM01_REC
+      CM02:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM02.CPY
+        pcb.tsys.processor.segment.name: CM02
+        pcb.tsys.processor.layout.name: CM02_REC
+      CM03:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM03.CPY
+        pcb.tsys.processor.segment.name: CM03
+        pcb.tsys.processor.layout.name: CM03_REC
+      CM04:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM04.CPY
+        pcb.tsys.processor.segment.name: CM04
+        pcb.tsys.processor.layout.name: CM04_REC
+      CM34:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM34.CPY
+        pcb.tsys.processor.segment.name: CM34
+        pcb.tsys.processor.layout.name: CM34_REC
+      CM05:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM05.CPY
+        pcb.tsys.processor.segment.name: CM05
+        pcb.tsys.processor.layout.name: CM05_REC
+      CM06:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM06.CPY
+        pcb.tsys.processor.segment.name: CM06
+        pcb.tsys.processor.layout.name: CM06_REC
+      CM07:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/MSTCUST_CM07.CPY
+        pcb.tsys.processor.segment.name: CM07
+        pcb.tsys.processor.layout.name: CM07_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_cusmaster/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9999
+        pcb.tsys.processor.layout.name: MAST_TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    data_load_type: APPEND_ONLY
+    tables:
+      CM00:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM00
+        record_count_column: TRAILER_REC_CNT_1
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM01:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM01
+        record_count_column: TRAILER_REC_CNT_2
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM02:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM02
+        record_count_column: TRAILER_REC_CNT_3
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM03:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM03
+        record_count_column: TRAILER_REC_CNT_4
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM04:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM04
+        record_count_column: TRAILER_REC_CNT_5
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM34:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM34
+        record_count_column: TRAILER_REC_CNT_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        join:
+          - project_id: pcb-{env}-processing
+            dataset_id: domain_customer_management
+            table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM04_DBEXT
+            output_columns:
+              - CM04_DATE_CUST_NOTES
+              - CM04_TIME_CUST_NOTES
+            join_columns:
+              - from_col: s.FILE_LINE_NUMBER
+                to_col: t.FILE_LINE_NUMBER
+      CM05:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM05
+        record_count_column: TRAILER_REC_CNT_7
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM06:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM06
+        record_count_column: TRAILER_REC_CNT_8
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CM07:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM07
+        record_count_column: TRAILER_REC_CNT_9
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: TSYS_PCB_MC_CUSTMASTER_MONTHLY_TRAILER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

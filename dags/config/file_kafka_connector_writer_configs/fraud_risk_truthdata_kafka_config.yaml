@@ -1,0 +1,32 @@
+fraud_risk_truthdata_kafka_writer:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P2"
+    sub_capability: "Applications"
+    business_impact: "Fraud Events from New applications or login will not be send as feedback to TMX"
+    customer_impact: "Customers are not categorized as Fraud from TMX"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/fraud-risk-truthdata/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/fraud-risk-truthdata/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/fraud-risk-truthdata/fraud_risk_truthdata_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/fraud-risk-truthdata/fraud_risk_truthdata_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/fraud-risk-truthdata/fraud_risk_truthdata_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: fraud_risk_truthdata_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: fraud_risk_truthdata_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: truthdataUID
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+    pcb.file.kafka.connector.auto.register.schemas: true
+    pcb.file.kafka.connector.schema.file.path: fraud_risk_truthdata_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_fraud_risk_truthdata
+    read_pause_deploy_config: False
+    tags: ["team-growth-and-sales"]
+    job_size: extra_small
+    dataproc_cluster_name: fraud-risk-truthdata-kafka-writer

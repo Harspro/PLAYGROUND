@@ -1,0 +1,27 @@
+instant_issuance_orchestration_bq_to_kafka:
+  default_args:
+    owner: "gremlins"
+    capability: "account-management"
+    severity: "P2"
+    sub_capability: "card-management"
+    business_impact: 'This will impact the card management'
+    customer_impact: 'Customer card instant issuance'
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-instant-issuance/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-instant-issuance/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-instant-issuance/scms_instant_issuance_reconciliation_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-instant-issuance/scms_instant_issuance_reconciliation_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.value.schema.path: scms_instant_issuance_reconciliation_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+    pcb.file.kafka.connector.schema.file.path: scms_instant_issuance_reconciliation_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_scms_instant_issuance_reconciliation
+    read_pause_deploy_config: True
+    job_size: small
+    tags: [ "instant-issuance", "SCMS" ]

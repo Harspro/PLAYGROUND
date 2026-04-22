@@ -1,0 +1,32 @@
+at31_file_parser:
+  file_type: AT31_REC
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_extract: pcb-{env}-staging-extract
+  dag:
+    description: "This DAG is helpful to parse AT31 file to Parquet format."
+    tags: ["Loyalty"]
+    job_size: small
+    dataproc_cluster_name: tsys-pcb-mc-accttx-file-c
+  spark_filter_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    args:
+      pcb.tsys.processor.datafile.type: ACCOUNT_TRANSACTION
+      pcb.tsys.processor.filtering: True
+  spark_parse_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    args:
+      pcb.tsys.processor.datafile.type: ACCOUNT_TRANSACTION
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/MSTTRAN_AT31.CPY
+      pcb.tsys.processor.layout.name: AT31_REC
+      pcb.tsys.processor.segment.name: AT31
+  default_args:
+    owner: team-convergence-alerts
+    capability: Loyalty
+  kafka_writer:
+    dag_id: TS2_at31_accttx_kafka_writer
+    wait_for_completion: False

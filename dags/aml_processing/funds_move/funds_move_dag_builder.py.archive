@@ -1,0 +1,258 @@
+import logging
+import os
+from typing import List, Dict
+
+from datetime import datetime
+from google.cloud import bigquery
+
+from dataclasses import dataclass
+from airflow import DAG, settings
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from util.miscutils import (
+    read_variable_or_file,
+    read_yamlfile_env_suffix
+)
+
+from aml_processing.transaction.bq_util import run_bq_dml_with_log
+from util.bq_utils import apply_timestamp_transformation
+from aml_processing.funds_move.sql_builder import sql_create_ctl_table, sql_insert_into_ctl, \
+    sql_create_curated_table, sql_update_ctl, sql_delete_curated_table, sql_insert_curated_table, \
+    COLS_EXCLUDE, TABLE_FUNDS_MOVE_CTL, PROJECT_LANDING
+
+from aml_processing import feed_commons as commons
+import util.constants as consts
+from dag_factory.terminus_dag_factory import add_tags
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class FundsMoveTable:
+    dag_id: str
+    schedule_cron: str
+    dataset: str
+    table_name: str
+    key_cols: str
+
+    def dataset_table_name(self):
+        return f"{self.dataset}.{self.table_name}"
+
+
+class FundsMoveDagBuilder:
+
+    def __init__(self, funds_move_table: FundsMoveTable):
+        self.funds_move_table = funds_move_table
+
+    @staticmethod
+    def _get_job_config(dag_run_id: str):
+        job_config = bigquery.QueryJobConfig(
+            query_parameters=[
+                bigquery.ScalarQueryParameter("dag_run_id", "STRING", dag_run_id)
+            ]
+        )
+        return job_config
+
+    @staticmethod
+    def get_table_cols(project_prefix: str, dataset_table_name: str) -> List[str]:
+
+        client = bigquery.Client()
+        strs = dataset_table_name.split(".")
+        project_id = project_prefix
+        dataset_id = strs[0]
+        table_name = strs[1]
+
+        dataset_ref = client.dataset(dataset_id=dataset_id, project=project_id)
+        table_ref = dataset_ref.table(table_name)
+        table = client.get_table(table_ref)  # API Request
+        columns = consts.COMMA_SPACE.join([field.name for field in table.schema])
+        table_dict = {
+            consts.ID: table_ref,
+            consts.COLUMNS: columns
+        }
+        table_dict = apply_timestamp_transformation(client, table_dict, tz='ODS')
+        table_dict[consts.COLUMNS] = table_dict[consts.COLUMNS].split(",")
+        logger.info(f'table_dict : {table_dict}')
+
+        return table_dict
+
+    @staticmethod
+    def get_match_expressions(cols: List[str], alias_left: str, alias_right: str) -> str:
+        left = [f"{alias_left}.{x}" for x in cols]
+        right = [f"{alias_right}.{x}" for x in cols]
+        pairs = zip(left, right)
+        expr_list = [f"{x[0]} = {x[1]}\n" for x in pairs]
+        return " AND ".join(expr_list)
+
+    @staticmethod
+    def get_select_col_list(cols: List[str], alias: str) -> str:
+        return ",".join([f"{alias}.{x}\n" for x in cols])
+
+    @staticmethod
+    def task_create_funds_move_control_table():
+        sql = sql_create_ctl_table()
+        run_bq_dml_with_log(f"Creating funds move control table:{TABLE_FUNDS_MOVE_CTL}",
+                            f"Completed funds move control table:{TABLE_FUNDS_MOVE_CTL}", sql)
+
+    def task_create_funds_move_curated_table(self):
+        curated_dataset_view = self.funds_move_table.dataset_table_name()
+        curated_dataset_table = curated_dataset_view + "_FUNDSMOVE_SNAPSHOT"
+        sql = sql_create_curated_table(curated_dataset_view, curated_dataset_table)
+        run_bq_dml_with_log(f"Creating funds move curated table:{curated_dataset_table}",
+                            f"Completed funds move curated table:{curated_dataset_table}", sql)
+
+    def task_insert_funds_move_control_table(self, **context):
+        curated_dataset_view = self.funds_move_table.dataset_table_name()
+        curated_view = self.funds_move_table.table_name
+        sql = sql_insert_into_ctl(curated_dataset_view, curated_view)
+        dag_run_id = context["run_id"]
+        logger.info(f"dag_run_id={dag_run_id}")
+        job_config = FundsMoveDagBuilder._get_job_config(dag_run_id)
+        run_bq_dml_with_log(f"Inserting into funds move control table:{TABLE_FUNDS_MOVE_CTL}",
+                            f"Completed inserting into funds move control table:{TABLE_FUNDS_MOVE_CTL}", sql, job_config)
+
+    def task_update_funds_move_control_table(self, **context):
+        curated_dataset_view = self.funds_move_table.dataset_table_name()
+        curated_view = self.funds_move_table.table_name
+        key_cols = self.funds_move_table.key_cols
+        sql = sql_update_ctl(curated_dataset_view, curated_view, key_cols)
+        job_config = FundsMoveDagBuilder._get_job_config(context["run_id"])
+        run_bq_dml_with_log(f"Updating funds move control table:{TABLE_FUNDS_MOVE_CTL}",
+                            f"Completed Updating funds move control table:{TABLE_FUNDS_MOVE_CTL}", sql, job_config)
+
+    def task_delete_funds_move_curated_table(self, **context):
+        curated_view = self.funds_move_table.table_name
+        curated_table = self.funds_move_table.table_name + "_FUNDSMOVE_SNAPSHOT"
+
+        curated_dataset_view = self.funds_move_table.dataset_table_name()
+        curated_dataset_table = self.funds_move_table.dataset_table_name() + "_FUNDSMOVE_SNAPSHOT"
+
+        key_cols = self.funds_move_table.key_cols
+        key_cols_list = [x.strip() for x in key_cols.split(",")]
+        match_expressions = FundsMoveDagBuilder.get_match_expressions(key_cols_list, "l", "cr")
+        sql = sql_delete_curated_table(curated_dataset_table, curated_dataset_view, curated_view, match_expressions)
+        job_config = FundsMoveDagBuilder._get_job_config(context["run_id"])
+        run_bq_dml_with_log(f"Deleting funds move curated table:{curated_table}",
+                            f"Completed deleting funds move curated table:{curated_table}", sql, job_config)
+
+    def task_insert_funds_move_curated_table(self, **context):
+        curated_view = self.funds_move_table.table_name
+        curated_table = self.funds_move_table.table_name + "_FUNDSMOVE_SNAPSHOT"
+
+        # land_dataset_table_name = self.funds_move_table.dataset_table_name()
+        curated_dataset_table_name = self.funds_move_table.dataset_table_name() + "_FUNDSMOVE_SNAPSHOT"
+
+        fundsmove_curated_view = FundsMoveDagBuilder.get_table_cols(PROJECT_LANDING, self.funds_move_table.dataset_table_name())
+        curated_col_list = [x.strip() for x in fundsmove_curated_view.get(consts.COLUMNS) if x.strip().upper() not in COLS_EXCLUDE]
+        logger.info(f"curated_col_list : {curated_col_list}")
+        sql = sql_insert_curated_table(curated_dataset_table_name, fundsmove_curated_view.get(consts.ID), curated_view, curated_col_list)
+        job_config = FundsMoveDagBuilder._get_job_config(context["run_id"])
+        run_bq_dml_with_log(f"Inserting funds move curated table:{curated_table}",
+                            f"Completed inserting funds move curated table:{curated_table}", sql, job_config)
+
+    def create_dag(self) -> DAG:
+
+        curated_table = self.funds_move_table.table_name
+        dag_id = self.funds_move_table.dag_id
+        cron = self.funds_move_table.schedule_cron
+        tags = commons.TAGS.copy()
+        tags.append("fundsmove")
+        tags.append(self.funds_move_table.table_name)
+        # Modify the default_args dictionary
+        custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+        custom_default_args['business_impact'] = 'Posted transaction additional details (eg. external financial institution info) will not be available in Verafin if this process fails'
+        tags.append(custom_default_args['severity'])
+
+        dag = DAG(
+            dag_id=dag_id,
+            is_paused_upon_creation=True,
+            description=f"DAG to rebuild funds move table data: {self.funds_move_table.table_name}",
+            default_args=custom_default_args,
+            schedule=cron,
+            start_date=datetime(2022, 1, 1, tzinfo=commons.TORONTO_TZ),
+            tags=tags,
+            max_active_runs=1,
+            catchup=False
+        )
+
+        with dag:
+
+            pipeline_start = EmptyOperator(task_id='start')
+            pipeline_complete = EmptyOperator(task_id='end')
+
+            create_control_table_task = PythonOperator(
+                task_id="create_funds_move_control_table_task",
+                python_callable=FundsMoveDagBuilder.task_create_funds_move_control_table,
+                trigger_rule="all_success"
+            )
+
+            create_curated_table_task = PythonOperator(
+                task_id=f"create_funds_move_curated_table_{curated_table}",
+                python_callable=self.task_create_funds_move_curated_table,
+                trigger_rule="all_success"
+            )
+
+            insert_into_funds_move_control_task = PythonOperator(
+                task_id="insert_into_funds_move_control_task",
+                python_callable=self.task_insert_funds_move_control_table,
+                trigger_rule="all_success"
+            )
+
+            update_funds_move_control_task = PythonOperator(
+                task_id="update_funds_move_control_task",
+                python_callable=self.task_update_funds_move_control_table,
+                trigger_rule="all_success"
+            )
+
+            delete_funds_move_curated_task = PythonOperator(
+                task_id=f"delete_funds_move_curated_{curated_table}",
+                python_callable=self.task_delete_funds_move_curated_table,
+                trigger_rule="all_success"
+            )
+
+            insert_funds_move_curated_task = PythonOperator(
+                task_id=f"insert_funds_move_curated_{curated_table}",
+                python_callable=self.task_insert_funds_move_curated_table,
+                trigger_rule="all_success"
+            )
+
+            (pipeline_start >> create_control_table_task >> create_curated_table_task
+             >> insert_into_funds_move_control_task
+             >> update_funds_move_control_task
+             >> delete_funds_move_curated_task
+             >> insert_funds_move_curated_task
+             >> pipeline_complete)
+
+        return add_tags(dag)
+
+    @staticmethod
+    def read_dag_config(config_filename: str, config_dir: str = None) -> dict:
+        gcp_config = read_variable_or_file(consts.GCP_CONFIG)
+        deploy_env = gcp_config[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+        deploy_env_suffix = gcp_config['deploy_env_storage_suffix']
+        if config_dir is None:
+            config_dir = f'{settings.DAGS_FOLDER}/aml_processing/funds_move/config'
+
+        logger.info(f"Reading funds move dag config:{config_dir}/{config_filename}")
+        file_path = f"{config_dir}/{config_filename}"
+        if not os.path.exists(file_path):
+            raise Exception(f"file not found:{file_path}")
+
+        dag_config = read_yamlfile_env_suffix(f'{config_dir}/{config_filename}', deploy_env, deploy_env_suffix)
+        logger.info(f"The funds move dags config : {dag_config}")
+        return dag_config
+
+    @staticmethod
+    def create_dags(config_filename: str, config_dir: str = None) -> Dict[str, DAG]:
+        dag_config = FundsMoveDagBuilder.read_dag_config(config_filename, config_dir)
+        funds_move_dags: Dict[str, DAG] = {}
+
+        for dag_id, config in dag_config.items():
+            logger.info(f"The dag id is {dag_id} and the config is {config}")
+            funds_move_table = FundsMoveTable(dag_id=dag_id, schedule_cron=config["schedule_cron"], dataset=config['dataset'], table_name=config['table_name'], key_cols=config['key_cols'])
+            funds_move_dags[dag_id] = FundsMoveDagBuilder(funds_move_table).create_dag()
+        return funds_move_dags
+
+
+dags = FundsMoveDagBuilder.create_dags("funds_move_dag.yaml")
+globals().update(dags)

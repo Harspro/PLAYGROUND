@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Simple.xsd" />
+	<!-- @@@@  Définition de types susceptibles de changer d'année en année  @@@@ -->
+	<xsd:simpleType
+    name="AnImpositionType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="2025" />
+			<xsd:enumeration
+        value="2026" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType
+    name="AnImpositionSansFermetureType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="2025" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

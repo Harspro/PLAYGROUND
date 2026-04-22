@@ -1,0 +1,8 @@
+call_replace_all_env_in_dict_dag:
+  dag:{
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "v"
+    tags: [ "team-defenders-alerts" ]
+ }

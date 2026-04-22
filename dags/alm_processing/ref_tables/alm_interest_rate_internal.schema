@@ -1,0 +1,5 @@
+vendor,STRING
+instrument_type,STRING
+field_name,STRING
+rate,STRING
+rate_description,STRING

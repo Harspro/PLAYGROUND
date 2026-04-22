@@ -1,0 +1,31 @@
+#IssueChildClass:
+#  - - field
+#    - field type
+#    - field id
+---
+Initiative:
+  - - status
+    - jira
+    - status
+  - - T-Shirt Size
+    - custom
+    - customfield_13165
+Epic:
+  - - status
+    - jira
+    - status
+  - - T-Shirt Size
+    - custom
+    - customfield_13165
+  - - Key
+    - jira
+Story:
+  - - status
+    - jira
+    - status
+  - - Story Points
+    - custom
+    - customfield_10117
+  - - Sprint
+    - custom
+    - customfield_10115

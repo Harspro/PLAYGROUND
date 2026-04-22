@@ -1,0 +1,4 @@
+empty_string_null_patch_CIF_CARD_CURR:
+  table_ref: pcb-{env}-landing.domain_account_management.CIF_CARD_CURR
+empty_string_null_patch_CIF_ACCOUNT_CURR:
+  table_ref: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_CURR

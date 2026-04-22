@@ -1,0 +1,16 @@
+consent_signature_tar_extraction:
+  default_args:
+    owner: "team-vortex"
+    capability: "Consent"
+    severity: "P2"
+    business_impact: "Failure to retrieve historical consent signature"
+    customer_impact: "None"
+  source_bucket: cnst-signature-pcb-{env}
+  source_prefix: "pcmc_app_sig.tar"
+  tar_file: "pcmc_app_sig.tar"
+  destination_bucket: cnst-signature-pcb-{env}
+  destination_folder: "inbound"
+  dag:
+    dagrun_timeout: 360
+    read_pause_deploy_config: True
+    tags: [ "consents" ]

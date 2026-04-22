@@ -1,0 +1,60 @@
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from airflow.providers.google.cloud.transfers.gcs_to_gcs import GCSToGCSOperator
+
+from aml_processing import feed_commons as commons
+from aml_processing.sas_aml_migration.const import SASAMLMigrationConst
+
+DAG_NAME = "sas_aml_migration_note_feed"
+FEED_CONFIG = commons.read_feed_config('feed.note', 'aml_processing', 'aml_dag_config.yaml')
+tags = commons.TAGS.copy()
+
+# Modify the default_args dictionary
+custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+custom_default_args['business_impact'] = 'For IDL, Historical SASAML Cases that were migrated to Verafin will not have complete details if this process fails'
+tags.append(custom_default_args['severity'])
+
+with DAG(
+    DAG_NAME,
+    default_args=custom_default_args,
+    description="DAG to orchestrate the migration of existing SAS AML notes to Verafin",
+    schedule=None,
+    catchup=False,
+    start_date=SASAMLMigrationConst.DAG_START_TIME,
+    tags=tags,
+    max_active_runs=1,
+    is_paused_upon_creation=True
+) as dag:
+
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+
+    export_table_to_gcs = PythonOperator(
+        task_id="export_table_to_gcs",
+        python_callable=commons.export_bq_table,
+        op_args=[FEED_CONFIG[commons.STAGING_BUCKET], FEED_CONFIG[commons.BQ_TO_GCS_FOLDER],
+                 FEED_CONFIG[commons.DESTINATION_BQ_DATASET], FEED_CONFIG[commons.BQ_TABLE_NAME], False, True],
+        trigger_rule="all_success"
+    )
+
+    compose_feed_file = PythonOperator(
+        task_id="compose_feed_file",
+        python_callable=commons.compose_infinite_files_into_one,
+        op_args=[FEED_CONFIG[commons.STAGING_BUCKET], FEED_CONFIG[commons.STAGING_FOLDER],
+                 FEED_CONFIG[commons.SOURCE_HEADERS_FILE_PATH], FEED_CONFIG[commons.DESTINATION_HEADERS_FILE_PATH],
+                 FEED_CONFIG[commons.BQ_TO_GCS_FOLDER], FEED_CONFIG[commons.BQ_TABLE_NAME]],
+        trigger_rule="all_success"
+    )
+
+    copy_object_to_outbound_bucket_task = GCSToGCSOperator(
+        task_id="copy_object_to_outbound_bucket_task",
+        source_bucket=FEED_CONFIG[commons.STAGING_BUCKET],
+        source_object=FEED_CONFIG[commons.STAGING_FOLDER],
+        destination_bucket=FEED_CONFIG[commons.OUTBOUND_BUCKET],
+        destination_object=FEED_CONFIG[commons.OUTBOUND_FILENAME],
+        trigger_rule="all_success"
+    )
+
+    pipeline_complete = EmptyOperator(task_id="pipeline_complete", trigger_rule="all_success")
+
+    pipeline_start >> export_table_to_gcs >> compose_feed_file >> copy_object_to_outbound_bucket_task >> pipeline_complete

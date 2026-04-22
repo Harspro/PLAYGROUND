@@ -1,0 +1,789 @@
+db839_at31_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: MasterCard.dbo.At31
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STAMP
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: AT31
+    partition_field: DATETIME_TRUNC(REC_LOAD_DT_TM_STAMP, MONTH)
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2022-01-05 # inclusive
+    end_date: 2024-12-31 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_custom_contact_detail_records_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: IVRReport.dbo.CUSTOM_CONTACT_DETAIL_RECORDS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CALLSTARTDATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CUSTOM_CONTACT_DETAIL_RECORDS
+    partition_field: DATETIME_TRUNC(CALLSTARTDATETIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+    add_columns:
+      - '`Interval` as INTERVAL_ID'
+    drop_columns:
+      - Interval
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2021-11-01 # inclusive
+    end_date: 2025-04-08 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_transactions_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.PCMA_TRANSACTIONS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_TRANSACTIONS
+    partition_field: DATE_TRUNC(REC_LOAD_DATE, MONTH)
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-04-22 # inclusive
+    end_date: 2025-04-23 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_daily_balances_part1_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.PCMA_DAILY_BALANCES
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: BATCH_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_DAILY_BALANCES
+    partition_field: DATE_TRUNC(BATCH_DATE, MONTH)
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-04-25 # inclusive
+    end_date: 2025-04-26 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_daily_balances_part2_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.PCMA_DAILY_BALANCES
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: BATCH_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_DAILY_BALANCES
+    partition_field: DATE_TRUNC(BATCH_DATE, MONTH)
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-05-02 # inclusive
+    end_date: 2025-05-03 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_revised_app_report_201911_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.REVISED_APP_REPORT_201911
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: APP_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REVISED_APP_REPORT_201911
+    partition_field: DATETIME_TRUNC(APP_DATE, MONTH)
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PRODUCT_TYPE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 6 months
+    start_date: 2015-03-26 # inclusive
+    end_date: 2025-05-07 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ca_ivr_monthly_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.CA_IVR_MONTHLY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CA_IVR_MONTHLY
+    partition_field: DATETIME_TRUNC(DATETIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+  batch:
+    chunk_size_in_months: 2 # Valid range: 1 to 6 months
+    start_date: 2025-04-02 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ts2_events_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Patrick.dbo.TS2_EVENTS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: EV3_EL01_JULIAN_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TS2_EVENTS
+    partition_field: DATE_TRUNC(EV3_EL01_JULIAN_DATE, MONTH)
+    clustering_fields:
+      - EV3_AM00_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-03-25 # inclusive
+    end_date: 2025-05-07 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdm_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.CCDM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CALLSTARTDATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDM
+    partition_field: DATETIME_TRUNC(CALLSTARTDATETIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-04-02 # inclusive
+    end_date: 2025-05-07 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdm_lob_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.CCDM_LOB
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: EVENTTIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDM_LOB
+    partition_field: DATETIME_TRUNC(EVENTTIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-04-02 # inclusive
+    end_date: 2025-05-07 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdr_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: IVRReport.dbo.CCDR
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CALLSTARTDATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDR
+    partition_field: DATETIME_TRUNC(CALLSTARTDATETIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-04-01 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cons_trans_pts_rdm_pcb_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.CONS_TRANS_PTS_RDM_PCB
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: TRANS_DT
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CONS_TRANS_PTS_RDM_PCB
+    partition_field: DATE_TRUNC(TRANS_DT, MONTH)
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-04-04 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20130201_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.FA_LOYALTYPOINTS_20130201
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: TRANS_TMS
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20130201
+    partition_field: DATETIME_TRUNC(TRANS_TMS, MONTH)
+    clustering_fields:
+      - PCF_SERV_CD
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2029-05-28 # inclusive
+    end_date: 2029-05-29 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pct_upc_daily_sales_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCT.dbo.PCT_UPC_Daily_Sales
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCT_UPC_DAILY_SALES
+    partition_field: DATETIME_TRUNC(DATE, MONTH)
+    clustering_fields:
+      - ITEM_UPC_CD
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-03-29 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mbr_pcma_consolidation_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.MBR_PCMA_CONSOLIDATION
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: NEW_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MBR_PCMA_CONSOLIDATION
+    partition_field: DATE_TRUNC(NEW_DATE, MONTH)
+    clustering_fields:
+      - ODS_ACCOUNTID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-03-01 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_monthly_caller_view_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: GENERIC.dbo.MONTHLY_CALLER_VIEW
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CALLSTARTDATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MONTHLY_CALLER_VIEW
+    partition_field: DATETIME_TRUNC(CALLSTARTDATETIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-03-01 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_hash_pc_part1_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.hash_PC
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: HASH_PC
+    partition_field: DATE_TRUNC(REC_CHNG_TMS, MONTH)
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 3 # Valid range: 1 to 12 months
+    start_date: 2024-12-30 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_hash_pc_part2_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.hash_PC
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: HASH_PC
+    partition_field: DATE_TRUNC(REC_CHNG_TMS, MONTH)
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2024-06-01 # inclusive
+    end_date: 2024-08-01 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dns_emailbounceback_exact_target_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CASL.dbo.DNS_EmailBounceBack_Exact_Target
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: EventDate
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DNS_EMAILBOUNCEBACK_EXACT_TARGET
+    partition_field: DATETIME_TRUNC(EventDate, MONTH)
+    clustering_fields:
+      - SendID
+      - EmailAddress
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-03-21 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_contact_mngmnt_db_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.Contact_Mngmnt_DB
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CAMPAIGN_DEPLOYMENT_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CONTACT_MNGMNT_DB
+    partition_field: DATE_TRUNC(CAMPAIGN_DEPLOYMENT_DATE, MONTH)
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-03-24 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_store28ace_outliers_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.STORE28ACE_OUTLIERS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: APP_ENTERED_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STORE28ACE_OUTLIERS
+    partition_field: DATETIME_TRUNC(APP_ENTERED_DATE, MONTH)
+    clustering_fields:
+      - APP_NUMBER
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2025-03-31 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_touch_point_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: IVRReport.dbo.Touch_Point
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TOUCH_POINT
+    partition_field: DATETIME_TRUNC(DATETIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+  batch:
+    chunk_size_in_months: 2 # Valid range: 1 to 12 months
+    start_date: 2025-04-01 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdr_gcp_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: IVRReport.dbo.CCDR_GCP
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CALLSTARTDATETIME
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDR_GCP
+    partition_field: DATETIME_TRUNC(CALLSTARTDATETIME, MONTH)
+    clustering_fields:
+      - CONTACTID
+    add_columns:
+      - '`interval` AS INTERVAL_ID'
+    drop_columns:
+      - interval
+  batch:
+    chunk_size_in_months: 2 # Valid range: 1 to 12 months
+    start_date: 2025-04-08 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_revised_app_report_20200708_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.REVISED_APP_REPORT_20200708
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: APP_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REVISED_APP_REPORT_20200708
+    partition_field: DATETIME_TRUNC(APP_DATE, MONTH)
+    clustering_fields:
+      - PRODUCT_TYPE
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 12 months
+    start_date: 2025-02-25 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_emob_dm_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.EMOB_DM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DT_OPEN
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: EMOB_DM
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - COHORT_ID
+      - MAST_ACCOUNT_ID
+    add_columns:
+      - CAST(COHORT AS INTEGER) AS COHORT_ID
+    drop_columns:
+      - COHORT
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 12 months
+    start_date: 2000-06-01 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_marketing_dm_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.MARKETING_DM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DP_ENROLL_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MARKETING_DM
+    write_disposition: WRITE_TRUNCATE
+    partition_field: DATE_TRUNC(DP_ENROLL_DATE, MONTH)
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 6 months
+    start_date: 2018-11-04 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_hash_part1_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.hash
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: HASH
+    write_disposition: WRITE_TRUNCATE
+    partition_field: DATE_TRUNC(REC_CHNG_TMS, MONTH)
+    clustering_fields:
+      - ACCT_BIN_NUM
+  batch:
+    chunk_size_in_months: 5 # Valid range: 1 to 12 months
+    start_date: 1900-01-01 # inclusive
+    end_date: 2014-05-01 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_hash_part2_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.hash
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: HASH
+    partition_field: DATE_TRUNC(REC_CHNG_TMS, MONTH)
+    clustering_fields:
+      - ACCT_BIN_NUM
+  batch:
+    chunk_size_in_months: 2 # Valid range: 1 to 12 months
+    start_date: 2014-05-01 # inclusive
+    end_date: 2016-05-01 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_hash_part3_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.hash
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: HASH
+    partition_field: DATE_TRUNC(REC_CHNG_TMS, MONTH)
+    clustering_fields:
+      - ACCT_BIN_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2016-05-01 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_emob_custs_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.PCMC_MBR_EMOB_CUSTS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DT_OPEN
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_EMOB_CUSTS
+    clustering_fields:
+      - COHORT_ID
+      - MAST_ACCOUNT_ID
+    add_columns:
+      - CAST(COHORT AS INTEGER) AS COHORT_ID
+      - CAST(MAST_ACCOUNT_ID AS INTEGER) AS MAST_ACCOUNT_ID
+    drop_columns:
+      - COHORT
+      - MAST_ACCOUNT_ID
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2024-12-01 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cons_trans_tendr_eft_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: NDW.dbo.CONS_TRANS_TENDR_EFT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: TRANS_DT
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CONS_TRANS_TENDR_EFT
+    partition_field: DATE_TRUNC(TRANS_DT, MONTH)
+    clustering_fields:
+      - CUST_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2025-03-31 # inclusive
+    end_date: 2025-05-21 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_Interchange_daily_PDSB5157_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.Interchange_daily_PDSB5157
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: date
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: Interchange_daily_PDSB5157
+    write_disposition: WRITE_TRUNCATE
+    partition_field: RANGE_BUCKET(date, GENERATE_ARRAY(20180000, 20360000, 20000))
+    clustering_fields:
+      - instore_ind
+      - PCMC_Product
+      - MCC_Category
+    add_columns:
+      - SAFE_CAST(date AS INT64) AS date
+    drop_columns:
+      - date
+  batch:
+    chunk_size_in_row_count: 30000 # Valid range: >0
+    lower_bound: 20180000 #
+    upper_bound: 20360000 #
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_Interchange_Monthly_PDSB5157_table_idl:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.Interchange_Monthly_PDSB5157
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: month
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: Interchange_Monthly_PDSB5157
+    write_disposition: WRITE_TRUNCATE
+    partition_field: RANGE_BUCKET(month, GENERATE_ARRAY(201800, 203500, 200))
+    clustering_fields:
+      - instore_ind
+      - PCMC_Product
+      - MCC_Category
+    add_columns:
+      - SAFE_CAST(month AS INT64) AS month
+    drop_columns:
+      - month
+  batch:
+    chunk_size_in_row_count: 200 # Valid range: >0
+    lower_bound: 201800 # inclusive  
+    upper_bound: 203500 # exclusive  
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"

@@ -1,0 +1,33 @@
+glp_pcl_lcl_merch_list_kafka_writer:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P2"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "This will impact the loading of LCL/SDM merchants into DP Kafka topic: dp-core-{env}-global-payment-merchant. Campaign service merchant list will be out of sync and all new LCL/ SDM merchants will not be updated in campaign service."
+    customer_impact: "All transactions in new LCL/SDM stores will be considered out of network store transaction. Customer will have a lower points earn rate."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/global_payment_merchant/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/global_payment_merchant/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/global_payment_merchant/global_payment_merchant_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/global_payment_merchant/global_payment_merchant_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/global_payment_merchant/glp_pcl_lcl_merch_list_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: global_payment_merchant_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: global_payment_merchant_value.avsc
+    pcb.file.kafka.connector.csv.delimiter: '|'
+    pcb.file.kafka.connector.csv.ignore.leading.white.space: true
+    pcb.file.kafka.connector.csv.ignore.trailing.white.space: true
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: CSV
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: merchantId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: glp_pcl_lcl_merch_list_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_glp_pcl_lcl_merch_list
+    read_pause_deploy_config: True
+    tags: ["Loyalty"]
+    job_size: extra_small

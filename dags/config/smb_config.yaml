@@ -1,0 +1,16 @@
+alm_shared:
+  dev:
+    hostname: 10.59.196.19
+    username: LCE\SVCPCBALMSHAREAPIUAT
+    secret_path: "/treasury/data/dev/alm"
+    secret_key: " SVCPCBALMSHAREAPIUAT"
+  uat:
+    hostname: 10.59.196.19
+    username: LCE\SVCPCBALMSHAREAPIUAT
+    secret_path: "/treasury/data/uat/alm"
+    secret_key: "SVCPCBALMSHAREAPIUAT"
+  prod:
+    hostname: 10.59.196.19
+    username: LCE\SVCPCBALMSHAREAPIPRD
+    secret_path: "/treasury/data/prod/alm"
+    secret_key: "SVCPCBALMSHAREAPI"

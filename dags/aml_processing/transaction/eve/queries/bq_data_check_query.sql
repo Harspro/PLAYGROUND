@@ -1,0 +1,39 @@
+SELECT
+    COUNT(*) AS RECORDS_COUNT
+FROM
+    (
+        SELECT
+            pt.RECORD_LOAD_TIMESTAMP,
+            pt.PRODUCT_TYPE,
+            pt.PCB_TRANSACTION_NO AS TRANSACTION_ID,
+            pt.REFERENCE_NUMBER AS REFERENCE_NUMBER,
+            pt.PCF_CUST_ID AS CUSTOMER_NUMBER,
+            SAFE_CAST(pt.SOURCE_ACCOUNT_ID AS STRING) AS ACCOUNT_NUMBER,
+            SAFE_CAST(pt.TRANSACTED_DATE AS DATETIME) AS TRANSACTION_DATE_TIME
+        FROM
+            `{BQTABLE_PRODUCT_TRANSACTION}` pt
+            JOIN `{BQTABLE_CUSTOMER}` cust ON pt.CUSTOMER_UID = cust.CUSTOMER_UID 
+            QUALIFY ROW_NUMBER() OVER (
+                PARTITION BY TRANSACTION_ID, REFERENCE_NUMBER 
+                ORDER BY
+                    pt.RECORD_LOAD_TIMESTAMP DESC
+            ) = 1
+    ) EVE
+WHERE
+    EVE.RECORD_LOAD_TIMESTAMP BETWEEN '{start_time}'
+    AND '{end_time}'
+    AND LOWER(EVE.PRODUCT_TYPE) = 'savings'
+    AND NOT EXISTS (
+        SELECT
+            1
+        FROM
+            `{TRANSACTION_HISTORY_TABLE}` hrt
+        WHERE
+            LOWER(hrt.RAIL_TYPE) = 'eve'
+            AND DATETIME(hrt.FILE_SENT_DATE) BETWEEN '{start_time}'
+            AND '{end_time}'
+            AND hrt.TRANSACTION_ID = EVE.TRANSACTION_ID
+            AND DATETIME(hrt.TRANSACTION_DATE_TIME) = EVE.TRANSACTION_DATE_TIME
+            AND hrt.CUSTOMER_NUMBER = EVE.CUSTOMER_NUMBER
+            AND hrt.ACCOUNT_NUMBER = EVE.ACCOUNT_NUMBER
+    );

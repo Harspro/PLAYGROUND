@@ -1,0 +1,192 @@
+-- Aggregation logic for Monthly LCL Subscription PCX Pass Velvet.
+CREATE OR REPLACE TABLE
+  `{staging_table_id}`
+OPTIONS (
+  expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 14 DAY)
+) AS
+WITH
+-- Get most recent pc_id for each source_pk.
+PCX_HY_SRC_PKS AS (
+  SELECT
+    CAST(SOURCE_PK AS INT) AS SOURCE_PK,
+    PC_ID
+  FROM
+    `ld-ds-bi-analytics-prod.bi_reporting.helios_customers_all_lobs`
+  WHERE
+    LOWER(LINE_OF_BUSINESS) = 'pcx'
+    AND LOWER(DATA_SOURCE) = 'hybris'
+    AND LENGTH(PC_ID) = 36
+  QUALIFY ROW_NUMBER() OVER (PARTITION BY SOURCE_PK ORDER BY LAST_MODIFIED_TIME DESC) = 1
+),
+-- Get most recent pc_id for each PCX unique_id_hash.
+PCX_EMAILS AS (
+  SELECT
+    UNIQUE_ID_HASH,
+    PC_ID
+  FROM
+    `ld-ds-bi-analytics-prod.bi_reporting.helios_customers_all_lobs`
+  WHERE
+    LOWER(LINE_OF_BUSINESS) = 'pcx'
+    AND LENGTH(PC_ID) = 36
+  QUALIFY ROW_NUMBER() OVER (PARTITION BY UNIQUE_ID_HASH ORDER BY LAST_MODIFIED_TIME DESC) = 1
+),
+-- Get most recent pc_id for each unique_id_hash regardless of lob.
+ALL_EMAILS AS (
+  SELECT
+    UNIQUE_ID_HASH,
+    PC_ID
+  FROM
+    `ld-ds-bi-analytics-prod.bi_reporting.helios_customers_all_lobs`
+  WHERE
+    LENGTH(PC_ID) = 36
+  QUALIFY ROW_NUMBER() OVER (PARTITION BY UNIQUE_ID_HASH ORDER BY LAST_MODIFIED_TIME DESC) = 1
+),
+-- Get Velvet subscribers.
+VELVET AS (
+  SELECT DISTINCT
+    WALLET_ID,
+    PCID,
+    SUBS_START_DT,
+    SUBS_END_DT
+  FROM
+    `ld-ds-bi-analytics-prod.bi_reporting.pc_subscriptions`
+  WHERE
+    LOWER(PRODUCT_NAME) LIKE '%velvet%'
+),
+-- Identify orders placed by Velvet customers.
+VELVET_ORDERS AS (
+  SELECT DISTINCT
+    COALESCE(ORDERS.CUSTOMER_PK_HELIOS, PS.PC_ID, PE.PC_ID, AE.PC_ID) AS PC_ID,
+    ORDERS.ORDER_NUMBER,
+    ECOM.TRANSACTION_DT,
+    V.WALLET_ID
+  FROM
+    `ld-ds-bi-analytics-prod.bi_reporting.pcx_hybris_orders` ORDERS
+  JOIN
+    `ld-ds-bi-analytics-prod.bi_reporting.sl_trans_qlfy_ecom_dly_full_history` ECOM
+  ON
+    ORDERS.ORDER_NUMBER = ECOM.ECOM_ORD_NUM
+    AND LOWER(FULFILLMENT_TYPE) IN ('pcx pickup','pcx delivery')
+  LEFT JOIN
+    PCX_HY_SRC_PKS PS
+  ON
+    ORDERS.CUSTOMER_PK = PS.SOURCE_PK
+  LEFT JOIN
+    PCX_EMAILS PE
+  ON
+    ORDERS.CUSTOMER_UNIQUE_ID_HASH = PE.UNIQUE_ID_HASH
+  LEFT JOIN
+    ALL_EMAILS AE
+  ON
+    ORDERS.CUSTOMER_UNIQUE_ID_HASH = AE.UNIQUE_ID_HASH
+  JOIN
+    VELVET V
+  ON
+    COALESCE(ORDERS.CUSTOMER_PK_HELIOS, PS.PC_ID, PE.PC_ID, AE.PC_ID) = V.PCID
+    AND DATE(ORDER_PLACED_DATE) >= SUBS_START_DT
+    AND (
+      DATE(ORDER_PLACED_DATE) <= SUBS_END_DT
+      OR SUBS_END_DT IS NULL
+    )
+  WHERE
+    (
+      (
+        LOWER(HYBRIS_STATUS_CODE) IN ('completed', 'closed')
+        AND IS_SCAN_AND_GO_ORDER = FALSE
+      )
+      OR LOWER(HELIOS_STATUS_CODE) IN ('order_completed')
+    )
+)
+SELECT
+  SAFE_CAST(ee_id.value AS STRING) AS pcf_customer_id,
+  SAFE_CAST(EXTRACT(YEAR FROM VO.TRANSACTION_DT) AS INTEGER) AS tx_year,
+  SAFE_CAST(EXTRACT(MONTH FROM VO.TRANSACTION_DT) AS INTEGER) AS tx_month,
+  SAFE_CAST('516179' AS INTEGER) AS card_bin,
+  'LCL' AS loyalty_partner,
+  'PCX_PASS' AS subscription_type,
+  COUNT(DISTINCT VO.ORDER_NUMBER) AS usage_count,
+  SAFE_CAST(0 AS INTEGER) AS points_earned,
+  SAFE_CAST(0 AS INTEGER) AS monetary_value,
+  CURRENT_DATETIME() AS create_dt,
+  'MONTHLY_LCL_SUBSCRIPTION_PCX_PASS' AS create_user_id,
+  CURRENT_DATETIME() AS update_dt,
+  'MONTHLY_LCL_SUBSCRIPTION_PCX_PASS' AS update_user_id
+FROM
+  VELVET_ORDERS VO
+INNER JOIN (
+  SELECT
+  ee_identity_subset.identity_id,
+  ee_identity_subset.business_effective_ts,
+  ee_identity_subset.identity_state,
+  ee_identity_subset.identity_status,
+  ee_identity_subset.wallet_id,
+  ee_identity_subset.identity_type,
+  ee_identity_subset.value
+  FROM (
+    SELECT
+      *,
+      ROW_NUMBER() OVER (PARTITION BY identity_id ORDER BY business_effective_ts DESC, create_ts DESC, event_header_ees_event_id DESC) AS RANK_
+    FROM
+      `lt-dih-bq-analytics-prd.DIH_CORE.ee_identity`
+    WHERE
+      event_header_client_id NOT LIKE 'eestesting%'
+      AND LOWER(identity_type) = 'cif'
+      AND LOWER(identity_status) = 'active'
+      AND business_effective_date >= DATE(2000,01,01)
+    ) ee_identity_subset
+  WHERE
+  ee_identity_subset.RANK_ = 1
+) ee_id ON VO.WALLET_ID = ee_id.wallet_id
+WHERE
+  VO.TRANSACTION_DT >= DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), MONTH)
+  AND VO.TRANSACTION_DT < DATE_TRUNC(CURRENT_DATE(), MONTH)
+GROUP BY pcf_customer_id, tx_year, tx_month, card_bin
+HAVING usage_count >= 1;
+
+-- Load staging table into landing zone table.
+MERGE `pcb-{env}-landing.domain_loyalty.LOYALTY_SUBSCRIPTION_USAGE` T
+USING `{staging_table_id}` S
+ON T.PCF_CUSTOMER_ID = S.PCF_CUSTOMER_ID
+AND T.TX_YEAR = S.TX_YEAR
+AND T.TX_MONTH = S.TX_MONTH
+AND T.CARD_BIN = S.CARD_BIN
+AND T.LOYALTY_PARTNER = S.LOYALTY_PARTNER
+AND T.SUBSCRIPTION_TYPE = S.SUBSCRIPTION_TYPE
+WHEN MATCHED AND (S.USAGE_COUNT > T.USAGE_COUNT OR S.POINTS_EARNED > T.POINTS_EARNED OR S.MONETARY_VALUE > T.MONETARY_VALUE) THEN
+  UPDATE SET
+  T.USAGE_COUNT = S.USAGE_COUNT,
+  T.POINTS_EARNED = S.POINTS_EARNED,
+  T.MONETARY_VALUE = S.MONETARY_VALUE,
+  T.UPDATE_DT = S.UPDATE_DT,
+  T.UPDATE_USER_ID = S.UPDATE_USER_ID
+WHEN NOT MATCHED THEN
+  INSERT (
+    PCF_CUSTOMER_ID,
+    TX_YEAR,
+    TX_MONTH,
+    CARD_BIN,
+    LOYALTY_PARTNER,
+    SUBSCRIPTION_TYPE,
+    USAGE_COUNT,
+    POINTS_EARNED,
+    MONETARY_VALUE,
+    CREATE_DT,
+    CREATE_USER_ID,
+    UPDATE_DT,
+    UPDATE_USER_ID
+  )
+  VALUES (
+    S.PCF_CUSTOMER_ID,
+    S.TX_YEAR,
+    S.TX_MONTH,
+    S.CARD_BIN,
+    S.LOYALTY_PARTNER,
+    S.SUBSCRIPTION_TYPE,
+    S.USAGE_COUNT,
+    S.POINTS_EARNED,
+    S.MONETARY_VALUE,
+    S.CREATE_DT,
+    S.CREATE_USER_ID,
+    S.UPDATE_DT,
+    S.UPDATE_USER_ID
+  );

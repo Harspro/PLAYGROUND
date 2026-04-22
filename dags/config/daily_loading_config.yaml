@@ -1,0 +1,2821 @@
+ods_platform_user_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PLATFORM_USER
+    pcb.bigquery.loader.source.primary.key.column: PLATFORM_USER_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: PLATFORM_USER
+  dag:
+    schedule_interval: '0 6 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_push_contact_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pad-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pad-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PUSH_CONTACT
+    pcb.bigquery.loader.source.primary.key.column: CONTACT_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: PUSH_CONTACT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "N/A"
+    customer_impact: "N/A"
+    severity: "P3"
+  dag:
+    schedule_interval: '15 19 * * *'
+
+ods_political_exposed_position_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.POLITICAL_EXPOSED_POSITION
+    pcb.bigquery.loader.source.primary.key.column: POLITICAL_EXPOSED_POSITION_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: POLITICAL_EXPOSED_POSITION
+  dag:
+    schedule_interval: '30 19 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_employment_industry_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_EMPLOYMENT_INDUSTRY
+    pcb.bigquery.loader.source.primary.key.column: REF_EMPLOYMENT_INDUSTRY_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: REF_EMPLOYMENT_INDUSTRY
+  dag:
+    schedule_interval: '30 19 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_employment_industry_label_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_EMPLOYMENT_INDUSTRY_LABEL
+    pcb.bigquery.loader.source.primary.key.column: REF_EMPLOYMENT_IND_LBL_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: REF_EMPLOYMENT_INDUSTRY_LABEL
+  dag:
+    schedule_interval: '0 20 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_employment_status_label_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_EMPLOYMENT_STATUS_LABEL
+    pcb.bigquery.loader.source.primary.key.column: REF_EMPLOYMENT_STATUS_LBL_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: REF_EMPLOYMENT_STATUS_LABEL
+  dag:
+    schedule_interval: '0 20 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_travel_notification_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.TRAVEL_NOTIFICATION
+    pcb.bigquery.loader.source.primary.key.column: TRAVEL_NOTIFICATION_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: TRAVEL_NOTIFICATION
+  dag:
+    schedule_interval: '0 20 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_biller_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.BILLER
+    pcb.bigquery.loader.source.primary.key.column: BILLER_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: BILLER
+  dag:
+    schedule_interval: '0 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_biller_categorization_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.BILLER_CATEGORIZATION
+    pcb.bigquery.loader.source.primary.key.column: BILLER_CATEGORIZATION_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: BILLER_CATEGORIZATION
+  dag:
+    schedule_interval: '15 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_customer_biller_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_BILLER
+    pcb.bigquery.loader.source.primary.key.column: CUSTOMER_BILLER_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: CUSTOMER_BILLER
+  dag:
+    schedule_interval: '0 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_notifi_channel_cd_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_NOTIFI_CHANNEL_CD
+    pcb.bigquery.loader.source.primary.key.column: REF_NOTIFI_CHANNEL_CD_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: REF_NOTIFI_CHANNEL_CD
+  dag:
+    schedule_interval: '0 21 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P4"
+    sub_capability: "NA"
+    business_impact: "Notification reporting (legacy data source)"
+    customer_impact: "None"
+
+ods_work_shift_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.WORK_SHIFT
+    pcb.bigquery.loader.source.primary.key.column: WORK_SHIFT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_service
+    table_name: WORK_SHIFT
+  dag:
+    schedule_interval: '0 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_retail_store_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_RETAIL_STORE
+    pcb.bigquery.loader.source.primary.key.column: REF_RETAIL_STORE_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_retail
+    table_name: REF_RETAIL_STORE
+  dag:
+    schedule_interval: '0 21 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+ods_ref_banner_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_BANNER
+    pcb.bigquery.loader.source.primary.key.column: REF_BANNER_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_retail
+    table_name: REF_BANNER
+  dag:
+    schedule_interval: '0 21 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+ods_batch_run_log_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.BATCH_RUN_LOG
+    pcb.bigquery.loader.source.primary.key.column: BATCH_RUN_LOG_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_technical
+    table_name: BATCH_RUN_LOG
+  dag:
+    schedule_interval: '0 * * * *'
+    is_multiple_runs: True
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: "P3"
+    business_impact: "Delay in loading Data to create Business report"
+
+ods_product_hierarchy_level_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PRODUCT_HIERARCHY_LEVEL
+    pcb.bigquery.loader.source.primary.key.column: PRODUCT_HIERARCHY_LEVEL_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: PRODUCT_HIERARCHY_LEVEL
+  dag:
+    schedule_interval: '0 21 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_cpa_transaction_type_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_CPA_TRANSACTION_TYPE
+    pcb.bigquery.loader.source.primary.key.column: REF_CPA_TRANSACTION_TYPE_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_CPA_TRANSACTION_TYPE
+  dag:
+    schedule_interval: '0 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_eft_reqtype_cd_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_EFT_REQTYPE_CD
+    pcb.bigquery.loader.source.primary.key.column: REF_EFT_REQTYPE_CD_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_EFT_REQTYPE_CD
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_gl_action_cd_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_GL_ACTION_CD
+    pcb.bigquery.loader.source.primary.key.column: REF_GL_ACTION_CD_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_GL_ACTION_CD
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_pcf_auth_req_key_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_PCF_AUTH_REQ_KEY
+    pcb.bigquery.loader.source.primary.key.column: REF_PCF_AUTH_REQ_KEY_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_PCF_AUTH_REQ_KEY
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_publication_type_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_PUBLICATION_TYPE
+    pcb.bigquery.loader.source.primary.key.column: REF_PUBLICATION_TYPE_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_technical
+    table_name: REF_PUBLICATION_TYPE
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: "P3"
+    business_impact: "Delay in loading Data to create Business report"
+
+ods_account_snapshot_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_SNAPSHOT
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_SNAPSHOT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_SNAPSHOT
+  dag:
+    schedule_interval: '0 1 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cpa_autopay_fulfillment_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CPA_AUTOPAY_FULFILLMENT
+    pcb.bigquery.loader.source.primary.key.column: CPA_AUTOPAY_FULFILLMENT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: CPA_AUTOPAY_FULFILLMENT
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_eft_extacct_link_req_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EFT_EXTACCT_LINK_REQ
+    pcb.bigquery.loader.source.primary.key.column: EFT_EXTACCT_LINK_REQ_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: EFT_EXTACCT_LINK_REQ
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_eft_external_account_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EFT_EXTERNAL_ACCOUNT
+    pcb.bigquery.loader.source.primary.key.column: EFT_EXTERNAL_ACCOUNT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: EFT_EXTERNAL_ACCOUNT
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_eft_instruction_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EFT_INSTRUCTION
+    pcb.bigquery.loader.source.primary.key.column: FUNDSMOVE_INSTRUCTION_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: EFT_INSTRUCTION
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_eft_pcborigin_out_req_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EFT_PCBORIGIN_OUT_REQ
+    pcb.bigquery.loader.source.primary.key.column: EFT_PCBORIGIN_OUT_REQ_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: EFT_PCBORIGIN_OUT_REQ
+  dag:
+    schedule_interval: '30 21 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_interac_reconciliation_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.INTERAC_RECONCILIATION
+    pcb.bigquery.loader.source.primary.key.column: INTERAC_RECONCILIATION_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: INTERAC_RECONCILIATION
+  dag:
+    schedule_interval: '0 22 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_interac_settlement_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.INTERAC_SETTLEMENT
+    pcb.bigquery.loader.source.primary.key.column: INTERAC_SETTLEMENT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: INTERAC_SETTLEMENT
+  dag:
+    schedule_interval: '0 22 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_notification_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_NOTIF.NOTIFICATION
+    pcb.bigquery.loader.source.primary.key.column: NOTIFICATION_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: NOTIFICATION
+  dag:
+    schedule_interval: '0 22 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P4"
+    sub_capability: "NA"
+    business_impact: "Notification reporting (legacy data source)"
+    customer_impact: "None"
+
+ods_access_medium_table_daily_loading_job:
+  job_size: small
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCESS_MEDIUM
+    pcb.bigquery.loader.source.primary.key.column: ACCESS_MEDIUM_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: ACCESS_MEDIUM
+  dag:
+    schedule_interval: '0 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_account_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: ACCOUNT
+  dag:
+    schedule_interval: '0 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_account_customer_table_daily_loading_job:
+  job_size: small
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_CUSTOMER_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER
+  dag:
+    schedule_interval: '0 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_account_customer_role_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER_ROLE
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_CUSTOMER_ROLE_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER_ROLE
+  dag:
+    schedule_interval: '0 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_product_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PRODUCT
+    pcb.bigquery.loader.source.primary.key.column: PRODUCT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: PRODUCT
+  dag:
+    schedule_interval: '0 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_account_identifier_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_IDENTIFIER
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_IDENTIFIER_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_IDENTIFIER
+  dag:
+    schedule_interval: '0 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_statement_cycle_table_daily_loading_job:
+  job_size: large
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.STATEMENT_CYCLE
+    pcb.bigquery.loader.source.primary.key.column: STATEMENT_CYCLE_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_account_management
+    table_name: STATEMENT_CYCLE
+  dag:
+    schedule_interval: '0 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_address_contact_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ADDRESS_CONTACT
+    pcb.bigquery.loader.source.primary.key.column: CONTACT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: ADDRESS_CONTACT
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: 'Business reports may not be generated'
+    customer_impact: 'N/A'
+    severity: "P3"
+
+ods_contact_table_daily_loading_job:
+  job_size: medium
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CONTACT
+    pcb.bigquery.loader.source.primary.key.column: CONTACT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: CONTACT
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_customer_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER
+    pcb.bigquery.loader.source.primary.key.column: CUSTOMER_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_customer_identifier_table_daily_loading_job:
+  job_size: small
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_IDENTIFIER
+    pcb.bigquery.loader.source.primary.key.column: CUSTOMER_IDENTIFIER_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_IDENTIFIER
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Business reports may not be generated"
+    customer_impact: "N/A"
+    severity: "P3"
+
+ods_customer_employment_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_EMPLOYMENT
+    pcb.bigquery.loader.source.primary.key.column: CUSTOMER_EMPLOYMENT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_EMPLOYMENT
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_customer_preference_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_PREFERENCE
+    pcb.bigquery.loader.source.primary.key.column: CUSTOMER_PREFERENCE_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_PREFERENCE
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_customer_preference_param_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_PREFERENCE_PARAM
+    pcb.bigquery.loader.source.primary.key.column: CUSTOMER_PREFERENCE_PARAM_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_PREFERENCE_PARAM
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_email_contact_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.EMAIL_CONTACT
+    pcb.bigquery.loader.source.primary.key.column: CONTACT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: EMAIL_CONTACT
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_phone_contact_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.PHONE_CONTACT
+    pcb.bigquery.loader.source.primary.key.column: CONTACT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: PHONE_CONTACT
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_country_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_COUNTRY
+    pcb.bigquery.loader.source.primary.key.column: REF_COUNTRY_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: REF_COUNTRY
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_education_level_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_EDUCATION_LEVEL
+    pcb.bigquery.loader.source.primary.key.column: REF_EDUCATION_LEVEL_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: REF_EDUCATION_LEVEL
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_employment_status_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_EMPLOYMENT_STATUS
+    pcb.bigquery.loader.source.primary.key.column: REF_EMPLOYMENT_STATUS_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: REF_EMPLOYMENT_STATUS
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_occupation_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_OCCUPATION
+    pcb.bigquery.loader.source.primary.key.column: REF_OCCUPATION_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    dataset_id: domain_customer_management
+    table_name: REF_OCCUPATION
+  dag:
+    schedule_interval: '30 2 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_alternate_contact_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ALTERNATE_CONTACT
+    pcb.bigquery.loader.source.primary.key.column: ALTERNATE_CONTACT_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: ODSDataset
+    table_name: ALTERNATE_CONTACT
+  dag:
+    schedule_interval: '30 20 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "ods"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_merchant_category_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_MERCHANT_CATEGORY
+    pcb.bigquery.loader.source.primary.key.column: REF_MERCHANT_CATEGORY_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: REF_MERCHANT_CATEGORY
+  dag:
+    schedule_interval: '30 20 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_merchant_category_group_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_MERCHANT_CATEGORY_GROUP
+    pcb.bigquery.loader.source.primary.key.column: REF_MERCHANT_CATEGORY_GRP_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: REF_MERCHANT_CATEGORY_GROUP
+  dag:
+    schedule_interval: '30 20 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_ref_currency_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_CURRENCY
+    pcb.bigquery.loader.source.primary.key.column: REF_CURRENCY_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_CURRENCY
+  dag:
+    schedule_interval: '30 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_fundsmove_type_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.FUNDSMOVE_TYPE
+    pcb.bigquery.loader.source.primary.key.column: FUNDSMOVE_TYPE_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: FUNDSMOVE_TYPE
+  dag:
+    schedule_interval: '30 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_interac_autodep_register_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.INTERAC_AUTODEP_REGISTER
+    pcb.bigquery.loader.source.primary.key.column: INTERAC_AUTODEP_REGISTER_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: INTERAC_AUTODEP_REGISTER
+  dag:
+    schedule_interval: '16 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_branch_address_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_BRANCH_ADDRESS
+    pcb.bigquery.loader.source.primary.key.column: REF_BRANCH_ADDRESS_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_BRANCH_ADDRESS
+  dag:
+    schedule_interval: '17 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_ref_financial_institution_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_FINANCIAL_INSTITUTION
+    pcb.bigquery.loader.source.primary.key.column: REF_FINANCIAL_INSTITUTION_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_FINANCIAL_INSTITUTION
+  dag:
+    schedule_interval: '18 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_biller_category_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.BILLER_CATEGORY
+    pcb.bigquery.loader.source.primary.key.column: BILLER_CATEGORY_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: BILLER_CATEGORY
+  dag:
+    schedule_interval: '30 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_customer_political_exposure_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUST_POLITICAL_EXPOSURE
+    pcb.bigquery.loader.source.primary.key.column: CUST_POLITICAL_EXPOSURE_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_aml
+    table_name: CUST_POLITICAL_EXPOSURE
+  dag:
+    schedule_interval: '0 0 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "aml"
+    business_impact: "Business reports may not be generated"
+    customer_impact: "N/A"
+    severity: "P3"
+
+ods_taxpayer_identification_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.TAXPAYER_IDENTIFICATION
+    pcb.bigquery.loader.source.primary.key.column: TAXPAYER_IDENTIFICATION_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: TAXPAYER_IDENTIFICATION
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  dag:
+    schedule_interval: '0 0 * * *'
+  tags:
+    - team-growth-and-sales
+
+ods_applicant_personal_identifier_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.APPLICANT_PERSONAL_IDENTIFIER
+    pcb.bigquery.loader.source.primary.key.column: APPLICANT_IDENTIFIER_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: APPLICANT_PERSONAL_IDENTIFIER
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Potential business report issue due to delay in loading customer IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  dag:
+    schedule_interval: '0 0 * * *'
+  tags:
+    - team-growth-and-sales
+
+ods_idv_submission_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.IDV_SUBMISSION
+    pcb.bigquery.loader.source.primary.key.column: IDV_SUBMISSION_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: IDV_SUBMISSION
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  dag:
+    schedule_interval: '0 0 * * *'
+  tags:
+    - team-growth-and-sales
+
+ods_idv_request_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.IDV_REQUEST
+    pcb.bigquery.loader.source.primary.key.column: IDV_REQUEST_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: IDV_REQUEST
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  dag:
+    schedule_interval: '0 0 * * *'
+  tags:
+    - team-growth-and-sales
+
+ods_notification_template_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_NOTIF.NOTIFICATION_TEMPLATE
+    pcb.bigquery.loader.source.primary.key.column: NOTIFICATION_TEMPLATE_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: NOTIFICATION_TEMPLATE
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  dag:
+    schedule_interval: '0 0 * * *'
+  tags:
+    - team-growth-and-sales
+
+adm_rt_response_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db563.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db563.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_RT_RESPONSE
+    pcb.bigquery.loader.source.primary.key.column: APA_APP_NUM
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: pcmc
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_RT_RESPONSE
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  dag:
+    schedule_interval: '05 09,13 * * *'
+    is_multiple_runs: True
+  tags:
+    - team-growth-and-sales
+
+ods_ref_gl_action_desc_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-mm-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-mm-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_GL_ACTION_DESC
+    pcb.bigquery.loader.source.primary.key.column: REF_GL_ACTION_DESC_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: REF_GL_ACTION_DESC
+  dag:
+    schedule_interval: '30 20 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_account_autopay_req_table_daily_full_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pad-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pad-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_AUTOPAY_REQ
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_AUTOPAY_REQ_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_AUTOPAY_REQ
+    partition_field: DATE(CREATE_DT)
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "Impact on real time PAD monitoring"
+    severity: "P3"
+  dag:
+    schedule_interval: '*/30 * * * *'
+    is_multiple_runs: True
+
+ods_account_autopay_req_stat_table_daily_full_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pad-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pad-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_AUTOPAY_REQ_STAT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_AUTOPAY_REQ_STAT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_AUTOPAY_REQ_STAT
+    partition_field: DATE(CREATE_DT)
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "Impact on real time PAD monitoring"
+    severity: "P3"
+  dag:
+    schedule_interval: '*/30 * * * *'
+    is_multiple_runs: True
+
+ods_card_activation_req_table_daily_full_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pad-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pad-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CARD_ACTIVATION_REQ
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: CARD_ACTIVATION_REQ_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: CARD_ACTIVATION_REQ
+    partition_field: DATE(CREATE_DT)
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "Impact on real time PAD monitoring"
+    severity: "P3"
+  dag:
+    schedule_interval: '*/30 * * * *'
+    is_multiple_runs: True
+
+ods_card_activation_req_stat_table_daily_full_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pad-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pad-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CARD_ACTIVATION_REQ_STAT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: CARD_ACTIVATION_REQ_STAT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: CARD_ACTIVATION_REQ_STAT
+    partition_field: DATE(CREATE_DT)
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "Impact on real time PAD monitoring"
+    severity: "P3"
+  dag:
+    schedule_interval: '*/30 * * * *'
+    is_multiple_runs: True
+
+ods_account_product_change_req_table_daily_full_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pad-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pad-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_PRODUCT_CHANGE_REQ
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_PRODUCT_CHANGE_REQ_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_PRODUCT_CHANGE_REQ
+    partition_field: DATE(CREATE_DT)
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "Impact on real time PAD monitoring"
+    severity: "P3"
+  dag:
+    schedule_interval: '*/30 * * * *'
+    is_multiple_runs: True
+
+lds_cme_offer_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db303.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db303.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: LDS_CME.OFFER
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: OFFER_SEQ
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db303
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: OFFER
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+ods_goal_table_daily_full_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.GOAL
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: GOAL_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: GOAL
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_account_customer_preference_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER_PREFERENCE
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ACCOUNT_CUSTOMER_PREF_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER_PREFERENCE
+  dag:
+    schedule_interval: '10 08 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_account_customer_pref_contact_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER_PREF_CONTACT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ACCT_CUSTOMER_PREF_CONTACT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER_PREF_CONTACT
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_account_customer_pref_param_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER_PREF_PARAM
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ACCT_CUSTOMER_PREF_PARAM_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER_PREF_PARAM
+  dag:
+    schedule_interval: '10 08 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_ref_correspondence_code_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_CORRESPONDENCE_CODE
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: REF_CORRESPONDENCE_CODE_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: REF_CORRESPONDENCE_CODE
+  dag:
+    schedule_interval: '20 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_cardinal_goal_account_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.GOAL_ACCOUNT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: GOAL_ACCOUNT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: GOAL_ACCOUNT
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_alternate_contact_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ALTERNATE_CONTACT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ALTERNATE_CONTACT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: ALTERNATE_CONTACT
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+db610_pcl_points_calculator_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCL.POINTS_CALCULATOR
+    pcb.bigquery.loader.source.primary.key.column: TXN_MULTIPLIER
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: POINTS_CALCULATOR
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_pcf_memo_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCL.PCF_MEMO
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: MEMO_ID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PCF_MEMO
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+
+ods_applmgmt_applicant_detail_tax_info_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICANT_DETAIL_TAX_INFO
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: APPLICANT_DETAIL_TAX_INFO_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICANT_DETAIL_TAX_INFO
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_idvmgmt_onfido_check_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.ONFIDO_CHECK
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ONFIDO_CHECK_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: ONFIDO_CHECK
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Potential business report issue due to delay in loading customer IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+
+uwork_uwork_paf_message_content_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-uwork.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-uwork.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: UWORK.PAF_MESSAGE_CONTENT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: MSG_ID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: uwork
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: cots_customer_service_blockworx
+    table_name: PAF_MESSAGE_CONTENT
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+db610_insider_ref_trx_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: INSIDER.REF_TRX
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: REF_TRX_KEY
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: REF_TRX
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_insider_cust_acct_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: INSIDER.CUST_ACCT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: CUST_ACCT_KEY
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: CUST_ACCT
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_lcs_ls_account_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: LCS.LS_ACCOUNT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: BILL_CYCLE_DAY
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: LS_ACCOUNT
+    drop_columns:
+      - LOAD_RESULT_UUID
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_lcs_subs_rate_plan_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: LCS.SUBS_RATE_PLAN
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: PROCESS_NUM
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: SUBS_RATE_PLAN
+    drop_columns:
+      - LOAD_RESULT_UUID
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+ods_cardinal_interceptor_agent_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename:  CARDINAL.INTERCEPTOR_AGENT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: INTERCEPTOR_AGENT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_service
+    table_name: INTERCEPTOR_AGENT
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+db563_pcmc_app_op_prod_xref_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db563.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db563.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.APP_OP_PROD_XREF
+    pcb.bigquery.loader.source.primary.key.column: PC_MC_CUST_APPL_ID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: pcmc
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APP_OP_PROD_XREF
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+db610_pcl_campaign_bin_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCL.CAMPAIGN_BIN
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: BIN_NUM
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: CAMPAIGN_BIN
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_campaign_transaction_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCL.CAMPAIGN_TRANSACTION
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: TXN_CODE
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: CAMPAIGN_TRANSACTION
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_campaign_country_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCL.CAMPAIGN_COUNTRY
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: COUNTRY_CODE
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: CAMPAIGN_COUNTRY
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_pcl_memo_reason_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db610.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db610.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCL.MEMO_REASON
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: MEMO_RSN_ID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: db610_pds
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_technical
+    table_name: MEMO_REASON
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+uwork_uwork_paf_bus_process_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-uwork.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-uwork.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: UWORK.PAF_BUS_PROCESS
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: BUS_PROCESS_ID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: uwork
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: cots_customer_service_blockworx
+    table_name: PAF_BUS_PROCESS
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_appl_savings_reminder_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPL_SAVINGS_REMINDER
+    pcb.bigquery.loader.source.primary.key.column: APPL_SAVINGS_REMINDER_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPL_SAVINGS_REMINDER
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "EDSA reminder email will not be sent"
+    customer_impact: "NA"
+    severity: 'P3'
+  dag:
+    schedule_interval: '30 8,14 * * *'
+    is_multiple_runs: True
+  tags:
+    - team-growth-and-sales
+
+ods_idvmgmt_onfido_applicant_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.ONFIDO_APPLICANT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: ONFIDO_APPLICANT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_validation_verification
+    table_name: ONFIDO_APPLICANT
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Potential business report issue due to delay in loading customer IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+
+ods_cardinal_ref_fmreq_status_reason_cd_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_FMREQ_STATUS_REASON_CD
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: REF_FMREQ_STATUS_REASON_CD_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: REF_FMREQ_STATUS_REASON_CD
+  dag:
+    schedule_interval: '50 7 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Business reports may not be generated"
+    customer_impact: "N/A"
+    severity: "P3"
+
+uwork_uwork_paf_audit_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-uwork.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-uwork.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: UWORK.PAF_AUDIT
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: AUDIT_ID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: uwork
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: cots_customer_service_blockworx
+    table_name: PAF_AUDIT
+  dag:
+    schedule_interval: '55 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_cardinal_customer_preference_history_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_PREFERENCE_HISTORY
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: CUSTOMER_PREF_HISTORY_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_PREFERENCE_HISTORY
+  dag:
+    schedule_interval: '15 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_cardinal_customer_pref_param_history_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUSTOMER_PREF_PARAM_HISTORY
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: CUST_PREF_PARAM_HISTORY_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: CUSTOMER_PREF_PARAM_HISTORY
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'
+
+ods_cardinal_ref_occupation_label_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.REF_OCCUPATION_LABEL
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: REF_OCCUPATION_LABEL_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    table_name: REF_OCCUPATION_LABEL
+  dag:
+    schedule_interval: '35 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    severity: 'P3'

@@ -1,0 +1,61 @@
+context_parameter:
+  # cif views
+  cif.card.curr.view.id: "pcb-{env}-curated.domain_account_management.CIF_CARD_CURR"
+  # staging views
+  cif.active.card.view.id: "pcb-{env}-processing.domain_ops_adhoc.CIF_ACTIVE_CARD_VIEW"
+  fee.reversal.staging.input.external.table.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_DBEXT"
+  fee.reversal.staging.input.enriched.data.table.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_DBEXT_COLUMN_TF"
+  fee.reversal.staging.detail.data.view.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_DETAIL_DATA_VIEW"
+  fee.reversal.staging.detail.file.view.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_DETAIL_FILE_VIEW"
+  fee.reversal.staging.sum.view.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_SUM_VIEW"
+  fee.reversal.staging.trailer.data.view.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_TRAILER_DATA_VIEW"
+  fee.reversal.staging.batch.trailer.file.view.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_BATCH_TRAILER_FILE_VIEW"
+  fee.reversal.staging.transmit.trailer.file.view.id: "pcb-{env}-processing.domain_ops_adhoc.FEE_REVERSAL_TRANSMIT_TRAILER_FILE_VIEW"
+  # landing zone tables
+  fee.reversal.landing.table.id: "pcb-{env}-landing.domain_ops_adhoc.FEE_REVERSAL"
+  fee.reversal.landing.batch.trailer.table.id: "pcb-{env}-landing.domain_ops_adhoc.FEE_REVERSAL_BATCH_TRAILER"
+  fee.reversal.landing.transmit.trailer.table.id: "pcb-{env}-landing.domain_ops_adhoc.FEE_REVERSAL_TRANSMIT_TRAILER"
+  #reference tables
+  draft5.ref.transaction.code.table.id: "pcb-{env}-landing.domain_ops_adhoc.REF_DRAFT5_TRANSACTION_CODE"
+  draft5.ref.hex.chart.table.id: "pcb-{env}-landing.domain_ops_adhoc.REF_DRAFT5_AMOUNT_HEX_CHART"
+transformation:
+  - task_name: create_cif_active_card_view
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans1_create_cif_active_card_view.sql
+  - task_name: create_detail_data_view
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans2_create_detail_data_view.sql
+  - task_name: create_detail_file_view
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans3_create_detail_file_view.sql
+  - task_name: save_detail_to_landing
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans4_save_detail_to_landing.sql
+  - task_name: create_sum_view
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans5_create_sum_view.sql
+  - task_name: create_batch_trailer_data_view
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans6_create_trailer_data_view.sql
+  - task_name: create_batch_trailer_file_view
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans7_create_batch_trailer_file_view.sql
+  - task_name: save_batch_trailer_to_landing
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans8_save_batch_trailer_to_landing.sql
+  - task_name: create_transmit_trailer_file_view
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans9_create_transmit_trailer_file_view.sql
+  - task_name: save_transmit_trailer_to_landing
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: fee_reversal/sql/trans10_save_transmit_trailer_to_landing.sql

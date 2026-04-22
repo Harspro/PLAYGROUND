@@ -1,0 +1,28 @@
+pcb_ops_pcmc_job_product_change_downgrade:
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  filename_prefix: pcb_tsys_pcmc_nmsbm
+  character_set: 'cp037'
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: PCMC_PRODUCT_CHANGE
+    TRLR:
+      table_name: PCMC_PRODUCT_CHANGE_TRAILER
+  email:
+    subject: "TSYS Batch Submission Request (Product Change Request - Downgrade)"
+    approver: ""
+    description: "Product Change Request - Card Downgrade"
+    batch_type: "Product Change Request - Card Downgrade"
+    purpose: "Downgrade 72 customers wrongfully upgraded to PC Insiders WE card. Issue new plastic, cancel PCX Pass, prorate annual fee refund."
+    recipients:
+      dev: "jigar.patel@pcbank.ca"
+      uat: "jigar.patel@pcbank.ca, arumugam.sabapathi1@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "operations"
+    severity: "P2"
+    sub_capability: "nonmon"
+    business_impact: "Customers wrongfully upgraded need card downgrade with refund"
+    customer_impact: "72 customers will receive new plastic and prorated refund"

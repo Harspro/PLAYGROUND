@@ -1,0 +1,5 @@
+dag_id: "transaction_risk_score_bucket_sync"
+dag_owner: "team-defenders-alerts"
+schedule: "*/10 8-17 * * *"
+input_bucket: batch-approvals{env_suffix}
+output_bucket: equifax-inbound-pcb{env_suffix}

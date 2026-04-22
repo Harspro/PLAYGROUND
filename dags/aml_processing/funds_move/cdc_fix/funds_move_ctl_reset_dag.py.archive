@@ -1,0 +1,79 @@
+from datetime import datetime
+import logging
+from aml_processing.transaction.bq_util import run_bq_dml_with_log
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.exceptions import AirflowFailException
+from airflow.operators.python import PythonOperator
+from aml_processing import feed_commons as commons
+from aml_processing.funds_move.sql_builder import TABLE_FUNDS_MOVE_CTL, sql_create_ctl_table
+
+
+class FundsMoveCtlReset():
+
+    @staticmethod
+    def get_ctl_reset_sql(context) -> str:
+        # Check if user has provided a table name to reset data in the control table for
+        table_name = context['params'].get('table_name')
+        if (table_name.upper() == 'ALL'):
+            # Recreate the control table after dropping it and reset for all tables
+            sql = f"""
+                        DROP TABLE IF EXISTS `{TABLE_FUNDS_MOVE_CTL}`;
+                        {sql_create_ctl_table()};
+                    """
+        elif (table_name is not None):
+            # Deleting only the rows corresponding to the table name
+            sql = f"""
+                        DELETE
+                        FROM
+                            `{TABLE_FUNDS_MOVE_CTL}` c
+                        WHERE
+                            c.TABLE_NAME = UPPER('{table_name}')
+                    """
+        else:
+            logging.error("DAG failed due to table_name not provided by the user to reset control table")
+            raise AirflowFailException("table_name not provided by the user to reset control table.")
+        return sql
+
+    @staticmethod
+    def reset_ctl_table(**context):
+        sql = FundsMoveCtlReset.get_ctl_reset_sql(context)
+        run_bq_dml_with_log(f"Resetting funds move control table:'{TABLE_FUNDS_MOVE_CTL}'",
+                            f"Completed resetting funds move control table:'{TABLE_FUNDS_MOVE_CTL}'",
+                            sql)
+
+
+# Creating DAG
+tags = commons.TAGS.copy()
+tags.append("fundsmove")
+tags.append("reset")
+# Modify the default_args dictionary
+custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+custom_default_args['business_impact'] = 'None'
+tags.append(custom_default_args['severity'])
+
+with DAG(
+        "funds_move_ctl_reset",
+        params={
+            "table_name": None,
+        },
+        is_paused_upon_creation=True,
+        description="Reset funds move control table",
+        default_args=custom_default_args,
+        start_date=datetime(2022, 1, 1, tzinfo=commons.TORONTO_TZ),
+        end_date=None,
+        schedule=None,
+        tags=tags,
+        max_active_runs=1,
+        catchup=False
+) as dag:
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+    pipeline_complete = EmptyOperator(task_id='end')
+
+    funds_move_ctl_reset_task = PythonOperator(
+        task_id="run_funds_move_ctl_reset",
+        python_callable=FundsMoveCtlReset.reset_ctl_table,
+        trigger_rule="all_success"
+    )
+
+    pipeline_start >> funds_move_ctl_reset_task >> pipeline_complete

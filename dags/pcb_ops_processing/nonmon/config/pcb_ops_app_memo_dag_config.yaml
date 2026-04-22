@@ -1,0 +1,21 @@
+pcmc_memo_file_generation:
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  filename_prefix: pcb_tsys_pcmc_nmsbm
+  character_set: 'cp037'
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: PCMC_MEMO
+    TRLR:
+      table_name: PCMC_MEMO_TRAILER
+  email:
+    subject: "TSYS Batch Submission Request (Memo Message)"
+    approver: ""
+    description: "Standard Batch 910 - Memo Message"
+    batch_type: "Standard Batch 910 - Memo Message"
+    purpose: "For PCMC - Memo"
+    recipients:
+      dev: "daniel.zhao01@pcbank.ca, ayush.barnawal@pcbank.ca"
+      uat: "radhika.solanki@pcbank.ca, Madhu.Chatterjee@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"
