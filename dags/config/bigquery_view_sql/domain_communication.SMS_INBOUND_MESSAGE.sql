@@ -1,0 +1,11 @@
+SELECT
+  externalId,
+  fromNumber,
+  toNumber,
+  body,
+  sendingServiceName,
+  messagingServiceSid,
+  messageSid,
+  INGESTION_TIMESTAMP
+FROM
+  pcb-{env}-landing.domain_communication.SMS_INBOUND_MESSAGE

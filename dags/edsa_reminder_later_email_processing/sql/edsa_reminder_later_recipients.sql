@@ -1,0 +1,28 @@
+EXPORT DATA
+OPTIONS(
+uri = 'gs://pcb-{env}-staging-extract/edsa_reminder_later/edsa-reminder-later-email-recipients-*.parquet',
+format = 'PARQUET',
+overwrite = true
+)
+AS
+SELECT DISTINCT
+'ALERT-ESA-ACCOUNT-OPENING-REMINDER' as CODE,
+'EDSA_REMINDER_LATER_DAG' as SOURCE,
+GENERATE_UUID() as UUID,
+STRUCT(
+    CAST(ACCOUNT_UID AS STRING) as accountId,
+    CAST(CUSTOMER_UID AS STRING) as customerId
+) as IDENTIFIERS,
+STRUCT(
+    CAST('SAVINGS_REMINDER_REQUEST_ID' AS STRING) as key,
+    CAST(APPL_SAVINGS_REMINDER_UID AS STRING) as value
+) as ADDITIONALIDENTIFIERS
+FROM `pcb-{env}-landing.domain_customer_acquisition.APPL_SAVINGS_REMINDER`
+WHERE
+STATUS = 'REMIND-ME'
+AND UPDATE_DT BETWEEN
+    CAST(TIMESTAMP(DATETIME(CURRENT_TIMESTAMP(), "America/Toronto")) - INTERVAL {lookback_start_hours} HOUR AS DATETIME)
+        AND
+    CAST(TIMESTAMP(DATETIME(CURRENT_TIMESTAMP(), "America/Toronto")) - INTERVAL {lookback_end_hours} HOUR AS DATETIME)
+AND ACCOUNT_UID IS  NOT NULL AND CUSTOMER_UID IS NOT NULL
+;

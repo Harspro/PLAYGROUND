@@ -1,0 +1,37 @@
+alm_pcb_tbsm_cc_recv_monthly_load_sql_test:
+  activity_name: cc_recv_monthly
+  file:
+      prefix: asset_creditcard_recv_test
+      frequency: m
+      format: parquet
+      extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/pcb_tbsm/cc_recv
+  outbound_bucket: tbsm-outbound-pcb-{env}
+  outbound_folder: asset-creditcard-recv-test
+  bigquery:
+      destination_project_id: pcb-{env}-curated
+      destination_dataset_id: cots_alm_tbsm
+      destination_table_name: CREDIT_CARD_RECV_TRANS_TEST
+  transformation_config: transformation_rules/asset_creditcard_recv_trans.yaml
+  dag:
+      schedule_interval: '0 12 1 * *'
+
+alm_off_bal_sheet_bond_forward_monthly_load:
+  activity_name: bond_forward_monthly
+  file:
+      prefix: alm_off_bal_sheet_bond_forward
+      frequency: m
+      format: parquet
+      extension: "{file_env}"
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/pcb_tbsm/bond
+  outbound_bucket: tbsm-outbound-pcb-{env}
+  outbound_folder: alm_off_bal_sheet_bond
+  bigquery:
+      destination_project_id: pcb-{env}-curated
+      destination_dataset_id: cots_alm_tbsm
+      destination_table_name: OFF_BAL_SHEET_BOND_FORWARD
+  transformation_config: transformation_rules/alm_off_bal_sheet_bond_forward_trans.yaml
+  dag:
+      schedule_interval: '0 19 5 * *'

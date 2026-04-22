@@ -1,0 +1,18 @@
+
+dag_id: "risk_adaptive_file_processing"
+dag_owner: "team-defenders-alerts"
+control_table_dataset_id: "JobControlDataset"
+control_table_name: "DAGS_HISTORY"
+sc_job_name: "tsys_pcb_mc_acctscore_full_file_loading"
+am_job_name: "tsys_pcb_mc_acctmaster_monthly_file_loading_v2"
+staging_bucket: "pcb-{env}-staging"
+segment_dataset_id: "domain_account_management"
+am_table_name: "AM00"
+sc_table_name: "SC01"
+ah_table_name: "AH01"
+output_bucket: equifax-outbound-pcb{env_suffix}
+jar_file_uris:
+  - gs://pcb-{env}-staging-artifacts/jarfiles/risk-adaptive-spark-batch-2.0.0.jar
+file_uris:
+  - gs://pcb-{env}-staging-artifacts/resources/risk-adaptive-spark-batch/application.yaml
+main_class: "com.pcb.batch.spark.risk.adaptive.RiskAdaptiveSparkBatchApplication"

@@ -1,0 +1,454 @@
+[
+  {
+    "name": "amount",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "amount",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "currency",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "credit_debit_indicator",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "status",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "code",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "value_date",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "datetime",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "bank_transaction_code",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "proprietary",
+        "type": "RECORD",
+        "fields": [
+          {
+            "name": "code",
+            "type": "STRING",
+            "mode": "NULLABLE"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "technical_input_channel",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "proprietary",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "entry_details",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "transaction_details",
+        "type": "RECORD",
+        "fields": [
+          {
+            "name": "references",
+            "type": "RECORD",
+            "fields": [
+              {
+                "name": "message_identification",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "account_servicer_reference",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "instruction_identification",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "transaction_identification",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "end_to_end_identification",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "uetr",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "clearing_system_reference",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              {
+                "name": "proprietary",
+                "type": "RECORD",
+                "mode": "REPEATED",
+                "fields": [
+                  {
+                    "name": "type",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                  },
+                  {
+                    "name": "reference",
+                    "type": "STRING",
+                    "mode": "NULLABLE"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "related_parties",
+            "type": "RECORD",
+            "fields": [
+              {
+                "name": "creditor",
+                "type": "RECORD",
+                "fields": [
+                  {
+                    "name": "party",
+                    "type": "RECORD",
+                    "fields": [
+                      {
+                        "name": "identification",
+                        "type": "RECORD",
+                        "fields": [
+                          {
+                            "name": "organisation_identification",
+                            "type": "RECORD",
+                            "fields": [
+                              {
+                                "name": "other",
+                                "type": "RECORD",
+                                "fields": [
+                                  {
+                                    "name": "identification",
+                                    "type": "STRING",
+                                    "mode": "NULLABLE"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "debtor",
+                "type": "RECORD",
+                "fields": [
+                  {
+                    "name": "party",
+                    "type": "RECORD",
+                    "fields": [
+                      {
+                        "name": "identification",
+                        "type": "RECORD",
+                        "fields": [
+                          {
+                            "name": "organisation_identification",
+                            "type": "RECORD",
+                            "fields": [
+                              {
+                                "name": "other",
+                                "type": "RECORD",
+                                "fields": [
+                                  {
+                                    "name": "identification",
+                                    "type": "STRING",
+                                    "mode": "NULLABLE"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "related_agents",
+            "type": "RECORD",
+            "fields": [
+              {
+                "name": "instructing_agent",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                  {
+                    "name": "financial_institution_identification",
+                    "type": "RECORD",
+                    "mode": "NULLABLE",
+                    "fields": [
+                      {
+                        "name": "clearing_system_member_identification",
+                        "type": "RECORD",
+                        "mode": "NULLABLE",
+                        "fields": [
+                          {
+                            "name": "member_identification",
+                            "type": "STRING",
+                            "mode": "NULLABLE"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "instructed_agent",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                  {
+                    "name": "financial_institution_identification",
+                    "type": "RECORD",
+                    "mode": "NULLABLE",
+                    "fields": [
+                      {
+                        "name": "clearing_system_member_identification",
+                        "type": "RECORD",
+                        "mode": "NULLABLE",
+                        "fields": [
+                          {
+                            "name": "member_identification",
+                            "type": "STRING",
+                            "mode": "NULLABLE"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "debtor_agent",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                  {
+                    "name": "financial_institution_identification",
+                    "type": "RECORD",
+                    "mode": "NULLABLE",
+                    "fields": [
+                      {
+                        "name": "clearing_system_member_identification",
+                        "type": "RECORD",
+                        "mode": "NULLABLE",
+                        "fields": [
+                          {
+                            "name": "member_identification",
+                            "type": "STRING",
+                            "mode": "NULLABLE"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "creditor_agent",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                  {
+                    "name": "financial_institution_identification",
+                    "type": "RECORD",
+                    "mode": "NULLABLE",
+                    "fields": [
+                      {
+                        "name": "clearing_system_member_identification",
+                        "type": "RECORD",
+                        "mode": "NULLABLE",
+                        "fields": [
+                          {
+                            "name": "member_identification",
+                            "type": "STRING",
+                            "mode": "NULLABLE"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "intermediary_agent1",
+                "type": "RECORD",
+                "fields": [
+                  {
+                    "name": "financial_institution_identification",
+                    "type": "RECORD",
+                    "fields": [
+                      {
+                        "name": "clearing_system_member_identification",
+                        "type": "RECORD",
+                        "fields": [
+                          {
+                            "name": "member_identification",
+                            "type": "STRING",
+                            "mode": "NULLABLE"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "intermediary_agent3",
+                "type": "RECORD",
+                "fields": [
+                  {
+                    "name": "financial_institution_identification",
+                    "type": "RECORD",
+                    "fields": [
+                      {
+                        "name": "clearing_system_member_identification",
+                        "type": "RECORD",
+                        "fields": [
+                          {
+                            "name": "member_identification",
+                            "type": "STRING",
+                            "mode": "NULLABLE"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "local_instrument",
+            "type": "RECORD",
+            "fields": [
+              {
+                "name": "proprietary",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              }
+            ]
+          },
+          {
+            "name": "related_dates",
+            "type": "RECORD",
+            "fields": [
+              {
+                "name": "transaction_date_time",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              }
+            ]
+          },
+          {
+            "name": "supplementary_data",
+            "type": "RECORD",
+            "fields": [
+              {
+                "name": "envelope",
+                "type": "RECORD",
+                "fields": [
+                  {
+                    "name": "cross_scheme_indicator",
+                    "type": "BOOLEAN",
+                    "mode": "NULLABLE"
+                  },
+                  {
+                    "name": "cancelled_with_autoreclaim",
+                    "type": "BOOLEAN",
+                    "mode": "NULLABLE"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "message_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

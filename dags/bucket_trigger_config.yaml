@@ -1,0 +1,97 @@
+# This file has the bucket -> config_file mappings
+#
+# bucket: Name of the gcs landing zone bucket
+# config_file: The filename which has bucket folder -> DAG mappings
+#
+# Add an entry here for a new landing zone bucket
+#
+- bucket: tsys-inbound-pcb{env}
+  config_file: tsys_processing/folder_trigger_config.yaml
+
+- bucket: lcl-inbound-pcb{env}
+  config_file: lcl_processing/folder_trigger_config.yaml
+
+- bucket: globalpay-inbound-pcb{env}
+  config_file: globalpay_processing/folder_trigger_config.yaml
+
+- bucket: esso-inbound-pcb{env}
+  config_file: loyalty_processing/folder_trigger_config.yaml
+
+- bucket: interac-inbound-pcb{env}
+  config_file: interac_processing/folder_trigger_config.yaml
+
+- bucket: equifax-inbound-pcb{env}
+  config_file: equifax_processing/folder_trigger_config.yaml
+
+- bucket: m1s-inbound-pcb{env}
+  config_file: payments_processing/folder_trigger_config.yaml
+
+- bucket:  mft-pcb-inbound{env}
+  config_file: digital_adoption/folder_trigger_config.yaml
+
+- bucket:  eft-pull-manual-limits{env}
+  config_file: eft_limits_processing/folder_trigger_config.yaml
+
+- bucket: temenos-inbound-pcb{env}
+  config_file: digital_adoption_tax_statements/temenos_t5/folder_trigger_config.yaml
+
+- bucket:  dnd-inbound-pcb{env}
+  config_file: billrefresh_processing/folder_trigger_config.yaml
+
+- bucket: salesforce-inbound-pcb{env}
+  config_file: salesforce_processing/folder_trigger_config.yaml
+
+- bucket:  treasury-manual-inbound-pcb{env}
+  config_file: alm_processing/treasury_manual/folder_trigger_config.yaml
+
+- bucket: pds-inbound-pcb{env}
+  config_file: digital_adoption_tax_statements/pds_t5/folder_trigger_config.yaml
+
+- bucket:  cibcmn-inbound-pcb{env}
+  config_file: alm_processing/cibcmn/folder_trigger_config.yaml
+
+- bucket:  rbccm-inbound-pcb{env}
+  config_file: alm_processing/rbccm/folder_trigger_config.yaml
+
+- bucket:  gwl-inbound-pcb{env}
+  config_file: alm_processing/gwl/folder_trigger_config.yaml
+
+- bucket:  pfp-inbound-pcb{env}
+  config_file: alm_processing/pfp/folder_trigger_config.yaml
+
+- bucket:  bbg-inbound-pcb{env}
+  config_file: alm_processing/bbg/folder_trigger_config.yaml
+
+- bucket:  mdl-inbound-pcb{env}
+  config_file: data_transfer/vendor_data_transfer/medallia/folder_trigger_config.yaml
+
+- bucket:  techcom-inbound-pcb{env}
+  config_file: data_transfer/vendor_data_transfer/techcom/folder_trigger_config.yaml
+
+- bucket:  bgo-inbound-pcb{env}
+  config_file: data_transfer/vendor_data_transfer/bgo/folder_trigger_config.yaml
+
+- bucket: broadridge-inbound-pcb{env}
+  config_file: broadridge_processing/folder_trigger_config.yaml
+
+- bucket: pcb-ops-inbound{env}
+  config_file: pcb_ops_processing/folder_trigger_config.yaml
+
+- bucket: score-inbound-pcb{env}
+  config_file: all_score_processor/folder_trigger_config.yaml
+
+- bucket: dmx-inbound-pcb{env}
+  config_file: dmx_letters_processing/folder_trigger_config.yaml
+
+- bucket: transunion-pcmceda-inbound-pcb{env}
+  config_file: transunion_processing/folder_trigger_config.yaml
+
+- bucket: communications-inbound-pcb{env}
+  config_file: digital_adoption/generic_communications/folder_trigger_config.yaml
+
+- bucket: creditrisk-truthdata-inbound-pcb{env}
+  config_file: fraud_risk_truthdata_processing/folder_trigger_config.yaml
+
+- bucket: pcb-{env}-inbound
+  config_file: eft_funds/folder_trigger_config.yaml
+

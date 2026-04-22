@@ -1,0 +1,4 @@
+Min_Range,Max_Range,Description
+-9999999999999,-0.01,"Credit Balance"
+0,0,"Zero Balance"
+0.01,99999999999999,"180+ days"

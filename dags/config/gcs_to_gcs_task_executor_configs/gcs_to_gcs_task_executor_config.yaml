@@ -1,0 +1,57 @@
+tcs_purge_case_image_landing_to_processing_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P2"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    description: "TCS Purge case image files movement from landing zone bucket to processing zone bucket ."
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    source_bucket: "tsys-inbound-pcb{env_suffix}"
+    source_object: "casepurge_images/*"
+    destination_bucket: "pcb-{env}-staging"
+    move_object: True
+
+tcs_purge_case_image_staging_extract_to_tsys_outbound_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P2"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+    retries: 3
+    retry_delay: 300
+  dag:
+    description: "TCS Purge case image files movement from staging extract bucket to TSYS outbound bucket."
+    dagrun_timeout: 10080
+    max_active_runs: 1
+    source_bucket: "pcb-{env}-staging-extract"
+    source_object: "casepurge_images/*"
+    destination_bucket: "tsys-outbound-pcb{env_suffix}"
+    destination_object: "casepurge_images/"
+    move_object: True
+
+sfmc_push_device_contact_file_to_staging_extract_job:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "push-notification"
+    severity: "P4"
+    business_impact: "This will impact the loading of Push Device Contact list from Salesforce Marketing Cloud (SFMC) into DP."
+    customer_impact: "Customer may not receive PUSH notifications and/or their opt-in/-outs will not be recorded by DP."
+  dag:
+    description: "The SFMC push device contact file is transferred from the inbound landing zone bucket to the staging bucket for processing by the Kafka writer job."
+    tags: [ "communication", "push-notification" ]
+    dagrun_timeout: 120
+    source_bucket: "{{ dag_run.conf['bucket'] }}"
+    source_object: "{{ dag_run.conf['name'] }}"
+    destination_bucket: "pcb-{env}-staging"
+    destination_object: "{{ dag_run.conf['name'] }}"
+    move_object: False
+    replace: True

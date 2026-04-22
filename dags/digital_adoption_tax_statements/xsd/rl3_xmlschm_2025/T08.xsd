@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du T08 @@@@ -->
+	<xsd:complexType
+    name="T08Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NbReleves"
+        type="Int9Type">
+				
+			</xsd:element>
+			<xsd:element
+        name="EtablissementEnseignement">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="Code"
+              type="Char8Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Nom1"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Nom2"
+              type="Char30Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

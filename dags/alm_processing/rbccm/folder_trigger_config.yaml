@@ -1,0 +1,3 @@
+- folder_name: inbound_bonds_swaps
+  filename_pattern: .*pcb_alm_bonds_swaps_\d{14}\.(uatv|prod)$
+  dags_to_trigger: [alm_rbc_pcb_bonds_monthly_load,alm_rbc_pcb_swaps_monthly_load]

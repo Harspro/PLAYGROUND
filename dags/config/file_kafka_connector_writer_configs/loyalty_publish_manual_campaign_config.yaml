@@ -1,0 +1,38 @@
+loyalty_publish_manual_campaign:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P3"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "This will publish Manual campaigns transactions."
+    customer_impact: "TBD..."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/publish_manual_campaign_transaction/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/publish_manual_campaign_transaction/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/publish_manual_campaign_transaction/publish_manual_campaign_file_schema.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/publish_manual_campaign_transaction/publish_manual_campaign_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/publish_manual_campaign_transaction/publish_manual_campaign_value.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: publish_manual_campaign_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: publish_manual_campaign_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.schema.file.path: publish_manual_campaign_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_loyalty_publish_manual_campaign
+    read_pause_deploy_config: True
+    tags: ["Loyalty"]
+    job_size: extra_small
+    dataproc_cluster_name: loyalty-publish-manual-campaign
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_id: loyalty_publish-manual-campaign-transactions_{current_date}
+    query_file: loyalty_processing/manual_campaign/loyalty_publish_manual_campaign.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: loyalty-manual-campaign
+    file_name: publish-manual-campaign-transactions

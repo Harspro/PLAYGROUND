@@ -1,0 +1,30 @@
+default_args:
+  owner: "team-growth-and-sales-alerts"
+  capability: "CustomerAcquisition"
+  severity: "P3"
+  sub_capability: "Applications"
+  business_impact: "PCMC no fee Cerebro customer acquisition failure"
+  customer_impact: "None"
+  depends_on_past: False
+  email: []
+  retries: 0
+  email_on_failure: False
+  email_on_retry: False
+
+read_pause_deploy_config: True
+
+#cerebro destination
+destination_bucket_np: "cerebro-sbx-cdp-pcbank-terminus-landing"
+destination_path_np: "PCBankTerminus.PCMC_NoFeeAquisition_Lowers"
+destination_bucket: "cerebro-prd-landing"
+destination_path: "marketingchannels_loyalty/cdp.pcf_trigger_audience"
+landing_table: "pcb-{env}-landing.domain_customer_acquisition.CEREBRO_DATA"
+
+#pcb archive
+archive_bucket: "pcb-cerebro-inbound-{env}"
+archive_bucket_prod: "pcb-cerebro-inbound"
+archive_path: "archive"
+
+#creditrisk archive
+creditrisk_processed_bucket: "terminus-creditrisk-processed{env_suffix}"
+creditrisk_processed_path: "trigger_aud_cerebro_processed"

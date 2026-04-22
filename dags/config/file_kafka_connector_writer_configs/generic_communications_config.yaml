@@ -1,0 +1,40 @@
+generic_communications_kafka_writer:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P2"
+    sub_capability: "account-management"
+    business_impact: "This loads communication events onto kafka topic: dp-core-{env}-loyalty-offer-presentation."
+    customer_impact: "In the event of a failure, communication events will not be sent to the customers."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/generic-communications/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/generic-communications/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/generic-communications/generic_communications_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/generic-communications/generic_communications_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/generic-communications/generic_communications_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: generic_communications_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: generic_communications_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: uuid
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: generic_communications_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_generic_communications
+    read_pause_deploy_config: False
+    tags: [ "team-digital-adoption-alerts" ]
+    job_size: extra_small
+    dataproc_cluster_name: generic-communications
+    skip_kafka_writer_if_empty: true
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_communication
+    query_file: digital_adoption/sql/generic_communications_kafka.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: digital-adoption
+    file_name: generic-communications

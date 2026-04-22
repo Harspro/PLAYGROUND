@@ -1,0 +1,17 @@
+# Test CSV files
+*.csv
+
+# Test scripts (optional - remove if you want to keep them)
+test_*.py
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Environment variables (if using .env file)
+.env
+.env.local
+

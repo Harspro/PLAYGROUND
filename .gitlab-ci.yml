@@ -1,0 +1,101 @@
+---
+include:
+  - project: 'loblaw/pc-financial/pcf-engineering/shared/cicd/gitlab-pipelines-library'
+    ref: $CI_LIBRARY_VERSION
+    file: 
+      - '/gitlab-ci/gcp/gcp_auth.yml'
+      - '/gitlab-ci/default.yml'
+
+variables:
+  WI_POOL_PROVIDER: "//iam.googleapis.com/projects/$GCP_WI_FEDERATION_PROJECT/locations/global/workloadIdentityPools/gitlab-oidc-platform/providers/gitlab-oidc-platform-wf-dp-dags"
+  SERVICE_ACCOUNT: "infra-admin-sa@$CLOUDSDK_CORE_PROJECT.iam.gserviceaccount.com"
+  AUDIENCE: "https://gitlab.lblw.ca"
+
+stages:
+  - init
+  - test
+  - deploy
+
+lint-tests:
+  image: ${ARTIFACTORY_DOCKER_BETA_VIRTUAL}/build/composer-airflow-image:2.11.3-2.10.2
+  stage: test
+  tags:
+    - nonprod
+  environment:
+    name: dev
+  script: |
+    ./test.sh
+  coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+
+dev-deploy:
+  image: ${ARTIFACTORY_DOCKER_BETA_VIRTUAL}/build/gcloud-python-image:499.0.0-2025.01.07
+  stage: deploy
+  tags:
+    - nonprod
+  environment:
+    name: nonprod
+  variables:
+    CLOUDSDK_CORE_PROJECT: pcb-dev-processing
+  only:
+    - main
+  extends: 
+    - .google-oidc:auth
+  script: 
+    - |
+      export CLOUDSDK_COMPOSER_LOCATION=northamerica-northeast1
+      export composer_environment=data-foundation
+      ./deploy.sh dev
+
+uat-deploy: # Sends slack notifications to gcp-uat-alerts
+  image: ${ARTIFACTORY_DOCKER_BETA_VIRTUAL}/build/gcloud-python-image:499.0.0-2025.01.07
+  stage: deploy
+  tags:
+    - nonprod
+  environment:
+    name: nonprod
+  variables:
+    CLOUDSDK_CORE_PROJECT: pcb-uat-processing
+    DEPLOY_ENV: UAT
+  only:
+    - main
+    - /^release-([0-9]+)\.([0-9]+)\.([0-9]+)$/
+  extends: 
+    - .google-oidc:auth
+  script: 
+    - |
+      export CLOUDSDK_COMPOSER_LOCATION=northamerica-northeast1
+      export composer_environment=data-foundation
+      # python3 -c "from slack_notify import in_progress_deployment; in_progress_deployment()"
+      ./deploy.sh uat
+  after_script:
+    # - python3 -c "from slack_notify import notify_deployment_status; notify_deployment_status('$?')"
+  when: manual
+
+prod-deploy: # Sends slack notifications to dp-release and gcp-prod-alerts
+  image: repo.prod.pcfcloud.io/pcb-dp-docker-prod/build/gcloud-python-image:499.0.0-2025.01.07
+  stage: deploy
+  tags:
+    - prod
+  environment:
+    name: prod
+  variables:
+    CLOUDSDK_CORE_PROJECT: pcb-prod-processing
+    DEPLOY_ENV: PROD
+  only:
+    - /^release-([0-9]+)\.([0-9]+)\.([0-9]+)$/
+  extends: 
+    - .google-oidc:auth
+  script: 
+    - |
+      export CLOUDSDK_COMPOSER_LOCATION=northamerica-northeast1
+      export composer_environment=data-foundation
+      # python3 -c "from slack_notify import in_progress_deployment; in_progress_deployment()"
+      ./deploy.sh prod
+  after_script:
+    # - python3 -c "from slack_notify import notify_deployment_status; notify_deployment_status('$?')"
+  when: manual

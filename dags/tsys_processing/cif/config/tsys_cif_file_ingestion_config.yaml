@@ -1,0 +1,157 @@
+tsys_pcb_mc_cif_file_loading:
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_cif_daily
+  bigquery_oracle_loader_dag_id: cif_daily_bq_to_oracle
+  file_date_column: FILE_CREATE_DT
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CIF
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CIF
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      ACCOUNT:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_cif/ACCOUNT.CPY
+        pcb.tsys.processor.segment.name: 5
+        pcb.tsys.processor.layout.name: CIFP_ACCOUNT_REC
+      CARD:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_cif/CARD.CPY
+        pcb.tsys.processor.segment.name: 6
+        pcb.tsys.processor.layout.name: CIFP_CARD_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_cif/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9
+        pcb.tsys.processor.layout.name: TRL_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    tables:
+      ACCOUNT:
+        table_name: CIF_ACCOUNT_CURR
+        partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+        clustering_fields:
+          - CIFP_ACCOUNT_ID5
+          - CIFP_CLIENT_PRODUCT_CODE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CAST(AM00_BLOCKED_CARDS_CNT AS STRING) AS AM00_BLOCKED_CARDS_CNT
+          - CAST(AM00_BANKRUPTCY_TYPE AS STRING) AS AM00_BANKRUPTCY_TYPE
+        drop_columns:
+          - CIFP_RECORD_ID
+          - CIFP_PROD_CHNG_IN_PROG
+          - AM00_BLOCKED_CARDS_CNT
+          - AM00_BANKRUPTCY_TYPE
+        rank_partition: CIFP_ACCOUNT_ID5, CIFP_SUFFIX_NUMBER
+        rank_order_by: REC_LOAD_TIMESTAMP DESC, CIFP_ACTION_CODE_SORTING_KEY ASC
+      CARD:
+        table_name: CIF_CARD_CURR
+        partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+        clustering_fields:
+          - CIFP_ACCOUNT_ID6
+          - CIFP_RELATIONSHIP_STAT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        drop_columns:
+          - CIFP_RECORD_ID
+        rank_partition: CIFP_ACCOUNT_ID6, CIFP_APPLICATION_SUF, CIFP_ACCOUNT_NUM, CIFP_CUSTOMER_ID_2
+        rank_order_by: REC_LOAD_TIMESTAMP DESC
+      TRLR:
+        table_name: CIF_ACCOUNT_TRAIL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+tsys_pcb_mc_cif_weekly_file_loading:
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_cif_weekly
+  bigquery_oracle_loader_dag_id: cif_weekly_bq_to_oracle
+  file_date_column: FILE_CREATE_DT
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CIF
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CIF
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      ACCOUNT:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_cif/ACCOUNT.CPY
+        pcb.tsys.processor.segment.name: 5
+        pcb.tsys.processor.layout.name: CIFP_ACCOUNT_REC
+      CARD:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_cif/CARD.CPY
+        pcb.tsys.processor.segment.name: 6
+        pcb.tsys.processor.layout.name: CIFP_CARD_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_cif/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9
+        pcb.tsys.processor.layout.name: TRL_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    tables:
+      ACCOUNT:
+        table_name: CIF_ACCOUNT_CURR
+        partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+        clustering_fields:
+          - CIFP_ACCOUNT_ID5
+          - CIFP_CLIENT_PRODUCT_CODE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - CAST(AM00_BLOCKED_CARDS_CNT AS STRING) AS AM00_BLOCKED_CARDS_CNT
+          - CAST(AM00_BANKRUPTCY_TYPE AS STRING) AS AM00_BANKRUPTCY_TYPE
+        drop_columns:
+          - CIFP_RECORD_ID
+          - CIFP_PROD_CHNG_IN_PROG
+          - AM00_BLOCKED_CARDS_CNT
+          - AM00_BANKRUPTCY_TYPE
+        rank_partition: CIFP_ACCOUNT_ID5, CIFP_SUFFIX_NUMBER
+        rank_order_by: REC_LOAD_TIMESTAMP DESC, CIFP_ACTION_CODE_SORTING_KEY ASC
+      CARD:
+        table_name: CIF_CARD_CURR
+        partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+        clustering_fields:
+          - CIFP_ACCOUNT_ID6
+          - CIFP_RELATIONSHIP_STAT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        drop_columns:
+          - CIFP_RECORD_ID
+        rank_partition: CIFP_ACCOUNT_ID6, CIFP_APPLICATION_SUF, CIFP_ACCOUNT_NUM, CIFP_CUSTOMER_ID_2
+        rank_order_by: REC_LOAD_TIMESTAMP DESC
+      TRLR:
+        table_name: CIF_ACCOUNT_TRAIL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: 'TBD'
+    customer_impact: 'TBD'
+    severity: "P3"

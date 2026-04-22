@@ -1,0 +1,9 @@
+UPDATE `pcb-{env}-landing.domain_retail.GLOBAL_PAYMENT_MERCHANT`
+SET VAL = "R", UPDATE_DT = CURRENT_DATE
+WHERE MERCHANT_ID IN
+(SELECT a.MERCHANT_ID
+FROM `pcb-{env}-landing.domain_retail.GLOBAL_PAYMENT_MERCHANT` a
+JOIN `pcb-{env}-processing.domain_retail.GLOBAL_PAYMENT_MERCHANT_STAGING` b
+ON a.MERCHANT_ID = b.MERCHANT_ID
+WHERE a.VAL = "D" AND b.VAL = "R"
+);

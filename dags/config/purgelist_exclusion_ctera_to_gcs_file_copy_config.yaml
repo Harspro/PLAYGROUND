@@ -1,0 +1,35 @@
+purgelist_exclusion_ctera_to_gcs_file_copy:
+  nonprod:
+    file_name: purgelist_exclusion.csv
+    ctera_shared_folder: DFSPCBALMUAT/UAT/poc_data_movement/GS
+    hostname: "vllscetpr02.ngco.com"
+    username: LCE\SVCPCBALMSHAREAPIUAT
+    secret_path: "/uat-secret/data/alm"
+    secret_key: "SVCPCBALMSHAREAPIUAT"
+  prod:
+    file_name: purgelist_exclusion.csv
+    ctera_shared_folder: DFSPCBLGL/purge_exclusion_list
+    hostname: "vllscetpr02.ngco.com"
+    username: LCE\SVCPCBLEGALSHARE
+    secret_path: "/secret/data/terminus/ctera"
+    secret_key: "lgl.svc.password"
+  gcs_bucket: pcb-{env}-staging-extract
+  gcs_folder: purging
+  dag:
+    task_id:
+      purgelist_load_task_id: purgelist_exclusion_process_dag
+    dag_id:
+      purgelist_exclusion_dag_id: purgelist_exclusion
+    wait_for_completion: True
+    poke_interval: 30
+  tags: ['team-growth-and-sales']
+  staging_config:
+    dataset_id: "domain_customer_acquisition"
+    table_name: "purgelist_exclusion_external"
+    file_format: "CSV"
+  validation_config:
+    required_columns: ['first_name', 'last_name', 'dob']
+    mandatory_fields: ['first_name', 'last_name']
+    dob_column: "dob"
+    dob_expected_format: "YYYYMMDD"
+

@@ -1,0 +1,145 @@
+# BigQuery Table Comparison Configuration
+cif_card_curr_comparator:
+  source_table_name: pcb-{env}-landing.domain_account_management.IDL_CIF_CARD_CURR
+  target_table_name: pcb-{env}-landing.domain_account_management.CIF_CARD_CURR
+
+  # Primary key columns (required)
+  primary_key_columns:
+    - CIFP_ACCOUNT_ID6
+    - CIFP_RELATIONSHIP_STAT
+    - FILE_CREATE_DT
+
+  # Flexible filtering with SQL-like conditions (replaces date filtering)
+  # Apply same filters to both source and target tables
+  filters:
+    - FILE_CREATE_DT = CURRENT_DATE()
+    # - "status = 'ACTIVE'"
+    # - "amount > 1000"
+    # - "created_date >= '2024-01-01'"
+
+  # Optional: Specific columns to compare (default: all common non-PK columns)
+  comparison_columns:
+    # - "metric_a"
+    # - "status_description"
+
+  # Optional: Columns to exclude from comparison (exclusion takes precedence over comparison_columns)
+  exclude_columns:
+    - REC_LOAD_TIMESTAMP
+
+  # Type-based global expressions
+  global_expressions_by_type:
+    string_types:
+    #   - "TRIM(column)"
+        - COALESCE(column, '')
+    # numeric_types:
+    #   - "COALESCE(column, 0)"   # NULL as 0
+    #   - "ROUND(column, 2)"      # Round to 2 decimals
+    # date_types:
+    #   - "DATE(column)"          # Extract date part
+    # boolean_types:
+    #   - "COALESCE(column, false)"  # NULL as false
+
+  # Column-specific expressions (override global for specific columns)
+  column_expressions:
+    # amount:
+    #   expressions:
+    #     - "ROUND(column, 2)"
+    #   description: "Compare amounts with precision handling"
+    # 
+    # phone_number:
+    #   expressions:
+    #     - "REGEXP_REPLACE(column, '[^0-9]', '')"
+    #   description: "Compare only numeric digits in phone numbers"
+
+  # Optional: Detailed mismatch report table
+  mismatch_report_table_name: pcb-{env}-landing.domain_technical.CIF_CARD_CURR_COMPARE_RESULTS
+  schedule_interval: 0 11 * * *
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "No impact its a copy of oracle data load"
+
+cif_card_prev_comparator:
+  source_table_name: pcb-{env}-landing.domain_account_management.IDL_CIF_CARD_PREV
+  target_table_name: pcb-{env}-landing.domain_account_management.CIF_CARD_PREV
+
+  primary_key_columns:
+    - CIFP_ACCOUNT_ID6
+    - CIFP_RELATIONSHIP_STAT
+    - FILE_CREATE_DT
+
+  filters:
+    - FILE_CREATE_DT = CURRENT_DATE()
+
+  exclude_columns:
+    - REC_LOAD_TIMESTAMP
+
+  global_expressions_by_type:
+    string_types:
+        - COALESCE(column, '')
+
+  mismatch_report_table_name: pcb-{env}-landing.domain_technical.CIF_CARD_PREV_COMPARE_RESULTS
+
+  schedule_interval: 0 11 * * *
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "No impact its a copy of oracle data load"
+
+cif_account_curr_comparator:
+  source_table_name: pcb-{env}-landing.domain_account_management.IDL_CIF_ACCOUNT_CURR
+  target_table_name: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_CURR
+
+  primary_key_columns:
+    - CIFP_ACCOUNT_ID5
+    - CIFP_CLIENT_PRODUCT_CODE
+    - FILE_CREATE_DT
+
+  filters:
+    - FILE_CREATE_DT = CURRENT_DATE()
+
+  exclude_columns:
+    - REC_LOAD_TIMESTAMP
+
+  global_expressions_by_type:
+    string_types:
+        - COALESCE(column, '')
+
+  mismatch_report_table_name: pcb-{env}-landing.domain_technical.CIF_ACCOUNT_CURR_COMPARE_RESULTS
+
+  schedule_interval: 0 11 * * *
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "No impact its a copy of oracle data load"
+
+cif_account_prev_comparator:
+  source_table_name: pcb-{env}-landing.domain_account_management.IDL_CIF_ACCOUNT_PREV
+  target_table_name: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_PREV
+
+  primary_key_columns:
+    - CIFP_ACCOUNT_ID5
+    - CIFP_CLIENT_PRODUCT_CODE
+    - FILE_CREATE_DT
+
+  filters:
+    - FILE_CREATE_DT = CURRENT_DATE()
+
+  exclude_columns:
+    - REC_LOAD_TIMESTAMP
+
+  global_expressions_by_type:
+    string_types:
+        - COALESCE(column, '')
+
+  mismatch_report_table_name: pcb-{env}-landing.domain_technical.CIF_ACCOUNT_PREV_COMPARE_RESULTS
+
+  schedule_interval: 0 11 * * *
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    business_impact: "No impact its a copy of oracle data load"

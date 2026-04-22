@@ -1,0 +1,6 @@
+vendor,product_field_name,product_field_value,alm_standard_value
+RBC CM,Sub product,SWAP,swap
+CIBC CM,Trade_type,BONDFWD,bond forward
+CIBC CM,Trade_type,IR SWAP,swap
+BMO CM,Product,Swap,swap
+NB CM,Product,Bond Forw,bond forward

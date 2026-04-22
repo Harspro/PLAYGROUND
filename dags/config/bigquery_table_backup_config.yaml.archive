@@ -1,0 +1,44 @@
+pcoscoresdataset_pco_scores_backup:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Applications"
+    severity: "P2"
+    sub_capability: "Submission"
+    business_impact: "This will impact PCO scores, as such application will be submitted without PCO scores. Scores are used by credit risk team to approve PCMC application for customer with limited or no credit history."
+    customer_impact: "If the PCO score is not populated during the application submission, a PCMC application for a customer with limited or no credit history will be rejected."
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: PCOScoresDataset
+    table_name: PCO_SCORES
+  dag:
+    read_pause_deploy_config: True
+
+domain_loyalty_pc_points_awarded_backup:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Convergence"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "This will impact are ability to update the Rewards table used for analytical purposes by the business."
+    customer_impact: "N/A"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PC_POINTS_AWARDED
+  dag:
+    read_pause_deploy_config: True
+
+domain_loyalty_pc_points_reprocess_backup:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Convergence"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "This will impact are ability to update the Reprocess table used for analytical purposes by the business."
+    customer_impact: "N/A"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PC_POINTS_REPROCESS
+  dag:
+    read_pause_deploy_config: True

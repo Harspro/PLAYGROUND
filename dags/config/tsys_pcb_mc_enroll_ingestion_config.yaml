@@ -1,0 +1,101 @@
+tsys_pcb_mc_enroll_full_file_loading:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_pcmc_insurancereq
+  folder_prefix: tsys_pcb_mc_enroll
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: INSURANCE_REQUEST
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: INSURANCE_REQUEST
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: Insurance_group
+        segments: C,S,E,N,P,T
+    segment_args:
+      C:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_enroll/INS_CANCEL.CPY
+        pcb.tsys.processor.segment.name: C
+        pcb.tsys.processor.layout.name: INSURANCE_REC
+      S:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_enroll/INS_CLAIM_STATUS.CPY
+        pcb.tsys.processor.segment.name: S
+        pcb.tsys.processor.layout.name: INSURANCE_REC
+      E:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_enroll/INS_ENROLL.CPY
+        pcb.tsys.processor.segment.name: E
+        pcb.tsys.processor.layout.name: INSURANCE_REC
+      N:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_enroll/INS_NON_FIN_CHG.CPY
+        pcb.tsys.processor.segment.name: N
+        pcb.tsys.processor.layout.name: INSURANCE_REC
+      P:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_enroll/INS_PREMIUM.CPY
+        pcb.tsys.processor.segment.name: P
+        pcb.tsys.processor.layout.name: INSURANCE_REC
+      T:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_enroll/INS_TRANSFER.CPY
+        pcb.tsys.processor.segment.name: T
+        pcb.tsys.processor.layout.name: INSURANCE_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_enroll/TRLR.CPY
+        pcb.tsys.processor.segment.name: INS_TRLR_SEG
+        pcb.tsys.processor.layout.name: INSURANCE_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      C:
+        table_name: INS_CANCEL
+        record_count_column: CANCEL_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      S:
+        table_name: INS_CLAIM_STATUS
+        record_count_column: CLAIM_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      E:
+        table_name: INS_ENROLL
+        record_count_column: ENROLL_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      N:
+        table_name: INS_NONFINANCIAL_CHGS
+        record_count_column: NONFIN_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      P:
+        table_name: INS_PREMIUM_DATA
+        record_count_column: PREMIUM_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      T:
+        table_name: INS_TRANSFER_DATA
+        record_count_column: TRANSF_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: INS_REQUEST_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

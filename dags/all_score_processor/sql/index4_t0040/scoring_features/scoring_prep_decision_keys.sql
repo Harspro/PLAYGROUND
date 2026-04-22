@@ -1,0 +1,28 @@
+INSERT INTO `pcb-{env}-landing.domain_scoring.SCORING_PREP_DECISION_KEYS`
+(
+  REPORT_DATE,
+  MAST_ACCOUNT_ID,
+  FILE_CREATE_DT,
+  KEY_410,
+  KEY_411,
+  KEY_412,
+  KEY_413,
+  REC_LOAD_TIMESTAMP,
+  JOB_ID
+)
+SELECT DISTINCT
+  -- Metadata fields
+  CONCAT('{report_year}', LPAD('{report_month}', 2, '0'), '01') AS REPORT_DATE,
+
+  -- Data fields (only the 6 used in scoring)
+  CAST(MASTER_ACCOUNT_ID AS STRING) AS MAST_ACCOUNT_ID,
+  CAST(FILE_CREATE_DT AS STRING) AS FILE_CREATE_DT,
+  CAST(key_410 AS STRING) AS KEY_410,
+  CAST(key_411 AS STRING) AS KEY_411,
+  CAST(key_412 AS STRING) AS KEY_412,
+  CAST(key_413 AS STRING) AS KEY_413,
+  -- Audit fields
+  CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP,
+  '{dag_id}' AS JOB_ID
+FROM `pcb-{env}-curated.domain_account_management.DECISION_KEYS`
+QUALIFY ROW_NUMBER() OVER(PARTITION BY MASTER_ACCOUNT_ID ORDER BY FILE_CREATE_DT DESC) = 1;

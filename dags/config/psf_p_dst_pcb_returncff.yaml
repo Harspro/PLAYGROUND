@@ -1,0 +1,75 @@
+psf_p_dst_pcb_returncff_file_loading:
+  job_size: small
+  source_bucket: broadridge-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: psf_p_dst_pcb_returncff
+  folder_prefix: pcb_broadridge_returncff
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: STMT_CME
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: STMT_CME
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: header_group
+        segments: HEDR
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: customer_group
+        segments: CUSTOMER
+      - group_name: offer_group
+        segments: OFFER
+    segment_args:
+      HEDR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_stmt_cme/HEDR.CPY
+        pcb.tsys.processor.segment.name: H
+        pcb.tsys.processor.layout.name: HEDR_REC
+      CUSTOMER:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_stmt_cme/CUSTOMER.CPY
+        pcb.tsys.processor.segment.name: C
+        pcb.tsys.processor.layout.name: CUSTOMER_REC
+      OFFER:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_stmt_cme/OFFER.CPY
+        pcb.tsys.processor.segment.name: O
+        pcb.tsys.processor.layout.name: OFFER_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_stmt_cme/TRLR.CPY
+        pcb.tsys.processor.segment.name: T
+        pcb.tsys.processor.layout.name: TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_management
+    data_load_type: APPEND_ONLY
+    tables:
+      HEDR:
+        table_name: STMT_HEDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      CUSTOMER:
+        table_name: STMT_CUSTOMER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      OFFER:
+        table_name: STMT_OFFER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: STMT_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "Potential reporting issues with delay in loading offers presented in CME DB"
+    customer_impact: "No customer impact"
+    severity: "P3"

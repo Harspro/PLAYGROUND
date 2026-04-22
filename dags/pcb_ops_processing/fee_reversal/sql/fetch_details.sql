@@ -1,0 +1,22 @@
+-- query used in file generation, column orders need to follow the copybook
+SELECT
+    SEQUENCE_NUMBER,
+    TRANSACTION_CODE,
+    ACCOUNT_NUMBER,
+    TRANSACTION_DATE,
+    TANDEM_AUTH_FLAG,
+    TRANSACTION_AMOUNT,
+    MERCHANT_NAME,
+    MERCHANT_CITY,
+    MERCHANT_STATE_PROV,
+    ALLOW_MER_DESC_ON_CORR,
+    REFERENCE_NUMBER,
+    REFERENCE_NUMBER_EXT,
+    FILLER1,
+    MERCHANT_COUNTRY_CODE,
+    MERCHANT_CATEGORY_CODE,
+    FILLER2,
+    AUTHORIZATION_CODE,
+    MAIL_PHONE_ORDER,
+    EXTENSION_IND
+FROM `{fee.reversal.staging.detail.file.view.id}`;

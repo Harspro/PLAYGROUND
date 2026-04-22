@@ -1,0 +1,411 @@
+alm_pcb_tbsm_mock_data_bonds_monthly_load:
+  file:
+    prefix: bond_submit
+    vendor: cibccm
+    frequency: m
+    extension: "{file_env}"
+  outbound_bucket: treasury-manual-inbound-pcb-{env}
+  outbound_folder: treasury_inbound_bonds
+  num_records: 2000
+  csv_options:
+    include_header_csv: false
+    separator: ","
+  header:
+    include_header: true
+    header_line: "HEADER,2024-05-31T18:30:00-0400,2024-06-30T18:30:00-0400,CIBCCM,ACCOUNT STATEMENT"
+  trailer:
+    include_trailer: true
+    trailer_line: "TRAILER,{num_records},CIBCCM,PCB ACCOUNT STATEMENT"
+  columns:
+      - name: "row_type"
+        type: "options"
+        values: ["BONDFORWARDS"]
+      - name: "trade_id"
+        type: "random_unique_int"
+        min: 10000000
+        max: 10010000
+      - name: "counterparty"
+        type: "options"
+        values: ["National Bank of Canada","Canadian Imperial Bank of Commerce","Royal Bank of Canada"]
+      - name: "bond_cusip"
+        type: "random_unique_int"
+        min: 10000000
+        max: 10010000
+      - name: "trade_date"
+        type: "date"
+        start_date: "2024-06-01"
+        end_date: "2024-06-29"
+        date_format: "%Y-%m-%d"
+      - name: "settlement_date"
+        type: "date"
+        start_date: "2024-06-30"
+        end_date: "2024-06-30"
+        date_format: "%Y-%m-%d"
+      - name: "forward_termination_date"
+        type: "date"
+        start_date: "2024-07-01"
+        end_date: "2024-07-30"
+        date_format: "%Y-%m-%d"
+      - name: "forward_settlement_date"
+        type: "date"
+        start_date: "2024-07-01"
+        end_date: "2024-07-30"
+        date_format: "%Y-%m-%d"
+      - name: "contract_forward_price"
+        type: "decimal"
+        min: 60000000.00
+        max: 60999999.00
+        scale: 2
+      - name: "face_amount"
+        type: "decimal"
+        min: 60000000.00
+        max: 60999999.00
+        scale: 2
+
+alm_pcb_tbsm_mock_data_swaps_monthly_load:
+  file:
+    prefix: swap_submit
+    vendor: bmocm
+    frequency: m
+    extension: "{file_env}"
+  outbound_bucket: treasury-manual-inbound-pcb-{env}
+  outbound_folder: treasury_inbound_swaps
+  num_records: 2000
+  csv_options:
+    include_header_csv: false
+    separator: ","
+  header:
+    include_header: true
+    header_line: "HEADER,2024-05-31T18:30:00-0400,2024-06-30T18:30:00-0400,BMOCM,ACCOUNT STATEMENT"
+  trailer:
+    include_trailer: true
+    trailer_line: "TRAILER,{num_records},BMOCM,PCB ACCOUNT STATEMENT"
+  columns:
+      - name: "row_type"
+        type: "options"
+        values: ["SWAPS"]
+      - name: "trade_id"
+        type: "random_unique_int"
+        min: 10000000
+        max: 10010000
+      - name: "counterparty"
+        type: "options"
+        values: ["National Bank of Canada", "Canadian Imperial Bank of Commerce", "Royal Bank of Canada"]
+      - name: "notional"
+        type: "decimal"
+        min: 600000.00
+        max: 609999.00
+        scale: 2
+      - name: "trade_date"
+        type: "date"
+        start_date: "2024-06-01"
+        end_date: "2024-06-29"
+        date_format: "%Y-%m-%d"
+      - name: "effective_date"
+        type: "date"
+        start_date: "2024-06-30"
+        end_date: "2024-06-30"
+        date_format: "%Y-%m-%d"
+      - name: "maturity_date"
+        type: "date"
+        start_date: "2024-07-01"
+        end_date: "2024-07-30"
+        date_format: "%Y-%m-%d"
+      - name: "fixed_rate"
+        type: "decimal"
+        min: 3.05
+        max: 5.05
+        scale: 2
+      - name: "fixed_payment_frequency"
+        type: "options"
+        values: ["Monthly", "Quarterly", "Semi-Annually", "Annually"]
+      - name: "float_benchmark"
+        type: "options"
+        values: ["CORRA"]
+      - name: "float_spread"
+        type: "decimal"
+        min: 3.05
+        max: 5.05
+        scale: 2
+      - name: "float_payment_frequency"
+        type: "options"
+        values: ["Monthly", "Quarterly", "Semi-Annually", "Annually"]
+
+alm_pcb_tbsm_mock_data_cash_monthly_load:
+  file:
+    prefix: asset_cash_submit
+    vendor: waterford
+    frequency: m
+    extension: "{file_env}"
+  outbound_bucket: treasury-manual-inbound-pcb-{env}
+  outbound_folder: mock_data
+  num_records: 2000
+  csv_options:
+    include_header_csv: false
+    separator: "|"
+  header:
+    include_header: false
+    header_line: "HEADER|2024-05-31T18:30:00-0400|2024-06-30T18:30:00-0400|CIBCCM|account_statement"
+  trailer:
+    include_trailer: false
+    trailer_line: "TRAILER|{num_records}|CIBCCM|pcb_account_statement"
+  columns:
+      - name: "name_of_account"
+        type: "options"
+        values: ["bank account statement", "waterford fs", "investment report"]
+      - name: "balance"
+        type: "decimal"
+        min: 1000000.00
+        max: 1099999.00
+        scale: 2
+      - name: "rate"
+        type: "decimal"
+        min: 3.00
+        max: 5.00
+        scale: 2
+      - name: "currency_held_in"
+        type: "options"
+        values: ["CAD", "USD", "AUD"]
+
+alm_pcb_tbsm_mock_data_investment_monthly_load:
+  file:
+    prefix: asset_investment_submit
+    vendor: quantum
+    frequency: m
+    extension: "{file_env}"
+  outbound_bucket: treasury-manual-inbound-pcb-{env}
+  outbound_folder: mock_data
+  num_records: 2000
+  csv_options:
+    include_header_csv: false
+    separator: "|"
+  header:
+    include_header: false
+    header_line: "HEADER|2024-05-31T18:30:00-0400|2024-06-30T18:30:00-0400|CIBCCM|account_statement"
+  trailer:
+    include_trailer: false
+    trailer_line: "TRAILER|{num_records}|CIBCCM|pcb_account_statement"
+  columns:
+      - name: "id"
+        type: "random_unique_int"
+        min: 10000000
+        max: 10010000
+      - name: "cusip"
+        type: "options"
+        values: ["National Bank of Canada", "Canadian Imperial Bank of Commerce", "Royal Bank of Canada"]
+      - name: "investment_type"
+        type: "options"
+        values: ["bond", "money market", "NHA MBS"]
+      - name: "face_amount"
+        type: "decimal"
+        min: 30000000.05
+        max: 50000000.05
+        scale: 2
+      - name: "coupon"
+        type: "decimal"
+        min: 30000000.05
+        max: 50000000.05
+        scale: 8
+      - name: "rate_type"
+        type: "options"
+        values: ["float vs 1m CDOR", "fixed", "float vs 3m CDOR"]
+      - name: "issue_date"
+        type: "date"
+        start_date: "2024-06-30"
+        end_date: "2024-06-30"
+        date_format: "%Y-%m-%d"
+      - name: "maturity_date"
+        type: "date"
+        start_date: "2024-07-01"
+        end_date: "2024-07-30"
+        date_format: "%Y-%m-%d"
+      - name: "first_coupon_date"
+        type: "date"
+        start_date: "2024-07-01"
+        end_date: "2024-07-30"
+        date_format: "%Y-%m-%d"
+      - name: "payment_frequency"
+        type: "options"
+        values: ["Monthly", "Quarterly", "Semi-Annually", "Annually"]
+      - name: "purchase_date"
+        type: "date"
+        start_date: "2024-07-01"
+        end_date: "2024-07-30"
+        date_format: "%Y-%m-%d"
+      - name: "book_value"
+        type: "decimal"
+        min: 30000000.05
+        max: 50000000.05
+        scale: 2
+      - name: "book_yield"
+        type: "decimal"
+        min: 30000000.05
+        max: 50000000.05
+        scale: 2
+
+alm_pcb_tbsm_mock_data_term_deposit_monthly_load:
+  file:
+    prefix: term_deposit_submit
+    vendor: pfp
+    frequency: m
+    extension: "{file_env}"
+  outbound_bucket: treasury-manual-inbound-pcb-{env}
+  outbound_folder: mock_data
+  num_records: 2000
+  csv_options:
+    include_header_csv: false
+    separator: "|"
+  header:
+    include_header: true
+    header_line: "HEADER|2024-05-31T18:30:00-0400|2024-06-30T18:30:00-0400|PFP|TERM_DEPOSIT"
+  trailer:
+    include_trailer: true
+    trailer_line: "TRAILER|{num_records}|PFP|TERM_DEPOSIT"
+  columns:
+      - name: "row_type"
+        type: "options"
+        values: ["TERM_DEPOSIT"]
+      - name: "id"
+        type: "random_unique_int"
+        min: 10000000
+        max: 10010000
+      - name: "principal"
+        type: "decimal"
+        min: 30.00
+        max: 50.00
+        scale: 2
+      - name: "rate"
+        type: "decimal"
+        min: 3.000
+        max: 5.000
+        scale: 3
+      - name: "issue_date"
+        type: "date"
+        start_date: "2024-06-01"
+        end_date: "2024-06-29"
+        date_format: "%Y-%m-%d"
+      - name: "maturity_date"
+        type: "date"
+        start_date: "2024-06-30"
+        end_date: "2024-06-30"
+        date_format: "%Y-%m-%d"
+      - name: "payment_frequency"
+        type: "options"
+        values: ["Monthly", "Quarterly", "Semi-Annually", "Annually"]
+      - name: "product_type"
+        type: "options"
+        values: ["TFSA", "RRSP","non-registered"]
+      - name: "depositor_type"
+        type: "options"
+        values: ["retail", "commercial"]
+      - name: "customer_id"
+        type: "random_unique_int"
+        min: 10000000
+        max: 10010000
+
+alm_pcb_tbsm_mock_data_fx_hedges_monthly_load:
+  file:
+    prefix: fx_hedges_submit
+    vendor: pfp
+    frequency: m
+    extension: "{file_env}"
+  outbound_bucket: treasury-manual-inbound-pcb-{env}
+  outbound_folder: treasury_inbound_hedges
+  num_records: 2000
+  csv_options:
+    include_header_csv: false
+    separator: ","
+  header:
+    include_header: true
+    header_line: "HEADER,2024-05-31T18:30:00-0400,2024-06-30T18:30:00-0400,PFP,TERM_DEPOSIT"
+  trailer:
+    include_trailer: true
+    trailer_line: "TRAILER,{num_records},PFP,TERM_DEPOSIT"
+  columns:
+      - name: "counterparty"
+        type: "options"
+        values: ["FX_HEDGES"]
+      - name: "currency1"
+        type: "options"
+        values: ["CAD", "USD","AUD"]
+      - name: "currency1_amount"
+        type: "decimal"
+        min: 3000.00
+        max: 5000.00
+        scale: 2
+      - name: "currency2"
+        type: "options"
+        values: ["CAD", "USD","AUD"]
+      - name: "currency2_amount"
+        type: "decimal"
+        min: 3000.00
+        max: 5000.00
+        scale: 2
+      - name: "trade_date"
+        type: "date"
+        start_date: "2024-05-30"
+        end_date: "2024-06-29"
+        date_format: "%Y-%m-%d"
+      - name: "settlement_date"
+        type: "date"
+        start_date: "2024-06-30"
+        end_date: "2024-06-30"
+        date_format: "%Y-%m-%d"
+      - name: "forward_rate"
+        type: "decimal"
+        min: 3.00
+        max: 5.00
+        scale: 2
+
+alm_pcb_tbsm_mock_data_abcp_monthly_load:
+  file:
+    prefix: abcp_submit
+    vendor: pfp
+    frequency: m
+    extension: "{file_env}"
+  outbound_bucket: treasury-manual-inbound-pcb-{env}
+  outbound_folder: treasury_inbound_abcp
+  num_records: 2000
+  csv_options:
+    include_header_csv: false
+    separator: ","
+  header:
+    include_header: true
+    header_line: "HEADER,2024-05-31T18:30:00-0400,2024-06-30T18:30:00-0400,PFP,TERM_DEPOSIT"
+  trailer:
+    include_trailer: true
+    trailer_line: "TRAILER,{num_records},PFP,TERM_DEPOSIT"
+  columns:
+      - name: "facility_name"
+        type: "options"
+        values: ["Ridge", "Safe Sound", "Pure Grove"]
+      - name: "face_amount"
+        type: "decimal"
+        min: 3000.00
+        max: 5000.00
+        scale: 2
+      - name: "issue_date"
+        type: "date"
+        start_date: "2024-05-30"
+        end_date: "2024-06-29"
+        date_format: "%Y-%m-%d"
+      - name: "maturity_date"
+        type: "date"
+        start_date: "2024-05-30"
+        end_date: "2024-06-29"
+        date_format: "%Y-%m-%d"
+      - name: "rate"
+        type: "decimal"
+        min: 3.00
+        max: 5.00
+        scale: 2
+      - name: "overall_limit_amount"
+        type: "decimal"
+        min: 300.00
+        max: 500.00
+        scale: 2
+      - name: "unused_fee_rate"
+        type: "decimal"
+        min: 3.00
+        max: 5.00
+        scale: 2

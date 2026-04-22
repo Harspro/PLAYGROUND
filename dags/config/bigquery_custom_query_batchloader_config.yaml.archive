@@ -1,0 +1,402 @@
+db610_dnscnst_cust_mktg_pref_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.CUST_MKTG_PREF WHERE REC_CHNG_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CHNG_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: CUST_MKTG_PREF
+    partition_field: DATETIME_TRUNC(REC_CHNG_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-01-01 # inclusive
+    end_date: 2024-05-29 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db610_dnscnst_dns_acct_cust_id_xref_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_ACCT_CUST_ID_XREF WHERE REC_CHNG_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CHNG_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_ACCT_CUST_ID_XREF
+    partition_field: DATETIME_TRUNC(REC_CHNG_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-01-01 # inclusive
+    end_date: 2024-05-29 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db610_dnscnst_dns_acct_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_ACCT WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_ACCT
+    partition_field: DATETIME_TRUNC(REC_CHNG_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-01-01 # inclusive
+    end_date: 2024-05-29 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db610_dnscnst_dns_event_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_EVENT WHERE REC_CHNG_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CHNG_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_EVENT
+    partition_field: DATETIME_TRUNC(REC_CHNG_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-01-01 # inclusive
+    end_date: 2024-06-18 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db610_dnscnst_dns_event_detail_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_EVENT_DETAIL WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_EVENT_DETAIL
+    partition_field: DATETIME_TRUNC(REC_CREATE_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-01-01 # inclusive
+    end_date: 2024-07-03 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db610_pcl_pcf_product_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCL.PCF_PRODUCT WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PCF_PRODUCT
+    partition_field: DATETIME_TRUNC(REC_CREATE_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2000-01-01 # inclusive
+    end_date: 2024-07-03 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db610_dnscnst_cnst_acct_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.CNST_ACCT WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_ACCT
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-01-01 # inclusive
+    end_date: 2024-05-23 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_cnst_acct_cust_id_xref_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.cnst_acct_cust_id_xref WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_ACCT_CUST_ID_XREF
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-05-08 # inclusive
+    end_date: 2024-05-16 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_cnst_detail_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.cnst_detail WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_DETAIL
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-12-19 # inclusive
+    end_date: 2024-05-16 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_cnst_event_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.cnst_event WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_EVENT
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-04-21 # inclusive
+    end_date: 2024-05-16 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_cnst_signature_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.cnst_signature WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_SIGNATURE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2018-01-02 # inclusive
+    end_date: 2024-05-16 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_cnst_type_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.cnst_type WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_TYPE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-05-03 # inclusive
+    end_date: 2024-04-15 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_cnst_type_mktg_grp_xref_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.cnst_type_mktg_grp_xref WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_TYPE_MKTG_GRP_XREF
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-07-18 # inclusive
+    end_date: 2024-04-15 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_cust_cnst_state_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.cust_cnst_state WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CUST_CNST_STATE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-05-08 # inclusive
+    end_date: 2024-05-16 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_event_type_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.event_type WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: EVENT_TYPE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-04-21 # inclusive
+    end_date: 2024-04-04 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_ext_cust_id_type_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.ext_cust_id_type WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: EXT_CUST_ID_TYPE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2015-12-01 # inclusive
+    end_date: 2021-09-22 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_legal_entity_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.legal_entity WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: LEGAL_ENTITY
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-04-20 # inclusive
+    end_date: 2016-04-21 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_mktg_grp_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.mktg_grp WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: MKTG_GRP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-04-21 # inclusive
+    end_date: 2019-08-06 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_mktg_grp_type_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.mktg_grp_type WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: MKTG_GRP_TYPE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-04-20 # inclusive
+    end_date: 2016-04-21 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_source_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.source WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: SOURCE
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-04-21 # inclusive
+    end_date: 2017-05-04 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_source_org_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.source_org WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: SOURCE_ORG
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2016-04-21 # inclusive
+    end_date: 2018-11-08 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+
+db610_dnscnst_token_bin_source_org_table_idl:
+  fetch_spark_job:
+    dbname: db610_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.token_bin_source_org WHERE REC_CREATE_TMS BETWEEN TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: TOKEN_BIN_SOURCE_ORG
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2018-04-25 # inclusive
+    end_date: 2023-12-01 # exclusive
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+

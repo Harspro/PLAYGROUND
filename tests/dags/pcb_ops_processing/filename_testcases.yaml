@@ -1,0 +1,139 @@
+valid_file_names:
+  - filename_pattern: ^pcb_ops_pcmc_account_closure_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_account_closure_ABCDefgh_20251022090000.uatv
+      - pcb_ops_pcmc_account_closure_ABCDefgh_20251022090000.prod
+      - pcb_ops_pcmc_account_closure_ABCD1234_20251022090000.uatv
+      - pcb_ops_pcmc_account_closure_abcd1234_20251022090000.prod
+  - filename_pattern: ^pcb_ops_eda_account_closure_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_eda_account_closure_ABCDefgh_20251022090000.uatv
+      - pcb_ops_eda_account_closure_ABCDefgh_20251022090000.prod
+      - pcb_ops_eda_account_closure_ABCD1234_20251022090000.uatv
+      - pcb_ops_eda_account_closure_abcd1234_20251022090000.prod
+  - filename_pattern: ^pcb_ops_pcmc_memo_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_memo_ABCDefgh_20251022090000.uatv
+      - pcb_ops_pcmc_memo_ABCDefgh_20251022090000.prod
+      - pcb_ops_pcmc_memo_ABCD1234_20251022090000.uatv
+      - pcb_ops_pcmc_memo_abcd1234_20251022090000.prod
+  - filename_pattern: ^pcb_ops_pcmc_monsbm_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_monsbm_ABCDefgh_20251022090000.uatv
+      - pcb_ops_pcmc_monsbm_ABCDefgh_20251022090000.prod
+      - pcb_ops_pcmc_monsbm_ABCD1234_20251022090000.uatv
+      - pcb_ops_pcmc_monsbm_abcd1234_20251022090000.prod
+  - filename_pattern: ^pcb_ops_eda_monsbm_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_eda_monsbm_ABCDefgh_20251022090000.uatv
+      - pcb_ops_eda_monsbm_ABCDefgh_20251022090000.prod
+      - pcb_ops_eda_monsbm_ABCD1234_20251022090000.uatv
+      - pcb_ops_eda_monsbm_abcd1234_20251022090000.prod
+  - filename_pattern: ^pcb_ops_pcmc_payment_hierarchy_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_payment_hierarchy_update_ABCDefgh_20251022090000.uatv
+      - pcb_ops_pcmc_payment_hierarchy_update_ABCDefgh_20251022090000.prod
+      - pcb_ops_pcmc_payment_hierarchy_update_ABCD1234_20251022090000.uatv
+      - pcb_ops_pcmc_payment_hierarchy_update_abcd1234_20251022090000.prod
+  - filename_pattern: ^pcb_ops_pcmc_tw40_start_date_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_tw40_start_date_update_ABCDefgh_20251022090000.uatv
+      - pcb_ops_pcmc_tw40_start_date_update_ABCDefgh_20251022090000.prod
+      - pcb_ops_pcmc_tw40_start_date_update_ABCD1234_20251022090000.uatv
+      - pcb_ops_pcmc_tw40_start_date_update_abcd1234_20251022090000.prod
+  - filename_pattern: ^pcb_ops_pcmc_card_expiration_date_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_card_expiration_date_update_ABCDefgh_20251022090000.uatv
+      - pcb_ops_pcmc_card_expiration_date_update_ABCDefgh_20251022090000.prod
+      - pcb_ops_pcmc_card_expiration_date_update_ABCD1234_20251022090000.uatv
+      - pcb_ops_pcmc_card_expiration_date_update_abcd1234_20251022090000.prod
+
+invalid_file_names:
+  - filename_pattern: ^pcb_ops_pcmc_account_closure_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_account_closure_ABCD1234.uatv
+      - pcb_ops_pcmc_account_closure_ABCD1234.prod
+      - pcb_ops_pcmc_account_closure_ABC_20251022090000.uatv
+      - pcb_ops_pcmc_account_closure_efgh_20251022090000.prod
+      - pcb_ops_pcmc_account_closure_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_pcmc_account_closure_abcd1234_20251022090.prod.gz
+      - pcb_ops_pcmc_account_closure_abcd1234_20251022090.prod.pgp
+      - pcb_ops_pcmc_account_closure_abcd1234_20251022090.gz
+      - pcb_ops_pcmc_account_closure_abcd1234_20251022090.pgp
+  - filename_pattern: ^pcb_ops_eda_account_closure_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_eda_account_closure_ABCD1234.uatv
+      - pcb_ops_eda_account_closure_ABCD1234.prod
+      - pcb_ops_eda_account_closure_ABC_20251022090000.uatv
+      - pcb_ops_eda_account_closure_efgh_20251022090000.prod
+      - pcb_ops_eda_account_closure_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_eda_account_closure_abcd1234_20251022090.prod.gz
+      - pcb_ops_eda_account_closure_abcd1234_20251022090.prod.pgp
+      - pcb_ops_eda_account_closure_abcd1234_20251022090.gz
+      - pcb_ops_eda_account_closure_abcd1234_20251022090.pgp
+  - filename_pattern: ^pcb_ops_pcmc_memo_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_memo_ABCD1234.uatv
+      - pcb_ops_pcmc_memo_ABCD1234.prod
+      - pcb_ops_pcmc_memo_ABC_20251022090000.uatv
+      - pcb_ops_pcmc_memo_efgh_20251022090000.prod
+      - pcb_ops_pcmc_memo_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_pcmc_memo_abcd1234_20251022090.prod.gz
+      - pcb_ops_pcmc_memo_abcd1234_20251022090.prod.pgp
+      - pcb_ops_pcmc_memo_abcd1234_20251022090.gz
+      - pcb_ops_pcmc_memo_abcd1234_20251022090.pgp
+  - filename_pattern: ^pcb_ops_pcmc_monsbm_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_monsbm_ABCD1234.uatv
+      - pcb_ops_pcmc_monsbm_ABCD1234.prod
+      - pcb_ops_pcmc_monsbm_ABC_20251022090000.uatv
+      - pcb_ops_pcmc_monsbm_efgh_20251022090000.prod
+      - pcb_ops_pcmc_monsbm_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_pcmc_monsbm_abcd1234_20251022090.prod.gz
+      - pcb_ops_pcmc_monsbm_abcd1234_20251022090.prod.pgp
+      - pcb_ops_pcmc_monsbm_abcd1234_20251022090.gz
+      - pcb_ops_pcmc_monsbm_abcd1234_20251022090.pgp
+  - filename_pattern: ^pcb_ops_eda_monsbm_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_eda_monsbm_ABCD1234.uatv
+      - pcb_ops_eda_monsbm_ABCD1234.prod
+      - pcb_ops_eda_monsbm_ABC_20251022090000.uatv
+      - pcb_ops_eda_monsbm_efgh_20251022090000.prod
+      - pcb_ops_eda_monsbm_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_eda_monsbm_abcd1234_20251022090.prod.gz
+      - pcb_ops_eda_monsbm_abcd1234_20251022090.prod.pgp
+      - pcb_ops_eda_monsbm_abcd1234_20251022090.gz
+      - pcb_ops_eda_monsbm_abcd1234_20251022090.pgp
+  - filename_pattern: ^pcb_ops_pcmc_payment_hierarchy_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_payment_hierarchy_update_ABCD1234.uatv
+      - pcb_ops_pcmc_payment_hierarchy_update_ABCD1234.prod
+      - pcb_ops_pcmc_payment_hierarchy_update_ABC_20251022090000.uatv
+      - pcb_ops_pcmc_payment_hierarchy_update_efgh_20251022090000.prod
+      - pcb_ops_pcmc_payment_hierarchy_update_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_pcmc_payment_hierarchy_update_abcd1234_20251022090.prod.gz
+      - pcb_ops_pcmc_payment_hierarchy_update_abcd1234_20251022090.prod.pgp
+      - pcb_ops_pcmc_payment_hierarchy_update_abcd1234_20251022090.gz
+      - pcb_ops_pcmc_payment_hierarchy_update_abcd1234_20251022090.pgp
+  - filename_pattern: ^pcb_ops_pcmc_tw40_start_date_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_tw40_start_date_update_ABCD1234.uatv
+      - pcb_ops_pcmc_tw40_start_date_update_ABCD1234.prod
+      - pcb_ops_pcmc_tw40_start_date_update_ABC_20251022090000.uatv
+      - pcb_ops_pcmc_tw40_start_date_update_efgh_20251022090000.prod
+      - pcb_ops_pcmc_tw40_start_date_update_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_pcmc_tw40_start_date_update_abcd1234_20251022090.prod.gz
+      - pcb_ops_pcmc_tw40_start_date_update_abcd1234_20251022090.prod.pgp
+      - pcb_ops_pcmc_tw40_start_date_update_abcd1234_20251022090.gz
+      - pcb_ops_pcmc_tw40_start_date_update_abcd1234_20251022090.pgp
+  - filename_pattern: ^pcb_ops_pcmc_card_expiration_date_update_[A-Za-z0-9_]{8,27}_\d{14}(?!.*\.(gz|pgp)$).*$
+    filenames:
+      - pcb_ops_pcmc_card_expiration_date_update_ABCD1234.uatv
+      - pcb_ops_pcmc_card_expiration_date_update_ABCD1234.prod
+      - pcb_ops_pcmc_card_expiration_date_update_ABC_20251022090000.uatv
+      - pcb_ops_pcmc_card_expiration_date_update_efgh_20251022090000.prod
+      - pcb_ops_pcmc_card_expiration_date_update_ABCD1234567890123456789012345678_20251022090000.uatv
+      - pcb_ops_pcmc_card_expiration_date_update_abcd1234_20251022090.prod.gz
+      - pcb_ops_pcmc_card_expiration_date_update_abcd1234_20251022090.prod.pgp
+      - pcb_ops_pcmc_card_expiration_date_update_abcd1234_20251022090.gz
+      - pcb_ops_pcmc_card_expiration_date_update_abcd1234_20251022090.pgp

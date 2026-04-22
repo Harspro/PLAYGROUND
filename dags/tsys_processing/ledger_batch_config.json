@@ -1,0 +1,48 @@
+{
+  "processing_bucket_extract": "pcb-{env}-staging-extract",
+  "ods_transaction_fetching_job": {
+    "jar_file_uris": [
+      "gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar"
+    ],
+    "file_uris": [
+      "gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application.conf"
+    ],
+    "main_class": "com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector",
+    "args": {
+      "pcb.bigquery.loader.source.schema.qualified.tablename": "CARDINAL.TRANSACTION",
+      "pcb.bigquery.loader.source.primary.key.column": "TRANSACTION_UID"
+    },
+    "ods_folder_name": "ods",
+    "ledger_time_prod": "150000",
+    "ledger_time_default": "010000"
+  },
+  "bq_transaction_table": {
+    "dataset_id": "ODSDataset",
+    "source_folder": "TRANSACTION",
+    "table_name": "TRANSACTION_RECENT_CHANGES"
+  },
+  "bq_ledger_history_table": {
+    "dataset_id": "LedgerDataset",
+    "table_name": "LEDGER_HISTORY"
+  },
+  "bq_eve_datasets": {
+    "domain_account_management_dataset": "domain_account_management",
+    "domain_customer_management_dataset": "domain_customer_management"
+  },
+  "ledger_spark_batch_job": {
+    "jar_file_uris": [
+      "gs://pcb-{env}-staging-artifacts/jarfiles/ledger-spark-batch-2.0.0.jar"
+    ],
+    "file_uris": [
+      "gs://pcb-{env}-staging-artifacts/resources/ledger-spark-batch/application.yaml",
+      "gs://pcb-{env}-staging-artifacts/resources/ledger-spark-batch/kafka.jks"
+    ],
+    "main_class": "com.pcb.batch.spark.ledger.LedgerSparkBatchApplication",
+    "properties": {
+        "spark.driver.extraJavaOptions": "-Duser.timezone=America/Toronto",
+        "spark.executor.extraJavaOptions": "-Duser.timezone=America/Toronto"
+    }
+  },
+  "ffm_acctm_segments": ["AM01_REC", "AM00_REC", "AM04_PD", "AM0E_REC", "AM0A_REC", "AM02_REC"],
+  "force_initial_run": false
+}

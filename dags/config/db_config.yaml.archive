@@ -1,0 +1,8 @@
+db839:
+  fetch_spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-pr839.conf
+    main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+    application_config: application-pds-pr839.conf

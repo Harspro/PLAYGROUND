@@ -1,0 +1,130 @@
+from dataclasses import asdict
+from datetime import timedelta, datetime
+
+import pendulum
+from airflow import DAG, configuration as airflow_conf
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from airflow.providers.google.cloud.transfers.gcs_to_gcs import GCSToGCSOperator
+from pcf_operators.sftp_operator.sftp_put_operator import PCBSFTPPutOperator
+
+from data_transfer.util.constants import DATA_TRANSFER_AUDIT_TABLE_NAME, DataTransferExecutionType
+from data_transfer.util.utils import create_data_transfer_audit_table_if_not_exists, \
+    write_marker_file_to_business_bucket
+from util.auditing_utils.audit_util import AuditUtil
+from util.auditing_utils.model.audit_record import AuditRecord
+from util.constants import DOMAIN_TECHNICAL_DATASET_ID
+from util.gcs_utils import delete_blobs
+
+DAG_DEFAULT_ARGS = {
+    "owner": "team-centaurs",
+    'capability': 'Terminus Data Platform',
+    'severity': 'P3',
+    'sub_capability': 'Data Enablement',
+    'business_impact': 'N/A',
+    'customer_impact': 'N/A',
+    "email": [],
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 0,
+    "retry_delay": timedelta(seconds=10),
+    "retry_exponential_backoff": True
+}
+
+audit_util = AuditUtil('prepare_config', 'audit_record')
+
+
+def prepare_config(**context):
+    conf = context['dag_run'].conf
+    context['ti'].xcom_push(key='marker_file_bucket', value=conf.get('marker_file_bucket'))
+    context['ti'].xcom_push(key='marker_file_prefix', value=conf.get('marker_file_prefix'))
+    create_data_transfer_audit_table_if_not_exists()
+    destination_bucket = airflow_conf.conf.get('logging', 'remote_base_log_folder').split('/')[2]
+    source_path = conf.get('source_path')
+    destination_filename = source_path.rsplit('/', 1)[-1]
+    audit_record_values = f"""
+        '{conf.get('source_project_id')}',
+        '{conf.get('source_dag_id')}',
+        '{conf.get('source_dag_run_id')}',
+        '{conf.get('source_type')}',
+        'gs://{conf.get('source_bucket')}/{source_path}',
+        '{destination_filename}',
+        '{conf.get('source_project_id')}',
+        '{conf.get('remote_filepath')}',
+        '{context.get('dag').dag_id}',
+        '{context.get('run_id')}',
+        '{DataTransferExecutionType.SHARED_DRIVE_DATA_EXPORT.value}',
+        '{conf.get('trigger_type')}',
+        '{conf.get('source_project_id')}',
+        CURRENT_TIMESTAMP()
+    """
+    audit_record = AuditRecord(DOMAIN_TECHNICAL_DATASET_ID, DATA_TRANSFER_AUDIT_TABLE_NAME, audit_record_values)
+    audit_util.record_request_received(audit_record)
+    context['ti'].xcom_push(key='audit_record', value=asdict(audit_record))
+    context['ti'].xcom_push(key='source_bucket', value=conf.get('source_bucket'))
+    context['ti'].xcom_push(key='source_path', value=source_path)
+    context['ti'].xcom_push(key='destination_bucket', value=destination_bucket)
+    context['ti'].xcom_push(key='remote_filepath', value=conf.get('remote_filepath'))
+    context['ti'].xcom_push(key='create_intermediate_dirs', value=conf.get('create_intermediate_dirs'))
+    context['ti'].xcom_push(key='destination_filename', value=destination_filename)
+    context['ti'].xcom_push(key='gcs_local_filepath', value=[f"data/{destination_filename}"])
+    context['ti'].xcom_push(key='lookup_key', value=conf.get('lookup_key'))
+
+
+with DAG(dag_id='shared_drive_data_export_job',
+         schedule=None,
+         render_template_as_native_obj=True,
+         default_args=DAG_DEFAULT_ARGS,
+         start_date=datetime(2023, 1, 1, tzinfo=pendulum.timezone('America/Toronto')),
+         catchup=False,
+         max_active_runs=1,
+         is_paused_upon_creation=True
+         ) as dag:
+    start = EmptyOperator(task_id='start')
+    end = EmptyOperator(task_id='end', trigger_rule='none_failed')
+
+    prepare_config_task = PythonOperator(
+        task_id="prepare_config",
+        python_callable=prepare_config,
+        on_failure_callback=audit_util.record_request_failure
+    )
+
+    move_data_from_business_project = GCSToGCSOperator(
+        task_id="move_data_from_business_project",
+        source_bucket="{{ ti.xcom_pull(task_ids='prepare_config', key='source_bucket') }}",
+        source_object="{{ ti.xcom_pull(task_ids='prepare_config', key='source_path') }}",
+        destination_bucket="{{ ti.xcom_pull(task_ids='prepare_config', key='destination_bucket') }}",
+        destination_object="data/{{ ti.xcom_pull(task_ids='prepare_config', key='destination_filename') }}",
+        on_failure_callback=audit_util.record_request_failure
+    )
+
+    move_data_to_remote_server = PCBSFTPPutOperator(
+        task_id="move_data_to_remote_server",
+        local_filepath="/home/airflow/gcs/data/{{ ti.xcom_pull(task_ids='prepare_config', key='destination_filename') }}",
+        remote_filepath="{{ ti.xcom_pull(task_ids='prepare_config', key='remote_filepath') }}",
+        create_intermediate_dirs="{{ ti.xcom_pull(task_ids='prepare_config', key='create_intermediate_dirs') }}",
+        lookup_key="{{ ti.xcom_pull(task_ids='prepare_config', key='lookup_key') }}",
+        on_failure_callback=audit_util.record_request_failure,
+        on_success_callback=audit_util.record_request_success
+    )
+
+    write_marker_file_to_business_bucket_task = PythonOperator(
+        task_id="write_marker_file_to_business_bucket",
+        python_callable=write_marker_file_to_business_bucket,
+        op_kwargs={
+            'marker_file_bucket': "{{ ti.xcom_pull(task_ids='prepare_config', key='marker_file_bucket') }}",
+            'marker_file_prefix': "{{ ti.xcom_pull(task_ids='prepare_config', key='marker_file_prefix') }}",
+            'task_id': 'move_data_to_remote_server'
+        },
+        trigger_rule='none_skipped'
+    )
+
+    clean_up_moved_file_task = PythonOperator(
+        task_id="clean_up_moved_file",
+        python_callable=delete_blobs,
+        op_kwargs={'bucket_name': "{{ ti.xcom_pull(task_ids='prepare_config', key='destination_bucket') }}",
+                   'files_names': "{{ ti.xcom_pull(task_ids='prepare_config', key='gcs_local_filepath') }}"}
+    )
+
+    start >> prepare_config_task >> move_data_from_business_project >> move_data_to_remote_server >> \
+        write_marker_file_to_business_bucket_task >> clean_up_moved_file_task >> end

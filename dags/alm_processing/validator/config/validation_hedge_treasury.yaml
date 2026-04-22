@@ -1,0 +1,29 @@
+file_regex_pattern: "{file_prefix_str}_{current_date}\\d{{6}}_{extension}\\.{format}$"
+header_count: 1
+trailer_count: 1
+header_config:
+    asset_type:
+      description: asset type like hedge etc
+      validation: none
+      column: 0
+    header_label:
+      description: header label
+      validation: exact
+      expected: "Header"
+      column: 1
+footer_config:
+    asset_type:
+      description: asset type like hedge
+      validation: none
+    footer_label:
+      description: footer label
+      validation: exact
+      expected: "Footer"
+      column: 1
+    record_description:
+      description: Record Description
+      validation: none
+    record_count:
+      description: actual file Record Count
+      validation: custom
+      column: 3

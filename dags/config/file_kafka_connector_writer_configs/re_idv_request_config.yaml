@@ -1,0 +1,31 @@
+re_idv_request_kafka_writer:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P2"
+    sub_capability: "Applications"
+    business_impact: "RE IDV for ABB customer will be impacted"
+    customer_impact: "Delay in on-boarding ABB as a regular customer"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/re-idv-request/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/re-idv-request/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/re-idv-request/re_idv_request_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/re-idv-request/re_idv_request_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/re-idv-request/re_idv_request_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: re_idv_request_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: re_idv_request_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: uuid
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: re_idv_request_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_re_idv_request
+    read_pause_deploy_config: False
+    tags: ["team-growth-and-sales"]
+    job_size: extra_small
+    dataproc_cluster_name: re-idv-request-kafka-writer

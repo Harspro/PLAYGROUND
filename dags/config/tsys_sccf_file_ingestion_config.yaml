@@ -1,0 +1,55 @@
+tsys_pcb_sccf_file_loading:
+  job_size: small
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_sccf
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CREDSCORE_TSYSCONFM
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CREDSCORE_TSYSCONFM
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: tsysconfm_group
+        segments: SC01
+    segment_args:
+      SC01:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_sccf/BODY.CPY
+        pcb.tsys.processor.segment.name: SC01
+        pcb.tsys.processor.layout.name: CREDSCORE_TSYSCONFM_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_sccf/TRAILER.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: MAST_TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_scoring
+    data_load_type: APPEND_ONLY
+    tables:
+      SC01:
+        table_name: CREDSCORE_TSYSCONFM
+        record_count_column: SC01_TRAILER_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: CREDSCORE_TSYSCONFM_TRAILER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "scoring"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

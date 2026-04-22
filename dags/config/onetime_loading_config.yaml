@@ -1,0 +1,330 @@
+# released dags have been archived.
+db303_mac_parameters_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db303.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db303.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: MAC.PARAMETERS
+    pcb.bigquery.loader.source.primary.key.column: REC_CREATE_TMS
+    pcb.bigquery.loader.source.db.read.parallelism: 1
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: mac
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "CME"
+    sub_capability: "NA"
+    business_impact: "NA"
+    customer_impact: "NA"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: MAC_PARAMETERS
+    add_columns:
+      - DATETIME(REC_CREATE_TMS) AS CREATE_DT
+      - DATETIME(REC_CHNG_TMS) AS UPDATE_DT
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+
+db053_app_optional_prod_onetime_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db053.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db053.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.APP_OPTIONAL_PROD
+    pcb.bigquery.loader.source.primary.key.column: PROD_ID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: pcmc
+  default_args:
+    owner: "team-vortex"
+    capability: "Consent"
+    sub_capability: "Consent"
+    business_impact: "Failure to retrieve historical consent"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APP_OPTIONAL_PROD
+
+db053_perm_ident_onetime_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-db053-fs.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-db053-fs.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: FS.PERM_IDENT
+    pcb.bigquery.loader.source.primary.key.column: SCORE
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: fs
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Failure to retrieve historical data"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PERM_IDENT
+
+one_time_patch_cockroachdb_idv_submission_onetime_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.idv_submission
+    pcb.bigquery.loader.source.primary.key.column: idv_submission_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_idv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_validation_verification
+    table_name: IDV_SUBMISSION_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+one_time_patch_cockroachdb_idv_request_onetime_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.idv_request
+    pcb.bigquery.loader.source.primary.key.column: idv_request_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_idv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_validation_verification
+    table_name: IDV_REQUEST_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+db053_token_notify_head_trail_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db053.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db053.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: TS2.TOKEN_NOTIFY_HEAD_TRAIL
+    pcb.bigquery.loader.source.primary.key.column: PROCESS_NUM
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: tokennotify
+  default_args:
+    owner: "team-money-movement"
+    capability: "AccountManagement"
+    sub_capability: "Payments"
+    business_impact: "NA"
+    customer_impact: "NA"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: TOKEN_NOTIFY_HEAD_TRAIL
+
+de_acq_adhoc_one_time_data_patch_cockroachdb_idv_event_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.idv_event
+    pcb.bigquery.loader.source.primary.key.column: idv_request_evt_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_idv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_validation_verification
+    table_name: IDV_EVENT_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+de_acq_adhoc_one_time_data_patch_cockroachdb_idv_document_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.idv_document
+    pcb.bigquery.loader.source.primary.key.column: idv_document_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_idv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_validation_verification
+    table_name: IDV_DOCUMENT_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+de_acq_adhoc_one_time_data_patch_cockroachdb_onfido_check_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.onfido_check
+    pcb.bigquery.loader.source.primary.key.column: onfido_check_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_idv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_validation_verification
+    table_name: ONFIDO_CHECK_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+de_acq_adhoc_one_time_data_patch_cockroachdb_onfido_applicant_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.onfido_applicant
+    pcb.bigquery.loader.source.primary.key.column: onfido_applicant_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_idv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_validation_verification
+    table_name: ONFIDO_APPLICANT_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+de_acq_adhoc_one_time_data_patch_cockroachdb_applicant_personal_identifier_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-idv.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-idv.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: public.applicant_personal_identifier
+    pcb.bigquery.loader.source.primary.key.column: applicant_identifier_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_idv
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_validation_verification
+    table_name: APPLICANT_PERSONAL_IDENTIFIER_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+de_acq_adhoc_one_time_data_patch_cockroachdb_application_product_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-gs-cockroachdb-applmgmt.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-gs-cockroachdb-applmgmt.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: applmgmt.public.application_product
+    pcb.bigquery.loader.source.primary.key.column: application_submission_uid
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: cockroachdb_applmgmt
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_PRODUCT_BACKFILL
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB applmgmt data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales

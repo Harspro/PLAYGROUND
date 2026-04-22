@@ -1,0 +1,40 @@
+product_upgrade_offers_kafka:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P4"
+    sub_capability: "account-management"
+    business_impact: "This DAG will send eligible customers to a Kafka topic. If DAG fails records will not be sent."
+    customer_impact: "Customer will miss card upgrade offer."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/product-upgrade/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/product-upgrade/product_upgrade_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/product-upgrade/product_upgrade_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/product-upgrade/product_upgrade_file_schema.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/digital-adoption/product-upgrade/schema_mapping.yaml
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.avro.key.schema.path: product_upgrade_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: product_upgrade_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: id
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+    pcb.file.kafka.connector.schema.file.path: product_upgrade_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_product_upgrade_offers
+    read_pause_deploy_config: True
+    tags: ["Digital Adoption"]
+    job_size: extra_small
+    dataproc_cluster_name: product-upgrade-offers
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_account_management
+    table_id: PRODUCT_UPGRADE_OFFER
+    query_file: digital_adoption/sql/product_upgrade_offers_kafka.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: product_upgrade_offers
+    file_name: product_upgrade_offers

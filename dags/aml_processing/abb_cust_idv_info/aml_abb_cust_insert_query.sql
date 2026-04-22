@@ -1,0 +1,10 @@
+INSERT INTO `pcb-{DEPLOY_ENV}-curated.domain_aml.AML_ABB_CUST` (CUSTOMER_NUMBER, ACCOUNT_NUMBER, ABB_IND, REC_CREATE_TMS)
+        SELECT DISTINCT
+            CUSTOMER_NUMBER,
+            CAST(ACCOUNT_NUMBER AS STRING),
+            'Y',
+            CURRENT_TIMESTAMP() AS REC_CREATE_TMS
+        FROM
+            `pcb-{DEPLOY_ENV}-processing.domain_aml.STG_ABB_CUST`
+        WHERE
+            CUSTOMER_NUMBER NOT IN (SELECT CUSTOMER_NUMBER FROM `pcb-{DEPLOY_ENV}-curated.domain_aml.AML_ABB_CUST`);

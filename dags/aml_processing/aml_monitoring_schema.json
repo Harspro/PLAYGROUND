@@ -1,0 +1,76 @@
+[
+    {
+        "name": "DAG_ID",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "fields": null
+    },
+    {
+        "name": "DAG_RUN_ID",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "fields": null
+    },
+    {
+        "name": "TASK_ID",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "fields": null
+    },
+    {
+        "name": "EXECUTION_TIME",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE",
+        "fields": null
+    },
+    {
+        "name": "TASK_STATE",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "fields": null
+    },
+    {
+        "name": "TASK_DURATION",
+        "type": "FLOAT",
+        "mode": "NULLABLE",
+        "fields": null
+    },
+    {
+        "name": "metrics_object",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields":
+        [
+            {
+                "name":"count_records",
+                "type":"INTEGER",
+                "mode":"NULLABLE"
+            },
+            {
+                "name":"bytes_billed",
+                "type":"INTEGER",
+                "mode":"NULLABLE"
+            },
+            {
+                "name":"source_file_list",
+                "type":"STRING",
+                "mode":"NULLABLE"
+            },
+            {
+                "name":"source",
+                "type":"STRING",
+                "mode":"NULLABLE"
+            },
+            {
+                "name":"destination",
+                "type":"STRING",
+                "mode":"NULLABLE"
+            },
+            {
+                "name":"outbound_file_size",
+                "type":"INTEGER",
+                "mode":"NULLABLE"
+            }
+        ]
+    }
+]

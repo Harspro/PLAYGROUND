@@ -1,0 +1,21 @@
+pcb_ops_pcmc_tw40_start_date_update_file_generation:
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: pcb-{env}-staging-extract
+  filename_prefix: pcb_tsys_pcmc_nmsbm
+  character_set: 'cp037'
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: PCMC_TW40_START_DATE_UPDATE
+    TRLR:
+      table_name: PCMC_TW40_START_DATE_UPDATE_TRAILER
+  email:
+    subject: "TSYS Batch Submission Request (TW40 Start Date Update)"
+    approver: ""
+    description: "Standard Batch 245 - TW40 Start Date Update"
+    batch_type: "Standard Batch 245 - TW40 Start Date Update"
+    purpose: "For PCMC Instant Issuance - TW40 Start Date Update for re-issued cards"
+    recipients:
+      dev: "kaitav.mehta@pcbank.ca"
+      uat: "kaitav.mehta@pcbank.ca, Tim.Martin1@pcbank.ca, Asha.Latha@pcbank.ca, radhika.solanki@pcbank.ca, Madhu.Chatterjee@pcbank.ca"
+      prod: "Pcf-Techops@pcbank.ca"

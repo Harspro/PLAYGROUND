@@ -1,0 +1,94 @@
+tsys_pcb_mc_prdenh_uptd_full_file_loading:
+  job_size: extra_small
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_prdenh_upd
+  folder_prefix: tsys_pcb_mc_prdenh_uptd
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PRODENH_ENHANCEMENT
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PRODENH_ENHANCEMENT
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: prdenh_group
+        segments: PRODENH_CUST_INFO_CHG,PRODENH_ACCT_STATUS_CHG,PRODENH_ACCT_TRANSFER,PRODENH_ENROLL_CONF,PRODENH_CANCEL_CONF
+    segment_args:
+      PRODENH_CUST_INFO_CHG:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_prdenh_uptd/PRODENH_CUST_INFO_CHG.CPY
+        pcb.tsys.processor.segment.name: "05"
+        pcb.tsys.processor.layout.name: PRODENH_CUST_INFO_CHG
+      PRODENH_ACCT_STATUS_CHG:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_prdenh_uptd/PRODENH_ACCT_STATUS_CHG.CPY
+        pcb.tsys.processor.segment.name: "10"
+        pcb.tsys.processor.layout.name: PRODENH_ACCT_STATUS_CHG
+      PRODENH_ACCT_TRANSFER:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_prdenh_uptd/PRODENH_ACCT_TRANSFER.CPY
+        pcb.tsys.processor.segment.name: "15"
+        pcb.tsys.processor.layout.name: PRODENH_ACCT_TRANSFER
+      PRODENH_ENROLL_CONF:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_prdenh_uptd/PRODENH_ENROLL_CONF.CPY
+        pcb.tsys.processor.segment.name: "20"
+        pcb.tsys.processor.layout.name: PRODENH_ENROLL_CONF
+      PRODENH_CANCEL_CONF:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_prdenh_uptd/PRODENH_CANCEL_CONF.CPY
+        pcb.tsys.processor.segment.name: "25"
+        pcb.tsys.processor.layout.name: PRODENH_CANCEL_CONF
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_prdenh_uptd/TRLR.CPY
+        pcb.tsys.processor.segment.name: "99"
+        pcb.tsys.processor.layout.name: TRLR
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      PRODENH_CUST_INFO_CHG:
+        table_name: PRODENH_CUST_INFO_CHG
+        record_count_column: TOTAL_ACCOUNT_INFO_CHANGE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      PRODENH_ACCT_STATUS_CHG:
+        table_name: PRODENH_ACCT_STATUS_CHG
+        record_count_column: TOTAL_ACCOUNT_STATUS_CHANGES
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      PRODENH_ACCT_TRANSFER:
+        table_name: PRODENH_ACCT_TRANSFER
+        record_count_column: TOTAL_ACCOUNT_TRANSFERS
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      PRODENH_ENROLL_CONF:
+        table_name: PRODENH_ENROLL_CONF
+        record_count_column: TOTAL_ENROLLMENT_CONFIRMATIONS
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      PRODENH_CANCEL_CONF:
+        table_name: PRODENH_CANCEL_CONF
+        record_count_column: TOTAL_CANCEL_CONFIRMATIONS
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: PRODENH_ENHANCEMENT_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

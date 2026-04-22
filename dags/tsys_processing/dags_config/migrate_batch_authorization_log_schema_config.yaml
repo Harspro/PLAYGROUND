@@ -1,0 +1,4 @@
+migrate_batch_authorization_log_schema:
+  transformation_config: transformation_rules/migrate_batch_authorization_log_schema_transformation.yaml
+  dag:
+    schedule_interval:

@@ -1,0 +1,122 @@
+[
+  {
+    "description": "Wallet ID",
+    "name": "wallet_id",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "description": "PC Optimum Score",
+    "name": "PCO_Score",
+    "type": "INTEGER",
+    "mode": "REQUIRED"
+  },
+  {
+    "description": "PCO Score Date",
+    "name": "PCO_Score_Date",
+    "type": "DATE",
+    "mode": "REQUIRED"
+  },
+  {
+    "description": "Scorecard Segment",
+    "name": "Scorecard_Segment",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "description": "Score version",
+    "name": "Score_version",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "description": "PCO Feature 1",
+    "name": "PCO_Feature_1",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 2",
+    "name": "PCO_Feature_2",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 3",
+    "name": "PCO_Feature_3",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 4",
+    "name": "PCO_Feature_4",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 5",
+    "name": "PCO_Feature_5",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 6",
+    "name": "PCO_Feature_6",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 7",
+    "name": "PCO_Feature_7",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 8",
+    "name": "PCO_Feature_8",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 9",
+    "name": "PCO_Feature_9",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 10",
+    "name": "PCO_Feature_10",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 11",
+    "name": "PCO_Feature_11",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 12",
+    "name": "PCO_Feature_12",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 13",
+    "name": "PCO_Feature_13",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 14",
+    "name": "PCO_Feature_14",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "description": "PCO Feature 15",
+    "name": "PCO_Feature_15",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

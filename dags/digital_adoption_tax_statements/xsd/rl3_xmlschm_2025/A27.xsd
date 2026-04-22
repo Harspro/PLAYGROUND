@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="R27.xsd" />
+	<!-- @@@@ Definition du A27 @@@@           -->
+	<xsd:complexType
+    name="A27Struct">
+		<xsd:complexContent>
+			<xsd:extension
+        base="R27Struct">
+				<xsd:sequence>
+					<xsd:element
+            name="NoReleveDerniereTrans"
+            type="NoReleveType">
+						
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

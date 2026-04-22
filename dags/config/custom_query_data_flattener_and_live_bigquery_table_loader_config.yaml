@@ -1,0 +1,39 @@
+db610_application_cnst_flattening_loading_job:
+  fetch_spark_job:
+    dbname: db610_ogres
+  bulk_load_data_aggregation_config:
+    script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_FETCH_SCRIPT.SQL"
+  single_record_load_data_aggregation_config:
+    script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_SINGLE_RECORD_FETCH_SCRIPT.SQL"
+  data_merge_config:
+    idempotent: Y
+    merge_script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_LOAD_SCRIPT.SQL"
+    cleanup_script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_CLEANUP_SCRIPT.SQL"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_EVENTS_ANALYTICS
+  default_args:
+    owner: "team-Ogres"
+    capability: "Data Movement consent"
+  genereate_report: N
+
+db563_application_cnst_flattening_loading_job:
+  fetch_spark_job:
+    dbname: db563_ogres
+  bulk_load_data_aggregation_config:
+    script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_FETCH_SCRIPT_DB563.SQL"
+  single_record_load_data_aggregation_config:
+    script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_SINGLE_RECORD_FETCH_SCRIPT_DB563.SQL"
+  data_merge_config:
+    idempotent: Y
+    merge_script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_LOAD_SCRIPT_DB563.SQL"
+    cleanup_script_location: "custom_query_data_flattener_and_live_table_loader_scripts/APPLICATION_CNST_ANALYTICS_HISTORICAL_DATA_CLEANUP_SCRIPT_DB563.SQL"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_consent
+    table_name: CNST_EVENTS_ANALYTICS
+  default_args:
+    owner: "team-vortex"
+    capability: "Data Movement consent"
+  genereate_report: N

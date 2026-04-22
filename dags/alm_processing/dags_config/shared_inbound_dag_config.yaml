@@ -1,0 +1,564 @@
+alm_pcb_bond_monthly_load:
+  file:
+    prefix: "off-bal-sheet-bond-forward"
+    frequency: m
+    days_delta: 0
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_bond
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_bonds
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_bond
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_BOND"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_bond_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_bond_submit"
+    schema_external:
+      - {"name": "BOND_FORWARD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "HEADER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "SOURCE_VENDOR_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "EMAIL_ID_OF_THE_SENDER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DATE_EMAIL_RECEIVED", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "NAME_OF_THE_SUBMITTER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "THE_ORIGINAL_FIE_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FROM_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TO_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "REVISION_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRADE_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "COUNTERPARTY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "BOND_CUSIP", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRADE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "SETTLEMENT_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FORWARD_TERMINATION_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FORWARD_SETTLEMENT_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CONTRACT_FORWARD_PRICE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FACE_AMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURPOSE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MTM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CURRENCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PRODUCT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "UNWIND_DATE", "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: BOND_FORWARD
+        TRADE_ID: TRADE_ID
+        COUNTERPARTY: COUNTERPARTY
+        BOND_CUSIP: BOND_CUSIP
+        TRADE_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', TRADE_DATE), SAFE.PARSE_DATE('%m/%d/%Y', TRADE_DATE))
+        SETTLEMENT_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', SETTLEMENT_DATE), SAFE.PARSE_DATE('%m/%d/%Y', SETTLEMENT_DATE))
+        FORWARD_TERMINATION_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', FORWARD_TERMINATION_DATE), SAFE.PARSE_DATE('%m/%d/%Y', FORWARD_TERMINATION_DATE))
+        FORWARD_SETTLEMENT_DATE:  COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', FORWARD_SETTLEMENT_DATE), SAFE.PARSE_DATE('%m/%d/%Y', FORWARD_SETTLEMENT_DATE))
+        CONTRACT_FORWARD_PRICE: CONTRACT_FORWARD_PRICE
+        FACE_AMOUNT: FACE_AMOUNT
+        PURPOSE: PURPOSE
+        MTM: MTM
+        CURRENCY: CURRENCY
+        PRODUCT: PRODUCT
+        UNWIND_DATE: UNWIND_DATE
+
+alm_pcb_swap_monthly_load:
+  file:
+    prefix: "off-bal-sheet-swap"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_swap
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_swaps
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_swap
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_SWAP"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_swap_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_swap_submit"
+    schema_external:
+      - {"name": "SWAP", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "HEADER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "SOURCE_VENDOR_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "EMAIL_ID_OF_THE_SENDER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DATE_EMAIL_RECEIVED", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "NAME_OF_THE_SUBMITTER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "THE_ORIGINAL_RECEIVED_FIE_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FROM_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TO_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "REVISION_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRADE_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "COUNTERPARTY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "NOTIONAL", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRADE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "EFFECTIVE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MATURITY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FIXED_RATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FIXED_PAYMENT_FREQUENCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FLOAT_BENCHMARK", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FLOAT_SPREAD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FLOAT_PAYMENT_FREQUENCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MTM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURPOSE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CURRENCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PRODUCT", "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: SWAP
+        TRADE_ID: TRADE_ID
+        COUNTERPARTY: COUNTERPARTY
+        NOTIONAL: NOTIONAL
+        TRADE_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', TRADE_DATE), SAFE.PARSE_DATE('%m/%d/%Y', TRADE_DATE))
+        EFFECTIVE_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', EFFECTIVE_DATE), SAFE.PARSE_DATE('%m/%d/%Y', EFFECTIVE_DATE))
+        MATURITY_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', MATURITY_DATE), SAFE.PARSE_DATE('%m/%d/%Y', MATURITY_DATE))
+        FIXED_RATE:  FIXED_RATE
+        FIXED_PAYMENT_FREQUENCY: FIXED_PAYMENT_FREQUENCY
+        FLOAT_BENCHMARK: FLOAT_BENCHMARK
+        FLOAT_SPREAD: FLOAT_SPREAD
+        FLOAT_PAYMENT_FREQUENCY: FLOAT_PAYMENT_FREQUENCY
+        MTM: MTM
+        PURPOSE: PURPOSE
+        CURRENCY: CURRENCY
+        PRODUCT: PRODUCT
+     
+alm_pcb_abcp_monthly_load:
+  file:
+    prefix: "liability-abcp"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_abcp
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_abcp
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_abcp
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_ABCP"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_abcp_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_abcp_submit"
+    schema_external:
+      - {"name": "ABCP", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "HEADER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "SOURCE_VENDOR_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "EMAIL_ID_OF_THE_SENDER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DATE_EMAIL_RECEIVED", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "NAME_OF_THE_SUBMITTER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "THE_ORIGINAL_RECEIVED_FIE_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FROM_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TO_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "REVISION_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FACILITY_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FACE_AMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "ISSUE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MATURITY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "YIELD_RATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "STANDBY_FEE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LC_FEE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LC_AMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "OVERALL_LIMIT_AMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "UNUSED_FEE_RATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CURRENCY", "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: ABCP
+        ID: ID
+        FACILITY_NAME: FACILITY_NAME
+        FACE_AMOUNT: FACE_AMOUNT
+        ISSUE_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', ISSUE_DATE), SAFE.PARSE_DATE('%m/%d/%Y', ISSUE_DATE))
+        MATURITY_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', MATURITY_DATE), SAFE.PARSE_DATE('%m/%d/%Y', MATURITY_DATE))
+        YIELD_RATE:  YIELD_RATE
+        STANDBY_FEE: STANDBY_FEE
+        LC_FEE: LC_FEE
+        LC_AMOUNT: LC_AMOUNT
+        OVERALL_LIMIT_AMOUNT: OVERALL_LIMIT_AMOUNT
+        UNUSED_FEE_RATE: UNUSED_FEE_RATE
+        CURRENCY: CURRENCY
+
+alm_pcb_cash_monthly_load:
+  file:
+    prefix: "asset-cash-m"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_cash
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_cash
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_cash
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_CASH"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_cash_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_cash_submit"
+    schema_external:
+      - {"name":"CASH",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"HEADER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"SOURCE_VENDOR_CODE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"EMAIL_ID_OF_THE_SENDER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DATE_EMAIL_RECEIVED",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"NAME_OF_THE_SUBMITTER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"THE_ORIGINAL_RECEIVED_FIE_NAME",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"FROM_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"TO_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"REVISION_NUMBER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"REPORT_NAME",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"REPORT_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"BANK",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"BANK_ACCOUNT_TYPE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"LEGAL_ENTITY",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"BANK_ACCOUNT_NUMBER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"BANK_ACCOUNT_NAME",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"OPENING_BALANCE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DEBITS",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CREDITS",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"NET_CHANGE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CLOSING_BALANCE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"RATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"REPORT_EXTRACTION_DETAILS",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CURRENCY_HELD_IN",  "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+          ROW_TYPE: CASH
+          REPORT_NAME: REPORT_NAME
+          REPORT_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', REPORT_DATE), SAFE.PARSE_DATE('%m/%d/%Y', REPORT_DATE))
+          BANK: BANK
+          BANK_ACCOUNT_TYPE: BANK_ACCOUNT_TYPE
+          LEGAL_ENTITY: LEGAL_ENTITY
+          BANK_ACCOUNT_NUMBER: BANK_ACCOUNT_NUMBER
+          BANK_ACCOUNT_NAME: BANK_ACCOUNT_NAME
+          OPENING_BALANCE: OPENING_BALANCE
+          DEBITS: DEBITS
+          CREDITS: CREDITS
+          NET_CHANGE: NET_CHANGE
+          CLOSING_BALANCE: CLOSING_BALANCE
+          RATE: RATE
+          REPORT_EXTRACTION_DETAILS: REPORT_EXTRACTION_DETAILS
+          CURRENCY_HELD_IN: CURRENCY_HELD_IN
+
+alm_pcb_investment_monthly_load:
+  file:
+    prefix: "asset-investment-m"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_investment
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_investment
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_investment
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_INVESTMENT"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_investment_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_investment_submit"
+    schema_external:
+      - {"name": "INVESTMENT", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "HEADER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "SOURCE_VENDOR_CODE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "EMAIL_ID_OF_THE_SENDER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "DATE_EMAIL_RECEIVED", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "NAME_OF_THE_SUBMITTER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "THE_ORIGINAL_RECEIVED_FIE_NAME", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "FROM_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "TO_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "REVISION_NUMBER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "ID", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "CUSIP", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "INVESTMENT_TYPE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "FACE_AMOUNT", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "COUPON", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "RATE_TYPE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "ISSUE_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "MATURITY_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "FIRST_COUPON_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "PAYMENT_FREQUENCY", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "PURCHASE_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "MARKET_VALUE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "BOOK_YIELD_TO_MATURITY", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "ISSUER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "INVESTMENT_NAME", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "BASE_COST", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "AS_OF_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name": "LOCAL_CURRENCY", "type": "STRING",  "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: INVESTMENT
+        ID: ID
+        CUSIP: CUSIP
+        INVESTMENT_TYPE: INVESTMENT_TYPE
+        FACE_AMOUNT: FACE_AMOUNT
+        COUPON: COUPON
+        RATE_TYPE: RATE_TYPE
+        ISSUE_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', ISSUE_DATE), SAFE.PARSE_DATE('%m/%d/%Y', ISSUE_DATE))
+        MATURITY_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', MATURITY_DATE), SAFE.PARSE_DATE('%m/%d/%Y', MATURITY_DATE))
+        FIRST_COUPON_DATE: FIRST_COUPON_DATE
+        PAYMENT_FREQUENCY: PAYMENT_FREQUENCY
+        PURCHASE_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', PURCHASE_DATE), SAFE.PARSE_DATE('%m/%d/%Y', PURCHASE_DATE))
+        MARKET_VALUE: MARKET_VALUE
+        BOOK_YIELD_TO_MATURITY: BOOK_YIELD_TO_MATURITY
+        ISSUER: ISSUER
+        INVESTMENT_NAME: INVESTMENT_NAME
+        BASE_COST: BASE_COST
+        AS_OF_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', AS_OF_DATE), SAFE.PARSE_DATE('%m/%d/%Y', AS_OF_DATE))
+        LOCAL_CURRENCY: LOCAL_CURRENCY
+
+alm_pcb_eagle_monthly_load:
+  file:
+    prefix: "liability-term-note"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_eagle
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_eagle
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_eagle
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_EAGLE"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_eagle_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_eagle_submit"
+    schema_external:
+      - {"name":"EAGLE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"HEADER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"SOURCE_VENDOR_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"EMAIL_ID_OF_THE_SENDER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DATE_EMAIL_RECEIVED", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"NAME_OF_THE_SUBMITTER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"THE_ORIGINAL_RECEIVED_FIE_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DATA_FROM_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DATA_TO_DATE_", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"REVISION_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"ISSUANCE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"SERIES", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"FACEAMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"RATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"ISSUEDATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"FIRST_COUPON", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"MATURITYDATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"FREQUENCY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"BOOK_YIELD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"BOOK_VALUE", "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: EAGLE
+        ISSUANCE: ISSUANCE
+        ID: ID
+        NAME: NAME
+        SERIES: SERIES
+        FACEAMOUNT: FACEAMOUNT
+        RATE: RATE
+        ISSUEDATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', ISSUEDATE), SAFE.PARSE_DATE('%m/%d/%Y', ISSUEDATE))
+        FIRST_COUPON: FIRST_COUPON
+        MATURITYDATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', MATURITYDATE), SAFE.PARSE_DATE('%m/%d/%Y', MATURITYDATE))
+        FREQUENCY: FREQUENCY
+        BOOK_YIELD: BOOK_YIELD
+        BOOK_VALUE: BOOK_VALUE
+
+alm_pcb_eaglefees_monthly_load:
+  file:
+    prefix: "liability-term-note-fees"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_eaglefees
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_eaglefees
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_eaglefees
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_EAGLEFEES"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_eaglefees_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_eaglefees_submit"
+    schema_external:
+      - {"name":"EAGLE_FEES", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"HEADER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"SOURCE_VENDOR_CODE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"EMAIL_ID_OF_THE_SENDER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"DATE_EMAIL_RECEIVED", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"NAME_OF_THE_SUBMITTER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"THE_ORIGINAL_RECEIVED_FIE_NAME", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"DATA_FROM_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"DATA_TO_DATE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"REVISION_NUMBER", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"ISSUANCE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"NOTIONAL", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"ISSUEDT", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"EXPIRYDT", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"ACUMSTARTDT", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"COUPON", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"ISSUEFEES", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"HEDGEGAINLOSS", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"HEDGEIMPACTRT", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"ISSUEFEEIMPACTRT", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"MONTHLYHANDLEFEE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"FILING_FEE", "type": "STRING",  "mode": "NULLABLE"}
+      - {"name":"ANNFILINGFEEAMORT", "type": "STRING",  "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: EAGLE_FEES
+        ISSUANCE: ISSUANCE
+        NOTIONAL: NOTIONAL
+        ISSUEDT: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', ISSUEDT), SAFE.PARSE_DATE('%m/%d/%Y', ISSUEDT))
+        EXPIRYDT: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', EXPIRYDT), SAFE.PARSE_DATE('%m/%d/%Y', EXPIRYDT))
+        ACUMSTARTDT: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', ACUMSTARTDT), SAFE.PARSE_DATE('%m/%d/%Y', ACUMSTARTDT))
+        COUPON: COUPON
+        ISSUEFEES: ISSUEFEES
+        HEDGEGAINLOSS: HEDGEGAINLOSS
+        HEDGEIMPACTRT: HEDGEIMPACTRT
+        ISSUEFEEIMPACTRT: ISSUEFEEIMPACTRT
+        MONTHLYHANDLEFEE: MONTHLYHANDLEFEE
+        FILING_FEE: FILING_FEE
+        ANNFILINGFEEAMORT: ANNFILINGFEEAMORT
+
+alm_pcb_hedge_monthly_load:
+  file:
+    prefix: "off-bal-sheet-fx-hedges"
+    frequency: m
+    format: parquet
+    extension: "{file_env}"
+  vendor:
+    - treasury
+  lowercase_vendor_name: vendor_name
+  uppercase_vendor_name: VENDOR_NAME
+  staging_bucket: pcb-{env}-staging-extract
+  staging_folder: alm/{vendor_name}_pcb/{vendor_name}_hedges
+  outbound_bucket: tbsm-outbound-pcb{env_suffix}
+  outbound_folder: tbsm_outbound_alm
+  inbound_bucket: treasury-manual-inbound-pcb{env_suffix}
+  inbound_folder: treasury_inbound_hedges
+  bq_to_gcs_folder: alm/{vendor_name}_pcb/{vendor_name}_hedges
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_account_management
+    destination_project_id: pcb-{env}-curated
+    destination_dataset_id: cots_alm_tbsm
+    table_name: "{VENDOR_NAME}_HEDGES"
+  inbound_file:
+    format: csv
+    delimiter: ","
+    validation_file: validation_hedge_{vendor_name}.yaml
+    prefix: "{vendor_name}_pcb_alm_hedge_submit"
+    schema_external:
+      - {"name":"HEDGE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"HEADER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"SOURCE_VENDOR_CODE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"EMAIL_ID_OF_THE_SENDER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DATE_EMAIL_RECEIVED",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"NAME_OF_THE_SUBMITTER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"THE_ORIGINAL_RECEIVED_FIE_NAME",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DATA_FROM_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"DATA_TO_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"REVISION_NUMBER",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"TRADEID",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"COUNTERPARTY",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CURRENCY1",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CURRENCY1_AMOUNT",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CURRENCY2",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CURRENCY2_AMOUNT",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"TRADE_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"SETTLEMENT_DATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"FORWARD_RATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"CONTRACT_RATE",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name":"SETTLEMENT_RATE",  "type": "STRING", "mode": "NULLABLE"}
+    data_mapping:
+      column_map:
+        ROW_TYPE: HEDGE
+        TRADEID: TRADEID
+        COUNTERPARTY: COUNTERPARTY
+        CURRENCY1: CURRENCY1
+        CURRENCY1_AMOUNT: CURRENCY1_AMOUNT
+        CURRENCY2: CURRENCY2
+        CURRENCY2_AMOUNT: CURRENCY2_AMOUNT
+        TRADE_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', TRADE_DATE), SAFE.PARSE_DATE('%m/%d/%Y', TRADE_DATE))
+        SETTLEMENT_DATE: COALESCE(SAFE.PARSE_DATE('%Y-%m-%d', SETTLEMENT_DATE), SAFE.PARSE_DATE('%m/%d/%Y', SETTLEMENT_DATE))
+        FORWARD_RATE: FORWARD_RATE
+        CONTRACT_RATE: CONTRACT_RATE
+        SETTLEMENT_RATE: SETTLEMENT_RATE

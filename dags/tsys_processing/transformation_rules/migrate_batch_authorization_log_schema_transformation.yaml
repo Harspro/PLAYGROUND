@@ -1,0 +1,42 @@
+context_parameter: {}
+
+transformation: 
+  - task_name: add_columns_to_batch_authorization_log
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_log_add_columns.sql
+
+  - task_name: populate_columns_in_batch_authorization_log
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_log_populate_columns.sql
+
+  - task_name: add_columns_to_batch_authorization_mc_ac
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_mc_ac_add_columns.sql
+
+  - task_name: add_columns_to_batch_authorization_mc_ta
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_mc_ta_add_columns.sql
+
+  - task_name: add_columns_to_batch_authorization_mc_tc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_mc_tc_add_columns.sql
+
+  - task_name: add_columns_to_batch_authorization_mc_te
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_mc_te_add_columns.sql
+
+  - task_name: add_columns_to_batch_authorization_mc_tv
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_mc_tv_add_columns.sql
+
+  - task_name: add_columns_to_batch_authorization_mc_misc
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/migrate_batch_auth_mc_misc_add_columns.sql

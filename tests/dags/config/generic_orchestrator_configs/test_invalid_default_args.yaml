@@ -1,0 +1,14 @@
+dag1:
+  dag:
+    description: 'Test DAG with Invalid Default Args'
+    dagrun_timeout: 60
+    sub_dag_trigger_rule: 'all_success'
+    tags:
+      - test
+  default_args: "invalid_string"
+  task_groups:
+    - group_id: 'group1'
+      execution_mode: 'parallel'
+      description: 'First group'
+      dags:
+        - 'sub_dag1'

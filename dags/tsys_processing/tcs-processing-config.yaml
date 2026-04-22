@@ -1,0 +1,50 @@
+tcs-processing-cdata-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-batch/application.yaml
+  main_class: com.pcb.batch.spark.tcs.TcsSparkBatchApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS Case Data file to tables
+  business_impact: Daily orchestration process of TCSCaseData files not done
+  customer_impact: This impact business to use data for Dispute & TCS Analysis
+  sub_capability: EMT
+  capability: Payments
+  severity: P3
+  tags:
+    - gold-alchemists, P3
+  drop_sql_file_path: tsys_processing/sql/tcs-processing-cdata_tables_drop.sql
+  sql_file_path: tsys_processing/sql/tcs-processing-cdata.sql
+  cluster_name: tcs-cdata-spark-cluster-ephemeral
+  num_workers: 3
+  region: northamerica-northeast1
+  tcs_file_type: CaseData
+  cdata_dag: tcs-processing-cdata-spark
+  trigger_dag_id: tcs_ethoca_chargeback_dispute_loader
+tcs-processing-wbasket-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-batch/application.yaml
+  main_class: com.pcb.batch.spark.tcs.TcsSparkBatchApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS Work Basket Data file to table
+  business_impact: Daily orchestration process of TCS workbasket files not done
+  customer_impact: This impact business to use data for Dispute & TCS Analysis
+  sub_capability: EMT
+  capability: Payments
+  severity: P3
+  tags:
+    - gold-alchemists, P3
+  sql_file_path: tsys_processing/sql/tcs-processing-workbasket.sql
+  drop_sql_file_path: tsys_processing/sql/tcs-processing-wbasket_table_drop.sql
+  cluster_name: tcs-wbasket-spark-cluster-ephemeral
+  num_workers: 3
+  region: northamerica-northeast1
+  tcs_file_type: WorkBasket

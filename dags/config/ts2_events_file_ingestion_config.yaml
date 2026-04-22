@@ -1,0 +1,50 @@
+ts2_events_full_file_loading:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_events
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: EVENTS
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: EVENTS
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      ALL_SEGMENT:
+        pcb.tsys.processor.segment.name: ALL_SEGMENT
+        pcb.tsys.processor.layout.name: EL01_EVENT_DETAIL
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    create_date_column: FILE_CREATE_DT
+    tables:
+      ALL_SEGMENT:
+        table_name: EVENTS
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - RANK() OVER (ORDER BY EV3_EL01_TYPE_EVENT, EV3_AM00_ACCOUNT_ID, EVENTS_PARTITION_ID, EVENTS_ROW_ID) AS FILE_RECORD_NBR
+        drop_columns:
+          - EVENTS_PARTITION_ID
+          - EVENTS_ROW_ID
+  kafka_writer:
+    dag_id: ts2_events_kafka_writer
+  oracle_writer:
+    dag_id: events_bq_to_oracle
+  read_pause_deploy_config: True
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'

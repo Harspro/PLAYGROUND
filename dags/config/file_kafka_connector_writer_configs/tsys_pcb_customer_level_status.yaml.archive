@@ -1,0 +1,31 @@
+tsys_customer_level_status_bq_to_kafka:
+  default_args:
+    owner: "gremlins"
+    capability: "platform-wide"
+    severity: "P2"
+    sub_capability: "status-maintenance"
+    business_impact: "This will impact the customer-level-status load"
+    customer_impact: "none"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_customer_level_status/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_customer_level_status/tsys_pcb_cust_level_status_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.message.schema.type: JSON
+    pcb.file.kafka.connector.schema.file.path: tsys_pcb_cust_level_status_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_pcb_cust_level_status_task
+    read_pause_deploy_config: True
+    job_size: large
+    dataproc_cluster_name: tsys-customer-level-status
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+    query_file: tsys_processing/sql/tsys_pcb_customer_level_status.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: tsys-pcb-customer-level-status
+    file_name: tsys-pcb-customer-level-status

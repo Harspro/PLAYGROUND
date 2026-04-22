@@ -1,0 +1,72 @@
+transunion_pcmceda_identification_data_loading_job:
+  dag:
+    description: "TransUnion PCMCEda identification data loading to BigQuery"
+    schedule: null
+    max_active_runs: 1
+    is_paused_upon_creation: true
+    tags: [ "team-growth-and-sales", "transunion" ]
+    render_template_as_native_obj: true
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "Customer Acquisition"
+    severity: "P2"
+    sub_capability: "Data Ingestion"
+    business_impact: "Medium"
+    customer_impact: "Low"
+    depends_on_past: false
+    email_on_failure: false
+    email_on_retry: false
+    retries: 2
+    retry_delay_minutes: 5
+    catchup: false
+  bigquery_config:
+    project_id_template: "pcb-{env}-landing"
+    dataset_id: "domain_customer_acquisition"
+    table_name: "TRANSUNION_PCMCEDA_IDENTIFICATION"
+    default_env: "uat"
+  staging_config:
+    max_bad_records: 1
+    field_delimiter: "\t"
+    skip_leading_rows: 0
+    ignore_unknown_values: true
+    autodetect: true
+  field_mappings:
+    base_fields:
+      - { index: 0, target: "RECORD_TYPE", type: "STRING" }
+      - { index: 1, target: "EXTERNAL_APPLICATION_ID", type: "STRING" }
+      - { index: 2, target: "APPLICATION_ID", type: "STRING" }
+      - { index: 3, target: "SCORE", type: "FLOAT" }
+      - { index: 4, target: "DECISION", type: "STRING" }
+      - { index: 5, target: "APPLICATION_CREATED", type: "DATETIME" }
+      - { index: 6, target: "APPLICATION_GENERATED", type: "DATETIME" }
+      - { index: 7, target: "EXAM_FLAG", type: "STRING" }
+      - { index: 8, target: "EXAM_STATUS", type: "STRING" }
+      - { index: 9, target: "SSID_VERSION", type: "STRING" }
+      - { index: 10, target: "SSID", type: "STRING" }
+      - { index: 11, target: "LAST_NAME", type: "STRING" }
+      - { index: 12, target: "FIRST_NAME", type: "STRING" }
+      - { index: 13, target: "DATE_OF_BIRTH", type: "STRING" }
+      - { index: 14, target: "PHONE_NUMBER", type: "STRING" }
+      - { index: 15, target: "NUMBER_OF_QUESTIONS", type: "STRING" }
+    question_fields:
+      - { index: 16, target: "QUESTION_1_ID", type: "STRING" }
+      - { index: 17, target: "QUESTION_1_TEXT", type: "STRING" }
+      - { index: 18, target: "QUESTION_1_STATUS", type: "STRING" }
+      - { index: 19, target: "QUESTION_2_ID", type: "STRING" }
+      - { index: 20, target: "QUESTION_2_TEXT", type: "STRING" }
+      - { index: 21, target: "QUESTION_2_STATUS", type: "STRING" }
+      - { index: 22, target: "QUESTION_3_ID", type: "STRING" }
+      - { index: 23, target: "QUESTION_3_TEXT", type: "STRING" }
+      - { index: 24, target: "QUESTION_3_STATUS", type: "STRING" }
+      - { index: 25, target: "QUESTION_4_ID", type: "STRING" }
+      - { index: 26, target: "QUESTION_4_TEXT", type: "STRING" }
+      - { index: 27, target: "QUESTION_4_STATUS", type: "STRING" }
+    metadata_fields:
+      - { target: "SOURCE_FILENAME", type: "STRING", value: "file_name" }
+      - { target: "REC_LOAD_TIMESTAMP", type: "TIMESTAMP", value: "CURRENT_TIMESTAMP()" }
+  filtering:
+    record_type_field_index: 0
+    detail_record_value: "D"
+    trailer_record_value: "T"
+    trailer_count_field_index: 1
+  timestamp_format: "%Y%m%d%H%M%S"

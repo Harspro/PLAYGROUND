@@ -1,0 +1,5 @@
+transformation:
+  - task_name: update_event_analytics_610_metadata
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: consents_sql/update_event_analytics.sql

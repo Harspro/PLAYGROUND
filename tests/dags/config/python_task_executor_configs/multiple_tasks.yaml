@@ -1,0 +1,31 @@
+call_replace_all_env_in_dict_dag:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "<TBD>"
+    severity: "<TBD>"
+    business_impact: "<TBD>"
+    customer_impact: "<TBD>"
+    retries: 3
+    retry_delay: 300
+  dag:
+    dagrun_timeout: 120
+    start_date: "2025-01-01"
+    catchup: false
+    description: "v"
+    tags: [ "team-defenders-alerts" ]
+  tasks:
+    - task_id: "test_module_task_1"
+      python_callable:
+        module: util.miscutils
+        method: replace_all_env_in_dict
+      args:
+        "config": {"env": "pcb-{env}-curated"}
+        "deploy_env": "test-environment"
+    - task_id: "test_module_task_2"
+      python_callable:
+        module: util.miscutils
+        method: read_env_filepattern
+      args:
+        "pattern": "filename_yyyymmdd.{file_env}"
+        "deploy_env": "test-environment"

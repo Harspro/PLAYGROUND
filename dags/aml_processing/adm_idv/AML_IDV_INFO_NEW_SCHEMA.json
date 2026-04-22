@@ -1,0 +1,94 @@
+[
+  {
+    "name": "CUSTOMER_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "ACCOUNT_CUSTOMER_ROLE_UID",
+    "type": "INTEGER"
+  },
+  {
+    "name": "RANK_ACC",
+    "type": "INTEGER"
+  }, 
+  {
+    "name": "ACCOUNT_NO",
+    "type": "INTEGER"
+  }, 
+  {
+    "name": "GIVEN_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "SURNAME",
+    "type": "STRING"
+  },  
+  {
+    "name": "APP_NUM",
+    "type": "NUMERIC"
+  }, 
+  {
+    "name": "ID_TYPE",
+    "type": "STRING"
+  }, 
+  {
+    "name": "ID_TYPE_DESCRIPTION",
+    "type": "STRING"
+  }, 
+  {
+    "name": "ID_STATUS",
+    "type": "STRING"
+  }, 
+  {
+    "name": "ID_NUMBER",
+    "type": "STRING"
+  }, 
+  {
+    "name": "ID_STATE",
+    "type": "STRING"
+  }, 
+  {
+    "name": "ID_COUNTRY",
+    "type": "STRING"
+  }, 
+  {
+    "name": "ID_ISSUE_DATE",
+    "type": "STRING"
+  }, 
+  {
+    "name": "ID_EXPIRY_DATE",
+    "type": "STRING"
+  }, 
+  {
+    "name": "NAME_ON_SOURCE",
+    "type": "STRING"
+  }, 
+  {
+    "name": "REF_NUMBER",
+    "type": "STRING"
+  }, 
+  {
+    "name": "DATE_VERIFIED",
+    "type": "STRING"
+  }, 
+  {
+    "name": "TYPE_OF_INFO",
+    "type": "STRING"
+  }, 
+  {
+    "name": "IDV_METHOD",
+    "type": "STRING"
+  }, 
+  {
+    "name": "IDV_DECISION",
+    "type": "STRING"
+  }, 
+  {
+    "name": "REC_CREATE_TMS",
+    "type": "DATETIME"
+  }, 
+  {
+    "name": "RUN_ID",
+    "type": "STRING"
+  }
+]

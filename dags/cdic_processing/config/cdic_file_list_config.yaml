@@ -1,0 +1,835 @@
+cdic_0100:
+  sql_file: 'cdic_0100_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0100"
+  columns_to_hash: "Depositor_Unique_ID,Depositor_ID_Link"
+  columns_to_mask: "Depositor_ID,Name_Prefix,Name,First_Name,Middle_Name,Last_Name,Name_Suffix,Phone_1,Phone_2,Email,Birth_Date"
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0100*"
+      schema:
+        fields:
+          - { "name": "Depositor_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Depositor_ID_Link", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Subsystem_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Depositor_Branch", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Depositor_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Name_Prefix", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "First_Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Middle_Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Last_Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Name_Suffix", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Birth_Date", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Phone_1", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Phone_2", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Email", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Depositor_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Depositor_Agent_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Language_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Employee_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Phone_1_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Phone_2_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Responsible_Party_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Non_Resident_Country_Code", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "domain_cdic"
+        tableId: "CDIC_0100_STAGING"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0110:
+  sql_file: 'cdic_0110_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0110"
+  columns_to_hash: "Depositor_Unique_ID"
+  columns_to_mask: "Identification_Number"
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0110*"
+      schema:
+        fields:
+          - { "name": "Depositor_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Personal_ID_Count", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Identification_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Personal_ID_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "domain_cdic"
+        tableId: "CDIC_0110_STAGING"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0120:
+  sql_file: 'cdic_0120_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0120"
+  columns_to_hash: "Depositor_Unique_ID"
+  columns_to_mask: "Address_1,Address_2,Postal_Code"
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0120*"
+      schema:
+        fields:
+          - { "name": "Depositor_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Address_Count", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Address_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Primary_Address_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Address_Change", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Undeliverable_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Address_1", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Address_2", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "City", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Province", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Postal_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Country", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "domain_cdic"
+        tableId: "CDIC_0120_STAGING"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0130:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0130"
+  columns_to_hash: "Account_Unique_ID,Account_Number"
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0130*"
+      schema:
+        fields:
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Branch", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Product_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Registered_Plan_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Registered_Plan_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Insurance_Determination_Category_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Balance", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Accessible_Balance", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Maturity_Date ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Status_Code ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Trust_Account_Type_Code ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "CDIC_Hold_Status_Code ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Joint_Account_Flag ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Clearing_Account_Code ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Type_Code ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Issued_Registered_Account_Flag ", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Related_Deposit_Flag ", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0130"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0500:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0500"
+  columns_to_hash: "Depositor_Unique_ID,Account_Unique_ID"
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0500*"
+      schema:
+        fields:
+          - { "name": "Depositor_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Relationship_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Primary_Account_Holder_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Payee_Flag", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0500"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0800:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0800"
+  columns_to_hash: "Account_Unique_ID"
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0800*"
+      schema:
+        fields:
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Subsystem_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "CDIC_Hold_Status_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Balance", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Accessible_Balance", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "CDIC_Hold_Amount", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0800"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0900:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0900"
+  columns_to_hash: "Account_Unique_ID"
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0900*"
+      schema:
+        fields:
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Subsystem_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Last_Interest_Payment_Date", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Interest_Accrued_Amount", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0900"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0211:
+  sql_file: 'cdic_0211_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0211"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0211*"
+      schema:
+        fields:
+          - { "name": "Personal_ID_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Personal_ID_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "CDIC_Personal_ID_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0211"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0233:
+  sql_file: 'cdic_0233_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0233"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0233*"
+      schema:
+        fields:
+          - { "name": "Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "ISO_Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0233"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0231:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0231"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0231*"
+      schema:
+        fields:
+          - { "name": "Product_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Product_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "CDIC_Product_Group_Code", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0231"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0232:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0232"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0232*"
+      schema:
+        fields:
+          - { "name": "Registered_Plan_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Registered_Plan_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0232"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0234:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0234"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "{composer_bucket}/dags/cdic_processing/ref_tables/pcma/0234_reference.csv"
+      schema:
+        fields:
+          - { "name": "Insurance_Determination_Category_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0234"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0235:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0235"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0235*"
+      schema:
+        fields:
+          - { "name": "CDIC_Hold_Status_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "CDIC_Hold_Status", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0235"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0236:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0236"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0236*"
+      schema:
+        fields:
+          - { "name": "Account_Status_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Account_Status_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0236"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0237:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0237"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0237*"
+      schema:
+        fields:
+          - { "name": "Trust_Account_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0237"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0238:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0238"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0238*"
+      schema:
+        fields:
+          - { "name": "Clearing_Account_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Clearing_Account", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0238"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0239:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0239"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0239*"
+      schema:
+        fields:
+          - { "name": "Account_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Account_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0239"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0240:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0240"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0240*"
+      schema:
+        fields:
+          - { "name": "CDIC_Product_Group_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "CDIC_Product_Group", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0240"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0241:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0241"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0241*"
+      schema:
+        fields:
+          - { "name": "MI_Deposit_Hold_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Deposit_Hold_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0241"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0242:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0242"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0242*"
+      schema:
+        fields:
+          - { "name": "ISO_Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Foreign_Currency_CAD_FX", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0242"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0400:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0400"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+
+cdic_0401:
+  sql_file: 'cdic_0401_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0401"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0401*"
+      schema:
+        fields:
+          - { "name": "Transaction_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Transaction_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0401"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0501:
+  sql_file: 'cdic_0501_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0501"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0501*"
+      schema:
+        fields:
+          - { "name": "Relationship_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Relationship_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0501"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0600:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0600"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0600*"
+      schema:
+        fields:
+          - { "name": "Ledger_Account", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Ledger_Description", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Ledger_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "GL_Account", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Debit", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Credit", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Balance", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0600"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0999:
+  sql_file: 'cdic_0999_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0999"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0999*"
+      schema:
+        fields:
+          - { "name": "Subsystem_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Subsystem_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0999"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0221:
+  sql_file: 'cdic_0221_query.sql'
+  enrichment_flag: True
+  processing_flag: True
+  final_table: "CDIC_0221"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0221*"
+      schema:
+        fields:
+          - { "name": "Address_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Address_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0221"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0212:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0212"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0212*"
+      schema:
+        fields:
+          - { "name": "CDIC_Personal_ID_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0212"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0202:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0202"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0202*"
+      schema:
+        fields:
+          - { "name": "Phone_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0202"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0201:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0201"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0201*"
+      schema:
+        fields:
+          - { "name": "Depositor_Type_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Depositor_Type", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Description", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0201"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0153:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0153"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0153*"
+      schema:
+        fields:
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Beneficiary_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "SIA_Individual_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Interest_In_Deposit_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Interest_In_Deposit", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "IB_LEI", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0153"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0152:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0152"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0152*"
+      schema:
+        fields:
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "First_Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Middle_Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Last_Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Address_1", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Address_2", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "City", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Province", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Postal_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Country", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "SIA_Individual_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Interest_In_Deposit_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Interest_In_Deposit", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0152"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0140:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0140"
+  columns_to_hash: ""
+  columns_to_mask: ""
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0140*"
+      schema:
+        fields:
+          - { "name": "Account_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Deposit_Hold_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Deposit_Hold_Scheduled_Release_Date", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "MI_Deposit_Hold_Amount", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0140"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1
+
+cdic_0121:
+  enrichment_flag: False
+  processing_flag: True
+  final_table: "CDIC_0121"
+  columns_to_hash: ""
+  columns_to_mask: "Transit_Number,Account_Number"
+  where_condition: ""
+  csv_to_bq_config:
+    load:
+      sourceUris: "gs://pcb-{env}-staging/cdic_processing/input/temenos_pcb_edsa_cdic_0121*"
+      schema:
+        fields:
+          - { "name": "Depositor_Unique_ID", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Payee_Name", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Institution_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Transit_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Account_Number", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Currency_Code", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Joint_Account_Flag", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Start_Date", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Last_Funds_Transfer", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Last_Outbound_Funds_Transfer", "type": "STRING", "mode": "NULLABLE" }
+          - { "name": "Next_Outbound_Funds_Transfer", "type": "STRING", "mode": "NULLABLE" }
+      destinationTable:
+        projectId: "pcb-{env}-curated"
+        datasetId: "cots_cdic"
+        tableId: "CDIC_0121"
+      writeDisposition: "WRITE_TRUNCATE"
+      fieldDelimiter: "|"
+      skipLeadingRows: 1

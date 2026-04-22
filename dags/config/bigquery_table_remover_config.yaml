@@ -1,0 +1,42 @@
+drop-eft-limits-manual-table-landing:
+  - pcb-{env}-landing.domain_movemoney_technical.EFT_LIMITS_MANUAL
+
+drop-adm_rt_response_uns_back_up-table-processing:
+  - pcb-{env}-processing.domain_customer_acquisition.ADM_RT_RESPONSE_UNS_BACK_UP
+
+drop-cockroachdb-idv-backfill-tables-processing:
+  - pcb-{env}-processing.domain_validation_verification.IDV_EVENT_BACKFILL
+  - pcb-{env}-processing.domain_validation_verification.IDV_DOCUMENT_BACKFILL
+  - pcb-{env}-processing.domain_validation_verification.ONFIDO_CHECK_BACKFILL
+  - pcb-{env}-processing.domain_validation_verification.ONFIDO_APPLICANT_BACKFILL
+  - pcb-{env}-processing.domain_validation_verification.APPLICANT_PERSONAL_IDENTIFIER_BACKFILL
+
+drop-jira-analytics-landing-tables:
+  - pcb-{env}-landing.domain_project_artifacts.INITIATIVE
+  - pcb-{env}-landing.domain_project_artifacts.EPIC
+  - pcb-{env}-landing.domain_project_artifacts.STORY
+  - pcb-{env}-landing.domain_project_artifacts.CHANGELOG_EVENT
+  - pcb-{env}-landing.domain_project_artifacts.CHANGELOG_COUNT
+  - pcb-{env}-landing.domain_project_artifacts.DAG_HISTORY
+  - pcb-{env}-landing.domain_project_artifacts.OUTCOME_TEAM
+  - pcb-{env}-landing.domain_project_artifacts.SPRINT
+  - pcb-{env}-landing.domain_project_artifacts.ISSUES_IN_ACTIVE_SPRINTS
+  - pcb-{env}-landing.domain_project_artifacts.ISSUES_IN_CLOSED_SPRINTS
+  - pcb-{env}-landing.domain_project_artifacts.BUG
+
+drop-tokennotify-table-landing:
+  backup_enabled: "true"
+  tables:
+    - pcb-{env}-landing.domain_account_management.TOKEN_NOTIFY
+
+drop-pc-optimum-identites-event-vw-curated:
+  - pcb-{env}-curated.domain_loyalty.PC_OPTIMUM_IDENTITIES_EVENT_VW
+
+drop-loyalty-offer-landing-table:
+  - pcb-{env}-landing.domain_account_management.LOYALTY_OFFER_ACCOUNT_STATUS
+
+drop-adm_inst_card_info_back_up-table-processing:
+  - pcb-{env}-processing.domain_customer_acquisition.ADM_INST_CARD_INFO_BACKFILL
+
+drop-click-to-pay-event-status-landing-table:
+  - pcb-{env}-landing.domain_customer_management.CLICK_TO_PAY_EVENT_STATUS

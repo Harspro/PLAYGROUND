@@ -1,0 +1,15 @@
+dag_id: "transaction_risk_score_dag"
+dag_owner: "team-defenders-alerts"
+jar_file_uris:
+  - gs://pcb-{env}-staging-artifacts/jarfiles/trs-scoring-job-spark-batch-2.0.0.jar
+file_uris:
+  - gs://pcb-{env}-staging-artifacts/resources/trs-scoring-job-spark-batch/score_accounts_spark.xml
+  - gs://pcb-{env}-staging-artifacts/resources/trs-scoring-job-spark-batch/application.yaml
+  - gs://pcb-{env}-staging-artifacts/resources/trs-scoring-job-spark-batch/kafka.jks
+main_class: "com.pcb.batch.spark.trsscoringjob.TrsScoringJobApplication"
+approval_file_name: "approval_status.json"
+business_view: "trs_daily_input_table"
+business_dataset_id: "domain_scoring"
+bq_curated_table_trs_input: "TRANSACTION_RISK_SCORING_INPUT"
+bq_dag_folder: pcb-{env}-staging
+pmml_file: score_accounts_spark.xml

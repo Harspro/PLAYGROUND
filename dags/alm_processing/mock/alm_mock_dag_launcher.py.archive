@@ -1,0 +1,4 @@
+# for airflow scanning
+from alm_processing.mock.alm_mock_dag_loader import AlmMockDagLoader
+
+globals().update(AlmMockDagLoader('mock_dag_config.yaml').generate_dags())  # pragma: no cover

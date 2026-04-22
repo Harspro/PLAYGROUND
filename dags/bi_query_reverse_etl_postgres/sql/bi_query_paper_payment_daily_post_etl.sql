@@ -1,0 +1,74 @@
+-- Inserting records from daily run
+INSERT INTO
+    `pcb-{env}-landing.domain_payments.BI_QUERY_PAPER_PAYMENT_RECORDS` (
+        PCF_CUST_ID,
+        ACCOUNT_NO,
+        CARD_NUMBER,
+        AMOUNT,
+        SEQ_NUM,
+        CHEQUE_NUM,
+        CHEQUE_DATE,
+        PROCESS_DATE,
+        TRANSIT_NUMBER,
+        INSTITUTION_ID,
+        FDR_FLAG,
+        FDR_DATE,
+        CREATE_DT,
+        UPDATE_USER_ID,
+        UPDATE_DT,
+        UPDATE_MONTH,
+        UPDATE_YEAR,
+        ST_CD,
+        ST_DT,
+        CSH_IND,
+        CREATE_USER_ID,
+        CREATE_FUNCTION_NAME,
+        TRACE_ID,
+        UPDATE_FUNCTION_NAME,
+        PAPER_PAYMENT_SOURCE,
+        BI_QUERY_PAPER_PAYMENT_DATE,
+        BI_QUERY_DAG_RUN_ID,
+        BI_QUERY_PAPER_PAYMENT_UID
+    )
+SELECT
+    DISTINCT PCF_CUST_ID,
+    ACCOUNT_NO,
+    CARD_NUMBER,
+    AMOUNT,
+    SEQ_NUM,
+    CHEQUE_NUM,
+    CHEQUE_DATE,
+    PROCESS_DATE,
+    TRANSIT_NUMBER,
+    INSTITUTION_ID,
+    FDR_FLAG,
+    FDR_DATE,
+    CREATE_DT,
+    UPDATE_USER_ID,
+    UPDATE_DT,
+    UPDATE_MONTH,
+    UPDATE_YEAR,
+    ST_CD,
+    ST_DT,
+    CSH_IND,
+    CREATE_USER_ID,
+    CREATE_FUNCTION_NAME,
+    TRACE_ID,
+    UPDATE_FUNCTION_NAME,
+    PAPER_PAYMENT_SOURCE,
+    BI_QUERY_PAPER_PAYMENT_DATE,
+    BI_QUERY_DAG_RUN_ID,
+    BI_QUERY_PAPER_PAYMENT_UID
+FROM
+    `pcb-{env}-processing.domain_payments.BI_QUERY_PAPER_PAYMENT` PAPER_PAYMENT
+WHERE
+    NOT EXISTS (
+        SELECT
+            1
+        FROM
+            `pcb-{env}-curated.domain_payments.BI_QUERY_PAPER_PAYMENT_RECORDS` PAPER_PAYMENT_REC
+        WHERE
+            PAPER_PAYMENT.CARD_NUMBER = PAPER_PAYMENT_REC.CARD_NUMBER
+            AND PAPER_PAYMENT.SEQ_NUM = PAPER_PAYMENT_REC.SEQ_NUM
+            AND PAPER_PAYMENT.BI_QUERY_DAG_RUN_ID = PAPER_PAYMENT_REC.BI_QUERY_DAG_RUN_ID
+    );

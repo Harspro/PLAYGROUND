@@ -1,0 +1,50 @@
+ts2_cardguard_fraudlog_full_file_loading:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_frd_crdg_fraudlog
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARDGUARD_FRAUDLOG
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARDGUARD_FRAUDLOG
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: detail_group
+        segments: CGC_D_REC
+    segment_args:
+      CGC_D_REC:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_frd_crdg_fraudlog/FRAUDLOG.CPY
+        pcb.tsys.processor.segment.name: CGC_D_REC
+        pcb.tsys.processor.layout.name: FRAUDLOG_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_frd_crdg_fraudlog/TRLR.CPY
+        pcb.tsys.processor.segment.name: CGC_T_REC
+        pcb.tsys.processor.layout.name: FRAUDLOG_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_fraud
+    data_load_type: APPEND_ONLY
+    tables:
+      CGC_D_REC:
+        table_name: CARDGUARD_FRAUDLOG
+        record_count_column: TOT_NBR_DET_RECS
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: CARDGUARD_FRAUDLOG_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+
+

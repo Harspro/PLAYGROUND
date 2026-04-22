@@ -1,0 +1,48 @@
+esso_merchant_processing:
+  tags:
+    - Loyalty
+  batch:
+    read_pause_deploy_config: False
+  dag:
+    task_id:
+      loading_task_id: trigger_esso_merchant_file_loading_job_dag
+      padded_loading_task_id: trigger_padded_esso_merchant_file_loading_job_dag
+      fuel_transactions_task_id: trigger_esso_fuel_transactions_file_loading_job_dag
+      updating_mc_task_id: trigger_pcl_merchant_code_updating_job_dag
+      updating_cm_task_id: trigger_pcl_campaign_merchant_updating_job_dag
+      kafka_writer_task_id: trigger_kafka_writer_dag
+      delete_gcs_landing_obj_task_id: delete_gcs_landing_obj
+      delete_gcs_landing_response_obj_task_id: delete_gcs_landing_response_obj
+      delete_gcs_processing_obj_task_id: delete_gcs_processing_obj
+      delete_gcs_processing_query_obj_task_id: delete_gcs_processing_query_obj
+      gcs_to_gcs_processing_bucket_task_id: gcs_to_gcs_processing_bucket
+      gcs_to_gcs_outbound_landing_bucket_task_id: gcs_to_gcs_outbound_landing_bucket
+      response_file_generation_task_id: response_file_generation
+    dag_id:
+      loading_dag_id: esso_merchant_file_loading_job
+      padded_loading_dag_id: padded_esso_merchant_file_loading_job
+      fuel_transactions_dag_id: esso_fuel_transactions_file_loading_job
+      updating_mc_dag_id: pcl_merchant_code_updating_job
+      updating_cm_dag_id: pcl_campaign_merchant_updating_job
+      kafka_trigger_dag_id: esso_merchant_kafka_writer
+    bucket_id:
+      inbound_landing_bucket: esso-inbound-pcb{env_suffix}
+      processing_bucket_extract: pcb-{env}-staging-extract
+      outbound_landing_bucket: esso-outbound-pcb{env_suffix}
+    bigquery:
+      output_uri_processing: fiserv_response/pcl_fdc_rtn_essogaspcpts_{current_date}-*.csv
+      output_uri_landing: pcl_fdc_rtn_essogaspcpts_{current_date}.{deployment_environment_name}
+      query_file: loyalty_processing/response_files/fiserv_response_summary.sql
+    obj_prefix:
+      landing_obj_prefix: esso_merhcant_list/
+      processing_obj_prefix: esso_merhcant_list/
+      query_file_landing_obj_prefix: pcl_fdc_rtn_essogaspcpts_
+      query_file_processing_obj_prefix: fiserv_response/
+    trigger_config:
+      bucket: "{{ dag_run.conf['bucket'] }}"
+      name: "{{ dag_run.conf['name'] }}"
+      folder_name: "{{ dag_run.conf['folder_name'] }}"
+      file_name: "{{ dag_run.conf['file_name'] }}"
+      cluster_name: "esso-merchant-c"
+    wait_for_completion: True
+    poke_interval: 30

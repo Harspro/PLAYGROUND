@@ -1,0 +1,21 @@
+dag1:
+  dag:
+    description: 'Test DAG with Sequential Multi Tasks'
+    dagrun_timeout: 60
+    sub_dag_trigger_rule: 'all_success'
+    tags:
+      - test
+  default_args:
+    retries: 2
+  task_groups:
+    - group_id: 'group1'
+      execution_mode: 'sequential'
+      description: 'Sequential group with multiple tasks'
+      dags:
+        - sub_dag_id: 'sub_dag1'
+          params:
+            param1: 'value1'
+        - sub_dag_id: 'sub_dag2'
+          params:
+            param2: 'value2'
+        - 'sub_dag3'

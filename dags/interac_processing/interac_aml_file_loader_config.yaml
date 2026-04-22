@@ -1,0 +1,24 @@
+# Config file for Interac AML file loader DAG
+interac_aml_file_loader:
+  bq_dataset_id: domain_aml
+  table_name: INTERAC_AML_REPORT
+  region: northamerica-northeast1
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_extract: pcb-{env}-staging-extract
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/interac-aml-spark-2.0.0.jar
+    main_class: com.pcb.batch.spark.interac.InteracAmlSparkBatchApplication
+    job_args:
+      pcb.interac.aml.processor.datafile.path: _tempplaceholder
+      pcb.interac.aml.processor.output.format: parquet
+      pcb.interac.aml.processor.output.path: _tempplaceholder
+  dag:
+    description: "DAG for processing AML (Anti-Money Laundering) files from Interac using Spark."
+    max_active_runs: 1
+    is_paused_upon_creation: True
+    tags: ["interac", "aml", "landing"]
+    render_template_as_native_obj: True
+  default_args:
+    catchup: False

@@ -1,0 +1,39 @@
+reverse_etl_processing_create_views_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P4"
+    business_impact: "Reverse ETL views creation in postgres"
+    customer_impact: "None"
+  postgres:
+    postgres_conn_id: reverse_etl_processing_create_views_postgres_connection
+    pg_query_file: bi_query_reverse_etl_postgres/pg_scripts/bi_query_create_views.sql
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_create_views_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL views creation Postgres Connection"
+    dev:
+      host: pcbdvs-pg-piquery.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: pcbdvs-pg-piquery-uat.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 120
+    tags: ["BiQueryReverseETL"]

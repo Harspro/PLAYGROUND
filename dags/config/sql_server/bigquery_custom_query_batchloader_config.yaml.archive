@@ -1,0 +1,3499 @@
+db839_pcma_data_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMA_DATA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_DATA
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pts_tick_trig_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Patrick.dbo.PTS_Tick_Trig"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PTS_TICK_TRIG
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_str_pcb_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Retail.dbo.STR_PCB"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STR_PCB
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pct_upc_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCT.dbo.PCT_UPC"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCT_UPC
+    add_columns:
+      - '`Group` as GROUP_NM'
+    drop_columns:
+      - Group
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_calls_forecasted_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM IVRReport.dbo.Calls_Forecasted"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CALLS_FORECASTED
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_bin_tender_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM NDW.dbo.bin_tender"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: BIN_TENDER
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dns_emailunsubscribe_exact_target_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM CASL.dbo.DNS_EmailUnsubscribe_Exact_Target"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DNS_EMAILUNSUBSCRIBE_EXACT_TARGET
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pts_acco_trig_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Patrick.dbo.PTS_Acco_Trig"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PTS_ACCO_TRIG
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dns_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM CASL.dbo.DNS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DNS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_passive_attrition_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_PASSIVE_ATTRITION"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_PASSIVE_ATTRITION
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_purchase_penetration_pcma_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.purchase_penetration_pcma"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PURCHASE_PENETRATION_PCMA
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ice_template_usage_volume_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ice_template_usage_volume"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ICE_TEMPLATE_USAGE_VOLUME
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_active_attrition_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_ACTIVE_ATTRITION"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_ACTIVE_ATTRITION
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_final_pcma_weekly_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.final_PCMA_WEEKLY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FINAL_PCMA_WEEKLY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_imp_qbr_engage_type_sizing_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IMP_QBR_ENGAGE_TYPE_SIZING"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IMP_QBR_ENGAGE_TYPE_SIZING
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_md_ra1_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_MD_RA1"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: GY_OP_PROD_20120800_MD_RA1
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_int_rev_20151126_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_int_rev_20151126"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_INT_REV_20151126
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_weekly_dp_summmary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WEEKLY_DP_SUMMMARY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WEEKLY_DP_SUMMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mbr_avg_stats_out_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MBR_AVG_STATS_OUT"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MBR_AVG_STATS_OUT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_email_summary_20190211_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_email_summary_20190211"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_EMAIL_SUMMARY_20190211
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_imp_qbr_pco_analysis_company_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IMP_QBR_PCO_ANALYSIS_COMPANY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IMP_QBR_PCO_ANALYSIS_COMPANY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cralert_payments_20150226_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cralert_payments_20150226"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CRALERT_PAYMENTS_20150226
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_m1s_int_adj20160307_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.m1s_int_adj20160307"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: M1S_INT_ADJ20160307
+    add_columns:
+      - '`DESC` as DESC_NM'
+    drop_columns:
+      - DESC
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_auto_giftcard_cat_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.Auto_GiftCard_Cat"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: AUTO_GIFTCARD_CAT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20130202_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_loyaltypoints_20130202"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20130202
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_auto_giftcard_cat_apr2017_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.Auto_GiftCard_Cat_APR2017"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: AUTO_GIFTCARD_CAT_APR2017
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_auto_giftcard_cat_apr2017_mod_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.AUTO_GIFTCARD_CAT_APR2017_MOD"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: AUTO_GIFTCARD_CAT_APR2017_MOD
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_optional_alert_20200317_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.optional_alert_20200317"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: OPTIONAL_ALERT_20200317
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pdsb_2755_daily_pco_registered_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PDSB_2755_Daily_PCO_Registered"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PDSB_2755_DAILY_PCO_REGISTERED
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ic_createdate_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IC_createdate"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IC_CREATEDATE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pdsb2976_benchmark_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PDSB2976_BENCHMARK"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PDSB2976_BENCHMARK
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_optional_alert_desc_20200317_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.optional_alert_desc_20200317"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: OPTIONAL_ALERT_DESC_20200317
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_products_20160211_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.report_products_20160211"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_PRODUCTS_20160211
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ccdr_weekly_pcma_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CCDR_WEEKLY_PCMA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CCDR_WEEKLY_PCMA
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_cust_type_summary_20190211_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_cust_type_summary_20190211"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_CUST_TYPE_SUMMARY_20190211
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mbr_avg_stats_slide3_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MBR_AVG_STATS_SLIDE3"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MBR_AVG_STATS_SLIDE3
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_creditcare_20150731_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.report_creditcare_20150731"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_CREDITCARE_20150731
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_token_summary_rpt_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.Token_summary_rpt"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TOKEN_SUMMARY_RPT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_prr_psp_monthly_comp_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PRR_PSP_MONTHLY_COMP"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PRR_PSP_MONTHLY_COMP
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_reason_codes_day_pcma_weekly_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.REASON_CODES_DAY_PCMA_WEEKLY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REASON_CODES_DAY_PCMA_WEEKLY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_reason_codes_pcma_weekly_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.REASON_CODES_PCMA_WEEKLY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REASON_CODES_PCMA_WEEKLY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_returnedmail_20150731_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.report_returnedmail_20150731"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_RETURNEDMAIL_20150731
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_imp_qbr_quarter_funnel_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IMP_QBR_QUARTER_FUNNEL"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IMP_QBR_QUARTER_FUNNEL
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cardinal_enroll_cycle2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cardinal_enroll_cycle2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CARDINAL_ENROLL_CYCLE2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_drbal_counts_20150731_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.report_drbal_counts_20150731"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_DRBAL_COUNTS_20150731
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_strongbow_active_tokens_q_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.strongbow_active_tokens_q"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STRONGBOW_ACTIVE_TOKENS_Q
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_estatement_monthly_summary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.estatement_monthly_summary"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ESTATEMENT_MONTHLY_SUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cardinal_enroll_cycle3_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cardinal_enroll_cycle3"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CARDINAL_ENROLL_CYCLE3
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_md_idr_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_MD_IDR"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: GY_OP_PROD_20120800_MD_IDR
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_book_active_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_BOOK_ACTIVE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_BOOK_ACTIVE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_book_card_spend_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_BOOK_CARD_SPEND"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_BOOK_CARD_SPEND
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_md_ra2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_MD_RA2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: GY_OP_PROD_20120800_MD_RA2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_card_summary_20190120_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_card_summary_20190120"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_CARD_SUMMARY_20190120
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mc_province20170323_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.mc_province20170323"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MC_PROVINCE20170323
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_strongbow_quartiles_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.Strongbow_Quartiles"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STRONGBOW_QUARTILES
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_intrev_at31b1_20170411_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.intrev_at31b1_20170411"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INTREV_AT31B1_20170411
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_chk_loadtable_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.chk_LOADTABLE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CHK_LOADTABLE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_purge_acc_cards_20160222_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.purge_acc_cards_20160222"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PURGE_ACC_CARDS_20160222
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_monthly_cluster_refresh_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MONTHLY_CLUSTER_REFRESH"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MONTHLY_CLUSTER_REFRESH
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20211119_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_loyaltypoints_20211119"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20211119
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_stmt_reprint_20170809_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.stmt_reprint_20170809"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STMT_REPRINT_20170809
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_cust_monthly_new_part2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_cust_monthly_NEW_part2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_CUST_MONTHLY_NEW_PART2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_crbalnew_201410_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.crbalnew_201410"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CRBALNEW_201410
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_MD_CR_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_MD_CR"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: GY_OP_PROD_20120800_MD_CR
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_securitization_pd2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.securitization_pd2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: SECURITIZATION_PD2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dm_prr_pci_summary_20191212_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.DM_PRR_PCI_SUMMARY_20191212"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DM_PRR_PCI_SUMMARY_20191212
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_doc_sub_result_suspected_info_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.DOC_SUB_RESULT_SUSPECTED_INFO"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DOC_SUB_RESULT_SUSPECTED_INFO
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_creditalertcancellation_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.creditAlertCancellation"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CREDITALERTCANCELLATION
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_inactiveclosed_20160622_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.InactiveClosed_20160622"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INACTIVECLOSED_20160622
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_accounts_2021_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_ACCOUNTS_2021"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_ACCOUNTS_2021
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_accounts_2019_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_ACCOUNTS_2019"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_ACCOUNTS_2019
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_accounts_2020_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_ACCOUNTS_2020"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_ACCOUNTS_2020
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_accounts_2022_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_ACCOUNTS_2022"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_ACCOUNTS_2022
+    data_load_type: FULL_REFRESH
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_securitization_pd1_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.securitization_pd1"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: SECURITIZATION_PD1
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ir_operator20160630_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ir_operator20160630"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IR_OPERATOR20160630
+    add_columns:
+       - '`DESC` as DESC_NM'
+       - '`GROUP` as GROUP_ID'
+    drop_columns:
+      - DESC
+      - GROUP
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_ir_operator_daily_20200505_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ir_operator_daily_20200505"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IR_OPERATOR_DAILY_20200505
+    add_columns:
+      - '`DESC` as DESC_NM'
+      - '`GROUP` as GROUP_ID'
+    drop_columns:
+      - DESC
+      - GROUP
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_cdl_monthly_20190303_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.pcmc_cdl_monthly_20190303"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_CDL_MONTHLY_20190303
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cardinal_est_20181202_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cardinal_est_20181202"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CARDINAL_EST_20181202
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_admops_authuser201504_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.report_admops_authuser201504"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_ADMOPS_AUTHUSER201504
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_book_cat_spend_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_BOOK_CAT_SPEND"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_BOOK_CAT_SPEND
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_tsys_acct_closures_20150311_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.tsys_acct_closures_20150311"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TSYS_ACCT_CLOSURES_20150311
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_weekly_dp_edelivery_accs_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WEEKLY_DP_EDELIVERY_ACCS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WEEKLY_DP_EDELIVERY_ACCS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_coe_data_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.COE_DATA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: COE_DATA
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20130204_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_loyaltypoints_20130204"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20130204
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20130203_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.FA_LOYALTYPOINTS_20130203"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20130203
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_inactiveopen_20160622_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.InactiveOpen_20160622"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INACTIVEOPEN_20160622
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_esso_enrollment_details_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ESSO_ENROLLMENT_DETAILS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ESSO_ENROLLMENT_DETAILS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_abp_psp_first_active_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ABP_PSP_FIRST_ACTIVE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ABP_PSP_FIRST_ACTIVE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_abp_psp_enrolls_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ABP_PSP_ENROLLS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ABP_PSP_ENROLLS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_imp_qbr_month_company_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IMP_QBR_MONTH_COMPANY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IMP_QBR_MONTH_COMPANY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_abp_psp_on_book_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ABP_PSP_ON_BOOK"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ABP_PSP_ON_BOOK
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_amlclosure_20141001_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.amlclosure_20141001"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: AMLCLOSURE_20141001
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_onfido_idv_adm_sub_result_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ONFIDO_IDV_ADM_SUB_RESULT"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ONFIDO_IDV_ADM_SUB_RESULT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20211120_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_loyaltypoints_20211120"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20211120
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dm_prr_swipe_summary_20191212_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.DM_PRR_SWIPE_SUMMARY_20191212"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DM_PRR_SWIPE_SUMMARY_20191212
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cralertplus_payments_20150226_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cralertplus_payments_20150226"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CRALERTPLUS_PAYMENTS_20150226
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_dual_banner_sales_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_DUAL_BANNER_SALES"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_DUAL_BANNER_SALES
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20211121_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_loyaltypoints_20211121"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20211121
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_statuscode20170323_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.statuscode20170323"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STATUSCODE20170323
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dm_prr_approval_summary_20191212_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.DM_PRR_APPROVAL_SUMMARY_20191212"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DM_PRR_APPROVAL_SUMMARY_20191212
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_authnsf201407_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.authnsf201407"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: AUTHNSF201407
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_paper_pay_20170629_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PAPER_PAY_20170629"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PAPER_PAY_20170629
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dm_prr_app_summary_20191212_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.DM_PRR_APP_SUMMARY_20191212"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DM_PRR_APP_SUMMARY_20191212
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_multi_banner_accts_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_MULTI_BANNER_ACCTS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_MULTI_BANNER_ACCTS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_m1s_int_adj_monthly_20160308_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.m1s_int_adj_monthly_20160308"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: M1S_INT_ADJ_MONTHLY_20160308
+    add_columns:
+      - '`DESC` as DESC_NM'
+    drop_columns:
+      - DESC
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_abp_psp_premium_refunds_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ABP_PSP_PREMIUM_REFUNDS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ABP_PSP_PREMIUM_REFUNDS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcpoints_20151214_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.pcpoints_20151214"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCPOINTS_20151214
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_dm_prr_active_summary_20191212_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.DM_PRR_ACTIVE_SUMMARY_20191212"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: DM_PRR_ACTIVE_SUMMARY_20191212
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cardinal_enroll_cycle_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cardinal_enroll_cycle"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CARDINAL_ENROLL_CYCLE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_drbal_20150731_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.report_drbal_20150731"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_DRBAL_20150731
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_digital_book_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_DIGITAL_BOOK"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_DIGITAL_BOOK
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_abp_psp_on_app_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ABP_PSP_ON_APP"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ABP_PSP_ON_APP
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pctravelportfoliotracking_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCTravelPortfolioTracking"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCTravelPortfolioTracking
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_2022_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_2022"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_2022
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_token_summary_pivot_rpt_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.Token_summary_pivot_rpt"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TOKEN_SUMMARY_PIVOT_RPT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_onfido_idv_facial_photo_det_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ONFIDO_IDV_FACIAL_PHOTO_DET"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ONFIDO_IDV_FACIAL_PHOTO_DET
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_salescube_test_stores_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.SALESCUBE_TEST_STORES"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: SALESCUBE_TEST_STORES
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cw_kyc_renew_activation_stats_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cw_kyc_renew_activation_stats"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CW_KYC_RENEW_ACTIVATION_STATS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_btconsent_20130201_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_btconsent_20130201"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_BTCONSENT_20130201
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_card_act_monthly_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CARD_ACT_MONTHLY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CARD_ACT_MONTHLY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pdsb_3138_dp_inst_enrol_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PDSB_3138_DP_Inst_Enrol"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PDSB_3138_DP_INST_ENROL
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cw_aml_invalid_id_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cw_aml_invalid_id"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CW_AML_INVALID_ID
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_optional_alert_20210526_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.optional_alert_20210526"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: OPTIONAL_ALERT_20210526
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_app_dash_mkt_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.APP_DASH_MKT"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: APP_DASH_MKT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_tw2_20170418_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.tw2_20170418"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TW2_20170418
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_emob_cat_spend_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_EMOB_CAT_SPEND"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_EMOB_CAT_SPEND
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_spd_offer_tblt_update_20180127_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.spd_offer_tblt_update_20180127"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: SPD_OFFER_TBLT_UPDATE_20180127
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '05 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_apps_active_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.apps_active"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: apps_active
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_mbr_wallet_share_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_MBR_WALLET_SHARE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_MBR_WALLET_SHARE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pdsb2976_dual_apps_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PDSB2976_DUAL_APPS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PDSB2976_DUAL_APPS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_btconsent_20130200_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.fa_btconsent_20130200"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_BTCONSENT_20130200
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_abp_psp_cancellations_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ABP_PSP_CANCELLATIONS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ABP_PSP_CANCELLATIONS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_tms701_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.tms701"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: TMS701
+    clustering_fields:
+      - _NAME_
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 5 * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_portfolio_gs_20180127_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.pcmc_portfolio_gs_20180127"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_PORTFOLIO_GS_20180127
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_engage_by_pcf_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ENGAGE_BY_PCF"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ENGAGE_BY_PCF
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+      - PRODUCT_SIMPLE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_sdi_summary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.SDI_SUMMARY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: SDI_SUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_crbalcounts_201411_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CRBALCOUNTS_201411"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CRBALCOUNTS_201411
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_fa_loyaltypoints_20211118_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.FA_LOYALTYPOINTS_20211118"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: FA_LOYALTYPOINTS_20211118
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_cust_monthly_new_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CDL_CUST_MONTHLY_NEW"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CDL_CUST_MONTHLY_NEW
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_returnedmail_20160315_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.RETURNEDMAIL_20160315"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: RETURNEDMAIL_20160315
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_store_tender_dm_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.STORE_TENDER_DM"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STORE_TENDER_DM
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_app_dash_v2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.APP_DASH_V2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: APP_DASH_V2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_points_day2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.POINTS_DAY2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: POINTS_DAY2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_giftcard_autoreport_alltab_test_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.GIFTCARD_AUTOREPORT_ALLTAB_TEST"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: GIFTCARD_AUTOREPORT_ALLTAB_TEST
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_report_crbal_201409_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.REPORT_CRBAL_201409"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REPORT_CRBAL_201409
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_inteceptor_outlier_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.INTECEPTOR_OUTLIER"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INTECEPTOR_OUTLIER
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_onfido_idv_adm_info_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ONFIDO_IDV_ADM_INFO"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ONFIDO_IDV_ADM_INFO
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_onfido_det_stat_summary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ONFIDO_DET_STAT_SUMMARY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ONFIDO_DET_STAT_SUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_prr_summary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PRR_SUMMARY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PRR_SUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_sales_cube_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.SALES_CUBE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: SALES_CUBE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_onfido_idv_facial_video_det_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.ONFIDO_IDV_FACIAL_VIDEO_DET"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ONFIDO_IDV_FACIAL_VIDEO_DET
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_sales_cube_sl_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.SALES_CUBE_SL"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: SALES_CUBE_SL
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_workshift_datamart_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WORKSHIFT_DATAMART"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WORKSHIFT_DATAMART
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_multi_prod_dash_pcma_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.MULTI_PROD_DASH_PCMA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MULTI_PROD_DASH_PCMA
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_imp_qbr_month_company_region_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.IMP_QBR_MONTH_COMPANY_REGION"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: IMP_QBR_MONTH_COMPANY_REGION
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_we_requal_ytd_2022_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.WE_REQUAL_YTD_2022"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: WE_REQUAL_YTD_2022
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_emob_dm_dashboard_test2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.EMOB_DM_DASHBOARD_TEST2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: EMOB_DM_DASHBOARD_TEST2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_dashboard_v2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMA_DASHBOARD_V2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_DASHBOARD_V2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_inteceptor_outlier_rawdata_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.INTECEPTOR_OUTLIER_RAWDATA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INTECEPTOR_OUTLIER_RAWDATA
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_calls_lob_queue_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CALLS_LOB_QUEUE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CALLS_LOB_QUEUE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_data_w_indicator_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMA_DATA_W_INDICATOR"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_DATA_W_INDICATOR
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcma_conversion_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMA_CONVERSION"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_CONVERSION
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmaemob_daily_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMAEMOB_DAILY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMAEMOB_DAILY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_pcmc_emob_daily_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.PCMC_EMOB_DAILY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMC_EMOB_DAILY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_points_eligible_day2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.POINTS_ELIGIBLE_DAY2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  POINTS_ELIGIBLE_DAY2
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_account_id_original_account_table_onetime_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM MasterCard.dbo.ACCOUNT_ID_original_account"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ACCOUNT_ID_ORIGINAL_ACCOUNT
+    partition_field: RANGE_BUCKET(CIFP_ACCOUNT_ID6, GENERATE_ARRAY(1, 5000000, 100000))
+    data_load_type: FULL_REFRESH
+    add_columns:
+      - SAFE_CAST(CIFP_ACCOUNT_ID6 AS INT64) AS CIFP_ACCOUNT_ID6
+    drop_columns:
+      - CIFP_ACCOUNT_ID6
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_refer_a_friend_code_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM TMP.dbo.REFER_A_FRIEND_CODE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: REFER_A_FRIEND_CODE
+    clustering_fields:
+      - PCF_CUST_ID
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_call_center_summary_stats_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CALL_CENTER_SUMMARY_STATS"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CALL_CENTER_SUMMARY_STATS
+    clustering_fields:
+      - PRODUCT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_contact_mngmnt_db_agg_v2_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CONTACT_MNGMNT_DB_AGG_V2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CONTACT_MNGMNT_DB_AGG_V2
+    clustering_fields:
+      - PCF_CUST_ID
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_interchange_monthly_mcc_mod2_table_monthly_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.INTERCHANGE_MONTHLY_MCC_MOD2"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INTERCHANGE_MONTHLY_MCC_MOD2
+    clustering_fields:
+      - PCMC_PRODUCT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 1 * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_contact_mngmnt_db_agg_table_monthly_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CONTACT_MNGMNT_DB_AGG"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: CONTACT_MNGMNT_DB_AGG
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+      - PCF_CUST_ID
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 1 * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_sdi_xsell_tablet_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.sdi_Xsell_tablet"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  SDI_XSELL_TABLET
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mos_xsell_tablet_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.mos_Xsell_tablet"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  MOS_XSELL_TABLET
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '5 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_mos_summary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.mos_summary"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  MOS_SUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_at31_tw10_20170424_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.at31_tw10_20170424"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  AT31_TW10_20170424
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_caredinal_20200112_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.CAREDINAL_20200112"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CAREDINAL_20200112
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cralert_refund_20150226_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cralert_refund_20150226"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CRALERT_REFUND_20150226
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cralertplus_refund_20150226_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cralertplus_refund_20150226"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CRALERTPLUS_REFUND_20150226
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_creditalert201506_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.creditAlert201506"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CREDITALERT201506
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_crsmallbal_20160216_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.crsmallbal_20160216"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CRSMALLBAL_20160216
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_crsmallbal_counts_20160216_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.crsmallbal_counts_20160216"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CRSMALLBAL_COUNTS_20160216
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cw_kyc_activation_summary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cw_kyc_activation_summary"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CW_KYC_ACTIVATION_SUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cw_kyc_offers_summary_report_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cw_kyc_offers_summary_report"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CW_KYC_OFFERS_SUMMARY_REPORT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 6 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cw_kyc_xsell_summary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cw_kyc_xsell_summary"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CW_KYC_XSELL_SUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_callcentre_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_CallCentre"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  GY_OP_PROD_20120800_CALLCENTRE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '5 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_mthdetail_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_MthDetail"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  GY_OP_PROD_20120800_MTHDETAIL
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_mthlist_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_MthList"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  GY_OP_PROD_20120800_MTHLIST
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_gy_op_prod_20120800_mthsummary_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.gy_op_prod_20120800_MthSummary"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  GY_OP_PROD_20120800_MTHSUMMARY
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '20 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_new_hire_data_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.NEW_HIRE_DATA"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  NEW_HIRE_DATA
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '25 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_optional_alert_cumulative_count_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.optional_alert_cumulative_count"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  OPTIONAL_ALERT_CUMULATIVE_COUNT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_returnedmail_20160216_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.returnedmail_20160216"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  RETURNEDMAIL_20160216
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_yr_interest_20170411_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.yr_interest_20170411"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  YR_INTEREST_20170411
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '40 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_yr1_adj_product_20170411_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.yr1_adj_product_20170411"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  YR1_ADJ_PRODUCT_20170411
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_yr1_adj_product_summary_20170411_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.yr1_adj_product_summary_20170411"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  YR1_ADJ_PRODUCT_SUMMARY_20170411
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '50 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_yr1_curr_adj_product_20170411_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.yr1_curr_adj_product_20170411"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  YR1_CURR_ADJ_PRODUCT_20170411
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_cust_monthly_20190608_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_cust_monthly_20190608"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CDL_CUST_MONTHLY_20190608
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '0 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cdl_cust_new_monthly_20190608_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.cdl_cust_new_monthly_20190608"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CDL_CUST_NEW_MONTHLY_20190608
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '5 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_sysdiagrams_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM NDW.dbo.sysdiagrams"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  SYSDIAGRAMS
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '10 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_cons_trans_hdr_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM NDW.dbo.CONS_TRANS_HDR"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name:  CONS_TRANS_HDR
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '15 5 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_interchange_monthly_mcc_daily_table_monthly_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.INTERCHANGE_MONTHLY_MCC_DAILY"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INTERCHANGE_MONTHLY_MCC_DAILY
+    clustering_fields:
+      - PCMC_PRODUCT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '55 7 1 * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_post_mon_token_rpt_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.Post_mon_token_rpt"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: POST_MON_TOKEN_RPT
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - PRODUCT_TYPE
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_interest_product_20170411_table_daily_loading_job:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.interest_product_20170411"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INTEREST_PRODUCT_20170411
+    add_columns:
+      - '`group` as GROUP_ID'
+    drop_columns:
+      - group
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '30 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+# tactical solution
+db839_store28ace_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM Generic.dbo.STORE28ACE"
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STORE28ACE
+    data_load_type: FULL_REFRESH
+  dag:
+    schedule_interval: '35 9 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"

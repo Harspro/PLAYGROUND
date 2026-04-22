@@ -1,0 +1,533 @@
+ods_cardinal_cust_alert_notification_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.CUST_ALERT_NOTIFICATION
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: CUST_ALERT_NOTIFICATION
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '35 8 * * *'
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "push-notification"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+adm_rt_response_uns_pm_run_delta:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_RT_RESPONSE_UNS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_RT_RESPONSE_UNS
+    insert_fetch_cols : True
+  batch:
+    time_from: '09:00:00'
+    time_to: '13:00:00'
+  dag:
+    schedule_interval: '05 13 * * *'
+    same_day_run: True
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "ADM_RT_RESPONSE_UNS related reporting will be impacted"
+    customer_impact: "None"
+
+adm_rt_response_uns_am_run_delta:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_RT_RESPONSE_UNS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_RT_RESPONSE_UNS
+    insert_fetch_cols : True
+  batch:
+    time_from: '13:00:00'
+    time_to: '09:00:00'
+  dag:
+    schedule_interval: '05 09 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "ADM_RT_RESPONSE_UNS related reporting will be impacted"
+    customer_impact: "None"
+
+db839_pcma_transactions_table_delta:
+  is_sqlserver: True
+  fetch_spark_job:
+    dbname: db839
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.PCMA_TRANSACTIONS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DATE
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: PCMA_TRANSACTIONS
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+adm_rt_response_uns_jul_2023_delta:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_RT_RESPONSE_UNS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_RT_RESPONSE_UNS
+    insert_fetch_cols : True
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "ADM_RT_RESPONSE_UNS related reporting will be impacted"
+    customer_impact: "None"
+
+ods_application_product_evt_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_PRODUCT_EVT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: OCCURRED_ON
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_PRODUCT_EVT
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: '00 06 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_application_submission_evt_am_run_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_SUBMISSION_EVT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: OCCURRED_ON
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_SUBMISSION_EVT
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  batch:
+    time_from: '15:00:00'
+    time_to: '09:00:00'
+  dag:
+    schedule_interval: '05 09 * * *'
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_application_submission_evt_pm_run_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_SUBMISSION_EVT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: OCCURRED_ON
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_SUBMISSION_EVT
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+  batch:
+    time_from: '09:00:00'
+    time_to: '15:00:00'
+  dag:
+    schedule_interval: '05 15 * * *'
+    same_day_run: True
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_cardinal_account_customer_preference_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER_PREFERENCE
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER_PREFERENCE
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '10 08 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_account_customer_pref_param_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER_PREF_PARAM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER_PREF_PARAM
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '10 08 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ods_cardinal_account_customer_pref_contact_table_delta:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCOUNT_CUSTOMER_PREF_CONTACT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCOUNT_CUSTOMER_PREF_CONTACT
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '05 8 * * *'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+data_patch_ods_application_product_table:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_PRODUCT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_PRODUCT
+    add_columns:
+      - CAST(APPLICATION_PRODUCT_UID AS INT64) AS APPLICATION_PRODUCT_UID
+      - CAST(APPLICATION_SUBMISSION_UID AS INT64) AS APPLICATION_SUBMISSION_UID
+      - TSYS_REFERENCE_NUMBER AS TSYS_REFERENCE_NUMBER
+      - ACCOUNT_NO AS ACCOUNT_NO
+      - PRODUCT_CODE AS PRODUCT_CODE
+      - CREATE_DT AS CREATE_DT
+      - CREATE_USER_ID AS CREATE_USER_ID
+      - CREATE_FUNCTION_NAME AS CREATE_FUNCTION_NAME
+      - UPDATE_DT AS UPDATE_DT
+      - UPDATE_USER_ID AS UPDATE_USER_ID
+      - UPDATE_FUNCTION_NAME AS UPDATE_FUNCTION_NAME
+      - PRODUCT_TYPE AS PRODUCT_TYPE
+      - CURRENT_STATUS AS CURRENT_STATUS
+      - CURRENT_CONTEXT AS CURRENT_CONTEXT
+      - ACCOUNT_OPEN_DT AS ACCOUNT_OPEN_DT
+      - SENDER_DT AS SENDER_DT
+      - IDV_REQUEST_NO AS IDV_REQUEST_NO
+      - CORRESPONDENCE_CODE AS CORRESPONDENCE_CODE
+      - E_DELIVERY_IND AS E_DELIVERY_IND
+      - INTENDED_USE_OF_ACCT AS INTENDED_USE_OF_ACCT
+      - SPECIAL_STATUS AS SPECIAL_STATUS
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+    drop_columns:
+      - APPLICATION_PRODUCT_UID
+      - APPLICATION_SUBMISSION_UID
+      - TSYS_REFERENCE_NUMBER
+      - ACCOUNT_NO
+      - PRODUCT_CODE
+      - CREATE_DT
+      - CREATE_USER_ID
+      - CREATE_FUNCTION_NAME
+      - UPDATE_DT
+      - UPDATE_USER_ID
+      - UPDATE_FUNCTION_NAME
+      - PRODUCT_TYPE
+      - CURRENT_STATUS
+      - CURRENT_CONTEXT
+      - ACCOUNT_OPEN_DT
+      - SENDER_DT
+      - IDV_REQUEST_NO
+      - CORRESPONDENCE_CODE
+      - E_DELIVERY_IND
+      - INTENDED_USE_OF_ACCT
+      - SPECIAL_STATUS
+  dag:
+    schedule_interval: null
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+data_patch_ods_application_submission_table:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_SUBMISSION
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_SUBMISSION
+    add_columns:
+      - CAST(APPLICATION_SUBMISSION_UID AS INT64) AS APPLICATION_SUBMISSION_UID
+      - APPLICATION_SUBMISSION_NO AS APPLICATION_SUBMISSION_NO
+      - LCL_APPLICATION_ID AS LCL_APPLICATION_ID
+      - APPLICATION_SUBMISSION_TYPE AS APPLICATION_SUBMISSION_TYPE
+      - PCF_CUSTOMER_ID AS PCF_CUSTOMER_ID
+      - APPLICATION_SUBMITTED_ON AS APPLICATION_SUBMITTED_ON
+      - APPLICATION_RECEIVED_ON AS APPLICATION_RECEIVED_ON
+      - OFFLINE_SUBMISSION_IND AS OFFLINE_SUBMISSION_IND
+      - CHANNEL_CD AS CHANNEL_CD
+      - CORRELATION_ID AS CORRELATION_ID
+      - MESSAGE_ID AS MESSAGE_ID
+      - REQUEST_ID AS REQUEST_ID
+      - TRACEABILITY_ID AS TRACEABILITY_ID
+      - SYNTHETIC_NO AS SYNTHETIC_NO
+      - CREATE_DT AS CREATE_DT
+      - CREATE_USER_ID AS CREATE_USER_ID
+      - CREATE_FUNCTION_NAME AS CREATE_FUNCTION_NAME
+      - UPDATE_DT AS UPDATE_DT
+      - UPDATE_USER_ID AS UPDATE_USER_ID
+      - UPDATE_FUNCTION_NAME AS UPDATE_FUNCTION_NAME
+      - APPLICATION_FULFILLMENT_TYPE AS APPLICATION_FULFILLMENT_TYPE
+      - CURRENT_STATUS AS CURRENT_STATUS
+      - CURRENT_CONTEXT AS CURRENT_CONTEXT
+      - CURRENT_STATUS_REASON_CD AS CURRENT_STATUS_REASON_CD
+      - SOURCE_CD AS SOURCE_CD
+      - PROMOTIONAL_CD AS PROMOTIONAL_CD
+      - APPLICATION_VERSION AS APPLICATION_VERSION
+      - DEVICE_ID AS DEVICE_ID
+      - EXTERNAL_APPLICATION_REF_NO AS EXTERNAL_APPLICATION_REF_NO
+      - EN_COMMS_CONFIRMED AS EN_COMMS_CONFIRMED
+      - ENTRY_POINT AS ENTRY_POINT
+      - NEW_CUSTOMER_IND AS NEW_CUSTOMER_IND
+      - SUBMISSION_FLOW AS SUBMISSION_FLOW
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - DATETIME(NULL) AS INGESTION_TIMESTAMP
+    drop_columns:
+      - APPLICATION_SUBMISSION_UID
+      - APPLICATION_SUBMISSION_NO
+      - LCL_APPLICATION_ID
+      - APPLICATION_SUBMISSION_TYPE
+      - PCF_CUSTOMER_ID
+      - APPLICATION_SUBMITTED_ON
+      - APPLICATION_RECEIVED_ON
+      - OFFLINE_SUBMISSION_IND
+      - CHANNEL_CD
+      - CORRELATION_ID
+      - MESSAGE_ID
+      - REQUEST_ID
+      - TRACEABILITY_ID
+      - SYNTHETIC_NO
+      - CREATE_DT
+      - CREATE_USER_ID
+      - CREATE_FUNCTION_NAME
+      - UPDATE_DT
+      - UPDATE_USER_ID
+      - UPDATE_FUNCTION_NAME
+      - APPLICATION_FULFILLMENT_TYPE
+      - CURRENT_STATUS
+      - CURRENT_CONTEXT
+      - CURRENT_STATUS_REASON_CD
+      - SOURCE_CD
+      - PROMOTIONAL_CD
+      - APPLICATION_VERSION
+      - DEVICE_ID
+      - EXTERNAL_APPLICATION_REF_NO
+      - EN_COMMS_CONFIRMED
+      - ENTRY_POINT
+      - NEW_CUSTOMER_IND
+      - SUBMISSION_FLOW
+  dag:
+    schedule_interval: null
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+db053_ts2_pc_download_table_delta:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.PC_DOWNLOAD
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: PC_DOWNLOAD
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+
+db053_ts2_token_notify_table_delta:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.TOKEN_NOTIFY
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: TOKEN_NOTIFY
+    add_columns:
+      - REC_LOAD_TMS AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - LOAD_RESULT_UUID
+      - REC_LOAD_TMS
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '35 8 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"

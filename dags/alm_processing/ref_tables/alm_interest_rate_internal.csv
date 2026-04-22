@@ -1,0 +1,11 @@
+vendor,instrument_type,field_name,rate,rate_description
+JP Morgan,Derivatives,Fixed Rate,3.5%,3.5% fixed annual rate
+Goldman Sachs,Bonds,Spread Rate,1.8%,1.8% spread over benchmark
+Morgan Stanley,Equities,Dividend Yield,4.2%,4.2% dividend yield
+Barclays,Derivatives,Forward Rate,2.7%,2.7% forward rate expectation
+Deutsche Bank,Bonds,Coupon Rate,3.0%,3.0% coupon rate for bonds
+Bank of America,Equities,Growth Rate,5.1%,5.1% annual growth rate
+Wells Fargo,Derivatives,Volatility Rate,3.9%,3.9% annualized volatility
+Citibank,Bonds,Credit Rate,2.4%,2.4% credit rate on assets
+UBS,Equities,Earnings Yield,6.0%,6.0% earnings yield on equities
+CIBC,Equities,Earnings Yield,4.0%,6.0% earnings yield on equities

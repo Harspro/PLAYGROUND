@@ -1,0 +1,61 @@
+tags:
+  - communication
+  - mail
+default_args:
+  owner: "alerts"
+  capability: "capability"
+  sub_capability: "sub-capability"
+  severity: "P3"
+  business_impact: "business impact"
+  customer_impact: "customer impact"
+dag:
+  read_pause_deploy_config: True
+  schedule_interval: "0 9 * * *"
+  location: "location"
+  wait_for_completion: True
+  poke_interval: 30
+  input_bucket: "input-bucket"
+  cloud_function:
+    audience: "audience-url"
+    max_concurrent_records: 500
+  workload:
+    namespace: namespace
+    afp:
+      - input_path: LETTER/SIMPLEX/EN
+        output_file_name: "simplex_eng_letters_afp_"
+        output_file_suffix: "01"
+      - input_path: LETTER/SIMPLEX/FR
+        output_file_name: "simplex_frc_letters_afp_"
+        output_file_suffix: "01"
+      - input_path: LETTER/DUPLEX_2/EN
+        output_file_name: "duplex_eng_letters_afp_"
+        output_file_suffix: "02"
+      - input_path: LETTER/DUPLEX_2/FR
+        output_file_name: "duplex_frc_letters_afp_"
+        output_file_suffix: "02"
+      - input_path: LETTER/DUPLEX_3/EN
+        output_file_name: "duplex_eng_letters_afp_"
+        output_file_suffix: "03"
+      - input_path: LETTER/DUPLEX_3/FR
+        output_file_name: "duplex_frc_letters_afp_"
+        output_file_suffix: "03"
+      - input_path: LETTER/DUPLEX_4/EN
+        output_file_name: "duplex_eng_letters_afp_"
+        output_file_suffix: "04"
+      - input_path: LETTER/DUPLEX_4/FR
+        output_file_name: "duplex_frc_letters_afp_"
+        output_file_suffix: "04"
+    uat:
+      project_id: "project-id"
+      cluster_name: "cluster-name"
+      image: "image"
+      output_bucket: "output-bucket-uat"
+      afp_file_prefix: "afp_prefix"
+      afp_file_extension: ".extension"
+  kafka_config:
+    kafka_writer_task_id: 'task-id'
+    kafka_trigger_dag_id: 'trigger-dag-id'
+    kafka_cluster_name: "cluster-name"
+    bucket: 'bucket-name'
+    folder_prefix: 'folder-prefix'
+    file_name: 'file-name'

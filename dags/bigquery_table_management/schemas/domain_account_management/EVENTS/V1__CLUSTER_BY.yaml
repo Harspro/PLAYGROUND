@@ -1,0 +1,4 @@
+clustering_fields:
+  - EV3_EL01_TYPE_EVENT
+  - EV3_EVENT_FIELD_NUM
+  - FILE_RECORD_NBR

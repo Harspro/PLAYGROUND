@@ -1,0 +1,22 @@
+dag1:
+  dag:
+    description: 'Test DAG'
+    dagrun_timeout: 60
+    sub_dag_trigger_rule: 'invalid_rule'
+    tags:
+      - test
+  default_args:
+    retries: 2
+  task_groups:
+    - group_id: 'group1'
+      execution_mode: 'parallel'
+      description: 'First group'
+      dags:
+        - sub_dag_id: 'sub_dag1'
+          params:
+            param1: 'value1'
+        - 'sub_dag2'
+    - group_id: 'group2'
+      execution_mode: 'sequential'
+      dags:
+        - 'sub_dag3'

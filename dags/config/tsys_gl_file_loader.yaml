@@ -1,0 +1,69 @@
+tsys_gl_file_loader:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "payments"
+    business_impact: 'General ledger table will not be created in BQ'
+    customer_impact: 'No Impact'
+    severity: "P3"
+  tags: ["MoneyMove - payments"]
+  job_size: medium
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_gl
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: GL
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: GL
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: detail_group
+        segments: DETL
+      - group_name: header_group
+        segments: HEDR
+    segment_args:
+      HEDR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_gl/HEDR.CPY
+        pcb.tsys.processor.segment.name: H
+        pcb.tsys.processor.layout.name: HEDR_REC
+      DETL:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_gl/DETL.CPY
+        pcb.tsys.processor.segment.name: D
+        pcb.tsys.processor.layout.name: DETL_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_gl/TRLR.CPY
+        pcb.tsys.processor.segment.name: T
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_ledger
+    data_load_type: APPEND_ONLY
+    tables:
+      HEDR:
+        table_name: GENERALLEDGER_HEDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL:
+        table_name: GENERALLEDGER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - DATETIME(PARSE_TIMESTAMP('%m%d%Y', CURR_PROCESSING_DATE)) as CURR_PROCESSING_DATE
+        drop_columns:
+          - CURR_PROCESSING_DATE
+      TRLR:
+        table_name: GENERALLEDGER_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP

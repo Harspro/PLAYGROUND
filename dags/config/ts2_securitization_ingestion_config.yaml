@@ -1,0 +1,57 @@
+ts2_securitization_full_file_loading:
+  job_size: extra_small
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_securitzn
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: SECURITIZATION
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: SECURITIZATION
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: detail_group
+        segments: SECURE_D_REC
+    segment_args:
+      SECURE_D_REC:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_securitzn/SECURE.CPY
+        pcb.tsys.processor.segment.name: 5
+        pcb.tsys.processor.layout.name: SECURE_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_securitzn/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9
+        pcb.tsys.processor.layout.name: SECURE_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_securitization
+    data_load_type: APPEND_ONLY
+    tables:
+      SECURE_D_REC:
+        table_name: SECURITIZATION
+        record_count_column: TOTAL_ITEM_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: SECURITIZATION_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "securitization"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'

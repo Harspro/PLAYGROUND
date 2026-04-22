@@ -1,0 +1,44 @@
+SELECT
+  sa14.* REPLACE(
+  CASE WHEN(ic.dt_cancel IS NULL AND ie.dt_enroll IS NOT NULL) OR (ic.dt_cancel < ie.dt_enroll) THEN CASE
+    WHEN (SA10_RET_INS_CLAIM_STAT IS NULL) OR (SA10_RET_INS_CLAIM_STAT = '')
+  OR (UPPER(SA10_RET_INS_CLAIM_STAT) IN ('8',
+      'O')) THEN 'P00'|| LANG_CODE_BEG_CY ||'1'
+    WHEN (UPPER(SA10_RET_INS_CLAIM_STAT) = 'A') THEN 'P00'|| LANG_CODE_BEG_CY ||'2'
+    WHEN (UPPER(SA10_RET_INS_CLAIM_STAT) IN ('B','N')) THEN 'P00'|| LANG_CODE_BEG_CY ||'3'
+    ELSE SA14_RET_INSUR_MSG
+END
+    WHEN (ic.dt_cancel > ie.dt_enroll) THEN CASE
+    WHEN (UPPER(SA10_RET_INS_CLAIM_STAT) = 'A') THEN 'P00'|| LANG_CODE_BEG_CY ||'2'
+    WHEN (UPPER(SA10_RET_INS_CLAIM_STAT) IN ('B','N')) THEN 'P00'|| LANG_CODE_BEG_CY ||'3'
+    ELSE SA14_RET_INSUR_MSG
+END
+    ELSE SA14_RET_INSUR_MSG
+END
+  AS SA14_RET_INSUR_MSG)
+FROM
+  pcb-{env}-processing.domain_account_management.SA14_MID{file_type} sa14
+LEFT JOIN (
+  SELECT
+    ACCOUNT_IDENTIFER,
+    MAX(DATE_ENROLLED_5) AS dt_enroll
+  FROM
+    pcb-{env}-landing.domain_account_management.INS_ENROLL
+  WHERE
+    SUBSTR( INSURANCE_TYPE, 9, 1) = 'Y'
+  GROUP BY
+    ACCOUNT_IDENTIFER ) ie
+ON
+  ie.ACCOUNT_IDENTIFER = sa14.SA14_ACCT_ID
+LEFT JOIN (
+  SELECT
+    ACCOUNT_IDENTIFER,
+    MAX(CANCELLATION_DT5) AS dt_cancel
+  FROM
+    pcb-{env}-landing.domain_account_management.INS_CANCEL
+  GROUP BY
+    ACCOUNT_IDENTIFER ) ic
+ON
+  ie.ACCOUNT_IDENTIFER = ic.ACCOUNT_IDENTIFER
+WHERE
+  sa14.Is_Ins_Active <> '0'

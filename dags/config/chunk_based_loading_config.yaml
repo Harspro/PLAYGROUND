@@ -1,0 +1,1457 @@
+ESB_CONTROL_pch_ho17bvi8_keycontrol_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: ESB_CONTROL.pch_ho17bvi8_keycontrol
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: DATE_FILE_SUBMITTED
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: PCH_RMS_KEYCONTROL
+    add_columns:
+      - DATE_FILE_SUBMITTED AS FILE_CREATE_DT
+    drop_columns:
+      - DATE_FILE_SUBMITTED
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-30 # exclusive
+  default_args:
+    owner: "team-risk-management-eng"
+    capability: "Risk Management - RMS"
+    sub_capability: "RecoveryManagementSystem"
+    business_impact: "RecoveryManagementSystem transactions will not be processed successfully"
+    customer_impact: "No Impact"
+
+db053_ts2_embossing_table_idl:
+  fetch_spark_job:
+    dbname: db053_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.EMBOSSING
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: EMBOSSING_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    partition_field: FILE_CREATE_DT
+    clustering_fields:
+      - ACCT_NBR_ON_CARD
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2010-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db053_ts2_embossing_fastcard_table_idl:
+  fetch_spark_job:
+    dbname: db053_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.EMBOSSING_FASTCARD
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: EMBOSSING_FASTCARD_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    partition_field: FILE_CREATE_DT
+    clustering_fields:
+      - ACCT_NBR_ON_CARD
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2010-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db053_ts2_embossing_reissue_table_idl:
+  fetch_spark_job:
+    dbname: db053_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.EMBOSSING_REISSUE
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: EMBOSSING_REISSUE_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    partition_field: FILE_CREATE_DT
+    clustering_fields:
+      - ACCT_NBR_ON_CARD
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2010-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_audit_log_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_AUDIT_LOG
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_AUDIT_LOG_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    partition_field: REC_CREATE_DT
+    clustering_fields:
+      - AUDIT_LOG_ID
+    add_columns:
+      - DATE(REC_CREATE_TMS) AS REC_CREATE_DT
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_audit_log_field_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_AUDIT_LOG_FIELD
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_AUDIT_LOG_FIELD_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    partition_field: REC_CREATE_DT
+    clustering_fields:
+      - AUDIT_LOG_ID
+    add_columns:
+      - DATE(REC_CREATE_TMS) AS REC_CREATE_DT
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_chip_option_change_status_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_CHIP_OPTION_CHANGE_STATUS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_CHIP_OPTION_CHANGE_STATUS_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PAN
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_doc_input_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_DOC_INPUT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_DOC_INPUT_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PERSO_REQ_ID
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2018-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_fulfill_master_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_FULFILL_MASTER
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_FULFILL_MASTER_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PAN
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_perso_token_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_PERSO_TOKEN
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_PERSO_TOKEN_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PERSO_REQ_ID
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2018-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_pushed_data_status_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_PUSHED_DATA_STATUS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_PUSHED_DATA_STATUS_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PAN
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2018-01-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_state_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_STATE
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_STATE_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PAN
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_tsys_push_clob_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_TSYS_PUSH_CLOB
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_TSYS_PUSH_CLOB_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - PAN
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2015-07-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_ii_tsys_pushed_data_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.II_TSYS_PUSHED_DATA
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: II_TSYS_PUSHED_DATA_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    partition_field: REC_CREATE_DT
+    clustering_fields:
+      - PAN
+    add_columns:
+      - DATE(REC_CREATE_TMS) AS REC_CREATE_DT
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2018-01-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db563_pcmc_apr_control_table_idl:
+  fetch_spark_job:
+    dbname: db563_ogres
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.APR_CONTROL
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CREATE_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    table_name: APR_CONTROL_ARCHIVE
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - APR_CTL_KEY
+    add_columns:
+      - REC_CREATE_TMS AS REC_CREATE_TIMESTAMP
+      - REC_CHNG_TMS AS REC_CHANGE_TIMESTAMP
+    drop_columns:
+      - REC_CREATE_TMS
+      - REC_CHNG_TMS
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2020-01-01 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    sub_capability: "card-management"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+stmt_sa10_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA10_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA10
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA10_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: 'TBD'
+    customer_impact: 'TBD'
+    severity: "P3"
+
+ts2_RMS_LEGAL_05_table_idl:
+  fetch_spark_job:
+    dbname:  db053_money_movement
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.RMS_LEGAL_05
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: RMS_LEGAL_05
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-30 # exclusive
+  default_args:
+    owner: "team-risk-management-eng"
+    capability: "Risk Management - RMS"
+    sub_capability: "RecoveryManagementSystem"
+    business_impact: "RecoveryManagementSystem transactions will not be processed successfully"
+    customer_impact: "No Impact"
+
+ts2_RMS_MAINT_ACCOUNT_04_table_idl:
+  fetch_spark_job:
+    dbname: db053_money_movement
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.RMS_MAINT_ACCOUNT_04
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: RMS_MAINT_ACCOUNT_04
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    add_columns:
+      - CAST(100*ACCOUNT_BALANCE AS INTEGER) AS ACCOUNT_BALANCE
+      - CAST(100*CHARGEOFF_AMOUNT AS INTEGER) AS CHARGEOFF_AMOUNT
+      - CAST(100*LAST_PAYMENT_AMT AS INTEGER) AS LAST_PAYMENT_AMT
+      - CAST(100*TOT_AMOUNT_PASTDUE AS INTEGER) AS TOT_AMOUNT_PASTDUE
+      - CAST(100*CASH_ADV_THIS_CYC AS INTEGER) AS CASH_ADV_THIS_CYC
+      - CAST(100*PURCHASES_THIS_CYC AS INTEGER) AS PURCHASES_THIS_CYC
+      - CAST(NULL AS STRING) AS FILLER_01
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - ACCOUNT_BALANCE
+      - CHARGEOFF_AMOUNT
+      - LAST_PAYMENT_AMT
+      - TOT_AMOUNT_PASTDUE
+      - CASH_ADV_THIS_CYC
+      - PURCHASES_THIS_CYC
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-30 # exclusive
+  default_args:
+    owner: "team-risk-management-eng"
+    capability: "Risk Management - RMS"
+    sub_capability: "RecoveryManagementSystem"
+    business_impact: "RecoveryManagementSystem transactions will not be processed successfully"
+    customer_impact: "No Impact"
+
+ts2_RMS_NEW_ACCOUNT_01_table_idl:
+  fetch_spark_job:
+    dbname: db053_money_movement
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.RMS_NEW_ACCOUNT_01
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: RMS_NEW_ACCOUNT_01
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    add_columns:
+      - CAST(100*ACCOUNT_BALANCE AS INTEGER) AS ACCOUNT_BALANCE
+      - CAST(100*CHARGEOFF_AMOUNT AS INTEGER) AS CHARGEOFF_AMOUNT
+      - CAST(100*LAST_PAYMENT_AMT AS INTEGER) AS LAST_PAYMENT_AMT
+      - CAST(100*TOT_AMOUNT_PASTDUE AS INTEGER) AS TOT_AMOUNT_PASTDUE
+      - CAST(100*CASH_ADV_THIS_CYC AS INTEGER) AS CASH_ADV_THIS_CYC
+      - CAST(100*PURCHASES_THIS_CYC AS INTEGER) AS PURCHASES_THIS_CYC
+      - CAST(NULL AS STRING) AS FILLER_01
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - ACCOUNT_BALANCE
+      - CHARGEOFF_AMOUNT
+      - LAST_PAYMENT_AMT
+      - TOT_AMOUNT_PASTDUE
+      - CASH_ADV_THIS_CYC
+      - PURCHASES_THIS_CYC
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-30 # exclusive
+  default_args:
+    owner: "team-risk-management-eng"
+    capability: "Risk Management - RMS"
+    sub_capability: "RecoveryManagementSystem"
+    business_impact: "RecoveryManagementSystem transactions will not be processed successfully"
+    customer_impact: "No Impact"
+
+ts2_RMS_MEMO_02_table_idl:
+  fetch_spark_job:
+    dbname: db053_money_movement
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.RMS_MEMO_02
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: RMS_MEMO_02
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-30 # exclusive
+  default_args:
+    owner: "team-risk-management-eng"
+    capability: "Risk Management - RMS"
+    sub_capability: "RecoveryManagementSystem"
+    business_impact: "RecoveryManagementSystem transactions will not be processed successfully"
+    customer_impact: "No Impact"
+
+ts2_RMS_TRANSACTION_03_table_idl:
+  fetch_spark_job:
+    dbname: db053_money_movement
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.RMS_TRANSACTION_03
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: RMS_TRANSACTION_03
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    add_columns:
+      - CAST(100*TRANSACTION_AMOUNT AS INTEGER) AS TRANSACTION_AMOUNT
+      - CAST(NULL AS STRING) AS FILLER_03
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - TRANSACTION_AMOUNT
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-30 # exclusive
+  default_args:
+    owner: "team-risk-management-eng"
+    capability: "Risk Management - RMS"
+    sub_capability: "RecoveryManagementSystem"
+    business_impact: "RecoveryManagementSystem transactions will not be processed successfully"
+    customer_impact: "No Impact"
+
+db303_esb_control_cme_batch_param_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: ESB_CONTROL.CME_BATCH_PARAM
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: CME_BATCH_PARAM
+    partition_field: DATE_TRUNC(REC_CHNG_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2023-05-01 # inclusive
+    end_date: 2025-03-30 # exclusive
+  default_args:
+    owner: "team-exodus"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+ts2_cif_account_curr_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.CIF_ACCOUNT_CURR
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: IDL_CIF_ACCOUNT_CURR
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - CIFP_ACCOUNT_ID5
+      - CIFP_CLIENT_PRODUCT_CODE
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STAMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STAMP
+      - EXECUTION_ID
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2010-01-01 # inclusive
+    end_date: 2025-12-31 # exclusive
+  dag:
+    schedule_interval: '0 11 * * 1-6'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "N/A"
+    severity: 'P3'
+
+ts2_cif_account_prev_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.CIF_ACCOUNT_PREV
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: IDL_CIF_ACCOUNT_PREV
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - CIFP_ACCOUNT_ID5
+      - CIFP_CLIENT_PRODUCT_CODE
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STAMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STAMP
+      - EXECUTION_ID
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2010-01-01 # inclusive
+    end_date: 2025-12-31 # exclusive
+  dag:
+    schedule_interval: '0 11 * * 1-6'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "N/A"
+    severity: 'P3'
+
+ts2_cif_card_curr_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.CIF_CARD_CURR
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: IDL_CIF_CARD_CURR
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - CIFP_ACCOUNT_ID6
+      - CIFP_RELATIONSHIP_STAT
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STAMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STAMP
+      - EXECUTION_ID
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2010-01-01 # inclusive
+    end_date: 2025-12-31 # exclusive
+  dag:
+    schedule_interval: '0 11 * * 1-6'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "N/A"
+    severity: 'P3'
+
+ts2_cif_card_prev_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.CIF_CARD_PREV
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: IDL_CIF_CARD_PREV
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    write_disposition: WRITE_TRUNCATE
+    clustering_fields:
+      - CIFP_ACCOUNT_ID6
+      - CIFP_RELATIONSHIP_STAT
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STAMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STAMP
+      - EXECUTION_ID
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2010-01-01 # inclusive
+    end_date: 2025-12-31 # exclusive
+  dag:
+    schedule_interval: '0 11 * * 1-6'
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "N/A"
+    severity: 'P3'
+
+stmt_sa14_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA14_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA14
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA14_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa15_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA15_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA15
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA15_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa20_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA20_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA20
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA20_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa30_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA30_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA30
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA30_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa40_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA40_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA40
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA40_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa59_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA59_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA59
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA59_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa85_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA85_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA85
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA85_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa41_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA41_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA41
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA41_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa60_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA60_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA60
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA60_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa65_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA65_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TIMESTAMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA65
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - SA65_ACCT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_sa30_tsys_buckets_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.SA30_TSYS_BUCKETS_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: FILE_CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SA30_TSYS_BUCKETS
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    clustering_fields:
+      - ACCOUNT_ID
+      - PARENT_CARD_NUM
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_audit_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.STMT_AUDIT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: PROCESS_DATE
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_AUDIT
+    partition_field: DATE_TRUNC(PROCESS_DATE, MONTH)
+    clustering_fields:
+      - PROCESS_NAME
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_load_results_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.LOAD_RESULTS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: LAST_LOAD_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_LOAD_RESULTS
+    partition_field: DATE_TRUNC(LAST_LOAD_DT, MONTH)
+    clustering_fields:
+      - PROCESS_NM
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+stmt_daily_data_join_sa_key_subset_table_idl:
+  fetch_spark_job:
+    dbname: db732
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: STMT.STMT_DAILY_DATA_JOIN_SA_KEY_SUBSET
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: PROCESS_DATE
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_DAILY
+    partition_field: DATE_TRUNC(PROCESS_DATE, MONTH)
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 12 months
+    start_date: 2017-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "e-statements"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: 'P3'
+
+ods_cardinal_ambassador_esso_transaction_table_idl:
+  fetch_spark_job:
+    dbname: ods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL_AMBASSADOR.ESSO_TRANSACTION
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: CREATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: AMBASSADOR_ESSO_TRANSACTION
+    partition_field: DATETIME_TRUNC(CREATE_DT, MONTH)
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 6 months
+    start_date: 2019-12-12 # inclusive
+    end_date: 2025-06-30 # exclusive
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+ts2_batch_authorization_log_table_idl:
+  fetch_spark_job:
+    dbname: db053
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: TS2.BATCH_AUTHORIZATION_LOG
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_DT_TM_STMP
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: BATCH_AUTHORIZATION_LOG
+    partition_field: DATE_TRUNC(FILE_CREATE_DT, MONTH)
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STMP
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 12 months
+    start_date: 2025-06-04 # inclusive
+    end_date: 2025-07-30 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "N/A"
+    customer_impact: "N/A"
+    severity: 'P3'
+
+db610_pcl_pcf_cust_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCL.PCF_CUST
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_LOAD_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PCF_CUST
+    partition_field: DATETIME_TRUNC(REC_LOAD_TMS, MONTH)
+    clustering_fields:
+      - PCF_CUST_ID
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 6 months
+    start_date: 2012-01-01 # inclusive
+    end_date: 2025-11-29 # exclusive
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+
+one_time_patch_adm_rt_response_uns_table_loading_job:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_RT_RESPONSE_UNS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_RT_RESPONSE_UNS
+    filter_rows: ["SOURCE_CD IN ('KOG', 'LNQ')"]
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 6 months
+    start_date: 2024-09-19 # inclusive
+    end_date: 2025-06-23 # exclusive
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+  dag:
+    schedule_interval: null
+  tags:
+    - team-growth-and-sales
+
+lds_cme_stmt_cme_feedback_table_idl:
+  fetch_spark_job:
+    dbname: db303_bods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: LDS_CME.STMT_CME_FEEDBACK
+      pcb.bigquery.loader.source.db.read.parallelism: 12
+      pcb.bigquery.loader.source.partition.column: PROCESSED_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: STMT_CME_FEEDBACK
+    partition_field: DATE_TRUNC(REC_CREATE_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2018-01-01 # inclusive
+    end_date: 2025-12-30 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Estatement"
+
+lds_cme_stmt_cme_feedback_staging_table_idl:
+  fetch_spark_job:
+    dbname: db303_bods
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: LDS_CME.STMT_CME_FEEDBACK_STAGING
+      pcb.bigquery.loader.source.db.read.parallelism: 12
+      pcb.bigquery.loader.source.partition.column: PROCESSED_TMS
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: STMT_FEEDBACK_STAGING
+    partition_field: DATE_TRUNC(REC_CREATE_TMS, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2018-01-01 # inclusive
+    end_date: 2025-12-30 # exclusive
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "Estatement"
+
+ods_cardinal_acct_cust_create_req_table_idl:
+  fetch_spark_job:
+    dbname: ods_da
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCT_CUST_CREATE_REQ
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCT_CUST_CREATE_REQ
+    partition_field: DATETIME_TRUNC(UPDATE_DT, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to12 months
+    start_date: 2018-01-01 # inclusive
+    end_date: 2026-02-28 # exclusive
+  default_args:
+    owner: "team-da-spiders"
+    capability: "history data"
+
+ods_cardinal_acct_cust_create_req_stat_table_idl:
+  fetch_spark_job:
+    dbname: ods_da
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.ACCT_CUST_CREATE_REQ_STAT
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+      pcb.bigquery.loader.source.partition.column: UPDATE_DT
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: ACCT_CUST_CREATE_REQ_STAT
+    partition_field: DATETIME_TRUNC(UPDATE_DT, MONTH)
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to12 months
+    start_date: 2018-01-01 # inclusive
+    end_date: 2026-02-28 # exclusive
+  default_args:
+    owner: "team-da-spiders"
+    capability: "history data"
+
+de_acq_adhoc_one_time_data_patch_db563_adm_inst_card_info_loading_job:
+  fetch_spark_job:
+    dbname: db563
+    args:
+      pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.ADM_INST_CARD_INFO
+      pcb.bigquery.loader.source.partition.column: REC_CHNG_TMS
+      pcb.bigquery.loader.source.db.read.parallelism: 8
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_customer_acquisition
+    table_name: ADM_INST_CARD_INFO_BACKFILL
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to12 months
+    start_date: 2024-01-01 # inclusive
+    end_date: 2026-03-31 # exclusive
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "Backfill missing CockroachDB IDV data"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales

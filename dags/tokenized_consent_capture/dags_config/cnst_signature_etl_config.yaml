@@ -1,0 +1,4 @@
+cnst_signature_db610_metadata_migration:
+  transformation_config: transformation_rules/cnst_signature_transformation_config.yaml
+  dag:
+      schedule_interval:

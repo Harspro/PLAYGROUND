@@ -1,0 +1,114 @@
+context_parameter:
+  account_open_start_date: "{{ dag_run.conf.get('account_open_start_date', '1900-01-01') }}"
+  account_open_end_date: "{{ dag_run.conf.get('account_open_end_date', '9999-12-31') }}"
+  report_generation_flag: "{{ dag_run.conf.get('report_generation_flag', 'true') }}"
+
+transformation:
+  - task_name: create_active_customer_base_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_active_customer_base.sql
+  - task_name: create_customer_bad_standing_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_customer_bad_standing_accounts.sql
+  - task_name: create_customer_with_email_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_customer_with_email_accounts.sql
+  - task_name: create_concat_block_codes_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_concat_block_codes.sql
+  - task_name: create_closed_block_codes_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_closed_block_codes.sql
+  - task_name: create_other_block_codes_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_other_block_codes.sql
+  - task_name: create_customer_block_codes_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_customer_block_codes.sql
+  - task_name: create_new_applications_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_new_applications.sql
+  - task_name: create_abb_applications_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_abb_applications.sql
+  - task_name: create_abb_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_abb_accounts.sql
+  - task_name: create_pcma_active_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_pcma_active_pcma_accounts.sql
+  - task_name: create_pcma_abb_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_pcma_abb_accounts.sql
+  - task_name: create_entitled_customers_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_entitled_customers.sql
+  - task_name: create_permitted_customers_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_permitted_customers.sql
+  - task_name: create_eligible_customers_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_eligible_customers.sql
+  - task_name: create_customer_roles_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_customer_roles.sql
+  - task_name: create_bad_standing_account_status_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_bad_standing_account_status.sql
+  - task_name: create_customer_account_status_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_customer_account_status.sql
+  - task_name: create_non_primary_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_non_primary_accounts.sql
+  - task_name: create_bad_standing_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_bad_standing_accounts.sql
+  - task_name: create_no_email_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_no_email_accounts.sql
+  - task_name: create_block_codes_account_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_block_codes_account.sql
+  - task_name: create_abb_pcma_accounts_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_abb_pcma_accounts.sql
+  - task_name: create_ineligible_customers_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_ineligible_customers.sql
+  - task_name: create_excluded_customers_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_excluded_customers.sql
+  - task_name: create_customer_union_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_customer_union.sql
+  - task_name: create_customer_eligibility_report
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/click_to_pay/c2p_customer_eligibility_report.sql

@@ -1,0 +1,23 @@
+from alm_processing.misc.alm_ref_tbl_load_dag import AlmRefTblDag
+from alm_processing.utils import misc_util as mscutil
+from airflow.operators.python import PythonOperator
+from airflow.utils.trigger_rule import TriggerRule
+from util.constants import BIGQUERY
+from alm_processing.utils import constants
+
+
+class AlmRefTblLoader(AlmRefTblDag):
+    def __init__(self, config_filename: str):
+        super().__init__(config_filename)
+
+    def get_data(self, config: dict):
+        return PythonOperator(
+            task_id="run_ref_table_load",
+            python_callable=mscutil.load_data_to_ref_tables,
+            op_args=[config[constants.FILE][constants.PREFIX],
+                     config[BIGQUERY][constants.REF_TABLES_FOLDER],
+                     config[BIGQUERY][constants.BQ_DESTINATION_PROJECT],
+                     config[BIGQUERY][constants.BQ_DESTINATION_DATASET],
+                     config[BIGQUERY][constants.BQ_TABLE_NAME]],
+            trigger_rule=TriggerRule.ALL_SUCCESS
+        )

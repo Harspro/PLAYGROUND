@@ -1,0 +1,58 @@
+CREATE OR REPLACE TABLE
+  pcb-{env}-processing.domain_account_management.{output_table_name}
+  OPTIONS ( expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 12 HOUR) ) AS
+
+SELECT DISTINCT
+    '3C' || IFNULL(LPAD(CAST(CL.TSYS_ACCOUNT_ID AS STRING), 11, ' '), LPAD(' ', 11, ' ')) ||
+    IFNULL(LPAD(CAST(CL.TSYS_CUSTOMER_ID AS STRING), 9, ' '), LPAD(' ', 9, ' ')) ||
+    IFNULL(LPAD(CC.CUSTOMER_REF, 20, ' '), LPAD(' ', 20, ' ')) ||
+    IFNULL(LPAD(OFF.OFFER_ID, 15, ' '), LPAD(' ', 15, ' ')) ||
+    IFNULL(OFF.RELATIONSHIP_TYPE, ' ') ||
+    IFNULL(LPAD(CH.CHANNEL, 20, ' '), LPAD(' ', 20, ' ')) ||
+    IFNULL(LPAD(MR.MEDIA_LANGUAGE, 3, ' '), LPAD(' ', 3, ' ')) ||
+    IFNULL(LPAD(IFNULL(CM.VARIABLE_1_VALUE, MR.MEDIA_PHRASE1), 200, ' '), LPAD(' ', 200, ' ')) ||
+    IFNULL(LPAD(IFNULL(CM.VARIABLE_2_VALUE, MR.MEDIA_PHRASE2), 200, ' '), LPAD(' ', 200, ' ')) ||
+    IFNULL(LPAD(IFNULL(CM.VARIABLE_3_VALUE, MR.MEDIA_PHRASE3), 200, ' '), LPAD(' ', 200, ' ')) ||
+    IFNULL(LPAD(IFNULL(CM.VARIABLE_4_VALUE, MR.MEDIA_PHRASE4), 200, ' '), LPAD(' ', 200, ' ')) ||
+    IFNULL(LPAD(IFNULL(CM.VARIABLE_5_VALUE, MR.MEDIA_PHRASE5), 200, ' '), LPAD(' ', 200, ' ')) ||
+    LPAD(' ', 114, ' ') AS record,
+    CL.TSYS_ACCOUNT_ID,
+    'C' AS REC_TYPE,
+    SA10.SA10_BILLING_CYCLE AS CYCLE_NO
+  FROM
+  pcb-{env}-landing.domain_account_management.SA10 AS SA10
+JOIN
+  pcb-{env}-landing.domain_marketing.CUSTOMER_LOOKUP AS CL
+ON
+  SA10.SA10_ACCT_ID = CL.TSYS_ACCOUNT_ID
+JOIN
+  pcb-{env}-landing.domain_marketing.CME_CUSTOMER AS CC
+ON
+  CL.CUSTOMER_REF = CC.CUSTOMER_REF
+JOIN
+  pcb-{env}-landing.domain_marketing.CUSTOMER_MEDIA AS CM
+ON
+  CC.CUSTOMER_MEDIA_REF = CM.CUSTOMER_MEDIA_REF
+JOIN
+  pcb-{env}-landing.domain_marketing.OFFER AS OFF
+ON
+  CC.OFFER_ID = OFF.OFFER_ID
+JOIN
+  pcb-{env}-landing.domain_marketing.CHANNEL AS CH
+ON
+  OFF.OFFER_ID = CH.OFFER_ID
+JOIN
+  pcb-{env}-landing.domain_marketing.MEDIA_REFERENCE AS MR
+ON
+  MR.MEDIA_REFERENCE = CH.MEDIA_REFERENCE
+  AND MR.MEDIA_LANGUAGE = CC.LANGUAGE
+WHERE
+  FILE_NAME = '{file_name}'
+  AND FILE_CREATE_DT = '{file_create_dt}'
+  AND CC.LAST_OFFER_STATUS = 'Pending'
+  AND CH.CHANNEL IN ('STATEMENT',
+    'ESTATEMENT',
+    'STMT MSG')
+  AND CC.CUSTOMER_OFFER_EXPIRY_DATE > CURRENT_DATETIME("America/Toronto")
+  AND OFF.OFFER_END_DATE > CURRENT_DATETIME("America/Toronto")
+  AND OFFER_START_DATE <= CURRENT_DATETIME("America/Toronto")

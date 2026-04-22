@@ -1,0 +1,14 @@
+domain_payments_eft_link_request_account_transactions_backup:
+  default_args:
+    owner: "team-money-movement"
+    capability: "Payments"
+    severity: "P4"
+    sub_capability: "EMT"
+    business_impact: "Eft link request table data will be lost."
+    customer_impact: "N/A"
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: EFT_LINK_REQUEST_ACCOUNT_TRANSACTIONS
+  dag:
+    read_pause_deploy_config: True

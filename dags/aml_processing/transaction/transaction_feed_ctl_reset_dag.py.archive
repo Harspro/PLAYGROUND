@@ -1,0 +1,58 @@
+from datetime import datetime
+
+from aml_processing.transaction.bq_util import run_bq_dml_with_log
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from aml_processing import feed_commons as commons
+from util.miscutils import read_variable_or_file
+
+DEPLOY_ENV = read_variable_or_file('gcp_config')['deployment_environment_name']
+TRANSACTION_FEED_CTL_TABLE = f"pcb-{DEPLOY_ENV}-processing.domain_aml.TRANSACTION_FEED_CONTROL_TABLE"
+
+
+class TransactionFeedCtlReset():
+
+    @staticmethod
+    def get_ctl_reset_sql() -> str:
+        sql = f"""
+             DELETE
+             FROM `{TRANSACTION_FEED_CTL_TABLE}` c
+             WHERE  1 = 1
+        """
+        return sql
+
+    @staticmethod
+    def reset_ctl_table():
+        sql = TransactionFeedCtlReset.get_ctl_reset_sql()
+        run_bq_dml_with_log(f"Resetting control table:'{TRANSACTION_FEED_CTL_TABLE}'",
+                            f"Completed control table:'{TRANSACTION_FEED_CTL_TABLE}'",
+                            sql)
+
+
+# Creating DAG
+tags = commons.TAGS.copy()
+
+with DAG(
+        "aml_transaction_feed_ctl_reset",
+        is_paused_upon_creation=True,
+        description="Reset control table for AML transaction feed extract process",
+        default_args=commons.DAG_DEFAULT_ARGS,
+        start_date=datetime(2023, 1, 1, tzinfo=commons.TORONTO_TZ),
+        end_date=None,
+        schedule=None,
+        tags=tags,
+        max_active_runs=1,
+        catchup=False
+) as dag:
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+    pipeline_complete = EmptyOperator(task_id='end')
+
+    transaction_feed_ctl_reset_task = PythonOperator(
+        task_id="run_transaction_feed_ctl_reset",
+        python_callable=TransactionFeedCtlReset.reset_ctl_table,
+        op_args=[],
+        trigger_rule="all_success"
+    )
+
+    pipeline_start >> transaction_feed_ctl_reset_task >> pipeline_complete

@@ -1,0 +1,17 @@
+kafka_cluster_name: tokenized-consent-merch-c
+kafka_trigger_dag_id: tokenized_consent_bq_to_kafka
+read_pause_deploy_config: True
+dag:
+  dag_id: tokenized_consent_capture_kafka_writer
+  external_sensor_dag_id: ts2_batch_authorization_log_full_file_loading
+  poke_interval_min: 1
+  poke_timeout_min: 180
+bigquery:
+  project_id: pcb-{env}-processing
+  dataset_id: domain_consent
+  table_id: tokenized_consent_capture_{current_date}
+  query_file: tokenized_consent_capture/tokenized_consent.sql
+gcs:
+  bucket: pcb-{env}-staging-extract
+  folder_name: tokenized_consent
+  file_name: tokenized-consents-captures

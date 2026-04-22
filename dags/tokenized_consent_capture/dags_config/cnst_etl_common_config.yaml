@@ -1,0 +1,4 @@
+terminus_cnst_event_analytics_db053:
+  transformation_config: transformation_rules/cnst_event_analytics_053.yaml
+  dag:
+      schedule_interval:

@@ -1,0 +1,23 @@
+CREATE OR REPLACE TABLE `pcb-{DEPLOY_ENV}-processing.domain_aml.CANADAPOST_BASE`
+OPTIONS (
+  expiration_timestamp = TIMESTAMP_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)
+)
+AS
+SELECT
+  POI_TRACK_NUM AS APP_NUMBER,
+  ACCOUNT_NUMBER,
+  ID_TYPE,
+  CONCAT(ID_TYPE, ' - CANADA POST') AS ID_TYPE_DESCRIPTION,
+  'PRIMARY' AS ID_STATUS,
+  ID_REF_NUM AS ID_NUMBER,
+  ref_experian_id_place.PROVINCE AS ID_STATE,
+  ref_experian_id_place.COUNTRY_CODE_2 AS ID_COUNTRY,
+  NULL AS ID_ISSUE_DATE,
+  NULL AS ID_EXPIRY_DATE,
+  'NFTF' AS IDV_METHOD,
+  'CANADA_POST' AS IDV_DECISION
+FROM `pcb-{env}-curated.domain_customer_acquisition.EXPERIAN_AML_CANADA_POST` AS experian_aml_canada_post
+    LEFT OUTER JOIN `pcb-{DEPLOY_ENV}-landing.domain_aml.REF_EXPERIAN_ID_PLACE` AS ref_experian_id_place
+    ON experian_aml_canada_post.ID_PROV = ref_experian_id_place.ID1PLACE
+WHERE ACCOUNT_NUMBER IS NOT NULL
+  AND ID_REF_NUM IS NOT NULL;

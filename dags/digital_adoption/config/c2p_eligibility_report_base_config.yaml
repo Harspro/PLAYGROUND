@@ -1,0 +1,2 @@
+c2p_eligibility_report_processing:
+  transformation_config: config/c2p_eligibility_report_trans.yaml

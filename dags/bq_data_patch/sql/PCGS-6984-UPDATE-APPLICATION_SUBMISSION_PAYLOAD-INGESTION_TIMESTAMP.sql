@@ -1,0 +1,4 @@
+UPDATE
+  pcb-{env}-landing.domain_customer_acquisition.APPLICATION_SUBMISSION_PAYLOAD
+SET INGESTION_TIMESTAMP = captureTime
+WHERE INGESTION_TIMESTAMP IS NULL;

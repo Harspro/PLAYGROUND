@@ -1,0 +1,28 @@
+mail_print_status_kafka_writer:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P4"
+    sub_capability: "mail"
+    business_impact: "This will impact the loading of paper mail status into DP kafka topic: `dp-core-mail-print-status`."
+    customer_impact: "No immediate customer impact  but if a customer requests the status of their paper mail, we will not have that information available in DP."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/mail/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/mail/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/mail/mail_print_status_file_schema.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/mail/CommunicationMailPrintStatusAO.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.value.schema.path: CommunicationMailPrintStatusAO.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+    pcb.file.kafka.connector.auto.register.schemas: true
+    pcb.file.kafka.connector.schema.file.path: mail_print_status_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_mail_print_status
+    read_pause_deploy_config: True
+    tags: ["communication", "mail"]
+    job_size: extra_small

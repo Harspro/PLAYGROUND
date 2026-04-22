@@ -1,0 +1,85 @@
+import json
+import os
+from datetime import datetime, timedelta
+
+import yaml
+from airflow.exceptions import AirflowException
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from airflow.utils.dates import days_ago
+
+import util.constants as consts
+from util.bq_utils import check_bq_table_exists
+from util.miscutils import (
+    read_variable_or_file
+)
+
+DAG_DEFAULT_ARGS = {
+    "owner": "team-centaurs",
+    'capability': 'TBD',
+    'severity': 'P3',
+    'sub_capability': 'TBD',
+    'business_impact': 'TBD',
+    'customer_impact': 'TBD',
+    "start_date": days_ago(2),
+    "email": [],
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "max_active_runs": 5,
+    "retries": 0,
+    "retry_delay": timedelta(seconds=10),
+    "retry_exponential_backoff": True,
+    "catchup": False
+}
+
+
+def does_table_exist_in_bigquery(conf):
+    bq_config = conf.get(consts.BIGQUERY)
+    gcp_config = read_variable_or_file(consts.GCP_CONFIG)
+    deploy_env = gcp_config[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+    project_id = bq_config.get(consts.PROJECT_ID) or gcp_config.get(consts.LANDING_ZONE_PROJECT_ID)
+    bq_table_name = bq_config.get(consts.TABLE_NAME)
+    bq_table_id = f"{project_id.replace(consts.ENV_PLACEHOLDER, deploy_env)}.{bq_config.get(consts.DATASET_ID)}.{bq_table_name}"
+    if check_bq_table_exists(bq_table_id):
+        raise AirflowException(f"Provided table {bq_table_name} already exists.")
+
+
+def check_preconditions(**context):
+    conf = context['dag_run'].conf
+    type = conf.get('type')
+    if type not in consts.DLAAS_BQL_ALLOWED_TYPES:
+        raise AirflowException(f"Provided type {type} is not a valid type.")
+    for _, job_config in conf.get('conf').items():
+        does_table_exist_in_bigquery(job_config)
+
+
+def save_request(**context):
+    context_conf = context['dag_run'].conf
+    config_dir = consts.DLAAS_BQL_ONETIME_CONFIG_PATH
+    if context_conf.get('type') == 'chunk':
+        config_dir = consts.DLAAS_BQL_CHUNK_CONFIG_PATH
+    config_filename = f"{datetime.today().strftime('%Y%m%d%H%M%S%f')}_dlaas_bigquery_loader_config.yaml"
+    file = f'{config_dir}/{config_filename}'
+    os.makedirs(os.path.dirname(file), exist_ok=True)
+    with open(file, 'w') as yamlconf:
+        yaml.dump(yaml.load(json.dumps(context_conf.get('conf')), Loader=yaml.FullLoader), yamlconf)
+
+
+with DAG(dag_id='dlaas_request_saver',
+         schedule=None,
+         default_args=DAG_DEFAULT_ARGS) as dag:
+    start = EmptyOperator(task_id='start')
+    end = EmptyOperator(task_id='end', trigger_rule='none_failed')
+
+    check_preconditions = PythonOperator(
+        task_id="check_preconditions",
+        python_callable=check_preconditions
+    )
+
+    save_request = PythonOperator(
+        task_id="save_request",
+        python_callable=save_request
+    )
+
+    start >> check_preconditions >> save_request >> end

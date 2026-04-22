@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 sp1 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R11 @@@@           -->
+	<xsd:complexType
+    name="R11Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Beneficiaire">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:choice>
+							<xsd:element
+                name="Personne">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NAS"
+                      type="NasType">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NomFamille"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Prenom"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Initiale"
+                      type="Char1Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="RaisonSociale">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="AutreNoId"
+                      type="Char10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct"
+              minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R11MntStruct" />
+			<xsd:element
+        name="CaseRensCompl"
+        minOccurs="0"
+        maxOccurs="4">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="CodeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="Char5Type">
+									<xsd:pattern
+                    value="[Aa]\-[1-2]|[Bb]-[1-2]" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="DonneeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:minLength
+                    value="1" />
+									<xsd:maxLength
+                    value="15" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R11MntStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="A_ExploCdn"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="B_MiseEnValeurCdn"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="D_ExploQue"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="E_ExploMinePetroleGazQue"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="F_ExploNordQue"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="G_AideCaseA"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="G_AideCaseB"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="G_AideCaseD"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="G_AideCaseE"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="G_AideCaseF"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="H_EmissionAction"
+        type="Decimal13Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoAttribueCO_359_10"
+        minOccurs="0">
+				
+				<xsd:simpleType>
+					<xsd:restriction
+            base="xsd:string">
+						<xsd:pattern
+              value="ACC-([A-Z]{1}|[a-z]{1})-\d{4}-0" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element
+        name="DateRenonciation"
+        type="DateType">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

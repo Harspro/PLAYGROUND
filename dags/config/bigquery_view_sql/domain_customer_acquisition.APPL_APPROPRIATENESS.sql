@@ -1,0 +1,13 @@
+SELECT
+lclApplicationId AS LCL_APPLICATION_ID,
+pcbApplicationReference AS APPLICATION_SUBMISSION_NO,
+application.appropriatenessAssessmentSkipAssessment AS IS_SKIPPED,
+application.paymentMethod AS RESP_PAYMENT_METHOD,
+application.productUsage AS RESP_PAYMENT_USAGE,
+application.primaryProductRecommendation AS PRIMAY_RECOMMENDATION,
+application.secondaryProductRecommendation AS SECONDARY_RECOMMENDATION,
+application.alternateProduct AS ALTERNATE_RECOMMENDATION,
+INGESTION_TIMESTAMP
+FROM `pcb-{env}-landing.domain_customer_acquisition.APPLICATION_SUBMISSION_PAYLOAD`,
+UNNEST(applications) AS application
+WHERE application IS NOT NULL

@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R27 @@@@           -->
+	<xsd:complexType
+    name="R27Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Beneficiaire">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="Type"
+              type="Indicateur1-5Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Nombre"
+              minOccurs="0">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:integer">
+									<xsd:minInclusive
+                    value="1" />
+									<xsd:maxInclusive
+                    value="9" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:choice>
+							<xsd:element
+                name="Personne">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NAS"
+                      type="NasType"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NoId"
+                      type="NoIdentificationType"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NEQ"
+                      type="Numeric10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NomFamille"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Prenom"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Initiale"
+                      type="Char1Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="RaisonSociale">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NoId"
+                      type="NoIdentificationType"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NEQ"
+                      type="Numeric10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Consortium"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct"
+              minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="SecondBeneficiaire"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element
+              name="Personne">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="NAS"
+                    type="NasType"
+                    minOccurs="0">
+										
+									</xsd:element>
+									<xsd:element
+                    name="AutreNoId"
+                    type="Numeric10Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+									<xsd:element
+                    name="NomFamille"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Prenom"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Initiale"
+                    type="Char1Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element
+              name="RaisonSociale">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="AutreNoId"
+                    type="Numeric10Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Nom1"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Nom2"
+                    type="Char30Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="TroisiemeBeneficiaire"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element
+              name="Personne">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="NAS"
+                    type="NasType"
+                    minOccurs="0">
+										
+									</xsd:element>
+									<xsd:element
+                    name="AutreNoId"
+                    type="Numeric10Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+									<xsd:element
+                    name="NomFamille"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Prenom"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Initiale"
+                    type="Char1Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element
+              name="RaisonSociale">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="AutreNoId"
+                    type="Numeric10Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Nom1"
+                    type="Char30Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Nom2"
+                    type="Char30Type"
+                    minOccurs="0">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R27MntStruct" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R27MntStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="A_PaiementContractuel"
+        type="Decimal12Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="B_Subvention"
+        type="Decimal12Type"
+        minOccurs="0">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

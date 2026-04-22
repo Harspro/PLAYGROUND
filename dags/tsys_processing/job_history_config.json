@@ -1,0 +1,6 @@
+{
+    "bucket_name":"pcb-{env}-staging-extract",
+    "folder_name": "job_history",
+    "bq_job_control_dataset": "JobControlDataset",
+    "bq_dags_hist_table": "DAGS_HISTORY"
+}

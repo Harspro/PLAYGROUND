@@ -1,0 +1,127 @@
+google_clickid_outbound:
+  description: 'Google ClickID outbound dag'
+  cluster_name: 'google-clickid-outbound-c'
+  tags:
+    - outbound
+    - team-growth-and-sales
+  spark_job:
+    jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/clickid-spark-batch-2.0.0.jar
+    file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/kafka.jks
+    main_class: com.pcb.batch.spark.clickid.ClickIDSparkBatchApplication 
+    properties:
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+    args:
+      pcb.clickid.processor.report.type: GOOGLE
+      pcb.clickid.processor.last.report.date: 20220223
+      pcb.clickid.processor.current.report.date: 20220225
+  schedule_cron: '0 8 * * *' 
+
+
+creditkarma_clickid_outbound:
+  description: 'CreditKarma ClickID outbound dag'
+  cluster_name: 'creditkarma-clickid-outbound-c'
+  tags:
+    - outbound
+    - team-growth-and-sales
+  spark_job:
+    jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/clickid-spark-batch-2.0.0.jar
+    file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/kafka.jks
+    main_class: com.pcb.batch.spark.clickid.ClickIDSparkBatchApplication 
+    properties:
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+    args:
+      pcb.clickid.processor.report.type: CREDIT_KARMA
+      pcb.clickid.processor.current.report.date: 20220225
+  schedule_cron: '15 8 * * *'
+
+ratehub_clickid_outbound:
+  description: 'RateHub ClickID outbound dag'
+  cluster_name: 'ratehub-clickid-outbound-c'
+  tags:
+    - outbound
+    - team-growth-and-sales
+  spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/clickid-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/application.yaml
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/kafka.jks
+    main_class: com.pcb.batch.spark.clickid.ClickIDSparkBatchApplication
+    properties:
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+    args:
+      pcb.clickid.processor.report.type: RATE_HUB
+      pcb.clickid.processor.current.report.date: 20220225
+  schedule_cron: '30 8 * * 1'
+
+great_canadian_rebate_clickid_outbound:
+  description: 'Great Canadian Rebate ClickID outbound dag'
+  cluster_name: 'great-canadian-rebate-clickid-outbound-c'
+  tags:
+    - outbound
+    - team-growth-and-sales
+  spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/clickid-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/application.yaml
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/kafka.jks
+    main_class: com.pcb.batch.spark.clickid.ClickIDSparkBatchApplication
+    properties:
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+    args:
+      pcb.clickid.processor.report.type: GC_REBATE
+      pcb.clickid.processor.current.report.date: 20220225
+  schedule_cron: '45 8 * * 1'
+
+borrowel_clickid_outbound:
+  description: 'Borrowel ClickID outbound dag'
+  cluster_name: 'borrowel-clickid-outbound-c'
+  tags:
+    - outbound
+    - team-growth-and-sales
+  spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/clickid-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/application.yaml
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/kafka.jks
+    main_class: com.pcb.batch.spark.clickid.ClickIDSparkBatchApplication
+    properties:
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+    args:
+      pcb.clickid.processor.report.type: BORROWEL
+      pcb.clickid.processor.current.report.date: 20260225
+  schedule_cron: '00 9 * * *'
+
+facebook_clickid_outbound:
+  description: 'Facebook ClickID outbound dag'
+  cluster_name: 'facebook-clickid-outbound-c'
+  tags:
+    - outbound
+    - team-growth-and-sales
+  spark_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/clickid-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/application.yaml
+      - gs://pcb-{env}-staging-artifacts/resources/clickid-spark-batch/kafka.jks
+    main_class: com.pcb.batch.spark.clickid.ClickIDSparkBatchApplication
+    properties:
+      spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+      spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+    args:
+      pcb.clickid.processor.report.type: FACEBOOK
+      pcb.clickid.processor.current.report.date: 20260325
+  schedule_cron: '15 9 * * *'

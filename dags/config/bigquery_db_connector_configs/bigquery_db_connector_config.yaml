@@ -1,0 +1,1807 @@
+dnscnst_cnst_signature_db610_to_pg:
+  default_args:
+    owner: "team-Ogres"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_SIGNATURE_{current_date}
+    query_file: tokenized_consent_capture/consents_sql/cnst_signature.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_signature
+    batch_size: 10000
+    select_fields:
+      - signature_id
+      - cnst_event_id
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+      - document_id
+    update_fields:
+      - cnst_event_id
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+      - document_id
+    conflict_fields:
+      - signature_id
+      - cnst_event_id
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+dnscnst_cnst_acct_cust_id_xref_db610_to_pg:
+  default_args:
+    owner: "team-Ogres"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_ACCT_CUST_ID_XREF
+    query_file: tokenized_consent_capture/consents_sql/cnst_query.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_acct_cust_id_xref
+    batch_size: 10000
+    select_fields:
+      - cnst_acct_id
+      - ext_cust_id
+      - ext_cust_id_type_cd
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+    update_fields:
+      - ext_cust_id
+      - ext_cust_id_type_cd
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+    conflict_fields:
+      - cnst_acct_id
+      - ext_cust_id
+      - ext_cust_id_type_cd
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+dnscnst_cust_cnst_state_db610_to_pg:
+  default_args:
+    owner: "team-Ogres"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CUST_CNST_STATE
+    query_file: tokenized_consent_capture/consents_sql/cnst_query.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cust_cnst_state
+    batch_size: 10000
+    select_fields:
+      - cnst_acct_id
+      - mktg_grp_id
+      - cust_cont_ind
+      - cnst_end_dt
+      - last_upd_dt
+      - cnst_type_code
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+    update_fields:
+      - mktg_grp_id
+      - cust_cont_ind
+      - cnst_end_dt
+      - last_upd_dt
+      - cnst_type_code
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+    conflict_fields:
+      - cnst_acct_id
+      - mktg_grp_id
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+dnscnst_cnst_event_db610_to_pg:
+  default_args:
+    owner: "team-Ogres"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_EVENT
+    query_file: tokenized_consent_capture/consents_sql/cnst_query.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_event
+    batch_size: 10000
+    select_fields:
+      - cnst_event_id
+      - event_type_id
+      - cnst_acct_id
+      - event_dt
+      - source_dt
+      - user_id
+      - source_org_id
+      - evidence_id
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+      - source_id
+      - cnst_type_id
+    update_fields:
+      - event_type_id
+      - cnst_acct_id
+      - event_dt
+      - source_dt
+      - user_id
+      - source_org_id
+      - evidence_id
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+      - source_id
+      - cnst_type_id
+    conflict_fields:
+      - cnst_event_id
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+dnscnst_cnst_acct_db610_to_pg:
+  default_args:
+    owner: "team-Ogres"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_ACCT
+    query_file: tokenized_consent_capture/consents_sql/cnst_query.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_acct
+    batch_size: 10000
+    select_fields:
+      - cnst_acct_id
+      - status_cd
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+    update_fields:
+      - status_cd
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+    conflict_fields:
+      - cnst_acct_id
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+dnscnst_cnst_detail_db610_to_pg:
+  default_args:
+    owner: "team-Ogres"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_DETAIL
+    query_file: tokenized_consent_capture/consents_sql/cnst_query.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_detail
+    batch_size: 10000
+    select_fields:
+      - cnst_event_id
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+      - cnst_detail_id
+      - field_name
+      - field_value
+    update_fields:
+      - rec_create_tms
+      - rec_chng_tms
+      - rec_chng_id
+      - field_name
+      - field_value
+    conflict_fields:
+      - cnst_detail_id
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+dnscnst_cnst_event_history_db563_to_pg:
+  default_args:
+    owner: "team-vortex"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_EVENTS_ANALYTICS
+    query_file: tokenized_consent_capture/consents_sql/cnst_event_history_load.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_event_history
+    batch_size: 10000
+    select_fields:
+      - cnst_event_source
+      - cnst_event_source_desc
+      - cnst_event_id
+      - event_type
+      - event_type_desc
+      - event_dt
+      - source_dt
+      - source_org
+      - cnst_type
+      - cnst_type_desc
+      - cnst_type_code
+      - cnst_type_ver
+      - cnst_category
+      - cnst_lang_code
+      - source_org_desc
+      - mktg_grp
+      - mktg_grp_desc
+      - external_id_type_code
+      - external_id_type
+      - external_id_value
+      - evidence_id
+      - pcf_cust_id
+      - application_id
+      - signature_path_original
+      - signature_path_current
+      - signature_file
+      - document_storage_link
+      - channel
+      - face_to_face_ind
+      - legacy_data_source
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+dnscnst_cnst_event_history_db053_to_pg:
+  default_args:
+    owner: "team-vortex"
+    capability: "legal-compliance"
+    severity: "P2"
+    sub_capability: "consent"
+    business_impact: "This will impact the compliance"
+    customer_impact: "none"
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_EVENTS_ANALYTICS
+    query_file: tokenized_consent_capture/consents_sql/cnst_event_history_load_pr053.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_event_history
+    batch_size: 10000
+    select_fields:
+      - cnst_event_source
+      - cnst_event_source_desc
+      - cnst_event_id
+      - event_type
+      - event_type_desc
+      - event_dt
+      - source_dt
+      - source_org
+      - cnst_type
+      - cnst_type_desc
+      - cnst_type_code
+      - cnst_type_ver
+      - cnst_category
+      - cnst_lang_code
+      - source_org_desc
+      - mktg_grp
+      - mktg_grp_desc
+      - external_id_type_code
+      - external_id_type
+      - external_id_value
+      - evidence_id
+      - pcf_cust_id
+      - application_id
+      - signature_path_original
+      - signature_path_current
+      - signature_file
+      - document_storage_link
+      - channel
+      - face_to_face_ind
+      - legacy_data_source
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: ["consents"]
+
+cnst_migration_metadata_update_db610_to_pg:
+  default_args:
+    owner: "team-vortex"
+    capability: "Consent"
+    severity: "P4"
+    sub_capability: "Consent Signature"
+    business_impact: "Updating metadata signatures for compliance requirements."
+    customer_impact: "Ensures accurate document tracking for compliance."
+  bigquery:
+    source_project_id: pcb-{env}-curated
+    source_dataset_id: domain_consent
+    project_id: pcb-{env}-processing
+    dataset_id: domain_consent
+    table_id: CNST_EVENTS_ANALYTICS
+    query_file: tokenized_consent_capture/consents_sql/cnst_metadata_update_610.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: consent_postgres_connection
+    target_table_id: public.cnst_signature
+    batch_size: 10000
+    select_fields:
+      - signature_id
+      - document_id
+      - cnst_event_id
+    update_fields:
+      - document_id
+    conflict_fields:
+      - signature_id
+      - cnst_event_id
+  airflow_connection_config:
+    conn_id: consent_postgres_connection
+    conn_type: postgres
+    description: "Consents Postgres Airflow Connection"
+    dev:
+      host: pcbdvs-pg-qa-auto.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/dev-secret/data/common/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    uat:
+      host: pcbdvs-pg-core-uat.nonprod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/uat-secret/data/uat/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+    prod:
+      host: pcbprs-pg-consents.prod.pcfcloud.io
+      login: consents_owner
+      vault_password_secret_path: "/secret/data/orca/core-api/consents"
+      vault_password_secret_key: spring.datasource.password
+      schema: consents
+      port: 5432
+  dag:
+    dagrun_timeout: 180
+    read_pause_deploy_config: True
+    tags: [ "consents" ]
+
+reverse_etl_processing_edi_ods_idl_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "EDI Reverse ETL IDL ODS Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_EDI_ODS
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_edi_ods_idl.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_edi_ods_idl_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_edi_ods_idl_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_edi_ods"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - payer_name
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - trace_id
+      - fi_trace_num
+      - payment_trace_no
+      - institution_id
+      - create_dt
+      - hdr_id
+      - edi_pymt_uid
+      - card_deposit_fulfillment_uid
+      - orig_co_supp_cd
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - edi_source
+      - bi_query_edi_date
+      - bi_query_dag_run_id
+      - bi_query_edi_uid
+    conflict_fields:
+      - edi_pymt_uid
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_edi_ods_idl_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL EDI IDL ODS Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 28800
+    tags: ["BiQueryReverseETL"]
+  dag_pause_unpause_config:
+    pause_dags_at_start:
+      - reverse_etl_processing_edi_ods_daily_postgres
+    unpause_dags_at_end:
+      - reverse_etl_processing_edi_ods_daily_postgres
+    pause_dags_at_end:
+      - reverse_etl_processing_edi_ods_idl_postgres
+
+reverse_etl_processing_edi_053_idl_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "EDI Reverse ETL IDL 053 Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_EDI_053
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_edi_053_idl.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_edi_053_idl_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_edi_053_idl_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_edi_053"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - payer_name
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - trace_id
+      - fi_trace_num
+      - payment_trace_no
+      - institution_id
+      - create_dt
+      - hdr_id
+      - edi_pymt_uid
+      - card_deposit_fulfillment_uid
+      - orig_co_supp_cd
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - edi_source
+      - bi_query_edi_date
+      - bi_query_dag_run_id
+      - bi_query_edi_uid
+    conflict_fields:
+      - card_number
+      - trace_id
+      - hdr_id
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_edi_053_idl_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL EDI IDL 053 Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 28800
+    tags: ["BiQueryReverseETL"]
+  dag_pause_unpause_config:
+    pause_dags_at_start:
+      - reverse_etl_processing_edi_053_daily_postgres
+    unpause_dags_at_end:
+      - reverse_etl_processing_edi_053_daily_postgres
+    pause_dags_at_end:
+      - reverse_etl_processing_edi_053_idl_postgres
+
+reverse_etl_processing_edi_ods_daily_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "EDI Reverse ETL Daily ODS Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_EDI_ODS
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_edi_ods_daily.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_edi_ods_daily_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_edi_ods_daily_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_edi_ods"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - payer_name
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - trace_id
+      - fi_trace_num
+      - payment_trace_no
+      - institution_id
+      - create_dt
+      - hdr_id
+      - edi_pymt_uid
+      - card_deposit_fulfillment_uid
+      - orig_co_supp_cd
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - edi_source
+      - bi_query_edi_date
+      - bi_query_dag_run_id
+      - bi_query_edi_uid
+    update_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - bi_query_edi_date
+      - bi_query_dag_run_id
+    conflict_fields:
+      - edi_pymt_uid
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_edi_ods_daily_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL EDI ODS Daily Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 21600
+    schedule_interval: "00 03 * * *"
+    tags: ["BiQueryReverseETL"]
+
+reverse_etl_processing_edi_053_daily_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "EDI Reverse ETL Daily 053 Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_EDI_053
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_edi_053_daily.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_edi_053_daily_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_edi_053_daily_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_edi_053"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - payer_name
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - trace_id
+      - fi_trace_num
+      - payment_trace_no
+      - institution_id
+      - create_dt
+      - hdr_id
+      - edi_pymt_uid
+      - card_deposit_fulfillment_uid
+      - orig_co_supp_cd
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - edi_source
+      - bi_query_edi_date
+      - bi_query_dag_run_id
+      - bi_query_edi_uid
+    update_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - bi_query_edi_date
+      - bi_query_dag_run_id
+    conflict_fields:
+      - card_number
+      - trace_id
+      - hdr_id
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_edi_053_daily_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL EDI Daily 053 Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 21600
+    schedule_interval: "30 03 * * *"
+    tags: ["BiQueryReverseETL"]
+
+reverse_etl_processing_eft_idl_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "EFT Reverse ETL IDL Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_EFT
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_eft_idl.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_eft_idl_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_eft_idl_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_eft"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - payer_name
+      - amount
+      - eft_req_uid
+      - eft_fulfillment_uid
+      - eft_reqtype_cd
+      - fundsmove_instruction_id
+      - fundsmove_gl_req_uid
+      - fundsmove_processing_dt
+      - institution_id
+      - transit_number
+      - eft_account_no
+      - originator_name
+      - originator_id 
+      - settle_on 
+      - pcb_assigned_opacct_nickname
+      - opacct_institution_no 
+      - opacct_transit_number 
+      - opacct_number 
+      - trace_id 
+      - executed_on 
+      - request_on
+      - create_dt 
+      - create_user_id 
+      - create_function_name 
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - transfer_type
+      - cpa_transaction_type 
+      - pcb_institution_id 
+      - pcb_transit_number 
+      - pcb_customer_account_number
+      - pcb_customer_name 
+      - origin_cross_reference_number 
+      - origin_institution_id 
+      - origin_transit_number
+      - origin_account_number
+      - origin_trace_number
+      - eft_source
+      - bi_query_eft_date 
+      - bi_query_dag_run_id
+      - bi_query_eft_uid
+    conflict_fields:
+      - eft_req_uid
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_eft_idl_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL EFT IDL Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 28800
+    tags: ["BiQueryReverseETL"]
+  dag_pause_unpause_config:
+    pause_dags_at_start:
+      - reverse_etl_processing_eft_daily_postgres
+    unpause_dags_at_end:
+      - reverse_etl_processing_eft_daily_postgres
+    pause_dags_at_end:
+      - reverse_etl_processing_eft_idl_postgres
+
+reverse_etl_processing_eft_daily_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "EFT Reverse ETL Daily Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_EFT
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_eft_daily.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_eft_daily_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_eft_daily_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_eft"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - payer_name
+      - amount
+      - eft_req_uid
+      - eft_fulfillment_uid
+      - eft_reqtype_cd
+      - fundsmove_instruction_id
+      - fundsmove_gl_req_uid
+      - fundsmove_processing_dt
+      - institution_id
+      - transit_number
+      - eft_account_no
+      - originator_name
+      - originator_id 
+      - settle_on 
+      - pcb_assigned_opacct_nickname
+      - opacct_institution_no 
+      - opacct_transit_number 
+      - opacct_number 
+      - trace_id 
+      - executed_on 
+      - request_on
+      - create_dt 
+      - create_user_id 
+      - create_function_name 
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - transfer_type
+      - cpa_transaction_type 
+      - pcb_institution_id 
+      - pcb_transit_number 
+      - pcb_customer_account_number
+      - pcb_customer_name 
+      - origin_cross_reference_number 
+      - origin_institution_id 
+      - origin_transit_number
+      - origin_account_number
+      - origin_trace_number
+      - eft_source
+      - bi_query_eft_date 
+      - bi_query_dag_run_id
+      - bi_query_eft_uid
+    update_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - fundsmove_instruction_id
+      - fundsmove_gl_req_uid
+      - amount
+      - fundsmove_processing_dt
+      - settle_on
+      - executed_on
+      - request_on
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - bi_query_eft_date 
+      - bi_query_dag_run_id
+    conflict_fields:
+      - eft_req_uid
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_eft_daily_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL EFT Daily Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 21600
+    schedule_interval: "00 04 * * *"
+    tags: ["BiQueryReverseETL"]
+
+reverse_etl_processing_paper_payment_idl_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "Paper Payment Reverse ETL IDL Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_PAPER_PAYMENT
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_paper_payment_idl.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_paper_payment_idl_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_paper_payment_idl_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_paper_payment"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id 
+      - account_no 
+      - card_number 
+      - amount
+      - seq_num
+      - cheque_num
+      - cheque_date
+      - process_date
+      - transit_number
+      - institution_id
+      - fdr_flag
+      - fdr_date
+      - create_dt
+      - update_user_id
+      - update_dt
+      - update_month
+      - update_year
+      - st_cd
+      - st_dt
+      - csh_ind
+      - create_user_id
+      - create_function_name
+      - trace_id
+      - update_function_name
+      - paper_payment_source
+      - bi_query_paper_payment_date
+      - bi_query_dag_run_id
+      - bi_query_paper_payment_uid
+    conflict_fields:
+      - card_number
+      - seq_num
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_paper_payment_idl_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL Paper Payment IDL Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 28800
+    tags: ["BiQueryReverseETL"]
+  dag_pause_unpause_config:
+    pause_dags_at_start:
+      - reverse_etl_processing_paper_payment_daily_postgres
+    unpause_dags_at_end:
+      - reverse_etl_processing_paper_payment_daily_postgres
+    pause_dags_at_end:
+      - reverse_etl_processing_paper_payment_idl_postgres
+
+reverse_etl_processing_paper_payment_daily_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "Paper Payment Reverse ETL Daily Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_PAPER_PAYMENT
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_paper_payment_daily.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_paper_payment_daily_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_paper_payment_daily_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_paper_payment"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id 
+      - account_no 
+      - card_number 
+      - amount
+      - seq_num
+      - cheque_num
+      - cheque_date
+      - process_date
+      - transit_number
+      - institution_id
+      - fdr_flag
+      - fdr_date
+      - create_dt
+      - update_user_id
+      - update_dt
+      - update_month
+      - update_year
+      - st_cd
+      - st_dt
+      - csh_ind
+      - create_user_id
+      - create_function_name
+      - trace_id
+      - update_function_name
+      - paper_payment_source
+      - bi_query_paper_payment_date
+      - bi_query_dag_run_id
+      - bi_query_paper_payment_uid
+    update_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - amount
+      - cheque_date
+      - process_date
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - bi_query_paper_payment_date
+      - bi_query_dag_run_id
+    conflict_fields:
+      - card_number
+      - seq_num
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_paper_payment_daily_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL Paper Payment Daily Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 21600
+    schedule_interval: "30 04 * * *"
+    tags: ["BiQueryReverseETL"]
+
+reverse_etl_processing_telpay_ods_idl_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "Telpay Reverse ETL IDL Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_TELPAY_ODS
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_telpay_ods_idl.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_telpay_ods_idl_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_telpay_ods_idl_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_telpay_ods"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id 
+      - account_no 
+      - card_number 
+      - payer_name 
+      - amount 
+      - orig_fi_dt 
+      - eff_pymt_dt
+      - trace_id 
+      - report_number 
+      - run_number 
+      - telpay_pymt_uid 
+      - card_deposit_fulfillment_uid
+      - hdr_id 
+      - run_timestamp
+      - version
+      - biller_cd
+      - create_dt
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id 
+      - update_function_name 
+      - telpay_source 
+      - bi_query_telpay_date 
+      - bi_query_dag_run_id
+      - bi_query_telpay_uid 
+    conflict_fields:
+      - telpay_pymt_uid
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_telpay_ods_idl_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL Telpay ODS IDL Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 28800
+    tags: ["BiQueryReverseETL"]
+  dag_pause_unpause_config:
+    pause_dags_at_start:
+      - reverse_etl_processing_telpay_ods_daily_postgres
+    unpause_dags_at_end:
+      - reverse_etl_processing_telpay_ods_daily_postgres
+    pause_dags_at_end:
+      - reverse_etl_processing_telpay_ods_idl_postgres
+
+reverse_etl_processing_telpay_053_idl_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "Telpay Reverse ETL IDL Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_TELPAY_053
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_telpay_053_idl.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_telpay_053_idl_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_telpay_053_idl_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_telpay_053"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id 
+      - account_no 
+      - card_number 
+      - payer_name 
+      - amount 
+      - orig_fi_dt 
+      - eff_pymt_dt
+      - trace_id 
+      - report_number 
+      - run_number 
+      - telpay_pymt_uid 
+      - card_deposit_fulfillment_uid
+      - hdr_id 
+      - run_timestamp
+      - version
+      - biller_cd
+      - create_dt
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id 
+      - update_function_name 
+      - telpay_source 
+      - bi_query_telpay_date 
+      - bi_query_dag_run_id
+      - bi_query_telpay_uid 
+    conflict_fields:
+      - card_number
+      - trace_id
+      - hdr_id
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_telpay_053_idl_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL Telpay 053 IDL Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 28800
+    tags: ["BiQueryReverseETL"]
+  dag_pause_unpause_config:
+    pause_dags_at_start:
+      - reverse_etl_processing_telpay_053_daily_postgres
+    unpause_dags_at_end:
+      - reverse_etl_processing_telpay_053_daily_postgres
+    pause_dags_at_end:
+      - reverse_etl_processing_telpay_053_idl_postgres
+
+reverse_etl_processing_telpay_ods_daily_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "Telpay Reverse ETL Daily Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_TELPAY_ODS
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_telpay_ods_daily.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_telpay_ods_daily_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_telpay_ods_daily_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_telpay_ods"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id 
+      - account_no 
+      - card_number 
+      - payer_name 
+      - amount 
+      - orig_fi_dt 
+      - eff_pymt_dt
+      - trace_id 
+      - report_number 
+      - run_number 
+      - telpay_pymt_uid 
+      - card_deposit_fulfillment_uid
+      - hdr_id
+      - run_timestamp
+      - version
+      - biller_cd
+      - create_dt
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id 
+      - update_function_name 
+      - telpay_source 
+      - bi_query_telpay_date 
+      - bi_query_dag_run_id
+      - bi_query_telpay_uid 
+    update_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - bi_query_telpay_date
+      - bi_query_dag_run_id
+    conflict_fields:
+      - telpay_pymt_uid
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_telpay_ods_daily_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL Telpay ODS Daily Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 21600
+    schedule_interval: "00 05 * * *"
+    tags: ["BiQueryReverseETL"]
+
+reverse_etl_processing_telpay_053_daily_postgres:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "BiQuery Reverse ETL"
+    severity: "P3"
+    business_impact: "Telpay Reverse ETL 053 Daily Data Load into postgres"
+    customer_impact: "None"
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: BI_QUERY_TELPAY_053
+    query_file: bi_query_reverse_etl_postgres/sql/bi_query_telpay_053_daily.sql
+    query_file_post_etl: bi_query_reverse_etl_postgres/sql/bi_query_telpay_053_daily_post_etl.sql
+    batch_size: 10000
+  postgres:
+    postgres_conn_id: reverse_etl_processing_telpay_053_daily_postgres_connection
+    target_table_id: "{env}_reverse_etl.bi_query_telpay_053"
+    batch_size: 2000
+    select_fields:
+      - pcf_cust_id 
+      - account_no 
+      - card_number 
+      - payer_name 
+      - amount 
+      - orig_fi_dt 
+      - eff_pymt_dt
+      - trace_id 
+      - report_number 
+      - run_number 
+      - telpay_pymt_uid 
+      - card_deposit_fulfillment_uid
+      - hdr_id 
+      - run_timestamp
+      - version
+      - biller_cd
+      - create_dt
+      - create_user_id
+      - create_function_name
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id 
+      - update_function_name 
+      - telpay_source 
+      - bi_query_telpay_date 
+      - bi_query_dag_run_id
+      - bi_query_telpay_uid 
+    update_fields:
+      - pcf_cust_id
+      - account_no
+      - card_number
+      - amount
+      - orig_fi_dt
+      - eff_pymt_dt
+      - update_dt
+      - update_month
+      - update_year
+      - update_user_id
+      - update_function_name
+      - bi_query_telpay_date
+      - bi_query_dag_run_id
+    conflict_fields:
+      - card_number
+      - trace_id
+      - hdr_id
+      - update_month
+      - update_year
+  replacements:
+    "{run_id}": "{{ run_id }}"
+  airflow_connection_config:
+    conn_id: reverse_etl_processing_telpay_053_daily_postgres_connection
+    conn_type: postgres
+    description: "BiQuery Reverse ETL Telpay 053 Daily Postgres Connection"
+    dev:
+      host: crdb-dev-db-lb.jupiter.azure.dev.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/dev-secret/data/ffm/dataproc/gcpDev002/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    uat:
+      host: crdb-seal-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-seal-bunker-db-lb.seal.gcp.nonprod.pcfcloud.io,crdb-dolphin-db-lb.dolphin.azure.nonprod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/uat-secret/data/ffm/dataproc/gcpStg001/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+    prod:
+      host: pcbprs-pg-piquery.prod.pcfcloud.io
+      login: piquery_owner
+      vault_password_secret_path: "/secret/data/biquery/bigquerytopostgres-spark-batch"
+      vault_password_secret_key: piquery.postgres.password
+      schema: piquery
+      port: 5432
+  dag:
+    dagrun_timeout: 21600
+    schedule_interval: "30 05 * * *"
+    tags: ["BiQueryReverseETL"]

@@ -1,0 +1,12 @@
+
+from aml_processing.funds_move.funds_move_dag_builder import FundsMoveDagBuilder
+from typing import List
+
+
+class MigrationUtils:
+
+    @staticmethod
+    def get_table_list() -> List[str]:
+        dag_config = FundsMoveDagBuilder.read_dag_config("funds_move_dag.yaml")
+        table_list = [config['table_name'] for dag_id, config in dag_config.items()]
+        return table_list

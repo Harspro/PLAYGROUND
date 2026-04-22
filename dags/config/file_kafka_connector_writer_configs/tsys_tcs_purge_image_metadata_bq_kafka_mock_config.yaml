@@ -1,0 +1,37 @@
+tcs_purge_image_metadata_kafka_writer_mock:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_tcs_purge/tsys_tcs_purge_image_metadata/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_tcs_purge/tsys_tcs_purge_image_metadata/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_tcs_purge/tsys_tcs_purge_image_metadata/tsys_tcs_purge_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_tcs_purge/tsys_tcs_purge_image_metadata/tsys_tcs_purge_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_tcs_purge/tsys_tcs_purge_image_metadata/tsys_tcs_purge_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: tsys_tcs_purge_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: tsys_tcs_purge_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: caseId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: tsys_tcs_purge_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_tsys_tcs_purge_image_metadata_mock
+    dataproc_cluster_name: tsys-tcs-image-purge-mock
+    job_size: small
+    read_pause_deploy_config: True
+    tags: [ "P3" ]
+  bigquery:
+    query_file: tsys_tcs_purge/sql/tsys_tcs_purge_image_metadata_bq_kafka_mock.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: tsys-tcs-case-purge-images
+    file_name: tsys-tcs-purge-case-mock-images

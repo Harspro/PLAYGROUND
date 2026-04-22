@@ -1,0 +1,35 @@
+- folder_name: treasury_inbound_bonds
+  filename_pattern: .*pcb_alm_bond.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_bond_monthly_load]
+
+- folder_name: treasury_inbound_swaps
+  filename_pattern: .*pcb_alm_swap.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_swap_monthly_load]
+
+- folder_name: treasury_inbound_hedges
+  filename_pattern: .*pcb_alm_hedge.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_hedge_monthly_load]
+
+- folder_name: treasury_inbound_abcp
+  filename_pattern: .*pcb_alm_abcp.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_abcp_monthly_load]
+
+- folder_name: treasury_inbound_cash
+  filename_pattern: .*pcb_alm_cash.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_cash_monthly_load]
+
+- folder_name: treasury_inbound_investment
+  filename_pattern: .*pcb_alm_investment.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_investment_monthly_load]
+
+- folder_name: treasury_inbound_eagle
+  filename_pattern: .*pcb_alm_eagle.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_eagle_monthly_load]
+
+- folder_name: treasury_inbound_eaglefees
+  filename_pattern: .*pcb_alm_eaglefees.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_eaglefees_monthly_load]
+
+- folder_name: treasury_inbound_ref_table
+  filename_pattern: .*pcb_alm_ref_table_change.*_submit_\d{14}\_(uatv|prod).csv$
+  dags_to_trigger: [alm_pcb_ref_table_change_monthly_load]

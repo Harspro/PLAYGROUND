@@ -1,0 +1,149 @@
+terminus.purging:
+  environment_specific_purge_attributes:
+    automatic_purge:
+      dev: Y
+      uat: Y
+      prod: Y
+    excluded_app_numbers:
+      dev:
+        ADM:
+        EXPERIAN:
+        EAPPS:
+      uat:
+        ADM:
+        EXPERIAN:
+        EAPPS:
+      prod:
+        ADM:
+        EXPERIAN:
+        EAPPS:
+  exclusion.config.sql:
+    - "SELECT DISTINCT SAFE_CAST(APA_APP_NUM AS INT64) AS APA_APP_NUM,
+            FROM pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc 
+            JOIN pcb-{env}-curated.domain_customer_acquisition.ADM_STD_DISP_CUST_INFO AS ADM_CUST_INFO ON
+              UPPER(TRIM(ADM_CUST_INFO.DTC_FULL_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+              AND UPPER(TRIM(ADM_CUST_INFO.DTC_FULL_LAST_NAME)) = UPPER(TRIM(exc.last_name))
+              WHERE (ADM_CUST_INFO.DTC_DATE_OF_BIRTH IS NULL OR ADM_CUST_INFO.DTC_DATE_OF_BIRTH IS NOT NULL
+              AND PARSE_DATE('%Y%m%d', ADM_CUST_INFO.DTC_DATE_OF_BIRTH) = exc.dob) AND SAFE_CAST(APA_APP_NUM AS INT64) IS NOT NULL
+        UNION DISTINCT
+        SELECT DISTINCT SAFE_CAST(APA_APP_NUM AS INT64) AS APA_APP_NUM,
+            FROM pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc 
+            JOIN pcb-{env}-curated.domain_customer_acquisition.ADM_STD_DISP_CUST_INFO AS ADM_CUST_INFO ON
+              UPPER(TRIM(ADM_CUST_INFO.DTC_FULL_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+              AND UPPER(TRIM(ADM_CUST_INFO.DTC_FULL_LAST_NAME)) = UPPER(TRIM(exc.last_name))
+              WHERE SAFE_CAST(APA_APP_NUM AS INT64) IS NOT NULL
+        UNION DISTINCT
+        SELECT DISTINCT SAFE_CAST(APA_APP_NUM AS INT64) AS APA_APP_NUM,
+            FROM pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc 
+            JOIN pcb-{env}-curated.domain_customer_acquisition.ADM_STD_DISP_CUST_INFO AS ADM_CUST_INFO ON
+              (UPPER(TRIM(ADM_CUST_INFO.DTC_FULL_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+              OR UPPER(TRIM(ADM_CUST_INFO.DTC_FULL_LAST_NAME)) = UPPER(TRIM(exc.first_name)))
+              WHERE (exc.first_name IS NULL OR exc.last_name IS NULL)  
+              AND SAFE_CAST(APA_APP_NUM AS INT64) IS NOT NULL"
+    - "SELECT DISTINCT SAFE_CAST(APP_NUMBER AS INT64) AS APP_NUMBER,
+            FROM pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc 
+            JOIN pcb-{env}-curated.domain_customer_acquisition.EXPERIAN_BASE AS EXP_BASE ON
+              UPPER(TRIM(EXP_BASE.P_PI_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+              AND UPPER(TRIM(EXP_BASE.P_PI_LAST_NAME)) = UPPER(TRIM(exc.last_name))
+              WHERE (EXP_BASE.P_PI_DOB IS NULL OR EXP_BASE.P_PI_DOB IS NOT NULL
+              AND EXP_BASE.P_PI_DOB = exc.dob) AND SAFE_CAST(APP_NUMBER AS INT64) IS NOT NULL
+           UNION DISTINCT
+           SELECT DISTINCT SAFE_CAST(APP_NUMBER AS INT64) AS APP_NUMBER,
+              FROM pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc 
+              JOIN pcb-{env}-curated.domain_customer_acquisition.EXPERIAN_BASE AS EXP_BASE ON
+                UPPER(TRIM(EXP_BASE.P_PI_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+                AND UPPER(TRIM(EXP_BASE.P_PI_LAST_NAME)) = UPPER(TRIM(exc.last_name))
+                WHERE SAFE_CAST(APP_NUMBER AS INT64) IS NOT NULL
+           UNION DISTINCT
+            SELECT DISTINCT SAFE_CAST(APP_NUMBER AS INT64) AS APP_NUMBER,
+              FROM pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc 
+              JOIN pcb-{env}-curated.domain_customer_acquisition.EXPERIAN_BASE AS EXP_BASE ON
+                (UPPER(TRIM(EXP_BASE.P_PI_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+                OR UPPER(TRIM(EXP_BASE.P_PI_LAST_NAME)) = UPPER(TRIM(exc.first_name)))
+                WHERE (exc.first_name IS NULL OR exc.last_name IS NULL)  
+                AND SAFE_CAST(APP_NUMBER AS INT64) IS NOT NULL"
+    - "SELECT DISTINCT A.APPLICATION_ID AS APPLICATION_ID
+             FROM
+               pcb-{env}-curated.domain_customer_acquisition.EAPS_1 AS A
+             JOIN pcb-{env}-curated.domain_customer_acquisition.EAPS_2 AS B ON A.APPLICATION_ID = B.APPLICATION_ID
+             JOIN pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc ON
+               UPPER(TRIM(B.PRI_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+               AND UPPER(TRIM(B.PRI_LAST_NAME)) = UPPER(TRIM(exc.last_name))
+               WHERE
+               (exc.dob IS NULL OR exc.dob IS NOT NULL
+               AND B.PRI_BIRTH_DATE = exc.dob)
+               AND A.APPLICATION_ID IS NOT NULL
+       UNION DISTINCT
+       SELECT DISTINCT A.APPLICATION_ID AS APPLICATION_ID
+             FROM
+               pcb-{env}-curated.domain_customer_acquisition.EAPS_1 AS A
+             JOIN pcb-{env}-curated.domain_customer_acquisition.EAPS_2 AS B ON A.APPLICATION_ID = B.APPLICATION_ID
+             JOIN pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc ON
+               UPPER(TRIM(B.PRI_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+               AND UPPER(TRIM(B.PRI_LAST_NAME)) = UPPER(TRIM(exc.last_name))
+             WHERE A.APPLICATION_ID IS NOT NULL
+       UNION DISTINCT
+       SELECT DISTINCT A.APPLICATION_ID AS APPLICATION_ID 
+             FROM
+               pcb-{env}-curated.domain_customer_acquisition.EAPS_1 AS A
+             JOIN pcb-{env}-curated.domain_customer_acquisition.EAPS_2 AS B ON A.APPLICATION_ID = B.APPLICATION_ID
+             JOIN pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXCLUSION AS exc ON
+               (UPPER(TRIM(B.PRI_FIRST_NAME)) = UPPER(TRIM(exc.first_name))
+               OR UPPER(TRIM(B.PRI_LAST_NAME)) = UPPER(TRIM(exc.first_name)))
+             WHERE (exc.first_name IS NULL OR exc.last_name IS NULL) 
+             AND A.APPLICATION_ID IS NOT NULL"
+  sources:
+    ADM:
+      base_query_sql: ADM_PURGE_QUERY.sql
+      purgelist_stat_table:
+        name: pcb-{env}-landing.domain_customer_acquisition.PURGELIST_ADM
+        application_number_column_name: APP_NUMBER
+      bq_tables:
+        - name: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_ADDR_INFO
+          id.column: APA_APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_CUST_INFO
+          id.column: APA_APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_EMPM_INFO
+          id.column: APA_APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_BAL_TRNS_INFO
+          id.column: APA_APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_MEMO
+          id.column: APA_APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.ADM_STD_DISP_USER
+          id.column: APA_APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.GEN_VAL_DETAIL
+          id.column: APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.APP_CUST_INFO
+          join.table: pcb-{env}-landing.domain_customer_acquisition.ADM_RT_RESPONSE_UNS
+          join.column.from: PC_MC_CUST_APPL_ID
+          join.column.to: PC_MC_CUST_APPL_ID
+          id.column: APA_APP_NUM
+        - name: pcb-{env}-landing.domain_customer_acquisition.ADM_RT_RESPONSE_UNS
+          id.column: APA_APP_NUM
+    EXPERIAN:
+      base_query_sql: EXPERIAN_PURGE_QUERY.sql
+      purgelist_stat_table:
+        name: pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EXPERIAN
+        application_number_column_name: APP_NUMBER
+      bq_tables:
+        - name: pcb-{env}-landing.domain_customer_acquisition.EXPERIAN_BUREAU
+          id.column: APP_NUMBER
+        - name: pcb-{env}-landing.domain_customer_acquisition.EXPERIAN_DAILY_HISTORY
+          id.column: APP_NUMBER
+        - name: pcb-{env}-landing.domain_customer_acquisition.EXPERIAN_BASE
+          id.column: APP_NUMBER
+        - name: pcb-{env}-landing.domain_customer_acquisition.EXPERIAN_RESULTS
+          id.column: APP_NUMBER
+        - name: pcb-{env}-landing.domain_customer_acquisition.EXPERIAN_AML_CANADA_POST
+          join.table: pcb-{env}-landing.domain_customer_acquisition.EXPERIAN_BASE
+          join.column.from: ACCOUNT_NUMBER
+          join.column.to: MCCARD_NUMBER_FDR
+          id.column: APP_NUMBER
+    EAPPS:
+      base_query_sql: EAPPS_PURGE_QUERY.sql
+      purgelist_stat_table:
+        name: pcb-{env}-landing.domain_customer_acquisition.PURGELIST_EAPPS
+        application_number_column_name: APPLICATION_ID
+      bq_tables:
+        - name: pcb-{env}-landing.domain_customer_acquisition.EAPS_2
+          id.column: APPLICATION_ID

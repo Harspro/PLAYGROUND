@@ -1,0 +1,345 @@
+# GA4 migration: table replication via service account impersonation.
+# Supports load_type: daily (one TaskGroup for the single table_name) or one_time (one TaskGroup per chunk).
+# chunk_size is required for one_time; one TaskGroup per chunk of N days (check + replicate landing + vendor for all dates in chunk).
+
+events_pcf_analytics_switch_vendor_daily_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  schedule_interval: "30 8,11,14,16,22 * * *"
+  load_type: daily
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: events
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: pcb-{env}-product-insights
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-landing
+      dataset_id: cots_product_insights
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+users_pcf_analytics_switch_vendor_daily_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  schedule_interval: "30 8,11,14,16,22 * * *"
+  load_type: daily
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: users
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: pcb-{env}-product-insights
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-landing
+      dataset_id: cots_product_insights
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+pseudonymous_users_pcf_analytics_switch_vendor_daily_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  schedule_interval: "30 8,11,14,16,22 * * *"
+  load_type: daily
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: pseudonymous_users
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: pcb-{env}-product-insights
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-landing
+      dataset_id: cots_product_insights
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+lt_events_pcf_analytics_switch_vendor_daily_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  schedule_interval: "30 8,11,14,16,22 * * *"
+  load_type: daily
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: events
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: lt-pcf-analytics-exp
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-landing
+      dataset_id: cots_product_insights
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+lt_users_pcf_analytics_switch_vendor_daily_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  schedule_interval: "30 8,11,14,16,22 * * *"
+  load_type: daily
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: users
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: lt-pcf-analytics-exp
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-landing
+      dataset_id: cots_product_insights
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+lt_pseudonymous_users_pcf_analytics_switch_vendor_daily_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  schedule_interval: "30 8,11,14,16,22 * * *"
+  load_type: daily
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: pseudonymous_users
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: lt-pcf-analytics-exp
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-landing
+      dataset_id: cots_product_insights
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+events_pcf_analytics_switch_vendor_one_time_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  load_type: one_time
+  start_date: 2024-05-02
+  end_date: 2026-04-12
+  chunk_size: 12  # optional; if set, one TaskGroup per chunk of N days (check + replicate landing + vendor for all dates in chunk)
+  skip_vendor_replication: True  # optional; when true, only landing is replicated (vendor task no-ops)
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: events
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: lt-pcf-analytics-exp
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-product-insights
+      dataset_id: analytics_332189397
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+users_pcf_analytics_switch_vendor_one_time_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  load_type: one_time
+  start_date: 2024-05-02
+  end_date: 2026-04-12
+  chunk_size: 12  # required for one_time; one TaskGroup per chunk of N days (check + replicate landing + vendor for all dates in chunk)
+  skip_vendor_replication: True  # optional; when true, only landing is replicated (vendor task no-ops)
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: users
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: lt-pcf-analytics-exp
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-product-insights
+      dataset_id: analytics_332189397
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4
+
+pseudonymous_users_pcf_analytics_switch_vendor_one_time_loading_job:
+  default_args:
+    owner: team-centaurs
+    capability: "Terminus Data Platform"
+    severity: P3
+  load_type: one_time
+  start_date: 2024-05-02
+  end_date: 2026-04-12
+  chunk_size: 12  # required for one_time; one TaskGroup per chunk of N days (check + replicate landing + vendor for all dates in chunk)
+  skip_vendor_replication: True  # optional; when true, only landing is replicated (vendor task no-ops)
+  bigquery:
+    audit_table_ref: pcb-{env}-landing.domain_technical.SWITCH_GROWTH_DATA_TRANSFER_AUDIT
+    service_account: pcb-switch-sa@pcb-{env}-processing.iam.gserviceaccount.com
+    write_disposition: WRITE_TRUNCATE
+    create_disposition: CREATE_IF_NEEDED
+    table_name: pseudonymous_users
+    source:
+      dev:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      uat:
+        project_id: pcb-{env}-landing
+        dataset_id: domain_technical
+      prod:
+        project_id: lt-pcf-analytics-exp
+        dataset_id: analytics_332189397
+    landing:
+      project_id: pcb-{env}-product-insights
+      dataset_id: analytics_332189397
+    vendor:
+      dev:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      uat:
+        project_id: switch-pcfinancial
+        dataset_id: test_shared_pcf
+      prod:
+        project_id: switch-pcfinancial
+        dataset_id: pcbank_ga4

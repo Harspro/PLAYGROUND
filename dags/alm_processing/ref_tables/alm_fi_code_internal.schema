@@ -1,0 +1,4 @@
+vendor,STRING
+usage,STRING
+common_name,STRING
+legal_name,STRING

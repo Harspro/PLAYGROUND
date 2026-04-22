@@ -1,0 +1,16 @@
+{
+	"main_class" : "com.pcb.batch.spark.dbtranauthlog.DbtranAuthLogBatchApplication", 
+	"jar_file_uris" : ["gs://pcb-{env}-staging-artifacts/jarfiles/dbtran-auth-spark-batch-2.0.0.jar"],
+	"loader_file_uris" : ["gs://pcb-{env}-staging-artifacts/resources/dbtran-auth-spark-batch/application.conf"],
+	"generator_file_uris" : ["gs://pcb-{env}-staging-artifacts/resources/dbtran-auth-spark-batch/application.conf", 
+		                    "gs://pcb-{env}-staging-artifacts/resources/dbtran-auth-spark-batch/dbtranAuthLog.sql", 
+		                    "gs://pcb-{env}-staging-artifacts/resources/dbtran-auth-spark-batch/kafka.jks"],
+	"processing_bucket" : "pcb-{env}-staging",
+	"inbound_bucket": "tsys-inbound-pcb-{env}",
+	"inbound_bucket_prod": "tsys-inbound-pcb",
+	"region" : "northamerica-northeast1",
+	"batch_auth_folder_name" : "TS2_batchauth",
+	"cardguard_auth_folder_name" : "TS2_crdg_auth",
+	"file_extension_prod" : ".prod",
+	"file_extension_lower" : ".uatv"
+}

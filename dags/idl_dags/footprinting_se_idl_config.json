@@ -1,0 +1,7 @@
+{
+  "tgt_bq_project_id":"pcb-{env}-landing",
+  "tgt_bq_dataset_id":"domain_audit",
+  "tgt_bq_table_id":"SF_SEARCH",
+  "src_gcs_bucket":"tci-inbound-pcb",
+  "src_obj_pattern":"tci_pcb_search/*_Search.csv"
+}

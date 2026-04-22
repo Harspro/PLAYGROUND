@@ -1,0 +1,197 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+- folder_name: tsys_pcb_mc_acctmaster_daily
+  filename_pattern: ^tsys_pcb_mc_acctmaster_daily(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_acctmaster_daily]
+
+- folder_name: TS2_rptrec
+  filename_pattern: ^tsys_pcb_rptrec(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [TS2_rptrec, tsys_triad_file_loader_launcher]
+
+- folder_name: tsys_pcb_mc_accttx
+  filename_pattern: ^tsys_pcb_mc_accttx(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [TS2_at31_accttx_file, tsys_pcb_mc_accttx_file]
+
+- folder_name: tsys_pcb_mc_events
+  filename_pattern: ^tsys_pcb_mc_events(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ ts2_events_full_file_loading ]
+
+- folder_name: TS2_fraudflag
+  filename_pattern: ^TS2_fraudflag(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_cardguard_fraudflag_full_file_loading]
+
+- folder_name: tsys_pcb_frd_crdg_fraudlog
+  filename_pattern: ^tsys_pcb_frd_crdg_fraudlog(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_cardguard_fraudlog_full_file_loading]
+
+- folder_name: TS2_crdg_auth
+  filename_pattern: ^tsys_pcb_crdg_auth(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_cardguard_authlog_full_file_loading]
+
+- folder_name: tsys_pcb_mc_enroll
+  filename_pattern: ^tsys_pcb_pcmc_insurancereq(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_enroll_full_file_loading]
+
+- folder_name: TS2_batchauth
+  filename_pattern: ^tsys_pcb_batchauth(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_batch_authorization_log_full_file_loading, tokenized_consent_capture_kafka_writer]
+
+- folder_name: tsys_pcb_tcs_casedata
+  filename_pattern: ^tsys_pcb_pcmc_tcs_casedata(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tcs-processing-cdata-spark]
+
+- folder_name: tsys_pcb_tcs_casedisposition
+  filename_pattern: ^tsys_pcb_pcmc_tcs_casedisposition(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tcs_casedisposition_processing]
+
+- folder_name: tsys_pcb_tcs_workbasket
+  filename_pattern: ^tsys_pcb_pcmc_tcs_workbasket(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tcs-processing-wbasket-spark]
+
+- folder_name: tsys_pcb_frd_crdg_fraudtxn
+  filename_pattern: ^tsys_pcb_frd_crdg_fraudtxn(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_cardguard_fraudtxn_full_file_loading]
+
+- folder_name: tsys_pcb_mc_adm_aceltr
+  filename_pattern: ^tsys_pcb_mc_aceltr(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_adm_aceltr_file_loading]
+
+- folder_name: tsys_pcb_mc_adm_appelement
+  filename_pattern: ^tsys_pcb_mc_adm_appelement(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_adm_appelement_file_loading]
+
+- folder_name: tsys_pcb_mc_adm_applog
+  filename_pattern: ^tsys_pcb_mc_adm_applog(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ tsys_pcb_mc_adm_applog_file_loading ]
+
+- folder_name: tsys_pcb_mc_adm_appmemo
+  filename_pattern: ^tsys_pcb_mc_adm_appmemo(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_adm_appmemo_file_loading]
+
+- folder_name: tsys_pcb_mc_adm_disp
+  filename_pattern: ^tsys_pcb_mc_admdisp(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_adm_disp_file_loading]
+
+- folder_name: tsys_pcb_mc_adm_operatorlog
+  filename_pattern: ^tsys_pcb_mc_adm_operatorlog(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_adm_operatorlog_file_loading]
+
+- folder_name: tsys_pcb_mc_acctscores
+  filename_pattern: ^tsys_pcb_mc_acctscores(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [TS2_acctscores, tsys_pcb_mc_acctscore_full_file_loading]
+
+- folder_name: tsys_pcb_mc_cusmaster_daily
+  filename_pattern: ^tsys_pcb_mc_cusmaster_daily(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_cusmaster_file_loading]
+
+- folder_name: tsys_pcb_mc_cusmaster_monthly
+  filename_pattern: ^tsys_pcb_mc_cusmaster_monthly(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_cusmaster_monthly_file_loading]
+
+- folder_name: tsys_pcb_mc_acctmisc
+  filename_pattern: ^tsys_pcb_mc_acctmisc(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_acctmisc_file_loading]
+
+- folder_name: tsys_sccf
+  filename_pattern: ^tsys_pcb_sccf(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_sccf_file_loading]
+
+- folder_name: TS2_crdg_caselog
+  filename_pattern: ^tsys_pcb_crdg_caselog(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_cardguard_caselog_full_file_loading]
+
+- folder_name: tsys_convchq_conf
+  filename_pattern: ^tsys_pcb_convchq_conf(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_convchq_conf_loader]
+
+- folder_name: tsys_pcb_chqorder
+  filename_pattern: ^tsys_pcb_chqorder(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_cheque_order_loader]
+
+- folder_name: tsys_pcb_mc_accthisto
+  filename_pattern: ^tsys_pcb_mc_accthisto(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ tsys_pcb_mc_acct_hist_file_loading ]
+
+
+- folder_name: tsys_cif_weekly
+  filename_pattern: ^tsys_pcb_cif_weekly(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_cif_weekly_file_loading]
+
+- folder_name: tsys_pcb_mc_adm_cif_daily
+  filename_pattern: ^tsys_pcb_mc_cif_daily(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_cif_file_loading]
+
+- folder_name: tsys_pcb_mc_autopurge_purged
+  filename_pattern: ^tsys_pcb_mc_autopurge_purged(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_autopurge_purged_full_file_loading]
+
+- folder_name: tsys_pcb_mc_securitzn
+  filename_pattern: ^tsys_pcb_mc_securitzn(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_securitization_full_file_loading]
+
+- folder_name: tsys_pcb_mc_prdenh_uptd
+  filename_pattern: ^tsys_pcb_mc_prdenh_upd(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_prdenh_uptd_full_file_loading]
+
+- folder_name: tsys_pcb_tms515
+  filename_pattern: ^tsys_pcb_tms515(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ tsys_portfolio_file_loading ]
+
+- folder_name: tsys_pcb_rms
+  filename_pattern: ^tsys_pcb_rms(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_rms_file_loader]
+
+- folder_name: tsys_pcb_gl
+  filename_pattern: ^tsys_pcb_gl(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_gl_file_loader]
+
+- folder_name: tsys_pcb_tokennotify
+  filename_pattern: ^tsys_pcb_tokennotify(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_tokennotify_file_loader]
+
+- folder_name: tsys_pcb_embossing
+  filename_pattern: ^tsys_pcb_embossing_.*$
+  dags_to_trigger: [card_embossing_file_loading]
+
+- folder_name: tsys_pcb_embossing_rush
+  filename_pattern: ^tsys_pcb_embossing_rush_.*$
+  dags_to_trigger: [card_embossing_rush_file_loading]
+
+- folder_name: tsys_pcb_reissue
+  filename_pattern: ^tsys_pcb_reissue_.*$
+  dags_to_trigger: [card_embossing_reissue_file_loading]
+
+- folder_name: tsys_pcb_postedtx
+  filename_pattern: ^tsys_pcb_postedtx(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_postedtx_file_loader]
+
+- folder_name: tsys_pcb_mc_acctmaster_monthly
+  filename_pattern: ^tsys_pcb_mc_acctmaster_monthly(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_mc_acctmaster_monthly_file_loading_v2]
+
+- folder_name: tsys_pcb_pcmc_stmt_cgo
+  filename_pattern: ^tsys_pcb_pcmc_stmt_cgo(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_pcmc_stmt_cgo_file_loading]
+
+- folder_name: tsys_pcb_pcmc_stmt_reg_rdf
+  filename_pattern: ^tsys_pcb_pcmc_stmt_reg_rdf(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tsys_pcb_pcmc_stmt_reg_file_loading]
+
+- folder_name: casepurge_records
+  filename_pattern: ^tsys_pcb_casepurge_(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tcs_purge_case_details_orchestrator]
+
+- folder_name: tsys_pcb_pcdownload
+  filename_pattern: ^tsys_pcb_pcdownload_\d{14}(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ts2_pcdownload_full_file_loading]
+
+- folder_name: casepurge_images
+  filename_pattern: ^tsys_pcb_casepurge_(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [tcs_purge_image_metadata_orchestrator]

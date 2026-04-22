@@ -1,0 +1,4 @@
+source_fi_code,STRING
+product_type_code,STRING
+trade_id,STRING
+cusip,STRING

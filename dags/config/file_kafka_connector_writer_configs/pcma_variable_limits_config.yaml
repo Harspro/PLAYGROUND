@@ -1,0 +1,28 @@
+pcma_variable_limits_kafka_writer:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Money Movement"
+    severity: "P3"
+    sub_capability: "EMT"
+    business_impact: "This dag loads all PCMA funds limits into DP kafka topic: dp-batch-{env}-funds-move-limit-updated"
+    customer_impact: "In the event of a failure, funds transfer limits for PCF customers will not be updated"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcma_variable_limits/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcma_variable_limits/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcma_variable_limits/CustomerEventKeyAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcma_variable_limits/FundsMoveLimitAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/pcma_variable_limits/pcma_limits_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: CustomerEventKeyAO.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: FundsMoveLimitAO.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.schema.file.path: pcma_limits_file_schema.avsc
+    pcb.file.kafka.connector.kafka.key: customerId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+  dag:
+    kafka_writer_task: kafka_writer_task_variable_limits
+    job_size: extra_small

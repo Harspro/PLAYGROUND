@@ -1,0 +1,31 @@
+tags:
+  - communication
+  - mail
+default_args:
+  owner: "team-telegraphers-alerts"
+  capability: "communication"
+  severity: "P2"
+  sub_capability: "mail"
+  business_impact: "This will impact the processing of DMX RRDF data into BigQuery MAIL_PRINT table."
+  customer_impact: "DMX letters data will not be processed and paper letters will not be mailed out to customers."
+dag:
+  read_pause_deploy_config: False
+  spark:
+    jar_file_uris:
+      - gs://test-staging-artifacts/jarfiles/dmx-letters-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.dmx.letters.DmxLettersSparkBatchApplication
+    args:
+      output.file.format: parquet
+  bigquery:
+    project_id: pcb-test-landing
+    dataset_id: domain_communication
+    table_name: MAIL_PRINT
+    output_gcs_prefix: "gs://pcb-test-staging-extract/dmx_letters"
+    add_columns:
+      - "'DMX RRDF' AS source"
+      - "'LETTER' AS mailType"
+      - "'SIMPLEX' AS printingMode"
+      - SAFE.PARSE_JSON(NULLIF(TRIM(parametersString), '')) AS parameters
+      - TIMESTAMP(CURRENT_DATETIME('America/Toronto')) AS timestamp
+    drop_columns:
+      - parametersString

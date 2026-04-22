@@ -1,0 +1,437 @@
+# finished dags have been archived
+db610_dnscnst_dns_acct_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_ACCT WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_ACCT
+  dag:
+    schedule_interval: '20 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db610_dnscnst_cust_mktg_pref_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.CUST_MKTG_PREF WHERE REC_CHNG_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CHNG_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: CUST_MKTG_PREF
+  dag:
+    schedule_interval: '30 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'    
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db610_dnscnst_dns_acct_cust_id_xref_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_ACCT_CUST_ID_XREF WHERE REC_CHNG_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CHNG_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_ACCT_CUST_ID_XREF
+  dag:
+    schedule_interval: '40 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'    
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db610_dnscnst_dns_event_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_EVENT WHERE REC_CHNG_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CHNG_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_EVENT
+  dag:
+    schedule_interval: '20 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db610_pcl_pcf_product_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM PCL.PCF_PRODUCT WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PCF_PRODUCT
+  dag:
+    schedule_interval: '10 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "Applications"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db610_dnscnst_dns_event_detail_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM DNSCNST.DNS_EVENT_DETAIL WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: DNS_EVENT_DETAIL
+  dag:
+    schedule_interval: '20 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+
+db610_pcl_points_staging_table_delta:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT INDEX_NUM, CUSTOMER_REF_ID, ACCOUNT_REF_ID, 
+      CARD_NUMBER, CARD_BIN, CARD_LAST4, SOURCE_CD, NAME_ON_CARD, TRANSACTION_DATE, 
+      TRANSACTION_CODE, TRANSACTION_AMOUNT, POST_DATE, MERCHANT_NAME, MERCHANT_NUMBER, 
+      MERCHANT_CATEGORY_CODE, MERCHANT_COUNTRY_CODE, TRANSACTION_REF_NUMBER, LOYALTY_REF_NUM, 
+      PROMO_CODE, INTERFACE_ID, PROCESS_FLAG, PROCESS_DT, REC_CREATE_TMS, REC_LOAD_TMS, 
+      REC_CHNG_ID, REC_CHNG_TMS, PCF_PRD, MERCHANT_ID, PROCESS_NUM, STR_NUM, TRANS_REF_ID, 
+      BKUP_PROCESS_FLAG, AT31_MERCHANT_CATEGORY_CODE FROM PCL.POINTS_STAGING WHERE PROCESS_DT >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND PROCESS_DT < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: POINTS_STAGING
+  drop_columns:
+    - LOAD_RESULT_UUID
+  dag:
+    schedule_interval: '40 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "Applications"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+cme_customer_media_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM LDS_CME.CUSTOMER_MEDIA WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: CUSTOMER_MEDIA
+    clustering_fields:
+      - customer_media_ref
+  dag:
+    schedule_interval: '30 8 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+disposition_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM LDS_CME.DISPOSITION WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: DISPOSITION
+    clustering_fields:
+      - disposition_date
+    drop_columns:
+      - EXECUTION_ID
+  dag:
+    schedule_interval: '05 6 * * *'
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db303_customer_lookup_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM LDS_CME.CUSTOMER_LOOKUP WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: CUSTOMER_LOOKUP
+    clustering_fields:
+      - customer_ref
+  batch:
+    time_from: '6:00:00'
+    time_to: '6:00:00'
+  dag:
+    schedule_interval: '05 6 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db303_lds_cme_customer_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM LDS_CME.CUSTOMER WHERE LAST_OFFER_STATUS_DATE >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND LAST_OFFER_STATUS_DATE < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: CME_CUSTOMER
+    drop_columns:
+      - EXECUTION_ID
+  dag:
+    schedule_interval: '05 6 * * *'
+  batch:
+    time_from: '6:00:00'
+    time_to: '6:00:00'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db303_mac_xsell_log_detail_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM MAC.XSELL_LOG_DETAIL WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: XSELL_LOG_DETAIL
+    clustering_fields:
+      - OFFER_ID
+      - OFFER_DISPLAYED_IND
+      - CONTACT_ID
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '35 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db303_mac_xsell_log_summary_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM MAC.XSELL_LOG_SUMMARY WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: XSELL_LOG_SUMMARY
+    clustering_fields:
+      - CONTACT_ID
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '35 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db303_mac_audit_mac_actions_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM MAC.AUDIT_MAC_ACTIONS WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: AUDIT_MAC_ACTIONS
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db303_mac_login_log_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM MAC.LOGIN_LOG WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: LOGIN_LOG
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '25 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+cme_channel_table_delta:
+  fetch_spark_job:
+    dbname: db303_bods
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM LDS_CME.CHANNEL WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: CHANNEL
+    clustering_fields:
+      - MEDIA_REFERENCE
+  batch:
+    time_from: '8:00:00'
+    time_to: '8:00:00'
+  dag:
+    schedule_interval: '30 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+cme_media_reference_table_delta:
+  fetch_spark_job:
+    dbname: db303_bods
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM LDS_CME.MEDIA_REFERENCE WHERE REC_CREATE_TMS >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_CREATE_TMS < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: MEDIA_REFERENCE
+    clustering_fields:
+      - MEDIA_REFERENCE
+  batch:
+    time_from: '6:00:00'
+    time_to: '6:00:00'
+  dag:
+    schedule_interval: '30 6 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'
+
+db303_lds_cme_stmt_cme_feedback_table_delta:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM LDS_CME.STMT_CME_FEEDBACK WHERE PRINTED_DATE >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND PRINTED_DATE < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_marketing
+    table_name: STMT_CME_FEEDBACK
+  batch:
+    time_from: '08:00:00'
+    time_to: '08:00:00'
+  dag:
+    schedule_interval: '50 8 * * *'
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: 'P3'

@@ -1,0 +1,1 @@
+drop table pcb-{env}-processing.domain_dispute.TCS_FRAUD_MONITORING_IDL;

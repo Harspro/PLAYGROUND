@@ -1,0 +1,8 @@
+# for airflow scanning
+from alm_processing.outbound.alm_etl_data_loader import AlmETLDataLoader
+from alm_processing.utils import constants as alm_constants
+
+globals().update(AlmETLDataLoader(module_name='alm_processing',
+                                  config_path='dags_config',
+                                  config_filename='alm_etl_common_config.yaml',
+                                  dag_default_args=alm_constants.DAG_DEFAULT_ARGS).generate_dags())  # pragma: no cover

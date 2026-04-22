@@ -1,0 +1,28 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+- folder_name: equifax_score_gen
+  filename_pattern: ^eqxds_expcbanktsys(tt|pd)_SCRQ_.*\.txt$
+  dags_to_trigger: [equifax_file_processing]
+
+- folder_name: equifax_das
+  filename_pattern: ^expcbanktsys(tt|pd).eqxcan.ds.SCDS.*\.*$
+  dags_to_trigger: [ equifax_cred_das_file_loading ]
+
+- folder_name: equifax_t10
+  filename_pattern: ^expcbanktsys(tt|pd).eqxcan.ds.SC10.*\.*$
+  dags_to_trigger: [ equifax_cred_t0010_file_loading ]
+
+- folder_name: equifax_t30
+  filename_pattern: ^expcbanktsys(tt|pd).eqxcan.ds.SC30.*\.*$
+  dags_to_trigger: [ equifax_cred_t0030_file_loading ]
+
+- folder_name: trs
+  filename_pattern: ^trs_exec_.*\.json$
+  dags_to_trigger: [transaction_risk_score_writer_dag]

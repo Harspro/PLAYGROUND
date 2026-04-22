@@ -1,0 +1,29 @@
+data-patch-PCBDF-2488-EVENTS-BACKUP-CREATION:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2488-EVENTS-BACKUP-CREATION.sql"
+  tags:
+   - "team-centaurs"
+
+data-patch-PCBDF-2488-EVENTS-DATA-CLEANUP:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2488-EVENTS-DATA-CLEANUP.sql"
+  tags:
+   - "team-centaurs"
+
+data-patch-PCBDF-2488-EVENTS-INSERT-UPDATED-DATA:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2488-EVENTS-INSERT-UPDATED-DATA.sql"
+  tags:
+   - "team-centaurs"
+
+data-patch-pcbdf-2627-pc_download_backup_creation:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2627-PC_DOWNLOAD_BACKUP_CREATION.sql"
+  tags:
+    - "team-centaurs"
+
+data-patch-pcbdf-2627-pc_download_update_min_due_balance_current:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2627-PC_DOWNLOAD_UPDATE_MIN_DUE_BALANCE_CURRENT.sql"
+  tags:
+    - "team-centaurs"

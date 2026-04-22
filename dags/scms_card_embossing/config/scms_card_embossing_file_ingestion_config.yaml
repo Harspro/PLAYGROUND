@@ -1,0 +1,191 @@
+card_embossing_file_loading:
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_embossing
+  folder_prefix: tsys_pcb_embossing
+  job_type: Daily_Embossing
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARD_EMBOSSING
+      pcb.tsys.processor.segment.name: EMBOSS
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARD_EMBOSSING
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: embossing_group
+        segments: EMBOSS
+    segment_args:
+      EMBOSS:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_scms_card_embossing/EMBOSS.CPY
+        pcb.tsys.processor.segment.name: EMBOSS
+        pcb.tsys.processor.layout.name: EMBOSS_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_scms_card_embossing/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: EMBOSS_TRL
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    data_load_type: APPEND_ONLY
+    tables:
+      EMBOSS:
+        table_name: EMBOSSING
+        record_count_column: GEN_TRL_DET_CNT
+        add_columns:
+          - CONCAT(GEN_PIN_OFFSET, GEN_PIN_FILLER) AS RECORD_NUM
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - "'D' as ISSUE_TYPE"
+      TRLR:
+        table_name: EMBOSSING_TRLR
+        record_count_column: GEN_TRL_DET_CNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+  kafka_writer:
+    kafka_cluster_name: scms-card-embossing-merch-c
+    kafka_trigger_dag_id: card_embossing_bq_to_kafka
+    curated_view_trigger_dag_id: domain_card_management_views
+    table_id: EMBOSSING_{current_date}
+    curated_view: EMBOSSING
+    query_file: scms_card_embossing/card_embossing.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: card_embossing
+    file_name: card-embossing-captures
+
+card_embossing_reissue_file_loading:
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_reissue
+  folder_prefix: tsys_pcb_reissue
+  job_type: Reissue_Embossing
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARD_EMBOSSING
+      pcb.tsys.processor.segment.name: EMBOSSING_REISSUE
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARD_EMBOSSING
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: reissue_group
+        segments: EMBOSSING_REISSUE
+    segment_args:
+      EMBOSSING_REISSUE:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_scms_card_embossing/EMBOSS.CPY
+        pcb.tsys.processor.segment.name: EMBOSSING_REISSUE
+        pcb.tsys.processor.layout.name: EMBOSS_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_scms_card_embossing/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: EMBOSS_TRL
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    data_load_type: APPEND_ONLY
+    tables:
+      EMBOSSING_REISSUE:
+        table_name: EMBOSSING_REISSUE
+        record_count_column: GEN_TRL_DET_CNT
+        add_columns:
+          - CONCAT(GEN_PIN_OFFSET, GEN_PIN_FILLER) AS RECORD_NUM
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - "'R' as ISSUE_TYPE"
+      TRLR:
+        table_name: EMBOSSING_REISSUE_TRL
+        record_count_column: GEN_TRL_DET_CNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+  kafka_writer:
+    kafka_cluster_name: scms-card-embossing-reissue-merch-c
+    kafka_trigger_dag_id: card_embossing_bq_to_kafka
+    curated_view_trigger_dag_id: domain_card_management_views
+    table_id: EMBOSSING_REISSUE_{current_date}
+    curated_view: EMBOSSING_REISSUE
+    query_file: scms_card_embossing/card_embossing.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: card_embossing_reissue
+    file_name: card-embossing-reissue-captures
+
+card_embossing_rush_file_loading:
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_embossing_rush
+  folder_prefix: tsys_pcb_embossing_rush
+  job_type: Rush_Embossing
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARD_EMBOSSING
+      pcb.tsys.processor.segment.name: EMBOSSING_RUSH
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: CARD_EMBOSSING
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: embossing_rush_group
+        segments: EMBOSSING_RUSH
+    segment_args:
+      EMBOSSING_RUSH:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_scms_card_embossing/EMBOSS.CPY
+        pcb.tsys.processor.segment.name: EMBOSSING_RUSH
+        pcb.tsys.processor.layout.name: EMBOSS_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_scms_card_embossing/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRLR
+        pcb.tsys.processor.layout.name: EMBOSS_TRL
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_card_management
+    data_load_type: APPEND_ONLY
+    tables:
+      EMBOSSING_RUSH:
+        table_name: EMBOSSING_RUSH
+        record_count_column: GEN_TRL_DET_CNT
+        add_columns:
+          - CONCAT(GEN_PIN_OFFSET, GEN_PIN_FILLER) AS RECORD_NUM
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - "'V' as ISSUE_TYPE"
+      TRLR:
+        table_name: EMBOSSING_RUSH_TRL
+        record_count_column: GEN_TRL_DET_CNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+  kafka_writer:
+    kafka_cluster_name: scms-card-embossing-rush-merch-c
+    kafka_trigger_dag_id: card_embossing_bq_to_kafka
+    curated_view_trigger_dag_id: domain_card_management_views
+    table_id: EMBOSSING_RUSH_{current_date}
+    curated_view: EMBOSSING_RUSH
+    query_file: scms_card_embossing/card_embossing.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: card_embossing_rush
+    file_name: card-embossing-rush-captures

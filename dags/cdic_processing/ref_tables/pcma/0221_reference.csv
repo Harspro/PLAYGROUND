@@ -1,0 +1,5 @@
+Address_Type_Code|MI_Address_Type|Description
+11|PRIMARY-ADDRESS|Customer’s primary address.
+12|MAILING-ADDRESS|Customer’s mailing address.
+13|TEMPORARY-ADDRESS|Customer’s temporary address.
+14|BUSINESS-ADDRESS|Customer’s business/employment address.

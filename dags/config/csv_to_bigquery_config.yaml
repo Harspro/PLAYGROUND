@@ -1,0 +1,2232 @@
+# One dag per CSV file.
+# Supports header, field-delimiter, add/drop columns, renames,
+# simple transformations and append/full-refresh
+esso_merchant_file_loading_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P2"
+    sub_capability: "Rewards"
+    business_impact: "This will impact the loading of non-padded ESSO merchants into BigQuery. The merchant list is used to block ESSO transactions from getting the points from these locations."
+    customer_impact: "If ESSO adds a new store and we receive transactions, the PC points will be awarded (Costing implication: Customer gets extra points)."
+  tags: ["Loyalty"]
+  source_file:
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - {"name": "RECORD_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "INDEX_NUM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_BIN", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_LAST4", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FUEL_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FUEL_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LITERS_PURCHASED", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "NAME_ON_CARD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_EXPIRY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_AMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_NUMBER", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "MERCHANT_NAME", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "MERCHANT_CATEGORY_CODE", "type": "INTEGER", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_COUNTRY_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_REF_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LOYALTY_REF_NUM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PROMO_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_ID", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_loyalty
+    table_name: MERCHANT
+    data_load_type: MERGE_INSERT
+    add_file_name_column:
+      alias: SOURCE_FILENAME
+    target_columns:
+      - MRCH_ID
+      - MRCH_NM
+      - STAT
+      - LOAD_TIMESTAMP
+      - SOURCE_FILENAME
+    source_columns:
+      - MERCHANT_NUMBER
+      - MERCHANT_NAME
+      - "'A'"
+      - CURRENT_DATETIME("America/Toronto")
+  merge:
+    join_columns:
+      - from_column: T.MRCH_ID
+        to_column: S.MERCHANT_NUMBER
+    distinct_source: True
+  dag:
+    read_pause_deploy_config: True
+
+padded_esso_merchant_file_loading_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P2"
+    sub_capability: "Rewards"
+    business_impact: "This will impact the loading of zero padded ESSO merchants into BigQuery. The merchant list is used to block ESSO transactions from getting the points from these locations."
+    customer_impact: "If ESSO adds a new store and we receive transactions, the PC points will be awarded (Costing implication: Customer gets extra points)."
+  tags: ["Loyalty"]
+  source_file:
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - {"name": "RECORD_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "INDEX_NUM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_BIN", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_LAST4", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FUEL_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FUEL_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LITERS_PURCHASED", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "NAME_ON_CARD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_EXPIRY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_AMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_NUMBER", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "MERCHANT_NAME", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "MERCHANT_CATEGORY_CODE", "type": "INTEGER", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_COUNTRY_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_REF_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LOYALTY_REF_NUM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PROMO_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_ID", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_loyalty
+    table_name: MERCHANT
+    data_load_type: MERGE_INSERT
+    add_file_name_column:
+      alias: SOURCE_FILENAME
+    target_columns:
+      - MRCH_ID
+      - MRCH_NM
+      - STAT
+      - LOAD_TIMESTAMP
+      - SOURCE_FILENAME
+    source_columns:
+      - CONCAT('00',MERCHANT_NUMBER) as MERCHANT_NUMBER
+      - MERCHANT_NAME
+      - "'A'"
+      - CURRENT_DATETIME("America/Toronto")
+    insert_values:
+      - MERCHANT_NUMBER
+      - MERCHANT_NAME
+      - "'A'"
+      - CURRENT_DATETIME("America/Toronto")
+  merge:
+    join_columns:
+      - from_column: T.MRCH_ID
+        to_column: S.MERCHANT_NUMBER
+    distinct_source: True
+  dag:
+    read_pause_deploy_config: True
+
+esso_fuel_transactions_file_loading_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "This will impact the loading of ESSO fuel transactions into BigQuery."
+    customer_impact: "N/A"
+  tags: ["Loyalty"]
+  source_file:
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - {"name": "RECORD_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "INDEX_NUM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_BIN", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_LAST4", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FUEL_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "FUEL_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LITERS_PURCHASED", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "NAME_ON_CARD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CARD_EXPIRY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_AMOUNT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_NUMBER", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "MERCHANT_NAME", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "MERCHANT_CATEGORY_CODE", "type": "INTEGER", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_COUNTRY_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_REF_NUMBER", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LOYALTY_REF_NUM", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PROMO_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_ID", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS
+    data_load_type: APPEND_ONLY
+    add_file_name_column:
+      alias: SOURCE_FILENAME
+    add_columns:
+      - CURRENT_DATETIME("America/Toronto") AS REC_LOAD_TIMESTAMP
+  dag:
+    read_pause_deploy_config: True
+
+purgelist_experian:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "Compliance Issue if the data is not purged"
+  tags:
+    - team-growth-and-sales
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: purging/experian_purge_list.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    schema_external:
+      - {"name": "APP_NUMBER", "type": "INTEGER", "mode": "REQUIRED"}
+      - {"name": "APP_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MAST_ACCOUNT_ID", "type": "INTEGER", "mode": "NULLABLE"}
+      - {"name": "IMAGE_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DECLINE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "ACCOUNT_CLOSE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CREDIT_REVOKE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LAST_FINANCIAL_ACTIVITY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CURRENT_BALANCE", "type": "FLOAT", "mode": "NULLABLE"}
+      - {"name": "APP_SOURCE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURGE_LIST_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURGE_IND", "type": "INTEGER", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PURGELIST_EXPERIAN
+    partition_field: DATE_TRUNC(PURGE_LIST_DATE, MONTH)
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATE('%Y%m%d', ACCOUNT_CLOSE_DATE) AS ACCOUNT_CLOSE_DATE
+      - PARSE_DATE('%Y%m%d', CREDIT_REVOKE_DATE) AS CREDIT_REVOKE_DATE
+      - PARSE_DATE('%Y%m%d', DECLINE_DATE) AS DECLINE_DATE
+      - CASE LENGTH(LAST_FINANCIAL_ACTIVITY_DATE)
+        WHEN 8 THEN PARSE_DATE('%Y%m%d',LAST_FINANCIAL_ACTIVITY_DATE)
+        ELSE NULL
+        END AS LAST_FINANCIAL_ACTIVITY_DATE
+      - PARSE_DATE('%Y%m%d', PURGE_LIST_DATE) AS PURGE_LIST_DATE
+      - CURRENT_DATETIME('America/Toronto') AS CREATE_TS
+      - string(null) AS PURGE_CYCLE
+      - "'N' AS IS_TERMINUS"
+    drop_columns:
+      - DECLINE_DATE
+      - ACCOUNT_CLOSE_DATE
+      - CREDIT_REVOKE_DATE
+      - LAST_FINANCIAL_ACTIVITY_DATE
+      - PURGE_LIST_DATE
+
+purgelist_eapps:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "Compliance Issue if the data is not purged"
+  tags:
+    - team-growth-and-sales
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: purging/eapps_purge_list.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    schema_external:
+      - {"name": "APPLICATION_ID",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "APP_TYPE",        "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MAST_ACCOUNT_ID", "type": "INTEGER", "mode": "NULLABLE"}
+      - {"name": "IMAGE_ID",        "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DECLINE_DATE",    "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "ACCOUNT_CLOSE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CREDIT_REVOKE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LAST_FINANCIAL_ACTIVITY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CURRENT_BALANCE", "type": "FLOAT", "mode": "NULLABLE"}
+      - {"name": "APP_SOURCE",      "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURGE_LIST_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURGE_IND",       "type": "INTEGER", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PURGELIST_EAPPS
+    partition_field: DATE_TRUNC(PURGE_LIST_DATE, MONTH)
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATE('%Y%m%d', ACCOUNT_CLOSE_DATE) AS ACCOUNT_CLOSE_DATE
+      - PARSE_DATE('%Y%m%d', CREDIT_REVOKE_DATE) AS CREDIT_REVOKE_DATE
+      - PARSE_DATE('%Y%m%d', DECLINE_DATE) AS DECLINE_DATE
+      - PARSE_DATE('%Y%m%d', LAST_FINANCIAL_ACTIVITY_DATE) AS LAST_FINANCIAL_ACTIVITY_DATE
+      - PARSE_DATE('%Y%m%d', PURGE_LIST_DATE) AS PURGE_LIST_DATE
+      - CURRENT_DATETIME('America/Toronto') AS CREATE_TS
+      - string(null) AS PURGE_CYCLE
+      - "'N' AS IS_TERMINUS"
+    drop_columns:
+      - DECLINE_DATE
+      - ACCOUNT_CLOSE_DATE
+      - CREDIT_REVOKE_DATE
+      - LAST_FINANCIAL_ACTIVITY_DATE
+      - PURGE_LIST_DATE
+
+purgelist_adm:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "Compliance Issue if the data is not purged"
+  tags:
+    - team-growth-and-sales
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: purging/adm_purge_list.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    schema_external:
+      - {"name": "APP_NUMBER", "type": "INTEGER", "mode": "REQUIRED"}
+      - {"name": "APP_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MAST_ACCOUNT_ID", "type": "INTEGER", "mode": "NULLABLE"}
+      - {"name": "IMAGE_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DECLINE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "ACCOUNT_CLOSE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CREDIT_REVOKE_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "LAST_FINANCIAL_ACTIVITY_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CURRENT_BALANCE", "type": "FLOAT", "mode": "NULLABLE"}
+      - {"name": "APP_SOURCE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURGE_LIST_DATE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "PURGE_IND", "type": "INTEGER", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PURGELIST_ADM
+    partition_field: DATE_TRUNC(PURGE_LIST_DATE, MONTH)
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATE('%Y%m%d', ACCOUNT_CLOSE_DATE) AS ACCOUNT_CLOSE_DATE
+      - PARSE_DATE('%Y%m%d', CREDIT_REVOKE_DATE) AS CREDIT_REVOKE_DATE
+      - PARSE_DATE('%Y%m%d', DECLINE_DATE) AS DECLINE_DATE
+      - PARSE_DATE('%Y%m%d', LAST_FINANCIAL_ACTIVITY_DATE) AS LAST_FINANCIAL_ACTIVITY_DATE
+      - PARSE_DATE('%Y%m%d', PURGE_LIST_DATE) AS PURGE_LIST_DATE
+      - CURRENT_DATETIME('America/Toronto') AS CREATE_TS
+      - string(null) AS PURGE_CYCLE
+      - "'N' AS IS_TERMINUS"
+    drop_columns:
+      - DECLINE_DATE
+      - ACCOUNT_CLOSE_DATE
+      - CREDIT_REVOKE_DATE
+      - LAST_FINANCIAL_ACTIVITY_DATE
+      - PURGE_LIST_DATE
+
+purgelist_exclusion:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "Compliance Issue if the litigation data is not excluded"
+  tags:
+    - team-growth-and-sales
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: purging/purgelist_exclusion.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    schema_external:
+      - {"name": "first_name",  "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "last_name",   "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "dob", "type": "String", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: PURGELIST_EXCLUSION
+    data_load_type: FULL_REFRESH
+    add_columns:
+      - PARSE_DATE('%Y%m%d', dob) AS dob
+      - CURRENT_DATETIME('America/Toronto') AS CREATE_TS
+    drop_columns:
+      - dob
+
+aml_ref_transaction_rail_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    business_impact: "Posted transactions needed for AML analysis will be missing in Verafin if this process fails"
+    sub_capability: "aml"
+    capability: "risk-management"
+    severity: "P3"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/aml_processing/ref_tables/REF_TRANSACTION_RAIL.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - {"name": "RAIL_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "INITIATOR", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "TRANSACTION_CATEGORY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_CD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DP_REF_NO", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MERCHANT_CATEGORY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TERMINAL_ENTRY", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_METHOD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_TYPE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TRANSACTION_DESC", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "TERMS_BALANCE_CD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CLASS_CD", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CREATE_DT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CREATE_USER_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CREATE_FUNCTION_NAME", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "UPDATE_DT", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "UPDATE_USER_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "UPDATE_FUNCTION_NAME", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_aml
+    table_name: REF_TRANSACTION_RAIL
+    data_load_type: FULL_REFRESH
+
+cdic_ref_0211_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    business_impact: "Compliance with CDIC"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P3"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/0211_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "PERSONAL_ID_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_PERSONAL_ID_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CDIC_PERSONAL_ID_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_cdic
+    table_name: CDIC_0211_REFERENCE
+    data_load_type: FULL_REFRESH
+
+cdic_ref_0233_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    business_impact: "Compliance with CDIC"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P3"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/0233_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "CURRENCY_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_CURRENCY_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ISO_CURRENCY_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_cdic
+    table_name: CDIC_0233_REFERENCE
+    data_load_type: FULL_REFRESH
+
+cdic_ref_0401_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    business_impact: "Compliance with CDIC"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P3"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/0401_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "TRANSACTION_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_TRANSACTION_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_cdic
+    table_name: CDIC_0401_REFERENCE
+    data_load_type: FULL_REFRESH
+
+cdic_ref_0501_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    business_impact: "Compliance with CDIC"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P3"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/0501_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "RELATIONSHIP_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_RELATIONSHIP_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_cdic
+    table_name: CDIC_0501_REFERENCE
+    data_load_type: FULL_REFRESH
+
+cdic_ref_0999_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    business_impact: "Compliance with CDIC"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P3"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/0999_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "SUBSYSTEM_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_SUBSYSTEM_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_cdic
+    table_name: CDIC_0999_REFERENCE
+    data_load_type: FULL_REFRESH
+
+cdic_ref_0221_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    business_impact: "Compliance with CDIC"
+    capability: "risk-management"
+    sub_capability: "deposit-insurance-cdic"
+    severity: "P3"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/0221_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "ADDRESS_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_ADDRESS_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_cdic
+    table_name: CDIC_0221_REFERENCE
+    data_load_type: FULL_REFRESH
+
+sfmc_email_unsubscribe_dns_file_loading_job:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "email"
+    severity: "P2"
+    business_impact: "This will affect the loading of the unsubscribe DNS email list from Salesforce Marketing to the BigQuery."
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations potentially resulting in penalties for the bank."
+  tags: ["communication", "email"]
+  source_file:
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 0
+    schema_external:
+      - { "name": "CLIENT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SEND_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SUBSCRIBER_KEY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EMAIL_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SUBSCRIBER_ID", "type": "INTEGER", "mode": "NULLABLE" }
+      - { "name": "LIST_ID", "type": "INTEGER", "mode": "NULLABLE" }
+      - { "name": "EVENT_DATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EVENT_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "BOUNCE_CATEGORY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SMTP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "BOUNCE_REASON", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "BATCH_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TRIGGERED_SEND_EXTERNAL_KEY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CONVERSATION_ID", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dns
+    table_name: SFMC_EMAIL_UNSUBSCRIBE_DNS
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS CREATE_TS
+  dag:
+    read_pause_deploy_config: True
+
+pcma_cdic_0201_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0201_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "DEPOSITOR_TYPE_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MI_DEPOSITOR_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0201
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0201_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0202_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0202_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "PHONE_TYPE_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0202
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0202_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0211_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0211_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "PERSONAL_ID_TYPE_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MI_PERSONAL_ID_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CDIC_PERSONAL_ID_TYPE_CODE", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0211
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0211_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0221_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0221_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "ADDRESS_TYPE_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MI_ADDRESS_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0221
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0221_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0501_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0501_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "RELATIONSHIP_TYPE_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MI_RELATIONSHIP_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0501
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0501_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0999_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0999_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "SUBSYSTEM_ID", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MI_SUBSYSTEM_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0999
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0999_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0212_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0212_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "CDIC_PERSONAL_ID_TYPE_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0212
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0212_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0231_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0231_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - {"name": "PRODUCT_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "MI_PRODUCT_CODE", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "CDIC_PRODUCT_GROUP_CODE", "type": "STRING", "mode": "NULLABLE"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0231
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0231_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0232_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0232_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "REGISTERED_PLAN_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_REGISTERED_PLAN_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0232
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0232_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0233_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0233_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "CURRENCY_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_CURRENCY_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ISO_CURRENCY_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0233
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0233_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0234_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0234_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "INSURANCE_DETERMINATION_CATEGORY_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0234
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0234_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0235_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0235_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "CDIC_HOLD_STATUS_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CDIC_HOLD_STATUS", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0235
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0235_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0236_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0236_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "ACCOUNT_STATUS_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_ACCOUNT_STATUS_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0236
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0236_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0237_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0237_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "TRUST_ACCOUNT_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0237
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0237_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0238_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0238_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "CLEARING_ACCOUNT_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_CLEARING_ACCOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0238
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0238_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0239_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0239_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "ACCOUNT_TYPE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_ACCOUNT_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0239
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0239_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0240_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0240_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "CDIC_PRODUCT_GROUP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CDIC_PRODUCT_GROUP", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0240
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0240_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0241_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0241_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "MI_DEPOSIT_HOLD_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_DEPOSIT_HOLD_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0241
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0241_domain_cdic_loading_job' as JOB_ID"
+
+pcma_cdic_0401_domain_cdic_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P2"
+    sub_capability: "deposit-insurance-cdic"
+    business_impact: "Compliance with CDIC"
+    customer_impact: "Sending email communications to a customer who is on the DNS list constitutes a violation of CASL regulations"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/cdic_processing/ref_tables/pcma/0401_reference.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+      max_bad_records: 0
+    schema_external:
+      - { "name": "TRANSACTION_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MI_TRANSACTION_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DESCRIPTION", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_cdic
+    table_name: PCMA_CDIC_0401
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'pcma_cdic_0401_domain_cdic_loading_job' as JOB_ID"
+
+draft5_hext_chart_reference_data_loading_job:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    sub_capability: "Operations"
+    business_impact: "C86 Redress & Refund"
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/config/draft5_configs/ref_draft5_amount_hex_chart.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - { "name": "AMOUNT_TYPE", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "AMOUNT_LAST_DIGIT", "type": "INT64", "mode": "REQUIRED" }
+      - { "name": "ALTERNATE_AMT_FLAG", "type": "STRING", "mode": "REQUIRED" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: REF_DRAFT5_AMOUNT_HEX_CHART
+    data_load_type: FULL_REFRESH
+
+
+draft5_transaction_code_reference_data_loading_job:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Terminus Data Platform"
+    severity: "P3"
+    sub_capability: "Operations"
+    business_impact: "C86 Redress & Refund"
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/config/draft5_configs/ref_draft5_trans_code.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - { "name": "LANGUAGE_CODE", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "TRANSACTION_CODE", "type": "INT64", "mode": "REQUIRED" }
+      - { "name": "TRANSACTION_TYPE", "type": "STRING", "mode": "REQUIRED" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_ops_adhoc
+    table_name: REF_DRAFT5_TRANSACTION_CODE
+    data_load_type: FULL_REFRESH
+
+tcs_purge_case_details_loading_job:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    severity: "P3"
+    business_impact: "Compliance"
+    customer_impact: "No Impact"
+  tags: ["P3"]
+  description: "TCS purge case detail CSV to BQ loading DAG."
+  source_file:
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+    max_bad_records: 1
+    schema_external:
+      - { "name": "RECORD_TYPE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PARENT_CASE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CASE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "WORK_STATUS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "FRAUD_INDICATOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "APPLICATION_NAME", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_dispute
+    table_name: TSYS_TCS_PURGE_CASE_DETAILS
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      - "'tcs_purge_case_details_loading_job' as JOB_ID"
+
+pcb_idx_stmt_file_processor:
+  default_args:
+      owner: "team-digital-adoption-alerts"
+      capability: "account-management"
+      sub_capability: "statements"
+      business_impact: "pcmc and pcma statement idx file will not be processed and no statement availability file will be generated"
+      customer_impact: "Customers will not be notified for statements availability"
+      severity: "P2"
+  tags: [ "Communications" ]
+  source_file:
+      csv_options:
+        skip_leading_rows: 0
+        field_delimiter: ","
+      schema_external:
+        - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "STATEMENT_DATE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "CYCLE_DATE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "SOURCE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "POSTAL_CODE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "COUNTRY_CODE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "LANGUAGE_CODE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "TPC", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "CPC", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "FIRST_NAME", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "LAST_NAME", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "PREVIOUS_BALANCE", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "AS_OF_DATE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "PURCHASES", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "CASH_ADVANCES", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "CONVENIENCE_CHEQUES", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "PROMOTIONAL_BALANCES", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "INTEREST", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "FEES", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "OTHER_CHARGES", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "PAYMENTS", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "OTHER_CREDITS", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "TOTAL_BALANCE", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "PAST_DUE_AMOUNT", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "OVER_LIMIT", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "MINIMUM_PAYMENT_DUE", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "MINIMUM_PAYMENT_DUE_DATE", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "CREDIT_LIMIT", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "CREDIT_AVAILABLE", "type": "FLOAT", "mode": "NULLABLE" }
+        - { "name": "PC_POINTS", "type": "INTEGER", "mode": "NULLABLE" }
+        - { "name": "BONUS_PC_POINTS", "type": "INTEGER", "mode": "NULLABLE" }
+        - { "name": "CRAWFORD_START", "type": "INTEGER", "mode": "NULLABLE" }
+        - { "name": "CRAWFORD_NUM_PAGES", "type": "INTEGER", "mode": "NULLABLE" }
+        - { "name": "CRAWFORD_AFF_FILE_NAME", "type": "STRING", "mode": "NULLABLE" }
+        - { "name": "STATEMENT_FORMAT", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      table_name: STMT_IDX_RAW_DATA
+      data_load_type: APPEND_ONLY
+      add_columns:
+        - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        - >-
+          "{{ dag_run.conf['file_name'] }}" AS SOURCE_FILENAME
+
+domain_technical_table_loading_schedules_loading_job:
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement"
+    severity: "P3"
+    sub_capability: "NA"
+    business_impact: "NA"
+  tags: ["P3"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/config/tables_metadata/table_loading_schedules_{pnp_env}.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+    schema_external:
+      - { "name": "TABLE_NAME", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "DATASET_ID", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "PLANNED_SCHEDULE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SOURCE", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "FREQUENCY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "BUFFER_IN_MINUTES", "type": "INT64", "mode": "NULLABLE" }
+      - { "name": "BUSINESS_CUTOFF_TIME", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_technical
+    table_name: TABLE_LOADING_SCHEDULES
+    data_load_type: FULL_REFRESH
+
+load_customers_welcome_offer_job:
+  default_args:
+    owner: "team-convergence-alerts"
+    business_impact: "business team can calculate and issue points"
+    capability: "loyalty"
+    sub_capability: "rewards"
+    severity: "P2"
+  tags: ["P2"]
+  source_file:
+    bucket: COMPOSER_BUCKET
+    name: dags/loyalty_processing/targeted_offer_fulfillment/Offers_to_Load_to_BQ_PROD.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+      max_bad_records: 0
+      null_marker: "null"
+    schema_external:
+      - {"name": "offerFulfillmentId", "type": "INTEGER", "mode": "REQUIRED"}
+      - {"name": "accountId", "type": "INTEGER", "mode": "REQUIRED"}
+      - {"name": "tsysAccountId", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "offerTriggerId", "type": "INTEGER", "mode": "REQUIRED"}
+      - {"name": "periodStartTimestamp", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "periodEndTimestamp", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "trackerType", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "status", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "currentValue", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "targetValue", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "points", "type": "INTEGER", "mode": "REQUIRED"}
+      - {"name": "fulfilledTimestamp", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "fulfilledTransactionId", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "createTimestamp", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "createUserId", "type": "STRING", "mode": "REQUIRED"}
+      - {"name": "updateTimestamp", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "updateUserId", "type": "STRING", "mode": "NULLABLE"}
+      - {"name": "eventType", "type": "STRING", "mode": "REQUIRED"}
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: PC_TARGETED_OFFER_FULFILLMENT
+    data_load_type: MERGE_INSERT
+    target_columns:
+      - offerFulfillmentId
+      - accountId
+      - tsysAccountId
+      - offerTriggerId
+      - periodStartTimestamp
+      - periodEndTimestamp
+      - trackerType
+      - status
+      - currentValue
+      - targetValue
+      - points
+      - fulfilledTimestamp
+      - fulfilledTransactionId
+      - createTimestamp
+      - createUserId
+      - updateTimestamp
+      - updateUserId
+      - eventType
+    source_columns:
+      - offerFulfillmentId
+      - accountId
+      - tsysAccountId
+      - offerTriggerId
+      - PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', periodStartTimestamp) AS periodStartTimestamp
+      - PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', periodEndTimestamp) AS periodEndTimestamp
+      - trackerType
+      - status
+      - currentValue
+      - targetValue
+      - points
+      - CASE WHEN fulfilledTimestamp IS NULL OR LOWER(fulfilledTimestamp)='null' OR fulfilledTimestamp='' THEN NULL ELSE PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', fulfilledTimestamp) END AS fulfilledTimestamp
+      - fulfilledTransactionId
+      - CASE WHEN createTimestamp IS NULL OR LOWER(createTimestamp)='null' OR createTimestamp='' THEN CURRENT_TIMESTAMP() ELSE PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', createTimestamp) END AS createTimestamp
+      - createUserId
+      - CASE WHEN updateTimestamp IS NULL OR LOWER(updateTimestamp)='null' OR updateTimestamp='' THEN NULL ELSE PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', updateTimestamp) END AS updateTimestamp
+      - updateUserId
+      - eventType
+    insert_values:
+      - S.offerFulfillmentId
+      - S.accountId
+      - S.tsysAccountId
+      - S.offerTriggerId
+      - PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', S.periodStartTimestamp)
+      - PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', S.periodEndTimestamp)
+      - S.trackerType
+      - S.status
+      - S.currentValue
+      - S.targetValue
+      - S.points
+      - CASE WHEN S.fulfilledTimestamp IS NULL OR LOWER(S.fulfilledTimestamp)='null' OR S.fulfilledTimestamp='' THEN NULL ELSE PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', S.fulfilledTimestamp) END
+      - S.fulfilledTransactionId
+      - CASE WHEN S.createTimestamp IS NULL OR LOWER(S.createTimestamp)='null' OR S.createTimestamp='' THEN CURRENT_TIMESTAMP() ELSE PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', S.createTimestamp) END
+      - S.createUserId
+      - CASE WHEN S.updateTimestamp IS NULL OR LOWER(S.updateTimestamp)='null' OR S.updateTimestamp='' THEN NULL ELSE PARSE_TIMESTAMP('%Y-%m-%d %H:%M:%S', S.updateTimestamp) END
+      - S.updateUserId
+      - S.eventType
+  merge:
+    join_columns:
+      - from_column: T.offerFulfillmentId
+        to_column: S.offerFulfillmentId
+
+sfmc_push_device_contact_file_loading_job:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    sub_capability: "push-notification"
+    severity: "P4"
+    business_impact: "This will affect the loading of the Push Device Contact list from Salesforce Marketing Cloud (SFMC) to the BigQuery."
+    customer_impact: "Customer may not receive PUSH notifications and/or their opt-in/-outs will not be recorded by DP."
+  tags: ["communication", "push-notification"]
+  source_file:
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 0
+    schema_external:
+      - { "name": "DEVICE_ID", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "CONTACT_ID", "type": "INTEGER", "mode": "REQUIRED" }
+      - { "name": "PLATFORM", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SYSTEM_TOKEN", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DEVICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MODIFIED_DATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CREATED_DATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "OPT_IN_DATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "OPT_OUT_DATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "OPT_IN_STATUS_ID", "type": "INTEGER", "mode": "NULLABLE" }
+      - { "name": "OPT_OUT_STATUS_ID", "type": "INTEGER", "mode": "NULLABLE" }
+      - { "name": "CONTACT_KEY", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: SFMC_PUSH_DEVICE_CONTACT
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS CREATE_TS
+  dag:
+    read_pause_deploy_config: True
+
+generic_communication_csv_to_bq_loader:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    severity: "P2"
+    sub_capability: "account-management"
+    business_impact: "Downstream kafka topic will not load if the table is not populated"
+  source_file:
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: "|"
+    schema_external:
+      - { "name": "COMMUNICATION_CODE", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "UNIQUE_ID", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "SOURCE", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "SOURCE_IDEMPOTENCY_KEY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "LANGUAGE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CONTACT_EMAIL", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CONTACT_PHONE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ALTERNATE_PHONE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PUSH_TOKEN", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CHANNELS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DOMAIN_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TENANT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CREATED_DT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PCF_CUSTOMER_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CUSTOMER_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CUSTOMER_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "LAST_DIGITS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "RECIPIENT_TIMEZONE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CUSTOMER_ROLE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PARAMETERS", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_communication
+    table_name: GENERIC_BATCH_COMMUNICATION_REQUEST
+    data_load_type: APPEND_ONLY
+    add_file_name_column:
+      alias: SOURCE_FILENAME
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+
+eft_funds_in_rt_data_loading_job:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Money Movement"
+    sub_capability: 'G-EFT'
+    severity: "P3"
+    business_impact: "This dag loads G_EFT details into DP kafka topic: dp-batch-eft-rt-pull-processed"
+    customer_impact: "No Impact"
+    description: "This dag loads G_EFT details into DP kafka topic: dp-batch-eft-rt-pull-processed"
+  source_file:
+    name: eft-funds-pcbdev
+    bucket: pcb-{env}-inbound
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    schema_external:
+      - { "name": "TransactionId", "type": "STRING", "mode": "REQUIRED" }
+      - { "name": "SettlementTransactionId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ExternalFinancialInstitution", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ExternalTransitNumber", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ExternalAccountNumber", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "DestinationAccountNumber", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "OverallRiskLevel", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UserRiskLevel", "type": "STRING",  "mode": "NULLABLE" }
+      - { "name": "TransactionRiskLevel", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "OtherRiskLevel", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "GuaranteeStatus", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UserMatch", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SettledOn", "type": "TIMESTAMP", "mode": "NULLABLE" }
+      - { "name": "CreatedOn", "type": "TIMESTAMP", "mode": "NULLABLE" }
+      - { "name": "CounterpartyName", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "Type", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "Amount", "type": "NUMERIC", "mode": "NULLABLE" }
+      - { "name": "Currency", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CreditOrDebit", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AccountOrAlias", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "Status", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ExecutionDate", "type": "TIMESTAMP", "mode": "NULLABLE" }
+      - { "name": "UpdatedOn", "type": "TIMESTAMP", "mode": "NULLABLE" }
+      - { "name": "RequestId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ReferenceId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SettlementId", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "CounterpartyEmail", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ErrorCode", "type": "INTEGER", "mode": "NULLABLE" }
+      - { "name": "ErrorDescription", "type": "STRING", "mode": "NULLABLE" }
+
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: PCB_EFT_FUNDS_IN_RT
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+
+esso_fuel_transaction_csv_data_load_1:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_1.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: FULL_REFRESH
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_2:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_2.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_3:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_3.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_4:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_4.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_5:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_5.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_6:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_6.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_7:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_7.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_8:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_8.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_9:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_9.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False
+
+esso_fuel_transaction_csv_data_load_10:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P4"
+    sub_capability: "Rewards"
+    business_impact: "Staging table for ESSO_FUEL_TRANSACTIONS data update"
+  tags: [ "Loyalty"]
+  source_file:
+    bucket: pcb-{env}-staging-extract
+    name: esso_fuel_transaction/esso_fuel_transaction_10.csv
+    csv_options:
+      skip_leading_rows: 1
+      field_delimiter: ","
+    max_bad_records: 2
+    ignore_unknown_values: True
+    schema_external:
+      - { "name": "PROCESSOR", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ADDRESS", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_CITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ALTERNATE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_MERCHANT_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_COUNTRY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_NAME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_PHONE_NO", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_STATE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "SITE_ZIP_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "EXTERNAL_REFERENCE_ID", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "TXN_DATE_AND_TIME", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "ACCOUNT_NUMBER", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AUTH_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "QUANTITY", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "PRODUCT_UNIT_PRICE", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_2", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_3", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_4", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "AMOUNT_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "NATIVE_MERCHANDISE_CODE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_PRICE_5", "type": "STRING", "mode": "NULLABLE" }
+      - { "name": "UNIT_QUANTITY_5", "type": "STRING", "mode": "NULLABLE" }
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_loyalty
+    table_name: ESSO_FUEL_TRANSACTIONS_STAGING
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - PARSE_DATETIME('%m/%d/%Y %I:%M:%S %p', TXN_DATE_AND_TIME)) AS TRANSACTION_DATE
+      - REPLACE(REPLACE(REPLACE(ACCOUNT_NUMBER, 'X', '0'), 'Y', '1'), 'Z', '2') AS CARD_NUMBER
+  dag:
+    read_pause_deploy_config: False

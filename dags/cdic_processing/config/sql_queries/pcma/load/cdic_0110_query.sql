@@ -1,0 +1,93 @@
+INSERT INTO
+  `pcb-{env}-curated.cots_cdic.PCMA_CDIC_0110`
+WITH
+  pcma_cdic_idv_history AS (
+  SELECT
+    ci_t.CUSTOMER_UID,
+    cdicidv.IDENTIFICATION_NUMBER,
+    cdicidv.PERSONAL_ID_TYPE_CODE
+  FROM
+    `pcb-{env}-landing.domain_cdic.CDIC_IDV_HISTORY` AS cdicidv
+  INNER JOIN
+    `pcb-{env}-curated.domain_customer_management.CUSTOMER_IDENTIFIER` AS ci_t
+  ON
+    ci_t.CUSTOMER_IDENTIFIER_NO = SUBSTR(cdicidv.DEPOSITOR_UNIQUE_ID,3)
+  WHERE
+    LOWER(ci_t.TYPE) = 'cdic-depositor-id'
+    AND LOWER(ci_t.DISABLED_IND) = 'n'),
+  pcma_cdic_0500_latest_load AS (
+  SELECT
+    MAX(pcma_cdic_0500.rec_load_timestamp) AS LATEST_REC_LOAD_TIMESTAMP
+  FROM
+    `pcb-{env}-curated.cots_cdic.PCMA_CDIC_0500` AS pcma_cdic_0500)
+SELECT
+  DISTINCT DEPOSITOR_UNIQUE_ID,
+  '' AS PERSONAL_ID_COUNT,
+  IDENTIFICATION_NUMBER,
+  CAST(PERSONAL_ID_TYPE_CODE AS STRING) AS PERSONAL_ID_TYPE_CODE,
+  CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP,
+  '{dag_id}' AS JOB_ID
+FROM (
+  SELECT
+    pcma_cdic_0500.DEPOSITOR_UNIQUE_ID,
+    api.APPLICANT_IDENTIFIER_VALUE AS IDENTIFICATION_NUMBER,
+    CASE
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'can-passport' AND ( LOWER(TRIM(IFNULL(api.NATIONALITY, ''))) = 'cad' OR api.NATIONALITY IS NULL ) THEN 2
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'can-passport'
+    AND LOWER(TRIM(IFNULL(api.NATIONALITY,''))) <> 'cad'
+    AND api.NATIONALITY IS NOT NULL THEN 14
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'driver-license' THEN 4
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'can-permanent-resident-card' THEN 5
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'can-citizenship-card' THEN 6
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'can-cert-of-indian-status' THEN 7
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'health-card' THEN 26
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'service-card' THEN 31
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'national-identity-card' AND LOWER(TRIM(IFNULL(api.NATIONALITY, ''))) <> 'cad' AND api.NATIONALITY IS NOT NULL THEN 36
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'national-identity-card'
+    AND ( LOWER(TRIM(IFNULL(api.NATIONALITY, ''))) = 'cad'
+      OR api.NATIONALITY IS NULL ) THEN 37
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'foreign-passport' AND LOWER(TRIM(IFNULL(api.NATIONALITY, ''))) <> 'cad' AND api.NATIONALITY IS NOT NULL THEN 14
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'foreign-passport'
+    AND ( LOWER(TRIM(IFNULL(api.NATIONALITY, ''))) = 'cad'
+      OR api.NATIONALITY IS NULL ) THEN 2
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'passport' AND ( LOWER(TRIM(IFNULL(api.NATIONALITY, ''))) = 'cad' OR api.NATIONALITY IS NULL ) THEN 2
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'passport'
+    AND LOWER(TRIM(IFNULL(api.NATIONALITY, ''))) <> 'cad'
+    AND api.NATIONALITY IS NOT NULL THEN 14
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'not-matched' THEN - 1
+      WHEN LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) = 'bank-card-number' THEN - 1
+      ELSE 0
+  END
+    AS PERSONAL_ID_TYPE_CODE
+  FROM
+    `pcb-{env}-curated.domain_validation_verification.APPLICANT_PERSONAL_IDENTIFIER` AS api
+  INNER JOIN
+    `pcb-{env}-curated.cots_cdic.PCMA_CDIC_0500` AS pcma_cdic_0500
+  ON
+    api.CUSTOMER_NO = pcma_cdic_0500.CUSTOMER_IDENTIFIER_NO
+  INNER JOIN
+    pcma_cdic_0500_latest_load AS pcma_cdic_0500_ll
+  ON
+    pcma_cdic_0500.REC_LOAD_TIMESTAMP = pcma_cdic_0500_ll.LATEST_REC_LOAD_TIMESTAMP
+  WHERE
+    LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) <> 'not-matched'
+    AND LOWER(TRIM(api.APPLICANT_IDENTIFIER_TYPE)) <> 'bank-card-number'
+    AND api.APPLICANT_IDENTIFIER_VALUE IS NOT NULL
+  UNION ALL
+  SELECT
+    CAST(idv.CUSTOMER_UID AS STRING) AS DEPOSITOR_UNIQUE_ID,
+    idv.IDENTIFICATION_NUMBER,
+    CAST(idv.PERSONAL_ID_TYPE_CODE AS INT) AS PERSONAL_ID_TYPE_CODE
+  FROM
+    pcma_cdic_idv_history AS idv
+  INNER JOIN
+    `pcb-{env}-curated.cots_cdic.PCMA_CDIC_0500` AS pcma_cdic_0500
+  ON
+    CAST(idv.CUSTOMER_UID AS STRING) = pcma_cdic_0500.DEPOSITOR_UNIQUE_ID
+  INNER JOIN
+    pcma_cdic_0500_latest_load AS pcma_cdic_0500_ll
+  ON
+    pcma_cdic_0500.REC_LOAD_TIMESTAMP = pcma_cdic_0500_ll.LATEST_REC_LOAD_TIMESTAMP
+  WHERE
+    idv.PERSONAL_ID_TYPE_CODE <> '-1'
+    AND idv.IDENTIFICATION_NUMBER IS NOT NULL);

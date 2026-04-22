@@ -1,0 +1,54 @@
+# bulk loading dag config
+scms_andis_se_idl_dags:
+  batch_size: 5
+  no_variable: true
+  dags:
+    - db909_scms_andis_se_groups_onetime_loading_job
+    - db909_scms_andis_se_script_audit_trail_onetime_loading_job
+    - db909_scms_andis_se_parameter_record_onetime_loading_job
+    - db909_scms_andis_se_x_group_roles_onetime_loading_job
+    - db909_scms_andis_se_x_group_users_onetime_loading_job
+    - db909_scms_andis_se_temp_id_application_onetime_loading_job
+    - db909_scms_andis_se_weak_pin_onetime_loading_job
+    - db909_scms_andis_se_script_onetime_loading_job
+    - db909_scms_andis_se_script_parameter_onetime_loading_job
+    - db909_scms_andis_se_preference_onetime_loading_job
+    - db909_scms_andis_se_script_definition_onetime_loading_job
+    - db909_scms_andis_se_command_in_script_onetime_loading_job
+    - db909_scms_andis_se_x_script_def2device_onetime_loading_job
+    - db909_scms_andis_se_x_script_def2network_onetime_loading_job
+    - db909_scms_andis_se_event_onetime_loading_job
+    - db909_scms_andis_se_parameter_tag_onetime_loading_job
+    - db909_scms_andis_se_c_state_onetime_loading_job
+    - db909_scms_andis_se_users_onetime_loading_job
+    - db909_scms_andis_se_c_format_pinoffvaldata_onetime_loading_job
+    - db909_scms_andis_se_type_application_onetime_loading_job
+    - db909_scms_andis_se_command_onetime_loading_job
+    - db909_scms_andis_se_type_pin_onetime_loading_job
+    - db909_scms_andis_se_c_format_pinblock_onetime_loading_job
+    - db909_scms_andis_se_application_onetime_loading_job
+    - db909_scms_andis_se_database_version_onetime_loading_job
+    - db909_scms_andis_se_device_onetime_loading_job
+    - db909_scms_andis_se_x_user_roles_onetime_loading_job
+    - db909_scms_andis_se_x_script_def2bin_onetime_loading_job
+    - db909_scms_andis_se_c_type_agent_onetime_loading_job
+    - db909_scms_andis_se_network_onetime_loading_job
+    - db909_scms_andis_se_state_onetime_loading_job
+    - db909_scms_andis_se_roles_onetime_loading_job
+    - db909_scms_andis_se_type_unique_id_onetime_loading_job
+    - db909_scms_andis_se_platform_onetime_loading_job
+    - db909_scms_andis_se_bin_onetime_loading_job
+    - db909_scms_andis_se_agent_onetime_loading_job
+    - db909_scms_andis_se_dki_onetime_loading_job
+    - db909_scms_andis_se_x_script_def2agent_onetime_loading_job
+    - db909_scms_andis_se_request_log_table_idl
+    - db909_scms_andis_se_history_pin_table_idl
+    - db909_scms_andis_se_pin_table_idl
+    - db909_scms_andis_se_history_phs_application_table_idl
+    - db909_scms_andis_se_unique_id_table_idl
+    - db909_scms_andis_se_history_unique_id_table_idl
+    - db909_scms_andis_se_phs_application_table_idl
+    - db909_scms_andis_se_x_script_def2application_onetime_loading_job
+    - db909_scms_andis_se_weak_pin_30march2018_onetime_loading_job
+  default_args:
+    owner: 'team-ogres-alerts'

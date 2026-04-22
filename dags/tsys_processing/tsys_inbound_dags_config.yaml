@@ -1,0 +1,478 @@
+# Config file for all TSYS related dags
+TS2_acctscores:
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  spark_delta_job:
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/tsys-batch-delta/application.conf
+      - gs://pcb-{env}-staging-artifacts/resources/tsys-batch-delta/kafka.jks
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-batch-delta-2.0.0.jar
+      - gs://pcb-{env}-staging-artifacts/jarfiles/ledger-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.tsysdeltagenerator.TsysDeltaGenerationApp
+    segment_args:
+      - configFilePath: application.conf
+        currentDayFilesPath: _tempplaceholder
+        previousDayFilesPath: _tempplaceholder
+        segment: _tempplaceholder
+    bq_dataset_id: AccountScoresDataset
+    application_suffix: 0
+    segments_to_process:
+      - SC01
+  spark_filter_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.datafile.path: _tempplaceholder
+        pcb.tsys.processor.datafile.type: account_score
+        pcb.tsys.processor.filtering: "true"
+  spark_parse_job:
+    common_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: account_score
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_acctscores/MSTSCOR_SC01.CPY
+        pcb.tsys.processor.layout.name: SC01_REC
+        pcb.tsys.processor.segment.name: SC01
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    ext_table_layout_prefix: TS2_ACCTSCORES
+    data_load_type: FULL_REFRESH
+    add_columns:
+      - CURRENT_TIMESTAMP() AS REC_LOAD_TIMESTAMP
+      - CURRENT_DATETIME('America/Toronto') AS inserted_at
+    keep_previous_table: true
+    layouts_to_bq_table:
+      SC01_REC: TS2_ACCTSCORES_SC01_REC
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+TS2_rptrec:
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  spark_parse_job:
+    common_args: {}
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.datafile.path: _tempplaceholder
+        pcb.tsys.processor.datafile.type: triad_report
+        pcb.tsys.processor.output.format: parquet
+        pcb.tsys.processor.output.path: _tempplaceholder
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: TriadReportDataset
+    table_name: TS2_RPTREC
+    data_load_type: FULL_REFRESH
+    add_columns:
+      - CURRENT_TIMESTAMP() AS REC_LOAD_TIMESTAMP
+  owner: team-defenders-alerts
+  tags:
+    - P3
+
+tsys_pcb_mc_acctmaster_daily:
+  job_size: large
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  spark_delta_job:
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/tsys-batch-delta/application.conf
+      - gs://pcb-{env}-staging-artifacts/resources/tsys-batch-delta/kafka.jks
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-batch-delta-2.0.0.jar
+    main_class: com.pcb.batch.tsysdeltagenerator.TsysDeltaGenerationApp
+    segment_args:
+      - configFilePath: application.conf
+        currentDayFilesPath: _tempplaceholder
+        previousDayFilesPath: _tempplaceholder
+        segment: _tempplaceholder
+    application_suffix: 0
+    segments_to_process:
+      - AM00
+      - AM01
+      - AM02
+      - AM04
+      - AM0A
+      - AM0E
+  spark_filter_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.datafile.path: _tempplaceholder
+        pcb.tsys.processor.filtering: "true"
+  spark_parse_job:
+    common_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM00.cpy
+        pcb.tsys.processor.layout.name: AM00_REC
+        pcb.tsys.processor.segment.name: AM00
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM01.cpy
+        pcb.tsys.processor.layout.name: AM01_REC
+        pcb.tsys.processor.segment.name: AM01
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM02.cpy
+        pcb.tsys.processor.layout.name: AM02_REC
+        pcb.tsys.processor.segment.name: AM02
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM0E.cpy
+        pcb.tsys.processor.layout.name: AM0E_REC
+        pcb.tsys.processor.segment.name: AM0E
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM0A.cpy
+        pcb.tsys.processor.layout.name: AM0A_REC
+        pcb.tsys.processor.segment.name: AM0A
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM04_PD.cpy
+        pcb.tsys.processor.layout.name: AM04_PD
+        pcb.tsys.processor.segment.name: AM04
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM08.cpy
+        pcb.tsys.processor.layout.name: AM08_REC
+        pcb.tsys.processor.segment.name: AM08
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM0F.cpy
+        pcb.tsys.processor.layout.name: AM0F_REC
+        pcb.tsys.processor.segment.name: AM0F
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM0BR.cpy
+        pcb.tsys.processor.layout.name: AM0BR_REC
+        pcb.tsys.processor.segment.name: AM0B
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM0BH.cpy
+        pcb.tsys.processor.layout.name: AM0BH_REC
+        pcb.tsys.processor.segment.name: AM0B
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM33.cpy
+        pcb.tsys.processor.layout.name: AM33_REC
+        pcb.tsys.processor.segment.name: AM33
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM35.cpy
+        pcb.tsys.processor.layout.name: AM35_REC
+        pcb.tsys.processor.segment.name: AM35
+  spark_validation_job:
+   common_args:
+     pcb.tsys.processor.datafile.path: _tempplaceholder
+     pcb.tsys.processor.output.path: _tempplaceholder
+     pcb.tsys.processor.validation: "true"
+   jar_file_uris:
+     - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+   main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+   segment_args:
+     - pcb.tsys.processor.segment.name: AM00
+       pcb.tsys.processor.layout.name: AM00_REC
+       pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/MSTACCT_AM00.cpy
+       pcb.tsys.processor.validation.columns:
+         - MAST_ACCOUNT_ID
+         - AM00_APPLICATION_SUFFIX
+  TRLR:
+    common_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.output.path: _tempplaceholder
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_acctmaster/TRLR.cpy
+        pcb.tsys.processor.layout.name: TRAILER_REC
+        pcb.tsys.processor.segment.name: 9999
+        pcb.tsys.processor.duplicate.columns:
+          - FILE_CREATE_DT 
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    ext_table_layout_prefix: TSYS_PCB_MC_ACCTMASTER_DAILY
+    data_load_type: FULL_REFRESH
+    add_columns:
+      - CURRENT_TIMESTAMP() AS REC_LOAD_TIMESTAMP
+      - CURRENT_DATETIME('America/Toronto') AS inserted_at
+    keep_previous_table: true
+    partition_field:  RANGE_BUCKET(AM00_APPLICATION_SUFFIX, GENERATE_ARRAY(0, 1000, 1))
+    clustering_fields:
+      - MAST_ACCOUNT_ID
+    layouts_to_bq_table:
+      AM00_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM00_REC
+      AM01_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM01_REC
+      AM02_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM02_REC
+      AM0E_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0E_REC
+      AM0A_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0A_REC
+      AM04_PD: TSYS_PCB_MC_ACCTMASTER_DAILY_AM04_PD
+      AM08_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM08_REC
+      AM0F_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0F_REC
+      AM0BR_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BR_REC
+      AM0BH_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM0BH_REC
+      AM33_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM33_REC
+      AM35_REC: TSYS_PCB_MC_ACCTMASTER_DAILY_AM35_REC
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+TS2_at31_accttx_file:
+  job_size: large
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  spark_filter_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.datafile.path: _tempplaceholder
+        pcb.tsys.processor.datafile.type: ACCOUNT_TRANSACTION
+        pcb.tsys.processor.filtering: true
+  spark_parse_job:
+    common_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_TRANSACTION
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/MSTTRAN_AT31.CPY
+        pcb.tsys.processor.layout.name: AT31_REC
+        pcb.tsys.processor.segment.name: AT31
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/MSTTRAN_AT21.CPY
+        pcb.tsys.processor.layout.name: AT21_REC
+        pcb.tsys.processor.segment.name: AT21
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/MSTTRAN_AT00.CPY
+        pcb.tsys.processor.layout.name: AT00_REC
+        pcb.tsys.processor.segment.name: AT00
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    ext_table_layout_prefix: accttx
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_TIMESTAMP() AS REC_LOAD_TIMESTAMP
+    partition_field: FILE_CREATE_DT
+    layouts_to_bq_table:
+      AT31_REC: AT31
+    join_segments:
+      AT31_REC: accttx_AT31_REC_join.sql
+  kafka_writer:
+    AT31:
+      dag_id: TS2_at31_accttx_kafka_writer
+  read_pause_deploy_config: True
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+tsys_pcb_mc_acctmisc_file_loading:
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  spark_filter_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.datafile.path: _tempplaceholder
+        pcb.tsys.processor.datafile.type: ACCOUNT_MISC
+        pcb.tsys.processor.filtering: "true"
+  spark_parse_job:
+    common_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_MISC
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_acctmisc/MSTMISC_MA03.CPY
+        pcb.tsys.processor.layout.name: MA03_REC
+        pcb.tsys.processor.segment.name: MA03
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_acctmisc/MSTMISC_MA01.CPY
+        pcb.tsys.processor.layout.name: MA01_REC
+        pcb.tsys.processor.segment.name: MA01
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/TS2_acctmisc/MSTMISC_MA00.CPY
+        pcb.tsys.processor.layout.name: MA00_REC
+        pcb.tsys.processor.segment.name: MA00
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    ext_table_layout_prefix: TSYS_ACCT_MISC
+    data_load_type: APPEND_ONLY
+    add_columns:
+      - CURRENT_TIMESTAMP() AS REC_LOAD_TIMESTAMP
+    file_date_column: FILE_CREATE_DT
+    bigquery_table_name: TSYS_ACCT_MISC_MA00
+    layouts_to_bq_table:
+      MA00_REC: TSYS_ACCT_MISC_MA00
+      MA01_REC: TSYS_ACCT_MISC_MA01
+      MA03_REC: TSYS_ACCT_MISC_MA03
+    join_segments:
+      MA01_REC: TSYS_ACCT_MISC_MA01.sql
+      MA03_REC: TSYS_ACCT_MISC_MA03.sql
+  oracle_writer:
+    dag_id: acct_misc_bq_to_oracle
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"
+
+tsys_pcb_mc_accttx_file:
+  job_size: large
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  spark_filter_job:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.datafile.path: _tempplaceholder
+        pcb.tsys.processor.datafile.type: ACCOUNT_TRANSACTION
+        pcb.tsys.processor.filtering: true
+  spark_parse_job:
+    common_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_TRANSACTION
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    segment_args:
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/MSTTRAN_AT31.CPY
+        pcb.tsys.processor.layout.name: AT31_REC
+        pcb.tsys.processor.segment.name: AT31
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/MSTTRAN_AT21.CPY
+        pcb.tsys.processor.layout.name: AT21_REC
+        pcb.tsys.processor.segment.name: AT21
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/MSTTRAN_AT00.CPY
+        pcb.tsys.processor.layout.name: AT00_REC
+        pcb.tsys.processor.segment.name: AT00
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_AIRLINE_DATA.CPY
+        pcb.tsys.processor.layout.name: AT41_AIRLINE_DATA
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_AIRLINE_INFO.CPY
+        pcb.tsys.processor.layout.name: AT41_AIRLINE_INFO
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_AWARD_INFO.CPY
+        pcb.tsys.processor.layout.name: AT41_AWARD_INFO
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_BAL_ALLOC.CPY
+        pcb.tsys.processor.layout.name: AT41_BAL_ALLOC
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_COMMON_INFO.CPY
+        pcb.tsys.processor.layout.name: AT41_COMMON_INFO
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_OUTSTAND_DIST.CPY
+        pcb.tsys.processor.layout.name: AT41_OUTSTAND_DIST
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_PMT_CRED.CPY
+        pcb.tsys.processor.layout.name: AT41_PMT_CRED
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_POINTS.CPY
+        pcb.tsys.processor.layout.name: AT41_POINTS
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_REAGE.CPY
+        pcb.tsys.processor.layout.name: AT41_REAGE
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_STMT_MSG.CPY
+        pcb.tsys.processor.layout.name: AT41_STMT_MSG
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_EUROPAY.CPY
+        pcb.tsys.processor.layout.name: AT41_EUROPAY
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_INSURANCE.CPY
+        pcb.tsys.processor.layout.name: AT41_INSURANCE
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_LONG_DIST.CPY
+        pcb.tsys.processor.layout.name: AT41_LONG_DIST
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_MC_LODGE.CPY
+        pcb.tsys.processor.layout.name: AT41_MC_LODGE
+        pcb.tsys.processor.segment.name: AT41
+      - pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accttx/AT41_MC_RENTAL.CPY
+        pcb.tsys.processor.layout.name: AT41_MC_RENTAL
+        pcb.tsys.processor.segment.name: AT41
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    ext_table_layout_prefix: accttx
+    data_load_type: APPEND_ONLY
+    bigquery_table_name: AT00
+    file_date_column: FILE_CREATE_DT
+    add_columns:
+      - CURRENT_TIMESTAMP() AS REC_LOAD_TIMESTAMP
+    partition_field: FILE_CREATE_DT
+    layouts_to_bq_table:
+      AT00_REC: AT00
+      AT21_REC: AT21
+      AT31_REC: AT31
+      AT41_AIRLINE_DATA: AT41_AIRLINE_DATA
+      AT41_AIRLINE_INFO: AT41_AIRLINE_INFO
+      AT41_AWARD_INFO: AT41_AWARD_INFO
+      AT41_BAL_ALLOC: AT41_BAL_ALLOC
+      AT41_COMMON_INFO: AT41_COMMON_INFO
+      AT41_OUTSTAND_DIST: AT41_OUTSTAND_DIST
+      AT41_PMT_CRED: AT41_PMT_CRED
+      AT41_POINTS: AT41_POINTS
+      AT41_REAGE: AT41_REAGE
+      AT41_STMT_MSG: AT41_STMT_MSG
+      AT41_EUROPAY: AT41_EUROPAY
+      AT41_INSURANCE: AT41_INSURANCE
+      AT41_LONG_DIST: AT41_LONG_DIST
+      AT41_MC_LODGE: AT41_MC_LODGE
+      AT41_MC_RENTAL: AT41_MC_RENTAL
+    join_segments:
+      AT31_REC: accttx_AT31_REC_join.sql
+      AT21_REC: accttx_AT21_REC_join.sql
+      AT41_AIRLINE_DATA: accttx_AT41_AIRLINE_DATA.sql
+      AT41_AIRLINE_INFO: accttx_AT41_AIRLINE_INFO.sql
+      AT41_AWARD_INFO: accttx_AT41_AWARD_INFO.sql
+      AT41_BAL_ALLOC: accttx_AT41_BAL_ALLOC.sql
+      AT41_COMMON_INFO: accttx_AT41_COMMON_INFO.sql
+      AT41_OUTSTAND_DIST: accttx_AT41_OUTSTAND_DIST.sql
+      AT41_PMT_CRED: accttx_AT41_PMT_CRED.sql
+      AT41_POINTS: accttx_AT41_POINTS.sql
+      AT41_REAGE: accttx_AT41_REAGE.sql
+      AT41_STMT_MSG: accttx_AT41_STMT_MSG.sql
+      AT41_EUROPAY: accttx_AT41_EUROPAY.sql
+      AT41_INSURANCE: accttx_AT41_INSURANCE.sql
+      AT41_LONG_DIST: accttx_AT41_LONG_DIST.sql
+      AT41_MC_LODGE: accttx_AT41_MC_LODGE.sql
+      AT41_MC_RENTAL: accttx_AT41_MC_RENTAL.sql
+  kafka_writer:
+    AT31:
+      dag_id: TS2_at31_accttx_kafka_writer_orchestrator
+  oracle_writer:
+    dag_id: acct_trans_bq_to_oracle
+  read_pause_deploy_config: True
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "TBD"
+    customer_impact: "TBD"
+    severity: "P3"

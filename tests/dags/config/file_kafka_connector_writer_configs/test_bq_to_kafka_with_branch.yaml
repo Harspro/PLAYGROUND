@@ -1,0 +1,40 @@
+test_bq_to_kafka_with_branch_dag:
+  default_args:
+    owner: "test-owner"
+    capability: "test-capability"
+    severity: "test-severity"
+    sub_capability: "test-sub-capability"
+    business_impact: "test-business-impact"
+    customer_impact: "test-customer-impact"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-schema-mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-file-schema.avsc
+  application_config: test-application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: test-key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: test-value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: test-schema-mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: test-key
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: test-file-schema.avsc
+  dag:
+    kafka_writer_task: kafka-writer-test
+    job_size: large
+    schedule_interval: "0 1 * * *"
+    dataproc_cluster_name: "test-cluster-name"
+    skip_kafka_writer_if_empty: true
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_test
+    table_id: test
+    query: "EXPORT DATA OPTIONS\n(\nuri='gs://pcb-{env}-staging-extract/test-folder-name/test-file-name-*.parquet',\nformat = 'PARQUET',\noverwrite = true\n) AS (SELECT * FROM `pcb-{env}-landing.domain_test.test_table`);"
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: test-folder-name
+    file_name: test-file-name

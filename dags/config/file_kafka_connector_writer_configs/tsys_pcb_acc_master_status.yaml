@@ -1,0 +1,32 @@
+tsys_acc_master_status_bq_to_kafka:
+  default_args:
+    owner: "gremlins"
+    capability: "platform-wide"
+    severity: "P2"
+    sub_capability: "status-maintenance"
+    business_impact: "This will impact the account-status load"
+    customer_impact: "Customer login"
+  tags: [ "gremlins" ]
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_acc_master_status/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/tsys/tsys_pcb_acc_master_status/tsys_pcb_acc_master_status_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.message.schema.type: JSON
+    pcb.file.kafka.connector.schema.file.path: tsys_pcb_acc_master_status_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_pcb_acc_master_status_task
+    read_pause_deploy_config: True
+    job_size: medium
+    dataproc_cluster_name: acc-master-status
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+    query_file: tsys_account_status_migration/sql/tsys_pcb_acc_master_status.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: tsys-pcb-acc-master-status
+    file_name: tsys-pcb-acc-master-status

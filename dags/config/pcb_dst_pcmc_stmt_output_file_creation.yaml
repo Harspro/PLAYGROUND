@@ -1,0 +1,134 @@
+pcb_dst_pcmc_stmt_output_file_creation_post_extractor:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: 'Revised statements files will not be sent to broadridge for further processing'
+    customer_impact: 'Customers will not be able to access their E-Statements'
+    severity: "P2"
+  tags: ["Digital Adoption - DA" , "P2" ]
+  job_size: large
+  processing_bucket: pcb-{env}-staging
+  cluster_name: pcb-dst-pcmc-stmt-output-loader-c
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  PROCESSING_INTERIM_DIR: pcb_dst_pcmc_processing/stmt_post/extract
+  PROCESSING_OUTPUT_DIR: pcb_dst_pcmc_processing/stmt_post/extract/{cycle}
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: mft-pcb-outbound{env_suffix}
+  validation:
+    tables_check: "'tsys_pcb_pcmc_stmt_reg_file_loading', 'tsys_pcb_pcmc_stmt_cgo_file_loading'"
+    count_check: 2
+    param_table: pcb-{env}-curated.JobControlDataset.DAGS_HISTORY
+    file_create_dt_table: pcb-{env}-landing.domain_account_management.SA00
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    batch_num_table: PCMC_STMT_POST_PARAM
+    data_load_type: APPEND_ONLY
+    segment_dependency_groups:
+      - group_name: header_proc1
+        segments: SA88_SUB_TOTAL_IND,SA60_TTL_AMT_TRANS,SA59_CUST_TYPE_2,SA59_NUMB,SA88_PURCHASE_AMT,SA88_CASH_ADV_AMT,BILLING_CYCLE,SA88_CONV_CHEQUES_AMT,SA88_PROM_PURCHASES_AMT,SA88_FEE_AMT,SA88_OTHER_CHARGES_AMT,PC_PTS,SA88_TOTAL_DEPOSITS,SA88_TOTAL_WITHDRAWALS
+      - group_name: header
+        segments: HEDR,SA88
+      - group_name: detail_proc1
+        segments: SA10_RECORD,SA14_RECORD,SA15_RECORD,SA20_RECORD,SA30_RECORD,SA40_RECORD,SA59_RECORD,SA60_RECORD_MID,SA85_RECORD,SA88_RECORD
+      - group_name: detail_proc2
+        segments: SA60_RECORD
+      - group_name: detail_proc3
+        segments: PCB_DST_STMT_DETL_INT
+      - group_name: detail
+        segments: DETL
+      - group_name: trailer
+        segments: TRLR
+    segment_args:
+      HEDR:
+        input_table_name: SA00
+        output_table_name: PCB_DST_STMT_HEDR
+      SA88_SUB_TOTAL_IND:
+        output_table_name: SA88_SUB_TOTAL_IND
+      SA60_TTL_AMT_TRANS:
+        output_table_name: SA60_TTL_AMT_TRANS
+      SA59_CUST_TYPE_2:
+        output_table_name: SA59_CUST_TYPE_2
+      SA59_NUMB:
+        output_table_name: SA59_NUMB
+      SA88_PURCHASE_AMT:
+        output_table_name: SA88_PURCHASE_AMT
+      SA88_CASH_ADV_AMT:
+        output_table_name: SA88_CASH_ADV_AMT
+      SA88_CONV_CHEQUES_AMT:
+        output_table_name: SA88_CONV_CHEQUES_AMT
+      SA88_PROM_PURCHASES_AMT:
+        output_table_name: SA88_PROM_PURCHASES_AMT
+      SA88_FEE_AMT:
+        output_table_name: SA88_FEE_AMT
+      SA88_OTHER_CHARGES_AMT:
+        output_table_name: SA88_OTHER_CHARGES_AMT
+      PC_PTS:
+        output_table_name: PC_PTS
+      SA88_TOTAL_DEPOSITS:
+        output_table_name: SA88_TOTAL_DEPOSITS
+      SA88_TOTAL_WITHDRAWALS:
+        output_table_name: SA88_TOTAL_WITHDRAWALS
+      BILLING_CYCLE:
+        output_table_name: BILLING_CYCLE
+      SA88:
+        output_table_name: SA88
+      SA10_RECORD:
+        output_table_name: SA10_RECORD
+      SA14_RECORD:
+        output_table_name: SA14_RECORD
+      SA15_RECORD:
+        output_table_name: SA15_RECORD
+      SA20_RECORD:
+        output_table_name: SA20_RECORD
+      SA30_RECORD:
+        output_table_name: SA30_RECORD
+      SA40_RECORD:
+        output_table_name: SA40_RECORD
+      SA59_RECORD:
+        output_table_name: SA59_RECORD
+      SA60_RECORD_MID:
+        output_table_name: SA60_RECORD_MID
+      SA60_RECORD:
+        output_table_name: SA60_RECORD
+      SA85_RECORD:
+        output_table_name: SA85_RECORD
+      SA88_RECORD:
+        output_table_name: SA88_RECORD
+      PCB_DST_STMT_DETL_INT:
+        output_table_name: PCB_DST_STMT_DETL_INT
+      DETL:
+        output_table_name: PCB_DST_STMT_DETL
+      TRLR:
+        input_table_name: SA99
+        output_table_name: PCB_DST_STMT_TRLR
+  output_file:
+    project_id: pcb-{env}-landing
+    order_by: ORDER BY ACCT_ID, PARENT_NUM, SEQ_NUM
+    table_order:
+      - "HEDR"
+      - "DETL"
+      - "TRLR"
+    table_detail:
+      HEDR: pcb-{env}-processing.domain_account_management.PCB_DST_STMT_HEDR_DBEXT
+      DETL: pcb-{env}-processing.domain_account_management.PCB_DST_STMT_DETL_DBEXT
+      TRLR: pcb-{env}-processing.domain_account_management.PCB_DST_STMT_TRLR_DBEXT
+    column: record
+    output_filename: "psf_dst_pcb_stmt_{cycle}"
+    filename_extension: "{file_env}"
+  parallel_dag_id_not_req:
+    - tsys_pcb_pcmc_stmt_cgo_file_loading
+    - tsys_pcb_pcmc_stmt_reg_file_loading
+  dependent_job_count: 2
+  control_table: pcb-{env}-curated.JobControlDataset.DAGS_HISTORY
+  cycle_details:
+    - cycle_job: VI70
+      domain: landing
+      table: domain_account_management.SA10
+      column: SA10_BILLING_CYCLE
+  trigger_dag_id: pcb_dst_crm_output_file_creation_post_extractor
+  oracle_dag_id: stmt_dag_history_bq_to_oracle
+  outbound_trigger: True

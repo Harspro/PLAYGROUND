@@ -1,0 +1,570 @@
+events_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "events"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P4"
+  tags: ["Digital Adoption - Events"]
+  activity_name: events_processing
+  interface_id: HO3
+  bigquery:
+      source_project_id: pcb-{env}-landing
+      processing_project_id: pcb-{env}-processing
+      destination_project_id: pcb-{env}-curated
+      dataset_id: domain_account_management
+  cluster_name: events-bq-to-oracle-c
+  job_size: medium
+  segment_name: EVENTS
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      EVENTS:
+        oracle.schema.table.name: "TS2.EVENTS"
+
+acct_misc_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Account Misc processing will be delayed"
+    customer_impact: "Account Misc processing will be delayed"
+    severity: "P4"
+  tags: [ "Digital Adoption - Acct Misc" ]
+  activity_name: acct_misc_processing
+  interface_id: HO13E
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: acct-misc-bq-to-oracle-c
+  job_size: medium
+  segment_name: ACCT_MISC
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      TSYS_ACCT_MISC_MA00:
+        oracle.schema.table.name: "TS2.MA00"
+      TSYS_ACCT_MISC_MA01:
+        oracle.schema.table.name: "TS2.MA01"
+      TSYS_ACCT_MISC_MA03:        
+        oracle.schema.table.name: "TS2.MA03"
+
+acct_score_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-score"
+    business_impact: "Account Scores processing will be delayed"
+    customer_impact: "Account Scores processing will be delayed"
+    severity: "P4"
+  tags: [ "Digital Adoption - Acct Score" ]
+  activity_name: acct_score_processing
+  interface_id: HO13D
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: acct-score-bq-to-oracle-c
+  job_size: medium
+  segment_name: ACCT_SCORE
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      SC00:        
+        oracle.schema.table.name: "TS2.SC00"
+      SC01:        
+        oracle.schema.table.name: "TS2.SC01"
+        
+acct_master_monthly_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P4"
+  tags: [ "Digital Adoption - Acct Master Monthly" ]
+  activity_name: acct_master_monthly_processing
+  interface_id: HO13B
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: acct-master-monthly-bq-to-oracle-c
+  job_size: large
+  segment_name: ACCT_MASTER
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"    
+    updater_job_args:
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM00:        
+        oracle.schema.table.name: "TS2.AM00"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM01:
+        oracle.schema.table.name: "TS2.AM01"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM02:
+        oracle.schema.table.name: "TS2.AM02"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_OL:
+        oracle.schema.table.name: "TS2.AM04_OL"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_PTP:
+        oracle.schema.table.name: "TS2.AM04_PTP"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_PD:
+        oracle.schema.table.name: "TS2.AM04_PD"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM04_S:
+        oracle.schema.table.name: "TS2.AM04_S"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM08:
+        oracle.schema.table.name: "TS2.AM08"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM09:
+        oracle.schema.table.name: "TS2.AM09"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0A:
+        oracle.schema.table.name: "TS2.AM0A"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BH:
+        oracle.schema.table.name: "TS2.AM0BH"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BI:
+        oracle.schema.table.name: "TS2.AM0BI"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BJ:
+        oracle.schema.table.name: "TS2.AM0BJ"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BP:
+        oracle.schema.table.name: "TS2.AM0BP"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BR:
+        oracle.schema.table.name: "TS2.AM0BR"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BU:
+        oracle.schema.table.name: "TS2.AM0BU"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BW:
+        oracle.schema.table.name: "TS2.AM0BW"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0BX:
+        oracle.schema.table.name: "TS2.AM0BX"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0C:
+        oracle.schema.table.name: "TS2.AM0C"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0E:
+        oracle.schema.table.name: "TS2.AM0E"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM0F:
+        oracle.schema.table.name: "TS2.AM0F"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM32:
+        oracle.schema.table.name: "TS2.AM32"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM33:
+        oracle.schema.table.name: "TS2.AM33"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM35:
+        oracle.schema.table.name: "TS2.AM35"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM38:
+        oracle.schema.table.name: "TS2.AM38"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3A:
+        oracle.schema.table.name: "TS2.AM3A"
+      TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3B:
+        oracle.schema.table.name: "TS2.AM3B"
+
+acct_trans_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Account Transactions processing will be delayed"
+    customer_impact: "Account Transactions processing will be delayed"
+    severity: "P4"
+  tags: [ "Digital Adoption - Acct Transactions" ]
+  activity_name: acct_trans_processing
+  interface_id: HO13F
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: acct-trans-bq-to-oracle-c
+  job_size: medium
+  segment_name: ACCT_TRANS
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      AT00:
+        oracle.schema.table.name: "TS2.AT00"
+      AT21:
+        oracle.schema.table.name: "TS2.AT21"
+      AT31:
+        oracle.schema.table.name: 'TS2.AT31'
+      AT41_AIRLINE_DATA:
+        oracle.schema.table.name: "TS2.AT41_AIRLINE_DATA"
+      AT41_AIRLINE_INFO:
+        oracle.schema.table.name: "TS2.AT41_AIRLINE_INFO"
+      AT41_AWARD_INFO:
+        oracle.schema.table.name: "TS2.AT41_AWARD_INFO"
+      AT41_BAL_ALLOC:
+        oracle.schema.table.name: "TS2.AT41_BAL_ALLOC"
+      AT41_COMMON_INFO:
+        oracle.schema.table.name: "TS2.AT41_COMMON_INFO"
+      AT41_INSURANCE:
+        oracle.schema.table.name: "TS2.AT41_INSURANCE"
+      AT41_LONG_DIST:
+        oracle.schema.table.name: "TS2.AT41_LONG_DIST"
+      AT41_MC_LODGE:
+        oracle.schema.table.name: "TS2.AT41_MC_LODGE"
+      AT41_MC_RENTAL:
+        oracle.schema.table.name: "TS2.AT41_MC_RENTAL"
+      AT41_OUTSTAND_DIST:
+        oracle.schema.table.name: "TS2.AT41_OUTSTAND_DIST"
+      AT41_PMT_CRED:
+        oracle.schema.table.name: "TS2.AT41_PMT_CRED"
+      AT41_POINTS:
+        oracle.schema.table.name: "TS2.AT41_POINTS"
+      AT41_REAGE:
+        oracle.schema.table.name: "TS2.AT41_REAGE"
+      AT41_STMT_MSG:
+        oracle.schema.table.name: "TS2.AT41_STMT_MSG"
+
+acct_hist_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Account History processing will be delayed"
+    customer_impact: "Account History processing will be delayed"
+    severity: "P4"
+  tags: [ "Digital Adoption - Acct History" ]
+  activity_name: acct_hist_processing
+  interface_id: HO13C
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: acct-hist-bq-to-oracle-c
+  job_size: medium
+  segment_name: ACCT_HIST
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      AH00:
+        oracle.schema.table.name: "TS2.AH00"
+      AH01:
+        oracle.schema.table.name: "TS2.AH01"
+      AH02_ADJ_PASTDUE:
+        oracle.schema.table.name: 'TS2.AH02_ADJ_PASTDUE'
+      AH02_CHG_OFF:
+        oracle.schema.table.name: "TS2.AH02_CHG_OFF"
+      AH02_COLL_AGENCY:
+        oracle.schema.table.name: "TS2.AH02_COLL_AGENCY"
+      AH02_CREDLIM_CHG:
+        oracle.schema.table.name: "TS2.AH02_CREDLIM_CHG"
+      AH02_DISPUTES:
+        oracle.schema.table.name: "TS2.AH02_DISPUTES"
+      AH02_HIST_BKP:
+        oracle.schema.table.name: "TS2.AH02_HIST_BKP"
+      AH02_HIST_TYPE10:
+        oracle.schema.table.name: "TS2.AH02_HIST_TYPE10"
+      AH02_PTP:
+        oracle.schema.table.name: "TS2.AH02_PTP"
+      AH02_REAGE:
+        oracle.schema.table.name: "TS2.AH02_REAGE"
+      AH02_REGZ_HIST:
+        oracle.schema.table.name: "TS2.AH02_REGZ_HIST"
+      AH31:
+        oracle.schema.table.name: "TS2.AH31"
+      AH32:
+        oracle.schema.table.name: "TS2.AH32"
+      AH35:
+        oracle.schema.table.name: "TS2.AH35"
+
+cust_master_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "Customer Master processing will be delayed"
+    customer_impact: "Customer Master processing will be delayed"
+    severity: "P4"
+  tags: [ "Digital Adoption - Cust Master" ]
+  activity_name: cust_master_processing
+  interface_id: HO13
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_customer_management
+  cluster_name: cust-master-bq-to-oracle-c
+  job_size: large
+  segment_name: CUST_MASTER
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM00:
+        oracle.schema.table.name: "TS2.CM00"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM01:
+        oracle.schema.table.name: "TS2.CM01"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM02:
+        oracle.schema.table.name: "TS2.CM02"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM03:
+        oracle.schema.table.name: "TS2.CM03"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM04:
+        oracle.schema.table.name: "TS2.CM04"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM34:
+        oracle.schema.table.name: "TS2.CM34"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM05:
+        oracle.schema.table.name: "TS2.CM05"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM06:
+        oracle.schema.table.name: "TS2.CM06"
+      TSYS_PCB_MC_CUSTMASTER_MONTHLY_CM07:
+        oracle.schema.table.name: "TS2.CM07"
+
+cif_daily_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "cif-daily"
+    business_impact: "CIF processing will be delayed"
+    customer_impact: "CIF processing will be delayed"
+    severity: "P4"
+  tags: [ "Digital Adoption - CIF DAILY" ]
+  activity_name: cif_daily_processing
+  interface_id: HO20
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: cif-daily-bq-to-oracle-c
+  job_size: large
+  segment_name: CIF_DAILY
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      CIF_ACCOUNT_CURR:
+        oracle.schema.table.name: "TS2.CIF_ACCOUNT_CURR_BQ"
+        operation.type: "merge"
+        pcb.oracle.update.columns: "All"
+        pcb.bigquery.loader.source.unique.key: "CIFP_ACCOUNT_ID5"
+        pcb.oracle.dest.temp.table: "TS2.CIF_ACCOUNT_CURR_BQ_TEMP1"
+      CIF_CARD_CURR:
+        oracle.schema.table.name: "TS2.CIF_CARD_CURR_BQ"
+        operation.type: "merge"
+        pcb.oracle.update.columns: "All"
+        pcb.bigquery.loader.source.unique.key: "CIFP_ACCOUNT_ID6,CIFP_ACCOUNT_NUM,CIFP_CUSTOMER_ID_2"
+        pcb.oracle.dest.temp.table: "TS2.CIF_CARD_CURR_BQ_TEMP1"
+      CIF_CARD_XREF:
+        oracle.schema.table.name: "TS2.CIF_CARD_XREF"
+        operation.type: "merge"
+        pcb.oracle.update.columns: "All"
+        pcb.bigquery.loader.source.unique.key: "CIFP_ACCOUNT_ID6,CIFP_ACCOUNT_NUM,CIFP_CUSTOMER_ID_2"
+        pcb.oracle.dest.temp.table: "TS2.CIF_CARD_XREF_BQ_TEMP"
+  enable_gcs_export: true
+  gcs_export:
+    bucket_name: "pcb-{env}-staging"
+    file_format: "CSV"
+    compression: "NONE"  # Must be NONE for merging files (GZIP cannot be composed with headers)
+    field_delimiter: "|"
+    include_header: false  # Export without headers (will be added during merge if needed)
+    skip_oracle_segments:
+      - CIF_CARD_CURR
+      - CIF_ACCOUNT_CURR
+    export_segments:
+      - CIF_CARD_CURR
+      - CIF_ACCOUNT_CURR
+    segment_file_names:
+      CIF_CARD_CURR:
+        output_filename: "pcb_cif_card_curr"
+        file_extension: "{file_env}"
+        gcs_path: "cif_exports"
+        header_file: "bq_to_oracle_loader/headers/cif_card_curr_header.csv"  # Required: path to fixed header file
+      CIF_ACCOUNT_CURR:
+        output_filename: "pcb_cif_account_curr"
+        file_extension: "{file_env}"
+        gcs_path: "cif_exports"
+        header_file: "bq_to_oracle_loader/headers/cif_account_curr_header.csv"  # Required: path to fixed header file
+    merge_sharded_files:  # Merge multiple sharded files into one
+      enabled: true
+      add_header: true  # Add header row from fixed header file (required if enabled)
+    move_to_landing:
+      enabled: true
+      destination_bucket: mft-pcb-outbound{env_suffix}
+      destination_folder: "pcb_cif_detail"
+
+cif_weekly_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "cif-weekly"
+    business_impact: "CIF Weekly processing will be delayed"
+    customer_impact: "CIF Weekly processing will be delayed"
+    severity: "P4"
+  tags: [ "Digital Adoption - CIF WEEKLY" ]
+  activity_name: cif_weekly_processing
+  interface_id: HO20B
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: cif-weekly-bq-to-oracle-c
+  job_size: large
+  segment_name: CIF_WEEKLY
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-ts2-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-ts2-db303.conf"
+    updater_job_args:
+      CIF_ACCOUNT_CURR:
+        oracle.schema.table.name: "TS2.CIF_ACCOUNT_CURR_BQ"
+        operation.type: "merge"
+        pcb.oracle.update.columns: "All"
+        pcb.bigquery.loader.source.unique.key: "CIFP_ACCOUNT_ID5"
+        pcb.oracle.dest.temp.table: "TS2.CIF_ACCOUNT_CURR_BQ_TEMP1"
+      CIF_CARD_CURR:
+        oracle.schema.table.name: "TS2.CIF_CARD_CURR_BQ"
+        operation.type: "merge"
+        pcb.oracle.update.columns: "All"
+        pcb.bigquery.loader.source.unique.key: "CIFP_ACCOUNT_ID6,CIFP_ACCOUNT_NUM,CIFP_CUSTOMER_ID_2"
+        pcb.oracle.dest.temp.table: "TS2.CIF_CARD_CURR_BQ_TEMP1"
+      CIF_CARD_XREF:
+        oracle.schema.table.name: "TS2.CIF_CARD_XREF"
+        operation.type: "merge"
+        pcb.oracle.update.columns: "All"
+        pcb.bigquery.loader.source.unique.key: "CIFP_ACCOUNT_ID6,CIFP_ACCOUNT_NUM,CIFP_CUSTOMER_ID_2"
+        pcb.oracle.dest.temp.table: "TS2.CIF_CARD_XREF_BQ_TEMP"
+  enable_gcs_export: true
+  gcs_export:
+    bucket_name: "pcb-{env}-staging"
+    file_format: "CSV"
+    compression: "NONE"  # Must be NONE for merging files (GZIP cannot be composed with headers)
+    field_delimiter: "|"
+    include_header: false  # Export without headers (will be added during merge if needed)
+    skip_oracle_segments:
+      - CIF_CARD_CURR
+      - CIF_ACCOUNT_CURR
+    export_segments:
+      - CIF_CARD_CURR
+      - CIF_ACCOUNT_CURR
+    segment_file_names:
+      CIF_CARD_CURR:
+        output_filename: "pcb_cif_card_curr"
+        file_extension: "{file_env}"
+        gcs_path: "cif_exports"
+        header_file: "bq_to_oracle_loader/headers/cif_card_curr_header.csv"  # Required: path to fixed header file
+      CIF_ACCOUNT_CURR:
+        output_filename: "pcb_cif_account_curr"
+        file_extension: "{file_env}"
+        gcs_path: "cif_exports"
+        header_file: "bq_to_oracle_loader/headers/cif_account_curr_header.csv"  # Required: path to fixed header file
+    merge_sharded_files:  # Merge multiple sharded files into one
+      enabled: true
+      add_header: true  # Add header row from fixed header file (required if enabled)
+    move_to_landing:
+      enabled: true
+      destination_bucket: mft-pcb-outbound{env_suffix}
+      destination_folder: "pcb_cif_detail"
+
+stmt_dag_history_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statement"
+    business_impact: "Impact index loader job"
+    customer_impact: "Impact index loader job"
+    severity: "P4"
+  tags: [ "Digital Adoption - Estatement" ]
+  activity_name: stmt_dag_history_processing
+  interface_id: VI70
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_account_management
+  cluster_name: stmt-dag-history-bq-to-oracle-c
+  job_size: medium
+  segment_name: STMT_DAG_HISTORY
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-pcb-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-pcb-db303.conf"
+    updater_job_args:
+      STMT_DAG_HISTORY:
+        oracle.schema.table.name: "PCB.STMT_DAG_HISTORY"
+
+returncff_cme_customer_update_bq_to_oracle:
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "customer-management"
+    business_impact: "CME Customer offer data update will be delayed"
+    customer_impact: "Customer might not see proper offers"
+    severity: "P4"
+  tags: [ "Digital Adoption - Cust Master" ]
+  activity_name: returncff_cme_customer_update_processing
+  interface_id: VO82
+  sequence: TRUE
+  bigquery:
+    source_project_id: pcb-{env}-landing
+    processing_project_id: pcb-{env}-processing
+    destination_project_id: pcb-{env}-curated
+    dataset_id: domain_customer_management
+  cluster_name: cust-master-bq-to-oracle-c
+  job_size: medium
+  segment_name: CME_CUSTOMER
+  spark:
+    update_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/bigquery-oracle-updater-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/bigquery-oracle-updater/application-cme-db303.conf
+    updater_main_class: com.pcb.batch.bigquerytooracleupdater.BigqueryToOracleUpdater
+    application.config: "application-cme-db303.conf"
+    updater_job_args:
+      RETURNCFF_CME_CUSTOMER:
+        oracle.schema.table.name: "LDS_CME.CUSTOMER"
+        operation.type: "merge"
+        pcb.oracle.update.columns: "LAST_OFFER_STATUS,LAST_OFFER_STATUS_DATE,NUMBER_OF_TIME_PRESENTED,REC_CHNG_TMS"
+        pcb.bigquery.loader.source.unique.key: "OFFER_ID,CUSTOMER_REF"
+        pcb.oracle.dest.temp.table: "CME_CUSTOMER_BQ_TEMP"

@@ -1,0 +1,78 @@
+[
+  {
+    "name": "CASE_FILE_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "CUSTOMER_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "TAX_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "FIRST_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "LAST_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "MIDDLE_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "AKA",
+    "type": "STRING"
+  },
+  {
+    "name": "CASE_ROLE",
+    "type": "STRING"
+  },
+  {
+    "name": "DATE_OF_BIRTH",
+    "type": "DATE"
+  },
+  {
+    "name": "ADDRESS",
+    "type": "STRING"
+  },
+  {
+    "name": "CITY",
+    "type": "STRING"
+  },
+  {
+    "name": "STATE",
+    "type": "STRING"
+  },
+  {
+    "name": "ZIP",
+    "type": "STRING"
+  },
+  {
+    "name": "COUNTRY",
+    "type": "STRING"
+  },
+  {
+    "name": "PHONE",
+    "type": "STRING"
+  },
+  {
+    "name": "SECONDARY_ID_NUMBER",
+    "type": "STRING"
+  },
+  {
+    "name": "SECONDARY_ID_TYPE",
+    "type": "STRING"
+  },
+  {
+    "name": "EMPLOYER",
+    "type": "STRING"
+  },
+  {
+    "name": "OCCUPATION",
+    "type": "STRING"
+  }
+]

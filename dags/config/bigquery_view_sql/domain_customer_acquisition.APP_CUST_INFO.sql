@@ -1,0 +1,6 @@
+SELECT
+  *
+FROM
+  `pcb-{env}-landing.domain_customer_acquisition.APP_CUST_INFO`
+QUALIFY
+  ROW_NUMBER() OVER (PARTITION BY PC_MC_CUST_APPL_ID ORDER BY INGESTION_TIMESTAMP DESC) = 1

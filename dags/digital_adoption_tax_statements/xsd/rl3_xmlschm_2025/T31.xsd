@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du T31         @@@@           -->
+	<xsd:complexType
+    name="T31Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionSansFermetureType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NbReleves"
+        type="Int9Type">
+				
+			</xsd:element>
+			<xsd:element
+        name="Proprietaire">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="Nom"
+              type="Char60Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

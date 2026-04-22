@@ -1,0 +1,35 @@
+esso_merchant_kafka_writer:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P2"
+    sub_capability: "Rewards"
+    business_impact: "This will impact the loading of ESSO merchants into DP Kafka topic: dp-core-{env}-esso-merchant. The merchant list is used to block ESSO transactions from getting the points from these locations."
+    customer_impact: "If ESSO adds a new store and we receive transactions, the PC points will be awarded (Costing implication: Customer gets extra points)."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/esso_merchant/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/esso_merchant/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/esso_merchant/esso_merchant_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/esso_merchant/esso_merchant_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/esso_merchant/fdc_pcl_esso_gas_pc_pts_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: esso_merchant_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: esso_merchant_value.avsc
+    pcb.file.kafka.connector.csv.comment.character: T
+    pcb.file.kafka.connector.csv.delimiter: '|'
+    pcb.file.kafka.connector.csv.header: true
+    pcb.file.kafka.connector.csv.ignore.leading.white.space: true
+    pcb.file.kafka.connector.csv.ignore.trailing.white.space: true
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: CSV
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: merchantNumber
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: fdc_pcl_esso_gas_pc_pts_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_esso_merchant
+    read_pause_deploy_config: True
+    tags: ["Loyalty"]
+    job_size: extra_small

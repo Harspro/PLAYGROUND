@@ -1,0 +1,43 @@
+TS2_at31_accttx_kafka_writer:
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Loyalty"
+    severity: "P2"
+    sub_capability: "Rewards/Loyalty"
+    business_impact: "This dag loads all PCF transactions into DP kafka topic: dp-core-{env}-tsys-posted-transaction."
+    customer_impact: "In the event of a failure, no points will be awarded to any PCF customers, thereby affecting the entire PCF customer base."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/tsys_posted_transactions/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/tsys_posted_transactions/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/tsys_posted_transactions/tsys_posted_transactions_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/tsys_posted_transactions/tsys_posted_transactions_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/loyalty/tsys_posted_transactions/at31_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: tsys_posted_transactions_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: tsys_posted_transactions_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+      file_path_suffix: _extract/AT31_REC/*.parquet
+    pcb.file.kafka.connector.filtered.fields:
+      - MAST_ACCOUNT_ID
+      - AT31_REFERENCE_NUM
+      - AT31_ACCOUNT_NUMB
+      - AT31_TRANSACTION_CODE
+      - AT31_DATE_POST
+      - AT31_AMT_TRANSACTION
+      - AT31_MERCHANT_ID
+      - AT31_MERCHANT_CATEGORY_CODE
+      - AT31_MERCHANT_DBA_COUNTRY
+      - AT31_MC_PROMO_CODE
+    pcb.file.kafka.connector.kafka.key: tsysTransactionId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: at31_file_schema.avsc
+    pcb.file.kafka.connector.timestamp.format: "yyyy-MM-dd'T'HH:mm:ss.SSS"
+  dag:
+    kafka_writer_task: kafka_writer_TS2_at31_accttx
+    read_pause_deploy_config: True
+    tags: ["Loyalty"]
+    job_size: large

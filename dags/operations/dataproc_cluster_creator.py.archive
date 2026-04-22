@@ -1,0 +1,88 @@
+from datetime import datetime, timedelta
+
+import pendulum
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.providers.google.cloud.operators.dataproc import DataprocCreateClusterOperator
+
+import util.constants as consts
+from util.miscutils import read_variable_or_file, get_ephemeral_cluster_config
+from dag_factory.terminus_dag_factory import add_tags
+
+"""
+    This dag can be used to create cluster with specified cluster name which is helpful in both integration testing
+    and production support.
+
+    Please pass in parameters from dag config. If not specified, number of workers (num_worker) is 16.
+    'cluster_name' is always required.
+
+    Example config:
+    {
+        "cluster_name": "test-cluster",
+        "num_worker": 3
+    }
+"""
+
+
+class DataprocClusterCreator:
+    def __init__(self):
+        self.gcp_config = read_variable_or_file(consts.GCP_CONFIG)
+        self.deploy_env = self.gcp_config[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+
+        self.default_args = {
+            'owner': 'team-centaurs',
+            'capability': 'Terminus Data Platform',
+            'severity': 'P3',
+            'sub_capability': 'Terminus Data Platform',
+            'business_impact': 'NA',
+            'customer_impact': 'NA',
+            "email": [],
+            "email_on_failure": False,
+            "email_on_retry": False,
+            "retries": 1,
+            "retry_delay": timedelta(minutes=15)
+        }
+
+        self.dataproc_config = read_variable_or_file(consts.DATAPROC_CONFIG)
+
+        self.local_tz = pendulum.timezone(consts.TORONTO_TIMEZONE_ID)
+
+    def create_dag(self, dag_id: str) -> DAG:
+        dag = DAG(
+            dag_id=dag_id,
+            default_args=self.default_args,
+            schedule=None,
+            start_date=datetime(2024, 1, 1),
+            max_active_runs=1,
+            catchup=False,
+            dagrun_timeout=timedelta(minutes=30),
+            is_paused_upon_creation=True,
+            render_template_as_native_obj=True,
+            params={
+                "cluster_name": "test-cluster",
+                "num_worker": 3
+            }
+        )
+
+        with dag:
+            start_point = EmptyOperator(task_id='start')
+            end_point = EmptyOperator(task_id='end')
+
+            cluster_creating_task = DataprocCreateClusterOperator(
+                task_id=consts.CLUSTER_CREATING_TASK_ID,
+                project_id=self.dataproc_config.get(consts.PROJECT_ID),
+                cluster_config=get_ephemeral_cluster_config(self.deploy_env, self.gcp_config.get(consts.NETWORK_TAG),
+                                                            "{{ dag_run.conf.get('num_worker') or 3}}"),
+                region=self.dataproc_config.get(consts.LOCATION),
+                cluster_name="{{ dag_run.conf['cluster_name'] }}"
+            )
+
+            start_point >> cluster_creating_task >> end_point
+
+        return add_tags(dag)
+
+    def create(self) -> dict:
+        return {consts.DAG_ID: self.create_dag('dataproc_cluster_creator')}
+
+
+globals().update(DataprocClusterCreator().create())

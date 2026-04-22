@@ -1,0 +1,35 @@
+sfmc_push_device_contact_kafka_writer:
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P4"
+    sub_capability: "push-notification"
+    business_impact: "This will impact the loading of Push Device Contact list from Salesforce Marketing Cloud (SFMC) into DP Kafka topic: dp-core-sfmc-push-device-contact."
+    customer_impact: "Customer may not receive PUSH notifications and/or their opt-in/-outs will not be recorded by DP."
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce-push-device/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce-push-device/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce-push-device/SfmcPushDeviceContactKeyAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce-push-device/SfmcPushDeviceContactAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/communications/salesforce-push-device/sfmc_push_device_contact_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: SfmcPushDeviceContactKeyAO.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: SfmcPushDeviceContactAO.avsc
+    pcb.file.kafka.connector.csv.delimiter: ','
+    pcb.file.kafka.connector.csv.header: true
+    pcb.file.kafka.connector.csv.ignore.leading.white.space: true
+    pcb.file.kafka.connector.csv.ignore.trailing.white.space: true
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: CSV
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.kafka.key: contactId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.auto.register.schemas: true
+    pcb.file.kafka.connector.schema.file.path: sfmc_push_device_contact_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_sfmc_push_device_contact
+    read_pause_deploy_config: True
+    tags: ["communication", "push-notification"]
+    job_size: extra_small

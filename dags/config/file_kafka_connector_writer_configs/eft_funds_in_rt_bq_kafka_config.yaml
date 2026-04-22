@@ -1,0 +1,38 @@
+eft_funds_in_rt_kafka_writer:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Money Movement"
+    severity: "P3"
+    sub_capability: "G-EFT"
+    business_impact: "This dag loads G_EFT details into DP kafka topic: dp-batch-eft-rt-pull-processed"
+    customer_impact: "In the event of a failure, EFT funds in real-time details will not be updated"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/eft_funds/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/eft_funds/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/eft_funds/FlinksEftRealTimePullEventKeyAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/eft_funds/FlinksEftRealTimePullProcessedEventAO.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/money-movement/eft_funds/FlinksEftRealTimePullFileSchema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: FlinksEftRealTimePullEventKeyAO.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: FlinksEftRealTimePullProcessedEventAO.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: transactionId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: false
+  dag:
+    kafka_writer_task: kafka_writer_task_eft_funds_in_rt
+    dataproc_cluster_name: eft-funds-in-rt-proc-c
+    read_pause_deploy_config: False
+    job_size: extra_small
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_payments
+    table_id: PCB_EFT_FUNDS_IN_RT_STAGING
+    query_file: eft_funds/eft_funds_in_rt_export.sql
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: eft-funds-in-rt-process
+    file_name: eft-funds-in-rt

@@ -1,0 +1,137 @@
+from datetime import datetime
+from typing import List
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from aml_processing import feed_commons as commons
+from aml_processing.funds_move.migration.funds_move_migration import FundsMoveDataSetMigration
+from aml_processing.funds_move.migration.migration_utils import MigrationUtils
+from util.miscutils import read_variable_or_file
+from dag_factory.terminus_dag_factory import add_tags
+
+
+LANDING_ZONE = "landing"
+CURATED_ZONE = "curated"
+DEPLOY_ENV = read_variable_or_file('gcp_config')['deployment_environment_name']
+
+
+class DagConfig:
+    dag_id: str
+    desc: str
+
+    def __init__(self, dag_id: str, desc: str, func):
+        self.dag_id = dag_id
+        self.desc = desc
+        self.func = func
+
+
+class FundsMoveMigrationDAGBuilder:
+
+    @staticmethod
+    def run_funds_move_migration(zone: str):
+        src_dataset = f"pcb-{DEPLOY_ENV}-{zone}.domain_aml"
+        ctl_table = f"pcb-{DEPLOY_ENV}-processing.domain_aml.FUNDS_MOVE_DATASET_MIGRATION_CTL"
+
+        FundsMoveDataSetMigration.create_ctl_table(ctl_table)
+        table_list = MigrationUtils.get_table_list()
+        for table_name in table_list:
+            if table_name == 'PLATFORM_USER_LOGIN':
+                target_dataset = f"pcb-{DEPLOY_ENV}-{zone}.domain_customer_management"
+            else:
+                target_dataset = f"pcb-{DEPLOY_ENV}-{zone}.domain_payments"
+            migration = FundsMoveDataSetMigration(src_dataset, target_dataset, ctl_table, table_name)
+            migration.run_insert_select()
+
+    @staticmethod
+    def drop_funds_move_old_dataset_tables(zone: str):
+        src_dataset = f"pcb-{DEPLOY_ENV}-{zone}.domain_aml"
+        ctl_table = f"pcb-{DEPLOY_ENV}-processing.domain_aml.FUNDS_MOVE_DATASET_MIGRATION_CTL"
+
+        table_list = MigrationUtils.get_table_list()
+        for table_name in table_list:
+            if table_name == 'PLATFORM_USER_LOGIN':
+                target_dataset = f"pcb-{DEPLOY_ENV}-{zone}.domain_customer_management"
+            else:
+                target_dataset = f"pcb-{DEPLOY_ENV}-{zone}.domain_payments"
+            migration = FundsMoveDataSetMigration(src_dataset, target_dataset, ctl_table, table_name)
+            migration.drop_src_table()
+
+    @staticmethod
+    def drop_funds_move_migration_ctl_table():
+        ctl_table = f"pcb-{DEPLOY_ENV}-processing.domain_aml.FUNDS_MOVE_DATASET_MIGRATION_CTL"
+        FundsMoveDataSetMigration.drop_ctl_table(ctl_table)
+
+    @staticmethod
+    def run_funds_move_land_migration():
+        FundsMoveMigrationDAGBuilder.run_funds_move_migration(LANDING_ZONE)
+
+    @staticmethod
+    def run_funds_move_curated_migration():
+        FundsMoveMigrationDAGBuilder.run_funds_move_migration(CURATED_ZONE)
+
+    @staticmethod
+    def drop_funds_move_landing_old_dataset_tables():
+        FundsMoveMigrationDAGBuilder.drop_funds_move_old_dataset_tables(LANDING_ZONE)
+
+    @staticmethod
+    def drop_funds_move_curated_old_dataset_tables():
+        FundsMoveMigrationDAGBuilder.drop_funds_move_old_dataset_tables(CURATED_ZONE)
+
+    @staticmethod
+    def create_dag(dag_config: DagConfig) -> DAG:
+        tags = commons.TAGS.copy()
+        tags.append("fundsmove")
+        tags.append("migration")
+        # Modify the default_args dictionary
+        custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+        custom_default_args['business_impact'] = 'None'
+
+        # DAG to move funds copy landing old dataset to new dataset
+        with DAG(
+                dag_config.dag_id,
+                is_paused_upon_creation=True,
+                description=dag_config.desc,
+                default_args=custom_default_args,
+                start_date=datetime(2022, 1, 1, tzinfo=commons.TORONTO_TZ),
+                end_date=None,
+                schedule=None,
+                tags=tags,
+                max_active_runs=1,
+                catchup=False
+        ) as dag:
+            pipeline_start = EmptyOperator(task_id="pipeline_start")
+            pipeline_complete = EmptyOperator(task_id='end')
+
+            data_migration_task = PythonOperator(
+                task_id="run_funds_move_migration",
+                python_callable=dag_config.func,
+                op_args=[],
+                trigger_rule="all_success"
+            )
+
+            pipeline_start >> data_migration_task >> pipeline_complete
+
+        return add_tags(dag)
+
+
+# Build DAGS
+dag_config_list: List[DagConfig] = [DagConfig("FundsMove_migration_landing_dataset",
+                                              "DAG to move funds move data in landing zone from old to new dataset",
+                                              FundsMoveMigrationDAGBuilder.run_funds_move_land_migration),
+                                    DagConfig("FundsMove_migration_drop_old_landing_dataset_tables",
+                                              "DAG to drop old funds move landing zone tables",
+                                              FundsMoveMigrationDAGBuilder.drop_funds_move_landing_old_dataset_tables),
+                                    DagConfig("FundsMove_migration_curated_dataset",
+                                              "DAG to move data in curated zone from old to new dataset",
+                                              FundsMoveMigrationDAGBuilder.run_funds_move_curated_migration),
+                                    DagConfig("FundsMove_migration_drop_old_curated_dataset_tables",
+                                              "DAG to drop old funds move curated zone tables",
+                                              FundsMoveMigrationDAGBuilder.drop_funds_move_curated_old_dataset_tables),
+                                    DagConfig("FundsMove_migration_drop_control_table",
+                                              "DAG to drop funds move control table",
+                                              FundsMoveMigrationDAGBuilder.drop_funds_move_migration_ctl_table)
+                                    ]
+
+for dag_config in dag_config_list:
+    dag = FundsMoveMigrationDAGBuilder.create_dag(dag_config)
+    globals()[dag_config.dag_id] = dag

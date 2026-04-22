@@ -1,0 +1,4 @@
+clustering_fields:
+  - ACTION_ID
+  - LOGIN_ID
+  - ACTION_DESC

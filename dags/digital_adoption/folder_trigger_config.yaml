@@ -1,0 +1,17 @@
+# This file has the landing bucket folder -> DAG mappings
+# Used to determine which DAG to trigger based on the bucket folder name
+#
+# folder_name: The exact folder name in GCS landing bucket.
+# filename_pattern: The filename has to match regex. If not, it is a no-op.
+# dags_to_trigger: The names of DAGs to trigger. Usually only one.
+#
+# Add an entry here for a new DAG which processes a new file-type
+#
+
+- folder_name: mft_pcb_estmtavail
+  filename_pattern: ^pcb_dgtl_mc_estmtavail(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [estatement_ready_launcher]
+
+- folder_name: pcb_idx_stmt
+  filename_pattern: ^pcb_idx_stmt(?!.*\.(gz|pgp)$).*$
+  dags_to_trigger: [ pcb_idx_stmt_processing_orchestrator ]

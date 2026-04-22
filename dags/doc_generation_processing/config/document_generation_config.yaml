@@ -1,0 +1,69 @@
+doc_generation_processing:
+  tags:
+    - communication
+    - mail
+  default_args:
+    owner: "team-telegraphers-alerts"
+    capability: "communication"
+    severity: "P2"
+    sub_capability: "mail"
+    business_impact: "This will impact the business to send letters or statements in mail to the customers."
+    customer_impact: "Customers opted-in for paper mail will not be able to receive their letters or statements in a timely manner."
+  dag:
+    read_pause_deploy_config: True
+    schedule_interval: "0 9 * * *"
+    location: northamerica-northeast1
+    wait_for_completion: True
+    poke_interval: 30
+    input_bucket: "pcb-{env}-doc-generation-outputs"
+    cloud_function:
+      audience: https://northamerica-northeast1-pcb-{env}-processing.cloudfunctions.net/pdf-generator-function-v2
+      max_concurrent_records: 250
+    workload:
+      namespace: pdf-afp-converter
+      afp:
+        - input_path: LETTER/SIMPLEX/EN
+          output_file_name: "simplex_eng_letters_afp_"
+          output_file_suffix: "01"
+        - input_path: LETTER/SIMPLEX/FR
+          output_file_name: "simplex_frc_letters_afp_"
+          output_file_suffix: "01"
+        - input_path: LETTER/DUPLEX_2/EN
+          output_file_name: "duplex_eng_letters_afp_"
+          output_file_suffix: "02"
+        - input_path: LETTER/DUPLEX_2/FR
+          output_file_name: "duplex_frc_letters_afp_"
+          output_file_suffix: "02"
+        - input_path: LETTER/DUPLEX_3/EN
+          output_file_name: "duplex_eng_letters_afp_"
+          output_file_suffix: "03"
+        - input_path: LETTER/DUPLEX_3/FR
+          output_file_name: "duplex_frc_letters_afp_"
+          output_file_suffix: "03"
+        - input_path: LETTER/DUPLEX_4/EN
+          output_file_name: "duplex_eng_letters_afp_"
+          output_file_suffix: "04"
+        - input_path: LETTER/DUPLEX_4/FR
+          output_file_name: "duplex_frc_letters_afp_"
+          output_file_suffix: "04"
+      uat:
+        project_id: pcb-nonprod-compute
+        cluster_name: gke-uat-mars
+        image: repo.nonprod.pcfcloud.io/docker/communications/pdf-to-afp-converter:latest
+        output_bucket: "broadridge-outbound-pcb-uat"
+        afp_file_prefix: "psf_t_pcb_dst_"
+        afp_file_extension: ".uatv"
+      prod:
+        project_id: pcb-prod-compute
+        cluster_name: gke-prod-orca
+        image: repo.prod.pcfcloud.io/pcb-dp-docker-prod/communications/pdf-to-afp-converter:2025.9.0
+        output_bucket: "broadridge-outbound-pcb"
+        afp_file_prefix: "psf_p_pcb_dst_"
+        afp_file_extension: ".prod"
+    kafka_config:
+      kafka_writer_task_id: trigger_mail_print_status_kafka_writer_dag
+      kafka_trigger_dag_id: mail_print_status_kafka_writer
+      kafka_cluster_name: "mail-print-status-events-c"
+      bucket: 'pcb-{env}-staging-extract'
+      folder_prefix: 'document_generation'
+      file_name: 'mail-print-status-*.parquet'

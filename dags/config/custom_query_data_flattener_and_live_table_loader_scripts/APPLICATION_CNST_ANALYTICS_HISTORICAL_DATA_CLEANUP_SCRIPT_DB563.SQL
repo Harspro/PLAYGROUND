@@ -1,0 +1,1 @@
+DELETE FROM pcb-{env}-landing.domain_consent.CNST_EVENTS_ANALYTICS WHERE legacyDataSource = 'PR563'

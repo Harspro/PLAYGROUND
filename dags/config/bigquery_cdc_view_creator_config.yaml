@@ -1,0 +1,108 @@
+# Create authorized CDC views
+# By default, views are updated when the DAG is rerun
+# Archive the DAGs when not needed and store them in dags/config/bigquery_cdc_view_creator_config.yaml.archive
+
+domain_validation_verification_cdc_views:
+  dag_owner: "team-growth-and-sales-alerts"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_validation_verification.CUSTOMER_ID_VERIFICATION
+      view_ref: pcb-{env}-curated.domain_validation_verification.CUSTOMER_ID_VERIFICATION
+      uid_column: CUSTOMER_ID_VERIFICATION_UID
+  tags:
+    - "team-growth-and-sales"
+
+aml_fundsmove_views:
+  dag_owner: "team-defenders-alerts"
+  tables:
+    - table_ref: pcb-{env}-landing.domain_payments.AUTHORIZATION_FULFILLMENT
+      view_ref: pcb-{env}-curated.domain_payments.AUTHORIZATION_FULFILLMENT
+      uid_column: AUTHORIZATION_FULFILLMENT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.BILLPAY_FULFILLMENT
+      view_ref: pcb-{env}-curated.domain_payments.BILLPAY_FULFILLMENT
+      uid_column: BILLPAY_FULFILLMENT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.BILLPAY_OPACCT_REQ
+      view_ref: pcb-{env}-curated.domain_payments.BILLPAY_OPACCT_REQ
+      uid_column: BILLPAY_OPACCT_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_payments.BILLPAY_OPACCT_REQSTATUS
+      view_ref: pcb-{env}-curated.domain_payments.BILLPAY_OPACCT_REQSTATUS
+      uid_column: BILLPAY_OPACCT_REQSTATUS_UID
+    - table_ref: pcb-{env}-landing.domain_payments.CARD_DEPOSIT_FULFILLMENT
+      view_ref: pcb-{env}-curated.domain_payments.CARD_DEPOSIT_FULFILLMENT
+      uid_column: CARD_DEPOSIT_FULFILLMENT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.CPA_AUTOPAY_REQ
+      view_ref: pcb-{env}-curated.domain_payments.CPA_AUTOPAY_REQ
+      uid_column: CPA_AUTOPAY_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_payments.CPA_AUTOPAY_REQ_STATUS
+      view_ref: pcb-{env}-curated.domain_payments.CPA_AUTOPAY_REQ_STATUS
+      uid_column: CPA_AUTOPAY_REQ_STATUS_UID
+    - table_ref: pcb-{env}-landing.domain_payments.EDI_PYMT_INB_REQ
+      view_ref: pcb-{env}-curated.domain_payments.EDI_PYMT_INB_REQ
+      uid_column: EDI_PYMT_INB_UID
+    - table_ref: pcb-{env}-landing.domain_payments.EDI_PYMT_INB_REQ_STATUS
+      view_ref: pcb-{env}-curated.domain_payments.EDI_PYMT_INB_REQ_STATUS
+      uid_column: EDI_PYMT_INB_REQ_STATUS_UID
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_EXTORIGIN_REQ
+      view_ref: pcb-{env}-curated.domain_payments.EFT_EXTORIGIN_REQ
+      uid_column: EFT_EXTORIGIN_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_EXTORIGIN_REQ_STAT
+      view_ref: pcb-{env}-curated.domain_payments.EFT_EXTORIGIN_REQ_STAT
+      uid_column: EFT_EXTORIGIN_REQ_STAT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_PCBORIGIN_IN_REQ
+      view_ref: pcb-{env}-curated.domain_payments.EFT_PCBORIGIN_IN_REQ
+      uid_column: EFT_PCBORIGIN_IN_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_PCBORIGIN_IN_REQ_STAT
+      view_ref: pcb-{env}-curated.domain_payments.EFT_PCBORIGIN_IN_REQ_STAT
+      uid_column: EFT_PCBORIGIN_IN_REQ_STAT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.EFT_PCBORIGIN_OUT_REQ_STAT
+      view_ref: pcb-{env}-curated.domain_payments.EFT_PCBORIGIN_OUT_REQ_STAT
+      uid_column: EFT_PCBORIGIN_OUT_REQ_STAT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.FUNDSMOVE_AUTHORIZATION
+      view_ref: pcb-{env}-curated.domain_payments.FUNDSMOVE_AUTHORIZATION
+      uid_column: FUNDSMOVE_AUTHORIZATION_UID
+    - table_ref: pcb-{env}-landing.domain_payments.FUNDSMOVE_GL_REQ
+      view_ref: pcb-{env}-curated.domain_payments.FUNDSMOVE_GL_REQ
+      uid_column: FUNDSMOVE_GL_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_payments.FUNDSMOVE_GL_REQ_STATUS
+      view_ref: pcb-{env}-curated.domain_payments.FUNDSMOVE_GL_REQ_STATUS
+      uid_column: FUNDSMOVE_GL_REQ_STATUS_UID
+    - table_ref: pcb-{env}-landing.domain_payments.FUNDSMOVE_INSTRUCTION
+      view_ref: pcb-{env}-curated.domain_payments.FUNDSMOVE_INSTRUCTION
+      uid_column: FUNDSMOVE_INSTRUCTION_UID
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_DEPOSIT_REQ
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_DEPOSIT_REQ
+      uid_column: INTERAC_DEPOSIT_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_DEPOSIT_REQ_STATUS
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_DEPOSIT_REQ_STATUS
+      uid_column: INTERAC_DEPOSIT_REQ_STATUS_UID
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_INSTRUCTION_RECV
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_INSTRUCTION_RECV
+      uid_column: FUNDSMOVE_INSTRUCTION_UID
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_INSTRUCTION_SEND
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_INSTRUCTION_SEND
+      uid_column: FUNDSMOVE_INSTRUCTION_UID
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_RECIPIENT
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_RECIPIENT
+      uid_column: INTERAC_RECIPIENT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_SEND_XFER_REQ
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_SEND_XFER_REQ
+      uid_column: INTERAC_SEND_XFER_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_payments.INTERAC_SEND_XFER_REQ_STAT
+      view_ref: pcb-{env}-curated.domain_payments.INTERAC_SEND_XFER_REQ_STAT
+      uid_column: INTERAC_SEND_XFER_REQ_STAT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.MOVEMONEY_FULFILLMENT
+      view_ref: pcb-{env}-curated.domain_payments.MOVEMONEY_FULFILLMENT
+      uid_column: MOVEMONEY_FULFILLMENT_UID
+    - table_ref: pcb-{env}-landing.domain_payments.PCF_FUNDSMOVE_AUTH_REQ
+      view_ref: pcb-{env}-curated.domain_payments.PCF_FUNDSMOVE_AUTH_REQ
+      uid_column: PCF_FUNDSMOVE_AUTH_REQ_UID
+    - table_ref: pcb-{env}-landing.domain_customer_management.PLATFORM_USER_LOGIN
+      view_ref: pcb-{env}-curated.domain_customer_management.PLATFORM_USER_LOGIN
+      uid_column: PLATFORM_USER_HISTORY_UID
+    - table_ref: pcb-{env}-landing.domain_payments.TELPAY_PYMT_INB_REQ
+      view_ref: pcb-{env}-curated.domain_payments.TELPAY_PYMT_INB_REQ
+      uid_column: TELPAY_PYMT_INB_UID
+    - table_ref: pcb-{env}-landing.domain_payments.TELPAY_PYMT_INB_REQ_STATUS
+      view_ref: pcb-{env}-curated.domain_payments.TELPAY_PYMT_INB_REQ_STATUS
+      uid_column: TELPAY_PYMT_INB_REQ_STATUS_UID
+  tags:
+    - "P3"

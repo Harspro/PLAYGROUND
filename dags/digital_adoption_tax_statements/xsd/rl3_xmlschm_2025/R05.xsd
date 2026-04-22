@@ -1,0 +1,541 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- édité avec XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) par Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSpy v2008 rel. 2 sp1 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R05 @@@@           -->
+	<xsd:complexType
+    name="R05Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Beneficiaire">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="NoDossier"
+              type="Char15Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NAS"
+              type="NasType">
+							
+						</xsd:element>
+						<xsd:element
+              name="NomFamille"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Prenom"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Adresse"
+              type="Adresse1Struct"
+              minOccurs="0" />
+						<xsd:element
+              name="DateNaissance"
+              type="DateType"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R05MntStruct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R05MntStruct">
+		<xsd:choice>
+			<xsd:element
+        name="CNESST">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="C_IndemniteRecue"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="E_AutreRevenu"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="M_Redressement"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="O_RedressementAnneePrecedente"
+              minOccurs="0"
+              maxOccurs="21">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="Annee">
+										
+										<xsd:simpleType>
+											<xsd:restriction
+                        base="Numeric4Type">
+												<xsd:enumeration
+                          value="2004" />
+												<xsd:enumeration
+                          value="2005" />
+												<xsd:enumeration
+                          value="2006" />
+												<xsd:enumeration
+                          value="2007" />
+												<xsd:enumeration
+                          value="2008" />
+												<xsd:enumeration
+                          value="2009" />
+												<xsd:enumeration
+                          value="2010" />
+												<xsd:enumeration
+                          value="2011" />
+												<xsd:enumeration
+                          value="2012" />
+												<xsd:enumeration
+                          value="2013" />
+												<xsd:enumeration
+                          value="2014" />
+												<xsd:enumeration
+                          value="2015" />
+												<xsd:enumeration
+                          value="2016" />
+												<xsd:enumeration
+                          value="2017" />
+												<xsd:enumeration
+                          value="2018" />
+												<xsd:enumeration
+                          value="2019" />
+												<xsd:enumeration
+                          value="2020" />
+												<xsd:enumeration
+                          value="2021" />
+												<xsd:enumeration
+                          value="2022" />
+												<xsd:enumeration
+                          value="2023" />
+												<xsd:enumeration
+                          value="2024" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element
+                    name="Redressement"
+                    type="Decimal8Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Ecart"
+                    type="SignedDecimal8Type">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element
+              name="P_RembExcedentIndemnite"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="MTESS">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="A_PrestAssistanceSociale"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="B_AutreAideGouv"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NbEnfants0-18"
+              type="Numeric2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NbMoisPrestAssistanceSociale"
+              type="Int2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="H_RembPrestAssistanceSociale"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="I_RembPrestAvant1998"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="J_FraisGarde"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Q_BeneficiairePSS"
+              type="IndicateurO-NType"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Q1_AjustementPRBSansConjoint"
+              minOccurs="0">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:enumeration
+                    value="N" />
+									<xsd:enumeration
+                    value="O" />
+									<xsd:enumeration
+                    value="P" />
+									<xsd:enumeration
+                    value="n" />
+									<xsd:enumeration
+                    value="o" />
+									<xsd:enumeration
+                    value="p" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="SupplementPrimeTravail"
+              minOccurs="0"
+              maxOccurs="6">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="R_Beneficiaire24Mois"
+                    type="IndicateurO-NType">
+										
+									</xsd:element>
+									<xsd:element
+                    name="S_CarnetReclamation"
+                    type="IndicateurO-NType">
+										
+									</xsd:element>
+									<xsd:element
+                    name="T_DebutPeriode">
+										
+										<xsd:simpleType>
+											<xsd:restriction
+                        base="Numeric6Type">
+												<xsd:enumeration
+                          value="202401" />
+												<xsd:enumeration
+                          value="202402" />
+												<xsd:enumeration
+                          value="202403" />
+												<xsd:enumeration
+                          value="202404" />
+												<xsd:enumeration
+                          value="202405" />
+												<xsd:enumeration
+                          value="202406" />
+												<xsd:enumeration
+                          value="202407" />
+												<xsd:enumeration
+                          value="202408" />
+												<xsd:enumeration
+                          value="202409" />
+												<xsd:enumeration
+                          value="202410" />
+												<xsd:enumeration
+                          value="202411" />
+												<xsd:enumeration
+                          value="202412" />
+												<xsd:enumeration
+                          value="202501" />
+												<xsd:enumeration
+                          value="202502" />
+												<xsd:enumeration
+                          value="202503" />
+												<xsd:enumeration
+                          value="202504" />
+												<xsd:enumeration
+                          value="202505" />
+												<xsd:enumeration
+                          value="202506" />
+												<xsd:enumeration
+                          value="202507" />
+												<xsd:enumeration
+                          value="202508" />
+												<xsd:enumeration
+                          value="202509" />
+												<xsd:enumeration
+                          value="202510" />
+												<xsd:enumeration
+                          value="202511" />
+												<xsd:enumeration
+                          value="202512" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element
+                    name="U_RetourAideFinanciere"
+                    minOccurs="0">
+										
+										<xsd:simpleType>
+											<xsd:restriction
+                        base="Numeric6Type">
+												<xsd:enumeration
+                          value="202501" />
+												<xsd:enumeration
+                          value="202502" />
+												<xsd:enumeration
+                          value="202503" />
+												<xsd:enumeration
+                          value="202504" />
+												<xsd:enumeration
+                          value="202505" />
+												<xsd:enumeration
+                          value="202506" />
+												<xsd:enumeration
+                          value="202507" />
+												<xsd:enumeration
+                          value="202508" />
+												<xsd:enumeration
+                          value="202509" />
+												<xsd:enumeration
+                          value="202510" />
+												<xsd:enumeration
+                          value="202511" />
+												<xsd:enumeration
+                          value="202512" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element
+                    name="V_NombreMois">
+										
+										<xsd:simpleType>
+											<xsd:restriction
+                        base="xsd:integer">
+												<xsd:minInclusive
+                          value="1" />
+												<xsd:maxInclusive
+                          value="12" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="SAAQ">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="D_IndemniteRecue"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="M_Redressement"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="O_RedressementAnneePrecedente"
+              minOccurs="0"
+              maxOccurs="21">
+							
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element
+                    name="Annee">
+										
+										<xsd:simpleType>
+											<xsd:restriction
+                        base="Numeric4Type">
+												<xsd:enumeration
+                          value="2004" />
+												<xsd:enumeration
+                          value="2005" />
+												<xsd:enumeration
+                          value="2006" />
+												<xsd:enumeration
+                          value="2007" />
+												<xsd:enumeration
+                          value="2008" />
+												<xsd:enumeration
+                          value="2009" />
+												<xsd:enumeration
+                          value="2010" />
+												<xsd:enumeration
+                          value="2011" />
+												<xsd:enumeration
+                          value="2012" />
+												<xsd:enumeration
+                          value="2013" />
+												<xsd:enumeration
+                          value="2014" />
+												<xsd:enumeration
+                          value="2015" />
+												<xsd:enumeration
+                          value="2016" />
+												<xsd:enumeration
+                          value="2017" />
+												<xsd:enumeration
+                          value="2018" />
+												<xsd:enumeration
+                          value="2019" />
+												<xsd:enumeration
+                          value="2020" />
+												<xsd:enumeration
+                          value="2021" />
+												<xsd:enumeration
+                          value="2022" />
+												<xsd:enumeration
+                          value="2023" />
+												<xsd:enumeration
+                          value="2024" />
+											</xsd:restriction>
+										</xsd:simpleType>
+									</xsd:element>
+									<xsd:element
+                    name="Redressement"
+                    type="Decimal8Type">
+										
+									</xsd:element>
+									<xsd:element
+                    name="Ecart"
+                    type="SignedDecimal8Type">
+										
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element
+              name="P_RembExcedentIndemnite"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Autre">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="A_PrestAssistanceSociale"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="B_AutreAideGouv"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NbEnfants0-18"
+              type="Numeric2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="NbMoisPrestAssistanceSociale"
+              type="Int2Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="E_AutreRevenu"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="H_RembPrestAssistanceSociale"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="I_RembPrestAvant1998"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="J_FraisGarde"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="K_AutreAide"
+              type="Decimal8Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+</xsd:schema>

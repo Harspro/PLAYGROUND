@@ -1,0 +1,1 @@
+drop table pcb-{env}-processing.domain_dispute.TCS_DISPOSITION_RPT_IDL;

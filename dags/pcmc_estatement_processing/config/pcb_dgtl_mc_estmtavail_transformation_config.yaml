@@ -1,0 +1,24 @@
+context_parameter:
+  file_name: "{{ dag_run.conf['file_name'] }}"
+transformation:
+   - task_name: create_idx_rejects_table_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+        script_path: sql/STMT_IDX_REJECTS.sql
+   - task_name: create_idx_good_table_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/STMT_IDX_DATA.sql
+   - task_name: create_stmt_avail_body_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/STMT_AVAIL_DATA_BODY.sql
+   - task_name: create_stmt_avail_header_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/STMT_AVAIL_DATA_HEDR.sql
+   - task_name: create_stmt_avail_trailer_data
+     task_type: SQL_EXTRACT_BQ_TO_BQ
+     task_param:
+       script_path: sql/STMT_AVAIL_DATA_TRLR.sql
+

@@ -1,0 +1,42 @@
+EXPORT DATA
+  OPTIONS (
+    uri = 'gs://pcb-{env}-staging-extract/mobile-token/mobile-token-regular-segment-*.parquet',
+    format = 'PARQUET',
+    overwrite = true
+  )
+AS
+(
+WITH LATEST_FILE AS (
+  SELECT
+    MAX(LF.FILE_CREATE_DT) AS LATEST_FILE_CREATE_DT
+  FROM
+    `pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG` LF
+)
+SELECT DISTINCT
+  S.CARDHOLDER_NUMBER,
+  S.ES5_TOKEN,
+  S.TKN_TRAN_IND,
+  S.TK_DEV_TYPE,
+  S.TKN_TYPE,
+  CAST(AC.CUSTOMER_UID AS STRING) AS CUSTOMER_UID
+FROM
+  `pcb-{env}-landing.domain_account_management.BATCH_AUTHORIZATION_LOG` S
+JOIN
+  LATEST_FILE LF
+ON
+  S.FILE_CREATE_DT = LF.LATEST_FILE_CREATE_DT
+JOIN
+  `pcb-{env}-landing.domain_account_management.ACCESS_MEDIUM` AM
+ON
+  S.CARDHOLDER_NUMBER = AM.ACCESS_MEDIUM_NO
+JOIN
+  `pcb-{env}-landing.domain_account_management.ACCOUNT_CUSTOMER` AC
+ON
+  AM.ACCOUNT_CUSTOMER_UID = AC.ACCOUNT_CUSTOMER_UID
+WHERE
+  (S.CARDHOLDER_NUMBER IS NOT NULL AND S.CARDHOLDER_NUMBER <> '')
+  AND (S.ES5_TOKEN IS NOT NULL AND S.ES5_TOKEN <> '')
+  AND (S.TKN_TRAN_IND IS NOT NULL AND S.TKN_TRAN_IND <> '')
+  AND S.TKN_TYPE IN ('02','03')
+ORDER BY S.CARDHOLDER_NUMBER DESC
+);

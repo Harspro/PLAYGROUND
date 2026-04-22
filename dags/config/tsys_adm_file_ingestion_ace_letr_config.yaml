@@ -1,0 +1,69 @@
+tsys_pcb_mc_adm_aceltr_file_loading:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags: ['team-growth-and-sales']
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_aceltr
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACE_LETTER
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACE_LETTER
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_args:
+      TS2A:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_aceltr/TS2A.CPY
+        pcb.tsys.processor.segment.name: TS2A
+        pcb.tsys.processor.layout.name: TS2A_REC
+      LETR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_aceltr/LETR.CPY
+        pcb.tsys.processor.segment.name: LETR
+        pcb.tsys.processor.layout.name: LETR_REC
+      TS2A_TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_aceltr/TRLR.CPY
+        pcb.tsys.processor.segment.name: TS2A_TRLR
+        pcb.tsys.processor.layout.name: TRLR_REC
+      LETR_TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_adm_aceltr/TRLR.CPY
+        pcb.tsys.processor.segment.name: LETR_TRLR
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    data_load_type: APPEND_ONLY
+    tables:
+      TS2A:
+        table_name: LTTR_OVRD_DETAIL_XTO
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto') AS REC_CHNG_TMS
+      TS2A_TRLR:
+        table_name: LTTR_OVRD_HEAD_TRAIL_XTO
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+      LETR:
+        table_name: LTTR_OVRD_DETAIL_LTO
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+      LETR_TRLR:
+        table_name: LTTR_OVRD_HEAD_TRAIL_LTO
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TMS
+          - CURRENT_DATETIME('America/Toronto')  AS REC_CHNG_TMS
+

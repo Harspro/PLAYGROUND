@@ -1,0 +1,208 @@
+aml_funds_move_AUTHORIZATION_FULFILLMENT:
+  dataset: domain_payments
+  table_name: AUTHORIZATION_FULFILLMENT
+  key_cols: "AUTHORIZATION_FULFILLMENT_UID"
+  schedule_cron: "2 6 * * 2-6"
+
+
+aml_funds_move_BILLPAY_FULFILLMENT:
+  dataset: domain_payments
+  table_name: BILLPAY_FULFILLMENT
+  key_cols: "BILLPAY_FULFILLMENT_UID"
+  schedule_cron: "4 6 * * 2-6"
+
+
+aml_funds_move_BILLPAY_OPACCT_REQ:
+  dataset: domain_payments
+  table_name: BILLPAY_OPACCT_REQ
+  key_cols: "BILLPAY_OPACCT_REQ_UID"
+  schedule_cron: "6 6 * * 2-6"
+
+
+aml_funds_move_BILLPAY_OPACCT_REQSTATUS:
+  dataset: domain_payments
+  table_name: BILLPAY_OPACCT_REQSTATUS
+  key_cols: "BILLPAY_OPACCT_REQSTATUS_UID"
+  schedule_cron: "8 6 * * 2-6"
+
+
+aml_funds_move_CARD_DEPOSIT_FULFILLMENT:
+  dataset: domain_payments
+  table_name: CARD_DEPOSIT_FULFILLMENT
+  key_cols: "CARD_DEPOSIT_FULFILLMENT_UID"
+  schedule_cron: "10 6 * * 2-6"
+
+
+aml_funds_move_CPA_AUTOPAY_REQ:
+  dataset: domain_payments
+  table_name: CPA_AUTOPAY_REQ
+  key_cols: "CPA_AUTOPAY_REQ_UID"
+  schedule_cron: "12 6 * * 2-6"
+
+
+aml_funds_move_CPA_AUTOPAY_REQ_STATUS:
+  dataset: domain_payments
+  table_name: CPA_AUTOPAY_REQ_STATUS
+  key_cols: "CPA_AUTOPAY_REQ_STATUS_UID"
+  schedule_cron: "14 6 * * 2-6"
+
+
+aml_funds_move_EDI_PYMT_INB_REQ:
+  dataset: domain_payments
+  table_name: EDI_PYMT_INB_REQ
+  key_cols: "EDI_PYMT_INB_UID"
+  schedule_cron: "16 6 * * 2-6"
+
+
+aml_funds_move_EDI_PYMT_INB_REQ_STATUS:
+  dataset: domain_payments
+  table_name: EDI_PYMT_INB_REQ_STATUS
+  key_cols: "EDI_PYMT_INB_REQ_STATUS_UID"
+  schedule_cron: "18 6 * * 2-6"
+
+
+aml_funds_move_EFT_EXTORIGIN_REQ:
+  dataset: domain_payments
+  table_name: EFT_EXTORIGIN_REQ
+  key_cols: "EFT_EXTORIGIN_REQ_UID"
+  schedule_cron: "20 6 * * 2-6"
+
+
+aml_funds_move_EFT_EXTORIGIN_REQ_STAT:
+  dataset: domain_payments
+  table_name: EFT_EXTORIGIN_REQ_STAT
+  key_cols: "EFT_EXTORIGIN_REQ_STAT_UID"
+  schedule_cron: "22 6 * * 2-6"
+
+
+aml_funds_move_EFT_PCBORIGIN_IN_REQ:
+  dataset: domain_payments
+  table_name: EFT_PCBORIGIN_IN_REQ
+  key_cols: "EFT_PCBORIGIN_IN_REQ_UID"
+  schedule_cron: "24 6 * * 2-6"
+
+
+aml_funds_move_EFT_PCBORIGIN_IN_REQ_STAT:
+  dataset: domain_payments
+  table_name: EFT_PCBORIGIN_IN_REQ_STAT
+  key_cols: "EFT_PCBORIGIN_IN_REQ_STAT_UID"
+  schedule_cron: "26 6 * * 2-6"
+
+
+aml_funds_move_EFT_PCBORIGIN_OUT_REQ_STAT:
+  dataset: domain_payments
+  table_name: EFT_PCBORIGIN_OUT_REQ_STAT
+  key_cols: "EFT_PCBORIGIN_OUT_REQ_STAT_UID"
+  schedule_cron: "28 6 * * 2-6"
+
+
+aml_funds_move_FUNDSMOVE_AUTHORIZATION:
+  dataset: domain_payments
+  table_name: FUNDSMOVE_AUTHORIZATION
+  key_cols: "FUNDSMOVE_AUTHORIZATION_UID"
+  schedule_cron: "30 6 * * 2-6"
+
+
+aml_funds_move_FUNDSMOVE_GL_REQ:
+  dataset: domain_payments
+  table_name: FUNDSMOVE_GL_REQ
+  key_cols: "FUNDSMOVE_GL_REQ_UID"
+  schedule_cron: "32 6 * * 2-6"
+
+
+aml_funds_move_FUNDSMOVE_GL_REQ_STATUS:
+  dataset: domain_payments
+  table_name: FUNDSMOVE_GL_REQ_STATUS
+  key_cols: "FUNDSMOVE_GL_REQ_STATUS_UID"
+  schedule_cron: "34 6 * * 2-6"
+
+
+aml_funds_move_FUNDSMOVE_INSTRUCTION:
+  dataset: domain_payments
+  table_name: FUNDSMOVE_INSTRUCTION
+  key_cols: "FUNDSMOVE_INSTRUCTION_UID"
+  schedule_cron: "36 6 * * 2-6"
+
+
+aml_funds_move_INTERAC_DEPOSIT_REQ:
+  dataset: domain_payments
+  table_name: INTERAC_DEPOSIT_REQ
+  key_cols: "INTERAC_DEPOSIT_REQ_UID"
+  schedule_cron: "38 6 * * 2-6"
+
+
+aml_funds_move_INTERAC_DEPOSIT_REQ_STATUS:
+  dataset: domain_payments
+  table_name: INTERAC_DEPOSIT_REQ_STATUS
+  key_cols: "INTERAC_DEPOSIT_REQ_STATUS_UID"
+  schedule_cron: "40 6 * * 2-6"
+
+
+aml_funds_move_INTERAC_INSTRUCTION_RECV:
+  dataset: domain_payments
+  table_name: INTERAC_INSTRUCTION_RECV
+  key_cols: "FUNDSMOVE_INSTRUCTION_UID"
+  schedule_cron: "42 6 * * 2-6"
+
+
+aml_funds_move_INTERAC_INSTRUCTION_SEND:
+  dataset: domain_payments
+  table_name: INTERAC_INSTRUCTION_SEND
+  key_cols: "FUNDSMOVE_INSTRUCTION_UID"
+  schedule_cron: "44 6 * * 2-6"
+
+
+aml_funds_move_INTERAC_RECIPIENT:
+  dataset: domain_payments
+  table_name: INTERAC_RECIPIENT
+  key_cols: "INTERAC_RECIPIENT_UID"
+  schedule_cron: "46 6 * * 2-6"
+
+
+aml_funds_move_INTERAC_SEND_XFER_REQ:
+  dataset: domain_payments
+  table_name: INTERAC_SEND_XFER_REQ
+  key_cols: "INTERAC_SEND_XFER_REQ_UID"
+  schedule_cron: "48 6 * * 2-6"
+
+
+aml_funds_move_INTERAC_SEND_XFER_REQ_STAT:
+  dataset: domain_payments
+  table_name: INTERAC_SEND_XFER_REQ_STAT
+  key_cols: "INTERAC_SEND_XFER_REQ_STAT_UID"
+  schedule_cron: "50 6 * * 2-6"
+
+
+aml_funds_move_MOVEMONEY_FULFILLMENT:
+  dataset: domain_payments
+  table_name: MOVEMONEY_FULFILLMENT
+  key_cols: "MOVEMONEY_FULFILLMENT_UID"
+  schedule_cron: "52 6 * * 2-6"
+
+
+aml_funds_move_PCF_FUNDSMOVE_AUTH_REQ:
+  dataset: domain_payments
+  table_name: PCF_FUNDSMOVE_AUTH_REQ
+  key_cols: "PCF_FUNDSMOVE_AUTH_REQ_UID"
+  schedule_cron: "54 6 * * 2-6"
+
+
+aml_funds_move_PLATFORM_USER_LOGIN:
+  dataset: domain_customer_management
+  table_name: PLATFORM_USER_LOGIN
+  key_cols: "PLATFORM_USER_HISTORY_UID"
+  schedule_cron: "56 6 * * 2-6"
+
+
+aml_funds_move_TELPAY_PYMT_INB_REQ:
+  dataset: domain_payments
+  table_name: TELPAY_PYMT_INB_REQ
+  key_cols: "TELPAY_PYMT_INB_UID"
+  schedule_cron: "58 6 * * 2-6"
+
+
+aml_funds_move_TELPAY_PYMT_INB_REQ_STATUS:
+  dataset: domain_payments
+  table_name: TELPAY_PYMT_INB_REQ_STATUS
+  key_cols: "TELPAY_PYMT_INB_REQ_STATUS_UID"
+  schedule_cron: "00 7 * * 2-6"

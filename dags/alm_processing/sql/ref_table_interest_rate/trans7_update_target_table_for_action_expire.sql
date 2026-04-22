@@ -1,0 +1,13 @@
+UPDATE `{bq_target_table_id}` AS main
+SET 
+    main.END_DATE = CURRENT_DATE(),
+    main.ACTION = "expire",
+    main.LOAD_DATE = vr.LOAD_DATE
+FROM `{bq_invalid_tmp_table_id}` AS vr
+WHERE vr.ERROR_MESSAGE IS NULL 
+AND TRIM(LOWER(vr.ACTION)) = 'expire'
+AND main.VENDOR_CODE = TRIM(LOWER(vr.VENDOR_CODE))
+AND main.INSTRUMENT_TYPE = TRIM(LOWER(vr.INSTRUMENT_TYPE))
+AND main.FIELD_NAME = TRIM(LOWER(vr.FIELD_NAME))
+AND main.BANK = TRIM(LOWER(vr.BANK))
+AND main.EFFECTIVE_DATE = vr.EFFECTIVE_DATE;

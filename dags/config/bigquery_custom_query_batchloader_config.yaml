@@ -1,0 +1,280 @@
+# finished dags have been archived
+db303_esb_param_stmt_ho50_tcatbucket_lookup_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ESB_PARAM.STMT_HO50_TCATBUCKET_LOOKUP"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_HO50_TCATBUCKET_LOOKUP
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2024-05-01 # inclusive
+    end_date: 2024-11-30 # exclusive
+  default_args:
+    owner: "team-exodus"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+db303_esb_param_stmt_ho50_pymttrans_lookup_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ESB_PARAM.STMT_HO50_PYMTTRANS_LOOKUP"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_HO50_PYMTTRANS_LOOKUP
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2024-05-01 # inclusive
+    end_date: 2024-11-30 # exclusive
+  default_args:
+    owner: "team-centaurs"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+db303_esb_param_stmt_vi70_lookup_tnt_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ESB_PARAM.STMT_VI70_LOOKUP_TNT"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_VI70_LOOKUP_TNT
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2024-05-01 # inclusive
+    end_date: 2024-11-30 # exclusive
+  default_args:
+    owner: "team-exodus"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+db303_esb_param_stmt_vi70_stmtcntrlopt_lookup_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ESB_PARAM.STMT_VI70_STMTCNTRLOPT_LOOKUP"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_VI70_STMTCNTRLOPT_LOOKUP
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2024-05-01 # inclusive
+    end_date: 2024-11-30 # exclusive
+  default_args:
+    owner: "team-exodus"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+db303_esb_param_stmt_vi70_constant_ref_table_idl:
+  fetch_spark_job:
+    dbname: db303_stmt
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ESB_PARAM.PCH_INTERFACE_CONSTANT_REF WHERE INTERFACE_ID= 'VI70'"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_VI70_CONSTANT_REF
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2024-05-01 # inclusive
+    end_date: 2024-11-30 # exclusive
+  default_args:
+    owner: "team-exodus"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+db303_esb_param_stmt_vi70_stmttransdesc_lookup_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ESB_PARAM.STMT_VI70_STMTTRANSDESC_LOOKUP"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_VI70_STMTTRANSDESC_LOOKUP
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2024-05-01 # inclusive
+    end_date: 2024-11-30 # exclusive
+  default_args:
+    owner: "team-exodus"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+db303_esb_param_stmt_vi70_tcattrans_lookup_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM ESB_PARAM.STMT_VI70_TCATTRANS_LOOKUP"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: STMT_VI70_TCATTRANS_LOOKUP
+    add_columns:
+      - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2024-05-01 # inclusive
+    end_date: 2024-11-30 # exclusive
+  default_args:
+    owner: "team-exodus"
+    capability: "Data Movement PDS"
+    sub_capability: "PDS"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+
+db610_pcl_points_staging_table_idl:
+  fetch_spark_job:
+    dbname: db610_pds
+    args:
+      pcb.bigquery.loader.source.query: "SELECT INDEX_NUM, CUSTOMER_REF_ID, ACCOUNT_REF_ID,
+      CARD_NUMBER, CARD_BIN, CARD_LAST4, SOURCE_CD, NAME_ON_CARD, TRANSACTION_DATE,
+      TRANSACTION_CODE, TRANSACTION_AMOUNT, POST_DATE, MERCHANT_NAME, MERCHANT_NUMBER,
+      MERCHANT_CATEGORY_CODE, MERCHANT_COUNTRY_CODE, TRANSACTION_REF_NUMBER, LOYALTY_REF_NUM,
+      PROMO_CODE, INTERFACE_ID, PROCESS_FLAG, PROCESS_DT, REC_CREATE_TMS, REC_LOAD_TMS,
+      REC_CHNG_ID, REC_CHNG_TMS, PCF_PRD, MERCHANT_ID, PROCESS_NUM, STR_NUM, TRANS_REF_ID,
+      BKUP_PROCESS_FLAG, AT31_MERCHANT_CATEGORY_CODE FROM PCL.POINTS_STAGING WHERE PROCESS_DT >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND PROCESS_DT < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_loyalty
+    table_name: POINTS_STAGING
+    partition_field: DATETIME_TRUNC(PROCESS_DT, MONTH)
+    clustering_fields:
+      - rec_chng_id
+      - source_cd
+      - transaction_code
+    drop_columns:
+      - LOAD_RESULT_UUID
+  batch:
+    chunk_size_in_months: 12 # Valid range: 1 to 12 months
+    start_date: 2025-01-01 # inclusive
+    end_date: 2025-07-31 # exclusive
+  default_args:
+    owner: "team-convergence-alerts"
+    capability: "Data Movement PDS"
+
+ts2_sc00_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM TS2.SC00 WHERE REC_LOAD_DT_TM_STAMP >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_LOAD_DT_TM_STAMP < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SC00
+    partition_field: FILE_CREATE_DT
+    clustering_fields:
+      - SC00_APPLICATION_SUFFIX
+      - SC00_APPLICATION_NUM
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STAMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STAMP
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 6 months
+    start_date: 2010-01-01 # inclusive
+    end_date: 2018-01-01 # exclusive
+
+ts2_sc01_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM TS2.SC01 WHERE REC_LOAD_DT_TM_STAMP >= TO_TIMESTAMP({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_LOAD_DT_TM_STAMP < TO_TIMESTAMP({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: SC01
+    partition_field: FILE_CREATE_DT
+    clustering_fields:
+      - SC00_APPLICATION_SUFFIX
+      - SC00_APPLICATION_NUM
+      - SC01_CUSTOMER_TYPE
+      - SC01_SCORE_TYPE
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STAMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STAMP
+  batch:
+    chunk_size_in_months: 1 # Valid range: 1 to 6 months
+    start_date: 2010-01-01 # inclusive
+    end_date: 2018-01-01 # exclusive
+
+ts2_events_table_idl:
+  fetch_spark_job:
+    dbname: db303
+    args:
+      pcb.bigquery.loader.source.query: "SELECT * FROM TS2.EVENTS WHERE REC_LOAD_DT_TM_STAMP >= TO_DATE({start_date}, 'YYYY-MM-DD HH24:MI:SS') AND REC_LOAD_DT_TM_STAMP < TO_DATE({end_date}, 'YYYY-MM-DD HH24:MI:SS')"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    table_name: EVENTS
+    partition_field: DATETIME_TRUNC(EV3_EL01_JULIAN_DATE, MONTH)
+    clustering_fields:
+      - EV3_EL01_TYPE_EVENT
+      - EV3_EVENT_FIELD_NUM
+      - EV3_EL01_ACCOUNT_NUMBER
+      - FILE_RECORD_NBR
+    add_columns:
+      - PARSE_DATE('%Y%m%d', CAST(10000*YYYY + 100*MM + DD AS STRING)) AS FILE_CREATE_DT
+      - REC_LOAD_DT_TM_STAMP AS REC_LOAD_TIMESTAMP
+    drop_columns:
+      - YYYY
+      - MM
+      - DD
+      - REC_LOAD_DT_TM_STAMP
+  batch:
+    chunk_size_in_months: 6 # Valid range: 1 to 12 months
+    start_date: 2010-01-01 # inclusive
+    end_date: 2018-01-01 # exclusive
+  default_args:
+    owner: "team-da-spiders"
+    capability: "history data"

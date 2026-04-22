@@ -1,0 +1,652 @@
+tsys_pcb_mc_cif_weekly_file_validator:
+  schedule_interval:
+    dev: '0 8 * * 0'
+    uat: '0 8 * * 0'
+    prod: '0 8 * * 0'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_cif_weekly
+  file_prefix: tsys_pcb_cif_weekly_
+  holiday_check_delta: 2
+  vendor: tsys
+  days_delta: 1
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: 'legal-compliance'
+    sub_capability: 'consent'
+    business_impact: 'TBD'
+    customer_impact: 'TBD'
+    severity: "P3"
+
+tsys_pcb_mc_adm_cif_daily_file_validator:
+  schedule_interval:
+    dev: '0 10 * * 2-6'
+    uat: '0 10 * * 2-6'
+    prod: '0 8 * * 2-6'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_adm_cif_daily
+  file_prefix: tsys_pcb_mc_cif_daily_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: 'TBD'
+    customer_impact: 'TBD'
+    severity: "P3"
+
+tsys_pcb_batchauth_daily_file_validator:
+  schedule_interval:
+    dev: '0 23 * * *'
+    uat: '0 23 * * *'
+    prod: '0 23 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: TS2_batchauth
+  file_prefix: tsys_pcb_batchauth_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: 'legal-compliance'
+    sub_capability: 'consent'
+    business_impact: 'N/A'
+    customer_impact: 'N/A'
+    severity: "P3"
+
+tsys_pcb_mc_adm_applog_daily_file_validator:
+  schedule_interval:
+    dev: '00 2 * * *'
+    uat: '00 2 * * *'
+    prod: '30 4 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_adm_applog
+  file_prefix: tsys_pcb_mc_adm_applog_
+  hours_delta: 4
+  vendor: tsys
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "tsys_pcb_mc_adm_applog file loading will be impacted"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+tsys_pcb_mc_adm_disp_file_validator:
+  schedule_interval:
+    dev: '30 2 * * *'
+    uat: '30 2 * * *'
+    prod: '30 3 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_adm_disp
+  file_prefix: tsys_pcb_mc_admdisp_
+  vendor: tsys
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: 'CustomerAcquisition'
+    severity: "P3"
+    sub_capability: 'Applications'
+    business_impact: 'tsys_pcb_mc_adm_disp_file file loading will be impacted'
+    customer_impact: 'None'
+  tags:
+    - team-growth-and-sales
+
+tsys_pcb_mc_adm_appmemo_file_validator:
+  schedule_interval:
+    dev: '00 2 * * *'
+    uat: '00 2 * * *'
+    prod: '30 4 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_adm_appmemo
+  file_prefix: tsys_pcb_mc_adm_appmemo_
+  hours_delta: 4
+  vendor: tsys
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: 'CustomerAcquisition'
+    sub_capability: 'Applications'
+    business_impact: 'NA'
+    customer_impact: 'NA'
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ntt_conv_cheque_file_validator:
+  schedule_interval:
+    dev: '0 12 * * 1-5'
+    uat: '0 12 * * 1-5'
+    prod: '0 12 * * 1-5'
+  source_bucket: m1s-inbound-pcb
+  folder_name: m1s_pcb_convchq
+  file_prefix: m1s_pcb_convchq_
+  vendor: m1s
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'Convenience cheques from NTT will not be processed and sent to TSYS'
+    customer_impact: 'Customer convenience cheques requests will not be posted to TSYS'
+    severity: 'P3'
+
+tsys_convchq_conf_file_validator:
+  schedule_interval:
+    dev: '30 17 * * 1-5'
+    uat: '30 17 * * 1-5'
+    prod: '30 17 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_convchq_conf
+  file_prefix: tsys_pcb_convchq_conf_
+  vendor: tsys
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'NSF fee will not be communicated to TSYS for declined transactions'
+    customer_impact: 'Customer will not be charged NSF fee for convenience cheques'
+    severity: 'P3'
+
+ntt_paper_payments_file_validator:
+  schedule_interval:
+    dev: '30 12 * * 1-5'
+    uat: '30 12 * * 1-5'
+    prod: '30 12 * * 1-5'
+  source_bucket: m1s-inbound-pcb
+  folder_name: m1s_pcb_mc_ppymts
+  file_prefix: m1s_pcb_mc_ppymts_
+  vendor: m1s
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'Paper payments from NTT will not be processed and sent to TSYS'
+    customer_impact: 'Customer payments will not be posted to TSYS'
+    severity: 'P3'
+
+tsys_conv_cheque_fee_file_validator:
+  schedule_interval:
+    dev: '30 17 * * 1-5'
+    uat: '30 17 * * 1-5'
+    prod: '30 17 * * 1-5'
+  source_bucket: tsys-outbound-pcb
+  folder_name: pcb_tsys_ccfeepost
+  file_prefix: pcb_tsys_ccfeepost_
+  vendor: tsys
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'NSF fee will not be communicated to TSYS for declined transactions'
+    customer_impact: 'Customer will not be charged NSF fee for convenience cheques'
+    severity: 'P3'
+
+tsys_cheque_order_file_validator:
+  schedule_interval:
+    dev: '30 20 * * 1-5'
+    uat: '30 20 * * 1-5'
+    prod: '30 20 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_chqorder
+  file_prefix: tsys_pcb_chqorder_
+  vendor: tsys
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: 'payments'
+    sub_capability: 'default'
+    business_impact: 'Convenience Cheque orders will not be processed and sent to NTT'
+    customer_impact: 'Customer convenience cheques requests will not be posted to TSYS'
+    severity: 'P3'
+
+tsys_pcb_mc_adm_operatorlog_file_validator:
+  schedule_interval:
+    dev: '00 02 * * 1'
+    uat: '00 02 * * 1'
+    prod: '30 4 * * 7'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_adm_operatorlog
+  file_prefix: tsys_pcb_mc_adm_operatorlog_
+  hours_delta: 4
+  vendor: tsys
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: 'CustomerAcquisition'
+    sub_capability: 'Applications'
+    business_impact: 'tsys_pcb_mc_adm_operatorlog file loading will be impacted'
+    customer_impact: 'NA'
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+tsys_pcb_mc_adm_appelement_file_validator:
+  schedule_interval:
+    dev: '00 2 * * 1'
+    uat: '00 2 * * 1'
+    prod: '30 03 * * 0'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_adm_appelement
+  file_prefix: tsys_pcb_mc_adm_appelement_
+  hours_delta: 3
+  vendor: tsys
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "tsys_pcb_mc_adm_appelement file loading will be impacted"
+    customer_impact: "None"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+TS2_acctmisc_file_validator:
+  schedule_interval:
+    dev: '0 0 1 * *'
+    uat: '0 0 1 * *'
+    prod: '30 6 1 * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: TS2_acctmisc
+  file_prefix: TS2_acctmisc_
+  vendor: tsys
+  days_delta: 7
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "transactions"
+    business_impact: "Impact on FFM scoring"
+    customer_impact: "N/A"
+    severity: "P3"
+
+tsys_pcb_mc_enroll_file_validator:
+  schedule_interval:
+    dev: '30 19 * * 1-5'
+    uat: '30 19 * * 1-5'
+    prod: '00 23 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_enroll
+  file_prefix: tsys_pcb_pcmc_insurancereq_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_aceltr_file_validator:
+  schedule_interval:
+    dev: '30 1 * * *'
+    uat: '30 1 * * *'
+    prod: '30 03 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_adm_aceltr
+  file_prefix: tsys_pcb_mc_aceltr_
+  vendor: tsys
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+tsys_pcb_mc_accthisto_file_validator:
+  schedule_interval:
+    dev: '30 19 * * 1-5'
+    uat: '30 19 * * 1-5'
+    prod: '50 23 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_accthisto
+  file_prefix: tsys_pcb_mc_accthisto_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_acctmaster_daily_file_validator:
+  schedule_interval:
+    dev: '00 22 * * 1-5'
+    uat: '00 22 * * 1-5'
+    prod: '00 3 * * 2-6'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_acctmaster_daily
+  file_prefix: tsys_pcb_mc_acctmaster_daily_
+  hours_delta: 8
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_accttx_file_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '00 3 * * 2-6'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_accttx
+  file_prefix: tsys_pcb_mc_accttx_
+  hours_delta: 5
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "TBD"
+    business_impact: "tsys_pcb_mc_accttx file loading will be impacted"
+    customer_impact: "None"
+    severity: "P3"
+
+tsys_pcb_mc_events_file_validator:
+  schedule_interval:
+    dev: '30 18 * * 1-5'
+    uat: '30 18 * * 1-5'
+    prod: '30 23 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_events
+  file_prefix: tsys_pcb_mc_events_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_cusmaster_daily_file_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '00 22 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_cusmaster_daily
+  file_prefix: tsys_pcb_mc_cusmaster_daily_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_mc_prdenh_uptd_file_validator:
+  schedule_interval:
+    dev: '30 19 * * 1-5'
+    uat: '30 19 * * 1-5'
+    prod: '30 23 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_mc_prdenh_uptd
+  file_prefix: tsys_pcb_mc_prdenh_upd_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ts2_cardguard_authlog_file_validator:
+  schedule_interval:
+    dev: '30 22 * * 2-6'
+    uat: '30 22 * * 2-6'
+    prod: '30 11 * * 2-6'
+  source_bucket: tsys-inbound-pcb
+  folder_name: TS2_crdg_auth
+  file_prefix: tsys_pcb_crdg_auth_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+ts2_cardguard_caselog_file_validator:
+  schedule_interval:
+    dev: '30 20 * * 2-6'
+    uat: '30 20 * * 2-6'
+    prod: '30 10 * * 2-6'
+  source_bucket: tsys-inbound-pcb
+  folder_name: TS2_crdg_caselog
+  file_prefix: tsys_pcb_crdg_caselog_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "N/A"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_frd_crdg_fraudlog_file_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '30 10 * * 2-6'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_frd_crdg_fraudlog
+  file_prefix: tsys_pcb_frd_crdg_fraudlog_
+  vendor: tsys
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: 'risk-management'
+    sub_capability: 'fraud'
+    business_impact: 'Fraud detection and monitoring capabilities will be impacted, potentially delaying fraud case investigations and regulatory reporting'
+    customer_impact: 'None'
+  tags:
+    - P3
+
+tsys_pcb_frd_crdg_fraudtxn_file_validator:
+  schedule_interval:
+    dev: '00 21 * * 1-5'
+    uat: '00 21 * * 1-5'
+    prod: '30 10 * * 2-6'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_frd_crdg_fraudtxn
+  file_prefix: tsys_pcb_frd_crdg_fraudtxn_
+  vendor: tsys
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: 'risk-management'
+    sub_capability: 'fraud'
+    business_impact: 'Fraud transaction processing will be delayed, impacting real-time fraud detection and CardGuard fraud monitoring systems'
+    customer_impact: 'None'
+  tags:
+    - P3
+
+expcbanktsyspd_eqxcan_ds_scds_file_validator:
+  schedule_interval:
+    uat: '50 23 * * *'
+    prod: '50 23 * * *'
+  source_bucket: equifax-inbound-pcb
+  folder_name: equifax_das
+  file_prefix: expcbanktsyspd.eqxcan.ds.SCDS.
+  vendor: equifax
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    business_impact: "Scoring team won’t be able to approve"
+    customer_impact: "No customer impact"
+  tags:
+    - P3
+
+expcbanktsyspd_eqxcan_ds_sc30_file_validator:
+  schedule_interval:
+    uat: '50 23 * * *'
+    prod: '50 23 * * *'
+  source_bucket: equifax-inbound-pcb
+  folder_name: equifax_t30
+  file_prefix: expcbanktsyspd.eqxcan.ds.SC30.
+  vendor: equifax
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    business_impact: "Scoring team won’t be able to approve"
+    customer_impact: "No customer impact"
+  tags:
+    - P3
+
+expcbanktsyspd_eqxcan_ds_sc10_file_validator:
+  schedule_interval:
+    uat: '45 23 * * *'
+    prod: '45 23 * * *'
+  source_bucket: equifax-inbound-pcb
+  folder_name: equifax_t10
+  file_prefix: expcbanktsyspd.eqxcan.ds.SC10.
+  vendor: equifax
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    business_impact: "Scoring team won’t be able to approve"
+    customer_impact: "No customer impact"
+  tags:
+    - P3
+
+expcbanktsyspd_eqxcan_outbound_file_validator:
+  schedule_interval:
+    uat: '0 0 3 * *'
+    prod: '0 0 3 * *'
+  source_bucket: equifax-outbound-pcb
+  file_prefix: eqxds_expcbanktsyspd_SCRQ
+  vendor: equifax
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    sub_capability: "fraud"
+    business_impact: "Equifax will not be able to generate cycle score files"
+    customer_impact: "No customer impact"
+  tags:
+    - P3
+
+tsys_pcb_sccf_file_validator:
+  schedule_interval:
+    dev: '30 20 * * 1-5'
+    uat: '30 20 * * 1-5'
+    prod: '30 21 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_sccf
+  file_prefix: tsys_pcb_sccf_
+  vendor: tsys
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "scoring"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"
+
+tsys_pcb_embossing_daily_file_validator:
+  schedule_interval:
+    dev: '0 3 * * *'
+    uat: '0 3 * * *'
+    prod: '0 3 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_embossing
+  file_prefix: tsys_pcb_embossing_
+  hours_delta: 8
+  vendor: tsys
+  default_args:
+    owner: 'team-ogres-alerts'
+    capability: 'account-management'
+    sub_capability: 'card-management'
+    business_impact: 'Potential compliance issue due to delay in loading business data'
+    customer_impact: 'Delay in processing customer card details'
+
+tsys_pcb_embossing_rush_file_validator:
+  schedule_interval:
+    dev: '50 23 * * *'
+    uat: '50 23 * * *'
+    prod: '50 23 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_embossing_rush
+  file_prefix: tsys_pcb_embossing_rush_
+  vendor: tsys
+  default_args:
+    owner: 'team-ogres-alerts'
+    capability: 'account-management'
+    sub_capability: 'card-management'
+    business_impact: 'Potential compliance issue due to delay in loading business data'
+    customer_impact: 'Delay in processing customer card details'
+
+tsys_pcb_reissue_file_validator:
+  schedule_interval:
+    dev: '0 3 * * *'
+    uat: '0 3 * * *'
+    prod: '0 3 * * *'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_reissue
+  file_prefix: tsys_pcb_reissue_
+  hours_delta: 6
+  vendor: tsys
+  default_args:
+    owner: 'team-ogres-alerts'
+    capability: 'account-management'
+    sub_capability: 'card-management'
+    business_impact: 'Potential compliance issue due to delay in loading business data'
+    customer_impact: 'Delay in processing customer card details'
+    
+tsys_pcb_pcmc_stmt_reg_rdf_file_validator:
+  schedule_interval:
+    dev: '0 21 * * 1-5' 
+    uat: '0 21 * * 1-5'      
+    prod: '00 22 * * 1-5'    
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_pcmc_stmt_reg_rdf 
+  file_prefix: tsys_pcb_pcmc_stmt_reg_rdf_
+  vendor: tsys
+  hours_delta: 6
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "Potential compliance issue due to delay in loading statement"
+    customer_impact: "Customers will not be able to access their E-Statements"
+    severity: "P2"
+
+tsys_pcb_pcmc_stmt_cgo_rdf_file_validator:
+  schedule_interval:
+    dev: '0 21 * * 1-5'
+    uat: '0 21 * * 1-5'
+    prod: '00 22 * * 1-5'
+  source_bucket: tsys-inbound-pcb
+  folder_name: tsys_pcb_pcmc_stmt_cgo
+  file_prefix: tsys_pcb_pcmc_stmt_cgo_
+  vendor: tsys
+  hours_delta: 6
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "Potential compliance issue due to delay in loading statement"
+    customer_impact: "Customers will not be able to access their E-Statements"
+    severity: "P2"
+
+psf_p_dst_pcb_returncff_file_validator:
+  schedule_interval:
+    dev: '00 08 * * 2-6'
+    uat: '00 08 * * 2-6'
+    prod: '00 08 * * 2-6'
+  source_bucket: broadridge-inbound-pcb
+  folder_name: pcb_broadridge_returncff
+  file_prefix: psf_p_dst_pcb_returncff
+  vendor: broadridge
+  hours_delta: 6
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "Potential reporting issues with delay in loading offers presented in CME DB"
+    customer_impact: "No customer impact"
+    severity: "P3"

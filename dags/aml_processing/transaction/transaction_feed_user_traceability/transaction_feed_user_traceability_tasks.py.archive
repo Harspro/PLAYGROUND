@@ -1,0 +1,94 @@
+from google.cloud import bigquery
+import logging
+from airflow.exceptions import AirflowFailException
+from util.bq_utils import check_bq_table_exists, create_or_replace_table
+from aml_processing.transaction.extraction.rail_type_mapping import RailTypeMapping
+from aml_processing.transaction.transaction import REF_RAIL_TABLE, TRANSACTION_AGGREGATE_TABLE, getRailTypeMappping
+from aml_processing import feed_commons as commons
+from aml_processing.transaction.bq_util import run_bq_dml_with_log
+import util.constants as consts
+from util.miscutils import read_variable_or_file
+
+GCP_CONFIG = read_variable_or_file(consts.GCP_CONFIG)
+DEPLOY_ENV = GCP_CONFIG[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+logger = logging.getLogger(__name__)
+
+
+def create_curated_transaction_feed_user_traceability_table(user_traceability_table=None, user_traceability_table_schema=None, partition_column=None, **context):
+    """
+    Creates the curated transaction feed user traceability table in BigQuery if it does not already exist.
+
+    Args:
+        user_traceability_table (str): The table ID of the user traceability table.
+        user_traceability_table_schema (dict): The schema of the user traceability table.
+        partition_column (str): The column to use for partitioning the table.
+        **context: Additional context passed from Airflow.
+
+    Raises:
+        AirflowFailException: If required parameters are not provided.
+    """
+    if user_traceability_table and user_traceability_table_schema:
+        if not check_bq_table_exists(user_traceability_table):
+            partition_column = "POSTED_DATE"
+            partition_type = bigquery.TimePartitioningType.MONTH
+            logger.info(f'Creating table: {user_traceability_table} with partition column: {partition_column}')
+            create_or_replace_table(user_traceability_table, user_traceability_table_schema, partitioning_column=partition_column, partition_type=partition_type)
+        else:
+            logger.info(f'Table {user_traceability_table} already exists.')
+    else:
+        raise AirflowFailException(f"Please provide user_traceability_table ID, user_traceability_table_schema and partition_column. Found {user_traceability_table}, {user_traceability_table_schema} and {partition_column}.")
+
+
+def insert_into_curated_transaction_feed_user_traceability_table(user_traceability_table=None, feeds_list=None, sql_file_path=None, **context):
+    """
+    Inserts data into the curated transaction feed user traceability table in BigQuery.
+
+    Args:
+        user_traceability_table (str): The ID of the user traceability table.
+        feeds_list (str): A comma-separated list of feeds.
+        sql_file_path (str): The path to the SQL file.
+        **context: Additional context passed from Airflow.
+
+    Raises:
+        AirflowFailException: If required parameters are not provided.
+    """
+    if feeds_list and user_traceability_table and sql_file_path:
+        feeds_list = [x.strip() for x in feeds_list.split(',')]
+        logger.info(f'feeds list: {feeds_list}')
+        join_condition = f"""
+                        LEFT OUTER JOIN `{REF_RAIL_TABLE}` ref_rail
+                            ON txn_agg.TRANSACTION_CATEGORY = ref_rail.TRANSACTION_CATEGORY
+                            AND txn_agg.TRANSACTION_CD = ref_rail.TRANSACTION_CD
+                            AND ref_rail.DP_REF_NO = SUBSTR(txn_agg.Ref_No, 12, 2)
+                            AND txn_agg.RAIL_TYPE = ref_rail.RAIL_TYPE
+                         """
+        # funds move mapping
+        for feed in feeds_list:
+            sql = commons.read_sql_file(sql_file_path).replace('{DEPLOY_ENV}', DEPLOY_ENV)
+            rail_type_mapping: RailTypeMapping = getRailTypeMappping(feed)
+            feed_dict = {
+                '{TBL_CURATED_TRANSACTION_FEED_USER_TRACEABILITY}': user_traceability_table,
+                '{external_bank_number}': rail_type_mapping.get_external_bank_number() or 'NULL',
+                '{external_cust_name}': rail_type_mapping.get_external_cust_name() or 'NULL',
+                '{device_id}': rail_type_mapping.get_device_id() or 'NULL',
+                '{ip_address}': rail_type_mapping.get_ip_address() or 'NULL',
+                '{user_name}': rail_type_mapping.get_user_name() or 'NULL',
+                '{session_date_time}': rail_type_mapping.get_session_date_time() or 'NULL',
+                '{interac_ref_number}': rail_type_mapping.get_interac_ref_number() or 'NULL',
+                '{interac_email}': rail_type_mapping.get_interac_email() or 'NULL',
+                '{interac_phone}': rail_type_mapping.get_interac_phone() or 'NULL',
+                '{device_type}': rail_type_mapping.get_device_type() or 'NULL',
+                '{TRANSACTION_AGGREGATE_TABLE}': TRANSACTION_AGGREGATE_TABLE,
+                '{join_condition}': join_condition,
+                '{funds_move_join}': rail_type_mapping.get_funds_move_join() or 'NULL',
+                '{rail_type}': feed,
+                '{start_time}': "DATETIME_SUB(CURRENT_DATETIME('America/Toronto'), INTERVAL 13 MONTH)",
+                '{end_time}': "CURRENT_DATETIME('America/Toronto')"
+            }
+            logger.info(f'feed dictionary: {feed_dict}')
+            for field, value in feed_dict.items():
+                sql = sql.replace(field, str(value))
+
+            run_bq_dml_with_log(f'Inserting into {user_traceability_table} data for {feed}', f'Completed inserting into {user_traceability_table} data for {feed}', sql)
+    else:
+        raise AirflowFailException("Please provide user_traceability_table ID, feeds_list and sql_file_path. Found")

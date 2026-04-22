@@ -1,0 +1,66 @@
+ts2_pcdownload_full_file_loading:
+  job_size: small
+  source_bucket: tsys-inbound-pcb
+  destination_bucket: techcom-outbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_pcdownload
+  outputfile_file_prefix: pcb_techcom_pcmc_customer_data
+  file_date_column: FILE_CREATE_DT
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    decoding_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.output.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PCDOWNLOAD_PLAINTEXT
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PCDOWNLOAD
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PCDOWNLOAD
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+      pcb.tsys.processor.feature.frenchsupport: true
+      pcb.tsys.processor.feature.emptystringtonull: true
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: detail_group
+        segments: PC_DOWNLOAD
+    segment_args:
+      PC_DOWNLOAD:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcdownload/PCDOWNLOAD.CPY
+        pcb.tsys.processor.segment.name: PC_DOWNLOAD
+        pcb.tsys.processor.layout.name: PCDOWNLOAD_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcdownload/TRLR.CPY
+        pcb.tsys.processor.segment.name: TRAILE
+        pcb.tsys.processor.layout.name: PCDOWNLOAD_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      PC_DOWNLOAD:
+        table_name: PC_DOWNLOAD
+        record_count_column: TOTAL_RECS
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: PC_DOWNLOAD_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "terminus-data-platform"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "TBD"
+    severity: "P2"

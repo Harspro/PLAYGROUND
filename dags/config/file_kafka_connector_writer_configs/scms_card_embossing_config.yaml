@@ -1,0 +1,29 @@
+card_embossing_bq_to_kafka:
+  default_args:
+    owner: "team-ogres-alerts"
+    capability: "account-management"
+    severity: "P2"
+    sub_capability: "card-management"
+    business_impact: 'This will impact the card management'
+    customer_impact: 'none'
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/file_request/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/file_request/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/file_request/scms_card_embossing_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/file_request/scms_card_embossing_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/scms-card-embossing/file_request/scms_card_embossing_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: scms_card_embossing_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: scms_card_embossing_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: acctIdentifier
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: scms_card_embossing_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_scms_card_embossing
+    read_pause_deploy_config: True
+    job_size: small

@@ -1,0 +1,687 @@
+tsys_pcb_pcmc_stmt_reg_file_loading:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_pcmc_stmt_reg_rdf
+  folder_prefix: tsys_pcb_pcmc_stmt_reg_rdf
+  trigger_dag_id: pcb_dst_pcmc_stmt_output_file_creation_post_extractor
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PCMC_STATEMENT
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PCMC_STATEMENT
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: header_group
+        segments: SA00, INDEXLOADER
+      - group_name: trailer_group
+        segments: SA99
+      - group_name: detail_group
+        segments: SA10, SA14, SA15, SA20, SA30, SA40, SA41, SA59, SA60, SA65 ,SA85
+    segment_args:
+      INDEXLOADER:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/INDEXLOADER.CPY
+        pcb.tsys.processor.segment.name: INDEXLOADER
+        pcb.tsys.processor.layout.name: INDEXLOADER_REC
+      SA00:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA00.CPY
+        pcb.tsys.processor.segment.name: SA00
+        pcb.tsys.processor.layout.name: SA00_REC
+      SA10:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA10.CPY
+        pcb.tsys.processor.segment.name: SA10
+        pcb.tsys.processor.layout.name: SA10_REC
+      SA14:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA14.CPY
+        pcb.tsys.processor.segment.name: SA14
+        pcb.tsys.processor.layout.name: SA14_REC
+      SA15:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA15.CPY
+        pcb.tsys.processor.segment.name: SA15
+        pcb.tsys.processor.layout.name: SA15_REC
+      SA20:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA20.CPY
+        pcb.tsys.processor.segment.name: SA20
+        pcb.tsys.processor.layout.name: SA20_REC
+      SA30:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA30.CPY
+        pcb.tsys.processor.segment.name: SA30
+        pcb.tsys.processor.layout.name: SA30_REC
+      SA40:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA40.CPY
+        pcb.tsys.processor.segment.name: SA40
+        pcb.tsys.processor.layout.name: SA40_REC
+      SA41:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA41.CPY
+        pcb.tsys.processor.segment.name: SA41
+        pcb.tsys.processor.layout.name: SA41_REC
+      SA59:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA59.CPY
+        pcb.tsys.processor.segment.name: SA59
+        pcb.tsys.processor.layout.name: SA59_REC
+      SA60:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA60.CPY
+        pcb.tsys.processor.segment.name: SA60
+        pcb.tsys.processor.layout.name: SA60_REC
+      SA65:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA65.CPY
+        pcb.tsys.processor.segment.name: SA65
+        pcb.tsys.processor.layout.name: SA65_REC
+      SA85:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA85.CPY
+        pcb.tsys.processor.segment.name: SA85
+        pcb.tsys.processor.layout.name: SA85_REC
+      SA99:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA99.CPY
+        pcb.tsys.processor.segment.name: SA99
+        pcb.tsys.processor.layout.name: SA99_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    file_create_dt_table: pcb-{env}-processing.domain_account_management.SA99_REG_DBEXT
+    file_type: REG
+    tables:
+      INDEXLOADER:
+        table_name: STMT_HO50_INDEXCTL
+        add_columns:
+          - ROW_NUMBER() OVER(ORDER BY MAST_ACCT_ID,MAST_SEQ_NUM ASC) AS ROW_NUM
+          - MAST_CLIENT_NUM
+          - MAST_ACCT_ID
+          - MAST_RECORD_ID
+          - MAST_SEQ_NUM
+          - FILE_CREATE_DT
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        drop_columns:
+          - MAST_CLIENT_NUM
+          - MAST_ACCT_ID
+          - MAST_RECORD_ID
+          - MAST_SEQ_NUM
+          - FILE_CREATE_DT
+      SA00:
+        table_name: SA00
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        landing_pause: TRUE
+      SA10:
+        table_name: SA10
+        record_count_column: SA10_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA14:
+        table_name: SA14
+        record_count_column: SA14_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA15:
+        table_name: SA15
+        record_count_column: SA15_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA20:
+        table_name: SA20
+        record_count_column: SA20_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA30:
+        table_name: SA30
+        record_count_column: SA30_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA40:
+        table_name: SA40
+        record_count_column: SA40_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA41:
+        table_name: SA41
+        record_count_column: SA41_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA59:
+        table_name: SA59
+        record_count_column: SA59_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA60:
+        table_name: SA60
+        record_count_column: SA60_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA65:
+        table_name: SA65
+        record_count_column: SA65_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA85:
+        table_name: SA85
+        record_count_column: SA85_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA99:
+        table_name: SA99
+        add_columns:
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA10') AS SA10_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA14') AS SA14_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA15') AS SA15_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA20') AS SA20_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA30') AS SA30_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA40') AS SA40_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA41') AS SA41_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA59') AS SA59_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA60') AS SA60_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA65') AS SA65_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA85') AS SA85_COUNT
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  post_processing_tables:
+    - task_name: append_to_SA00
+      table_name: SA00
+      file_type: REG
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA00.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+    - task_name: append_to_SA10
+      table_name: SA10
+      file_type: REG
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA10.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+    - task_name: SA59_creation
+      table_name: SA59_DAILY{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_creation_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: SA60_creation
+      table_name: SA60_DAILY{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA60_creation_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: total_amt_calc_sa59
+      table_name: SA59_CALC{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_total_amt_calc_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: old_to_new_card_trans_transfer
+      table_name: SA59_CALC_MID{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_old_trans_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: old_to_new_card_transfer_sa60
+      table_name: SA60_MID{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA60_update_acct_num.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: old_to_new_card_sum
+      table_name: SA59_CALC{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_sum_tot.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: total_amt_calc_sa60
+      table_name: SA60_CALC{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA60_sum_tot.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: append_to_SA59
+      table_name: SA59
+      file_type: REG
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA59.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: append_to_SA60
+      table_name: SA60
+      file_type: REG
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA60.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: sa30_tsys_bucket_creation
+      table_name: SA30_TSYS_BUCKETS
+      file_type: REG
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa30_tsys_buckets.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA30{file_type}_DBEXT
+    - task_name: sa40_update_tbal_desc
+      table_name: SA40
+      file_type: REG
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa40_update_tbal_desc.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA40{file_type}_DBEXT
+    - task_name: sa14_update_triad_msgs
+      table_name: SA14_MID{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa14_update_triad_msgs.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA14{file_type}_DBEXT
+    - task_name: sa14_psp_insr_msg
+      table_name: SA14_PSP{file_type}
+      file_type: REG
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa14_psp_insr_msg.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA14{file_type}_DBEXT
+    - task_name: append_to_sa14
+      table_name: SA14
+      file_type: REG
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_sa14.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA14{file_type}_DBEXT
+  parallel_dag_id: tsys_pcb_pcmc_stmt_cgo_file_loading
+  control_table: pcb-{env}-curated.JobControlDataset.DAGS_HISTORY
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "Potential compliance issue due to delay in loading statement"
+    customer_impact: "Customers will not be able to access their E-Statements"
+    severity: "P2"
+    retries: 3
+
+tsys_pcb_pcmc_stmt_cgo_file_loading:
+  job_size: large
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_pcmc_stmt_cgo
+  folder_prefix: tsys_pcb_pcmc_stmt_cgo
+  trigger_dag_id: pcb_dst_pcmc_stmt_output_file_creation_post_extractor
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PCMC_STATEMENT
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: PCMC_STATEMENT
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: header_group
+        segments: SA00, INDEXLOADER
+      - group_name: trailer_group
+        segments: SA99
+      - group_name: detail_group
+        segments: SA10, SA14, SA15, SA20, SA30, SA40, SA41, SA59, SA60, SA65 ,SA85
+    segment_args:
+      INDEXLOADER:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/INDEXLOADER.CPY
+        pcb.tsys.processor.segment.name: INDEXLOADER
+        pcb.tsys.processor.layout.name: INDEXLOADER_REC
+      SA00:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA00.CPY
+        pcb.tsys.processor.segment.name: SA00
+        pcb.tsys.processor.layout.name: SA00_REC
+      SA10:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA10.CPY
+        pcb.tsys.processor.segment.name: SA10
+        pcb.tsys.processor.layout.name: SA10_REC
+      SA14:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA14.CPY
+        pcb.tsys.processor.segment.name: SA14
+        pcb.tsys.processor.layout.name: SA14_REC
+      SA15:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA15.CPY
+        pcb.tsys.processor.segment.name: SA15
+        pcb.tsys.processor.layout.name: SA15_REC
+      SA20:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA20.CPY
+        pcb.tsys.processor.segment.name: SA20
+        pcb.tsys.processor.layout.name: SA20_REC
+      SA30:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA30.CPY
+        pcb.tsys.processor.segment.name: SA30
+        pcb.tsys.processor.layout.name: SA30_REC
+      SA40:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA40.CPY
+        pcb.tsys.processor.segment.name: SA40
+        pcb.tsys.processor.layout.name: SA40_REC
+      SA41:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA41.CPY
+        pcb.tsys.processor.segment.name: SA41
+        pcb.tsys.processor.layout.name: SA41_REC
+      SA59:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA59.CPY
+        pcb.tsys.processor.segment.name: SA59
+        pcb.tsys.processor.layout.name: SA59_REC
+      SA60:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA60.CPY
+        pcb.tsys.processor.segment.name: SA60
+        pcb.tsys.processor.layout.name: SA60_REC
+      SA65:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA65.CPY
+        pcb.tsys.processor.segment.name: SA65
+        pcb.tsys.processor.layout.name: SA65_REC
+      SA85:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA85.CPY
+        pcb.tsys.processor.segment.name: SA85
+        pcb.tsys.processor.layout.name: SA85_REC
+      SA99:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_pcmc_stmt/SA99.CPY
+        pcb.tsys.processor.segment.name: SA99
+        pcb.tsys.processor.layout.name: SA99_REC
+
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    file_create_dt_table: pcb-{env}-processing.domain_account_management.SA99_CGO_DBEXT
+    file_type: CGO
+    tables:
+      INDEXLOADER:
+        table_name: STMT_HO50_INDEXCTL
+        add_columns:
+          - ROW_NUMBER() OVER(ORDER BY MAST_ACCT_ID,MAST_SEQ_NUM ASC) AS ROW_NUM
+          - MAST_CLIENT_NUM
+          - MAST_ACCT_ID
+          - MAST_RECORD_ID
+          - MAST_SEQ_NUM
+          - FILE_CREATE_DT
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        drop_columns:
+          - MAST_CLIENT_NUM
+          - MAST_ACCT_ID
+          - MAST_RECORD_ID
+          - MAST_SEQ_NUM
+          - FILE_CREATE_DT
+      SA00:
+        table_name: SA00
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+        landing_pause: TRUE
+      SA10:
+        table_name: SA10
+        record_count_column: SA10_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA14:
+        table_name: SA14
+        record_count_column: SA14_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA15:
+        table_name: SA15
+        record_count_column: SA15_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA20:
+        table_name: SA20
+        record_count_column: SA20_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA30:
+        table_name: SA30
+        record_count_column: SA30_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA40:
+        table_name: SA40
+        record_count_column: SA40_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA41:
+        table_name: SA41
+        record_count_column: SA41_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA59:
+        table_name: SA59
+        record_count_column: SA59_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA60:
+        table_name: SA60
+        record_count_column: SA60_COUNT
+        landing_pause: TRUE
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA65:
+        table_name: SA65
+        record_count_column: SA65_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA85:
+        table_name: SA85
+        record_count_column: SA85_COUNT
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      SA99:
+        table_name: SA99
+        add_columns:
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA10') AS SA10_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA14') AS SA14_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA15') AS SA15_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA20') AS SA20_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA30') AS SA30_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA40') AS SA40_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA41') AS SA41_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA59') AS SA59_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA60') AS SA60_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA65') AS SA65_COUNT
+          - (SELECT COUNT(MAST_RECORD_ID) FROM `pcb-{env}-processing.domain_account_management.STMT_HO50_INDEXCTL_{file_type}_DBEXT` WHERE MAST_RECORD_ID = 'SA85') AS SA85_COUNT
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+  post_processing_tables:
+    - task_name: append_to_SA00
+      table_name: SA00
+      file_type: CGO
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA00.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+    - task_name: append_to_SA10
+      table_name: SA10
+      file_type: CGO
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA10.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+    - task_name: SA59_creation
+      table_name: SA59_DAILY{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_creation_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: SA60_creation
+      table_name: SA60_DAILY{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA60_creation_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: total_amt_calc_sa59
+      table_name: SA59_CALC{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_total_amt_calc_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: old_to_new_card_trans_transfer
+      table_name: SA59_CALC_MID{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_old_trans_query.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: old_to_new_card_transfer_sa60
+      table_name: SA60_MID{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA60_update_acct_num.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: old_to_new_card_sum
+      table_name: SA59_CALC{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA59_sum_tot.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: total_amt_calc_sa60
+      table_name: SA60_CALC{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_SA60_sum_tot.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: append_to_SA59
+      table_name: SA59
+      file_type: CGO
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA59.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: append_to_SA60
+      table_name: SA60
+      file_type: CGO
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_SA60.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA59{file_type}_DBEXT_COLUMN_TF
+    - task_name: sa30_tsys_bucket_creation
+      table_name: SA30_TSYS_BUCKETS
+      file_type: CGO
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa30_tsys_buckets.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA30{file_type}_DBEXT
+    - task_name: sa40_update_tbal_desc
+      table_name: SA40
+      file_type: CGO
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa40_update_tbal_desc.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA40{file_type}_DBEXT
+    - task_name: sa14_update_triad_msgs
+      table_name: SA14_MID{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa14_update_triad_msgs.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA14{file_type}_DBEXT
+    - task_name: sa14_psp_insr_msg
+      table_name: SA14_PSP{file_type}
+      file_type: CGO
+      project_id: pcb-{env}-processing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_sa14_psp_insr_msg.sql
+      data_load_type: FULL_REFRESH
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA14{file_type}_DBEXT
+    - task_name: append_to_sa14
+      table_name: SA14
+      file_type: CGO
+      project_id: pcb-{env}-landing
+      dataset_id: domain_account_management
+      query_file: pcmc_stmt_append_to_sa14.sql
+      data_load_type: APPEND_ONLY
+      count_check_skip: TRUE
+      table_exists: pcb-{env}-processing.domain_account_management.SA14{file_type}_DBEXT
+  parallel_dag_id: tsys_pcb_pcmc_stmt_reg_file_loading
+  control_table: pcb-{env}-curated.JobControlDataset.DAGS_HISTORY
+  sub_query_table: pcb-{env}-landing.domain_account_management.SA99
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "statements"
+    business_impact: "Potential compliance issue due to delay in loading statement"
+    customer_impact: "Customers will not be able to access their E-Statements"
+    severity: "P2"
+    retries: 3

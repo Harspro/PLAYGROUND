@@ -1,0 +1,15 @@
+# finished dags have been archived
+scms_pin_flag_enable_legacy_loading_job:
+  fetch_spark_job:
+    dbname: db909_ogres
+    args:
+      pcb.bigquery.loader.source.query: "SELECT pan as CARD_NUMBER FROM (SELECT pan, IND_FORCE_PINCHANGE FROM ANDIS_SE.PHS_APPLICATION a1 WHERE a1.DT_CREATED = (SELECT max(a2.DT_CREATED) FROM ANDIS_SE.PHS_APPLICATION a2 WHERE a2.pan = a1.pan)) WHERE IND_FORCE_PINCHANGE = 0 ORDER BY 1"
+      pcb.bigquery.loader.source.db.read.parallelism: 1
+  bigquery:
+    dataset_id: domain_card_management
+    table_name: EMBOSSING_PIN_FLAG_ENABLE
+    overwrite_bq_table: True
+    add_columns:
+      - "'Y' as STATUS"
+  default_args:
+    owner: "team-ogres-alerts"

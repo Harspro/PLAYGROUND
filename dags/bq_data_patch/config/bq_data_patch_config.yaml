@@ -1,0 +1,219 @@
+data-patch-PCBDA-9412-CUSTOMER_OFFER_DETAIL_IDL:
+  dag_owner: "team-digital-adoption-alerts"
+  sql_file: "PCBDA-9412-REF_CUSTOMER_OFFER_DETAIL.sql"
+  tags:
+    - "team-digital-adoption"
+
+data-patch-PCGS-5688-ACCOUNT_RELATIONSHIP_ACTIVEIND_BACKFILL:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-5688-ACCOUNT_RELATIONSHIP_ACTIVEIND_BACKFILL.sql"
+  tags:
+   - "team-growth-and-sales"
+
+data-patch-SCMS-CARD-EMBOSSING:
+  dag_owner: "team-ogres-alerts"
+  sql_file: "SCMS-CARD-EMBOSSING.sql"
+  tags:
+   - "team-ogres"
+
+data-patch-SCMS-CARD-EMBOSSING-RUSH:
+  dag_owner: "team-ogres-alerts"
+  sql_file: "SCMS-CARD-EMBOSSING-RUSH.sql"
+  tags:
+   - "team-ogres"
+
+data-patch-SCMS-CARD-EMBOSSING-REISSUE:
+  dag_owner: "team-ogres-alerts"
+  sql_file: "SCMS-CARD-EMBOSSING-REISSUE.sql"
+  tags:
+   - "team-ogres"
+
+data-patch-PCGS-5802-APPLICATION_PRODUCT-CURRENT_STATUS-UPDATE:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-5802-APPLICATION_PRODUCT-CURRENT_STATUS-UPDATE.sql"
+  tags:
+   - "team-growth-and-sales"
+
+data-patch-PCGS-6213-ACCOUNT_RELATIONSHIP_BACKFILL:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6213-BACKFILL-ACCOUNT-RELATIONSHIP.sql"
+  tags:
+   - "team-growth-and-sales"
+
+data-patch-PCBDA-10357-REF_LOYALTY_OFFER_DETAIL_PIV:
+  dag_owner: "team-digital-adoption-alerts"
+  sql_file: "PCBDA-10357-REF_LOYALTY_OFFER_DETAIL.sql"
+  tags:
+    - "team-digital-adoption"
+
+domain_technical_data_loading_agenda_loading_job:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2561-DATA_LOADING_AGENDA.sql"
+  tags:
+   - "team-centaurs"
+  parameters:
+    start_date: "2026-01-01"
+    end_date: "2026-12-31"
+
+data-patch-pcgs-6387-account_relationship_savings_activeind_backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6387-ACCOUNT_RELATIONSHIP_SAVINGS_ACTIVEIND_BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-pcgs-6344-adm_rt_response_uns-backup-creation:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6344-ADM_RT_RESPONSE_UNS-BACKUP-CREATION.sql"
+  tags:
+   - "team-growth-and-sales"
+
+data-patch-pcgs-6344-adm_rt_response_uns-for-rec_create_tms-from-pr563:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6344-ADM_RT_RESPONSE_UNS-data-patch-for-REC_CREATE_TMS.sql"
+  tags:
+    - "team-growth-and-sales"
+
+data-patch-pcgs-6344-adm_rt_response_uns-rollback:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6344-ADM_RT_RESPONSE_UNS-data-patch-ROLLBACK.sql"
+  tags:
+    - "team-growth-and-sales"
+
+data-patch-portfolio:
+  dag_owner: "team-money-movement-eng"
+  sql_file: "PCMM-9677-PORTFOLIO_DATA_COPY.sql"
+  tags:
+    - "team-money-movement-eng"
+
+data-patch-pcgs-6411-insert-missing-saving-account-in-account_relationship:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6411-INSERT-SAVING-ACCOUNT-IN-ACCOUNT_RELATIONSHIP-TABLE.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-PCGS-6447-APPLICATION_PRODUCT-CURRENT_STATUS-UPDATE:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6447-APPLICATION_PRODUCT-CURRENT_STATUS-UPDATE.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-generalledger:
+  dag_owner: "team-money-movement-eng"
+  sql_file: "PCMM-9678-GENERALLEDGER_DATA_COPY.sql"
+  tags:
+    - "team-money-movement-eng"
+
+data-patch-pcbdf-2640-dedup-acctmaster_monthly_am3b:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2640-TSYS_PCB_MC_ACCTMASTER_MONTHLY_AM3B_DEDUP.sql"
+  tags:
+   - "team-centaurs"
+
+data-patch-pcbdf-2640-insert-acctmaster_monthly_am3b:
+  dag_owner: "team-centaurs"
+  sql_file: "PCBDF-2640-TSYS_PCB_MC_ACCMASTER_MONTHLY_AM3B_INSERT.sql"
+  tags:
+   - "team-centaurs"
+
+data-patch-PCBDA-10717-REF_LOYALTY_OFFER_DETAIL:
+  dag_owner: "team-digital-adoption-alerts"
+  sql_file: "PCBDA-10717-REF_LOYALTY_OFFER_DETAIL.sql"
+  tags:
+    - "team-digital-adoption"
+
+data-patch-pcgs-6482-onetime-transunion-history-data-load:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6428-INSERT-HISTORY-DATA-FROM-PERM_IDENT-TO-GCP-TABLE.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+
+data-patch-pcgs-6429-cockroachdb-idv-submission-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6429-COCKROACHDB-IDV-SUBMISSION-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-pcgs-6429-cockroachdb-idv-request-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6429-COCKROACHDB-IDV-REQUEST-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-tokennotify:
+  dag_owner: "team-money-movement-eng"
+  sql_file: "PCMM-9785-TOKENNOTIFY_DATA_COPY.sql"
+  tags:
+    - "team-money-movement-eng"
+
+data-patch-rebuild-tokennotify-with-filecreatedt:
+  dag_owner: "team-money-movement-eng"
+  sql_file: "PCMM-9785-TOKENNOTIFY_REBUILD_WITH_FILE_CREATE_DT.sql"
+  tags:
+    - "team-money-movement-eng"
+
+data-patch-pcgs-6495-application_product-current_status-update:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6495-APPLICATION_PRODUCT-CURRENT_STATUS-UPDATE.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-pcgs-6687-backfill-cust_appl_id-in-adm_rt_response_uns:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6687-BACKFILL-PC_MC_CUST_APPL_ID-IN-ADM_RT_RESPONSE_UNS-TABLE.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-pcgs-6984-update-missing-ingestion_timestamp-in-adm_rt_response_uns:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6984-UPDATE-ADM_RT_RESPONSE_UNS-INGESTION_TIMESTAMP.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-pcgs-6984-update-missing-ingestion_timestamp-in-app_cust_info:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6984-UPDATE-APP_CUST_INFO-INGESTION_TIMESTAMP.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-pcgs-6984-update-missing-ingestion_timestamp-in-application_submission_payload:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6984-UPDATE-APPLICATION_SUBMISSION_PAYLOAD-INGESTION_TIMESTAMP.sql"
+  tags: ["team-growth-and-sales", "P3" ]
+
+data-patch-pin-flag-enable:
+  dag_owner: "team-ogres-alerts"
+  sql_file: "PCBIV-2430-PIN-FLAG-ENABLE-DATA-PATCH.sql"
+  tags:
+   - "team-ogres"
+
+data-patch-pcgs-6703-cockroachdb-idv-event-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6703-COCKROACHDB-IDV_EVENT-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-pcgs-6703-cockroachdb-idv-document-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6703-COCKROACHDB-IDV_DOCUMENT-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-pcgs-6703-cockroachdb-applicant-personal-identifier-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6703-COCKROACHDB-APPLICANT_PERSONAL_IDENTIFIER-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-pcgs-6703-cockroachdb-onfido-applicant-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6703-COCKROACHDB-ONFIDO_APPLICANT-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-pcgs-6703-cockroachdb-onfido-check-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6703-COCKROACHDB-ONFIDO_CHECK-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-pcgs-6988-db563-adm_inst_card_info-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-6988-DB563-ADM_INST_CARD_INFO-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]
+
+data-patch-pcbda-12032-loyalty-offer-account:
+  dag_owner: "team-digital-adoption-alerts"
+  sql_file: "PCBDA-12032-LOYALTY_OFFER_ACCOUNT.sql"
+  tags:
+    - "team-digital-adoption"
+
+data-patch-pcgs-7244-cockroachdb-application_product-backfill:
+  dag_owner: "team-growth-and-sales-alerts"
+  sql_file: "PCGS-7244-COCKROACHDB-APPLICATION_PRODUCT-BACKFILL.sql"
+  tags: ["team-growth-and-sales", "P3"]

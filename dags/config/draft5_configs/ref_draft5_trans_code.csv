@@ -1,0 +1,15 @@
+﻿LANGUAGE_CODE,TRANSACTION_CODE,TRANSACTION_TYPE
+FRC,164,Annulation des frais
+ENU,164,Fee Reversal
+FRC,167,Annulation des frais
+ENU,167,Fee Reversal
+FRC,170,Renv frais
+ENU,170,Fee revers
+FRC,397,Recours
+ENU,397,Redress
+FRC,162,Inversion des intérêts
+ENU,162,Interest Reversal
+FRC,7002,Renv frais PROTEC DEC
+ENU,7002,ODP fee Reversal
+ENU,108,PCF contest winner
+FRC,108,Gagnant du concours PCF

@@ -1,0 +1,3 @@
+- folder_name: pfp_inbound_alm
+  filename_pattern: .*pfp_pcb_alm_term_deposit_\d{14}\.(uatv|prod)$
+  dags_to_trigger: [alm_pfp_pcb_term_deposits_monthly_load]

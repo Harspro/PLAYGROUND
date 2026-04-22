@@ -1,0 +1,74 @@
+[
+    {
+        "name": "TRANSACTION_ID",
+        "type": "STRING"
+    },
+    {
+        "name": "CUSTOMER_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "ACCOUNT_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "TRANSACTION_DATE_TIME",
+        "type": "STRING"
+    },
+    {
+        "name": "POSTED_DATE",
+        "type": "DATE"
+    },
+    {
+        "name": "EXTERNAL_BANK_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "EXTERNAL_CUSTOMER_NAME",
+        "type": "STRING"
+    },
+    {
+        "name": "DEVICE_ID",
+        "type": "STRING"
+    },
+    {
+        "name": "IP_ADDRESS",
+        "type": "STRING"
+    },
+    {
+        "name": "USERNAME",
+        "type": "STRING"
+    },
+    {
+        "name": "SESSION_DATE_TIME",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_REF_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_EMAIL",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_PHONE",
+        "type": "STRING"
+    },
+    {
+        "name": "INTERAC_BANK_ACCOUNT",
+        "type": "STRING"
+    },
+    {
+        "name": "PCF_MONEY_MOVE_REF_NUMBER",
+        "type": "STRING"
+    },
+    {
+        "name": "DEVICE_TYPE",
+        "type": "STRING"
+    },
+    {
+        "name": "RAIL_TYPE",
+        "type": "STRING"
+    }
+]

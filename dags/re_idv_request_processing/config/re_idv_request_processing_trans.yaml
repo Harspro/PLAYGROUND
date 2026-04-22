@@ -1,0 +1,20 @@
+context_parameter:
+  lookback_date: "{{ dag_run.conf.get('lookback_date', '') }}"
+  
+transformation:
+  - task_name: re_idv_generate_abb_app_id
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/app_abb_re_idv.sql
+  - task_name: re_idv_get_acc_id_for_abb_app_id
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/app_abb_acc_re_idv.sql
+  - task_name: re_idv_app_id_to_acc_num_cust_num_mapping
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/map_acc_num_re_idv.sql
+  - task_name: generate_re_idv_customer
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+      script_path: sql/re_idv_required_customer.sql

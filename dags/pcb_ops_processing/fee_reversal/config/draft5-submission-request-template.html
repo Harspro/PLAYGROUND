@@ -1,0 +1,65 @@
+<html>
+<head>
+    <style>
+      <!-- {{ and }} are for escaping curly braces in python string formatting-->
+      table, th, td {{
+          border-style:solid;
+          border-width:1px;
+          border-color:#96D4D4;
+          border-collapse:
+          collapse;padding: 5px 10px 5px 5px;
+      }}
+      p {{
+        color: black;
+      }}
+    </style>
+</head>
+
+<body>
+<p>Hi,</p>
+
+<p> Please see below for the TSYS Draft 5 submission form ( {purpose} ). </p>
+<p> The batch will be sent to TSYS once your approval is received. </p>
+<br>
+<p>Total records: {total_records}</p>
+<p>Total amount: ${total_amount}</p>
+<br>
+<p>Please let me know if you have questions.</p>
+<p>Batch location: {batch_location}</p>
+
+<table>
+    <caption>Decision Support TSYS Batch Submission Form (DRAFT5)</caption>
+    <tr>
+        <th>Submission Date</th>
+        <th>Transaction Code</th>
+        <th>Transaction Type</th>
+        <th>Submitted By</th>
+        <th>File Name/s</th>
+        <th>Run Date</th>
+        <th>Batch Type</th>
+        <th>Operator ID</th>
+        <th>Approver</th>
+        <th># Accounts Affected</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>{submission_date}</td>
+        <td>{trans_code}</td>
+        <td>{trans_type}</td>
+        <td>PCF TechOps</td>
+        <td>{file_name}</td>
+        <td>{run_date}</td>
+        <th>{batch_type}</th>
+        <td>{operator_id}</td>
+        <td>{approver}</td>
+        <td>{num_accounts_affected}</td>
+        <td>{description}</td>
+    </tr>
+</table>
+
+<br>
+<p>Thanks,</p>
+<p>PCF TechOps</p>
+
+</body>
+</html>

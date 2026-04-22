@@ -1,0 +1,123 @@
+import logging
+from datetime import datetime, timedelta
+
+import pendulum
+from airflow.exceptions import AirflowException
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from google.cloud import bigquery
+
+import util.constants as consts
+from util.bq_utils import check_bq_table_exists
+from util.gcs_utils import gcs_file_exists
+
+DAG_DEFAULT_ARGS = {
+    'owner': 'team-centaurs',
+    'capability': 'TBD',
+    'severity': 'P3',
+    'sub_capability': 'TBD',
+    'business_impact': 'TBD',
+    'customer_impact': 'TBD',
+    'depends_on_past': False,
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 1,
+    'retry_delay': timedelta(seconds=10)
+}
+
+
+def start(**context):
+    logging.info('DAG with traceability id: {} started'.format(
+        context['dag_run'].conf.get('traceability_id')))
+
+
+def check(bkt, path, dest, disp, src, skip, schema):
+    if disp not in consts.FLAAS_BQL_ALLOWED_WRITE_TYPES:
+        raise AirflowException(
+            "Provided write type {} is invalid\nValid options are {}.".format(disp,
+                                                                              consts.FLAAS_BQL_ALLOWED_WRITE_TYPES))
+    if src not in consts.FLAAS_BQL_ALLOWED_SOURCE_FORMATS:
+        raise AirflowException(
+            "Provided source format {} is invalid\nValid options are {}.".format(src,
+                                                                                 consts.FLAAS_BQL_ALLOWED_SOURCE_FORMATS))
+    if not gcs_file_exists(bkt, path):
+        raise AirflowException(
+            "Provided GCS file gs://{}/{} does not exist.".format(bkt, path))
+    if skip < 1:
+        raise AirflowException(
+            "Provided skip_leading_rows {} is not greater than or equal to 1".format(skip))
+    if not check_bq_table_exists(dest):
+        raise AirflowException(
+            "Provided BigQuery table path {} does not exist.".format(dest))
+    if schema:
+        for field in schema:
+            if "name" not in field or "type" not in field or "mode" not in field:
+                raise AirflowException(
+                    "Each schema field must only contain name, type, and mode. Missing one or more of these in: {}".format(
+                        field))
+
+
+def load_csv_to_bigquery(**context):
+    conf = context['dag_run'].conf
+    schema_fields = conf.get('schema_fields', None)
+    bucket = conf.get('bucket')
+    path = conf.get('path')
+    destination = conf.get('destination')
+    write_disposition = conf.get('write_disposition')
+    source_format = conf.get('source_format', "CSV")
+    skip_leading_rows = conf.get('skip_leading_rows', 1)
+    check(bucket, path, destination, write_disposition,
+          source_format, skip_leading_rows, schema_fields)
+
+    # Create a BigQuery client instance
+    client = bigquery.Client()
+
+    # Set the source data format and location
+    uri = f'gs://{bucket}/{path}'
+
+    # Define the BigQuery table schema
+    schema_autodetect = True
+    schema = None
+    if schema_fields is not None:
+        schema = [bigquery.SchemaField(
+            field['name'], field['type'], field['mode']) for field in schema_fields]
+        schema_autodetect = False
+
+    # Configure the load job options
+    job_config = bigquery.LoadJobConfig(
+        schema=schema,
+        source_format=source_format,
+        skip_leading_rows=skip_leading_rows,
+        write_disposition=write_disposition,
+        autodetect=schema_autodetect
+    )
+
+    # Execute the load job
+    table_ref = destination
+    job = client.load_table_from_uri(uri, table_ref, job_config=job_config)
+    job.result()  # wait for the job to complete
+
+
+def end(**context):
+    logging.info('DAG with traceability id: {} finished'.format(
+        context['dag_run'].conf.get('traceability_id')))
+
+
+with DAG(
+        'flaas_loader',
+        start_date=datetime(2023, 1, 1, tzinfo=pendulum.timezone('America/Toronto')),
+        default_args=DAG_DEFAULT_ARGS,
+        schedule=None
+) as dag:
+    start = PythonOperator(
+        task_id='start', python_callable=start, provide_context='True')
+
+    load_csv_task = PythonOperator(
+        task_id='load_csv',
+        python_callable=load_csv_to_bigquery,
+        provide_context='True'
+    )
+
+    end = PythonOperator(task_id='end', python_callable=end)
+
+    start >> load_csv_task >> end

@@ -1,0 +1,36 @@
+test_file_to_kafka_dag:
+  default_args:
+    owner: "test-owner"
+    capability: "test-capability"
+    severity: "test-severity"
+    sub_capability: "test-sub-capability"
+    business_impact: "test-business-impact"
+    customer_impact: "test-customer-impact"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-schema-mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/test-folder/test-file-schema.avsc
+  application_config: test-application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: test-key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: test-value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: test-schema-mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+      file_path_suffix: test-folder/*.parquet
+    pcb.file.kafka.connector.filtered.fields:
+      - test-field-1
+      - test-field-2
+      - test-field-3
+    pcb.file.kafka.connector.kafka.key: test-key
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: test-file-schema.avsc
+  dag:
+    kafka_writer_task: kafka-writer-test
+    read_pause_deploy_config: True
+    job_size: large
+    schedule_interval: "0 1 * * *"
+    dataproc_cluster_name: "test-cluster-name"

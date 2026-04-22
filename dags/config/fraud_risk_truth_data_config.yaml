@@ -1,0 +1,64 @@
+fraud_risk_truthdata_data_loading_job:
+  dag:
+    description: "Fraud Risk Truth Data loading to BigQuery with file validation"
+    schedule: null
+    max_active_runs: 1
+    is_paused_upon_creation: true
+    tags: [ "team-growth-and-sales", "fraud_risk_truthdata" ]
+    render_template_as_native_obj: true
+    task_id:
+      kafka_writer_task_id: trigger_kafka_processing_dag
+    dag_id:
+      kafka_trigger_dag_id: fraud_risk_truthdata_kafka_processing
+    wait_for_completion: true
+    poke_interval: 30
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "Customer Acquisition"
+    severity: "P3"
+    sub_capability: "Data Ingestion"
+    business_impact: "Fraud Events from New applications or login will not be send as feedback to TMX"
+    customer_impact: "Customers are not categorized as Fraud from TMX"
+    depends_on_past: false
+    email_on_failure: false
+    email_on_retry: false
+    retries: 0
+    retry_delay_minutes: 5
+    catchup: false
+  bigquery_config:
+    project_id_template: "pcb-{env}-landing"
+    dataset_id: "domain_fraud_risk_intelligence"
+    table_name: "FRAUD_RISK_TRUTH_DATA_INBOUND"
+    default_env: "uat"
+  staging_config:
+    dataset_id: "domain_customer_acquisition"
+    table_name: "fraud_risk_truth_data_staging"
+    file_format: "CSV"
+    field_delimiter: ","
+    skip_leading_rows: 1
+    expiration_hours: 6
+  validation_config:
+    required_columns:
+      - "request_id"
+      - "action"
+      - "final_review_status"
+      - "event_classification"
+      - "event_tag"
+    mandatory_fields:
+      - "request_id"
+      - "action"
+      - "final_review_status"
+      - "event_classification"
+      - "event_tag"
+  column_mapping:
+    # Map CSV column names (lowercase/snake_case) to BigQuery column names (PascalCase)
+    # If CSV columns match exactly, no mapping needed
+    request_id: "RequestId"
+    action: "Action"
+    final_review_status: "FinalReviewStatus"
+    event_classification: "EventClassification"
+    event_tag: "EventTag"
+  metadata_fields:
+    - { target: "SourceFilename", type: "STRING", value: "file_name" }
+    - { target: "INGESTION_TIMESTAMP", type: "TIMESTAMP", value: "CURRENT_TIMESTAMP()" }
+

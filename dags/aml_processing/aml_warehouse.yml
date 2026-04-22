@@ -1,0 +1,6 @@
+name: bigquery
+connection:
+  type: bigquery
+  use_context_auth: true
+  project_id: pcb-{env}-curated
+  dataset: cots_aml_verafin

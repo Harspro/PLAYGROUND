@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2016 rel. 2 sp1 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du R18 @@@@           -->
+	<xsd:complexType
+    name="R18Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoReleve"
+        type="NoReleveType">
+				
+			</xsd:element>
+			<xsd:element
+        name="Consolide">
+				
+				<xsd:simpleType>
+					<xsd:restriction
+            base="xsd:string">
+						<xsd:enumeration
+              value="C" />
+						<xsd:enumeration
+              value="c" />
+						<xsd:enumeration
+              value="U" />
+						<xsd:enumeration
+              value="u" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element
+        name="Beneficiaire">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="Type"
+              type="Indicateur1-4Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="No"
+              type="Char20Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:choice>
+							<xsd:element
+                name="Personne">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NAS"
+                      type="NasType">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NomFamille"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Prenom"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Initiale"
+                      type="Char1Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="RaisonSociale">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="AutreNoId"
+                      type="Char10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct"
+              minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="SecondBeneficiaire"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:choice>
+							<xsd:element
+                name="Personne">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NAS"
+                      type="NasType">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NomFamille"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Prenom"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Initiale"
+                      type="Char1Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="RaisonSociale">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="AutreNoId"
+                      type="Char10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Montants"
+        type="R18MntStruct" />
+			<xsd:element
+        name="CaseRensCompl"
+        minOccurs="0"
+        maxOccurs="4">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="CodeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="Char5Type">
+									<xsd:pattern
+                    value="200|201|202" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="DonneeRensCompl">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:minLength
+                    value="1" />
+									<xsd:maxLength
+                    value="15" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType
+    name="R18MntStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="CodeDeLaDevise"
+        type="Char3Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="C14_DateTransaction"
+        type="MoisJourType"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="TitreTransige"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="C15_Genre"
+              minOccurs="0">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="Char3Type">
+									<xsd:enumeration
+                    value="BLA" />
+									<xsd:enumeration
+                    value="BO1" />
+									<xsd:enumeration
+                    value="BON" />
+									<xsd:enumeration
+                    value="DO1" />
+									<xsd:enumeration
+                    value="DOB" />
+									<xsd:enumeration
+                    value="ELN" />
+									<xsd:enumeration
+                    value="FUT" />
+									<xsd:enumeration
+                    value="MET" />
+									<xsd:enumeration
+                    value="MFT" />
+									<xsd:enumeration
+                    value="MSC" />
+									<xsd:enumeration
+                    value="OPC" />
+									<xsd:enumeration
+                    value="PTI" />
+									<xsd:enumeration
+                    value="RTS" />
+									<xsd:enumeration
+                    value="SHS" />
+									<xsd:enumeration
+                    value="UNT" />
+									<xsd:enumeration
+                    value="WTS" />
+									<xsd:enumeration
+                    value="bla" />
+									<xsd:enumeration
+                    value="bo1" />
+									<xsd:enumeration
+                    value="bon" />
+									<xsd:enumeration
+                    value="do1" />
+									<xsd:enumeration
+                    value="dob" />
+									<xsd:enumeration
+                    value="eln" />
+									<xsd:enumeration
+                    value="fut" />
+									<xsd:enumeration
+                    value="met" />
+									<xsd:enumeration
+                    value="mft" />
+									<xsd:enumeration
+                    value="msc" />
+									<xsd:enumeration
+                    value="opc" />
+									<xsd:enumeration
+                    value="pti" />
+									<xsd:enumeration
+                    value="rts" />
+									<xsd:enumeration
+                    value="shs" />
+									<xsd:enumeration
+                    value="unt" />
+									<xsd:enumeration
+                    value="wts" />
+									<xsd:enumeration
+                    value="Bla" />
+									<xsd:enumeration
+                    value="Bo1" />
+									<xsd:enumeration
+                    value="Bon" />
+									<xsd:enumeration
+                    value="Do1" />
+									<xsd:enumeration
+                    value="Dob" />
+									<xsd:enumeration
+                    value="Eln" />
+									<xsd:enumeration
+                    value="Fut" />
+									<xsd:enumeration
+                    value="Met" />
+									<xsd:enumeration
+                    value="Mft" />
+									<xsd:enumeration
+                    value="Msc" />
+									<xsd:enumeration
+                    value="Opc" />
+									<xsd:enumeration
+                    value="Pti" />
+									<xsd:enumeration
+                    value="Rts" />
+									<xsd:enumeration
+                    value="Shs" />
+									<xsd:enumeration
+                    value="Unt" />
+									<xsd:enumeration
+                    value="Wts" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="C16_Quantite"
+              type="Decimal15_4Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C17_Description"
+              type="Char60Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C18_NoValeur"
+              type="Char12Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C19_ValeurNominale"
+              type="Decimal13Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C20_ValeurComptable"
+              type="Decimal13Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C21_AlienationPaiement"
+              type="SignedDecimal13Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="TitreRecu"
+        minOccurs="0">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="C22_Genre"
+              type="Char3Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C23_Quantite"
+              type="Decimal12_4Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="C24_Description"
+              type="Char60Type"
+              minOccurs="0">
+							
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType
+    name="TypeNumeroType">
+		
+		<xsd:restriction
+      base="xsd:string">
+			<xsd:enumeration
+        value="C" />
+			<xsd:enumeration
+        value="I" />
+			<xsd:enumeration
+        value="c" />
+			<xsd:enumeration
+        value="i" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

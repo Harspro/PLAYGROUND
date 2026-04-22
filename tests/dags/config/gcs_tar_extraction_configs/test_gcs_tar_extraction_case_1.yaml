@@ -1,0 +1,15 @@
+test_gcs_tar_extraction:
+  default_args:
+    owner: "test-owner"
+    capability: "test-capability"
+    severity: "test-severity"
+    business_impact: "test-business-impact"
+    customer_impact: "test-customer-impact"
+  source_bucket: test-source-bucket-{env}
+  tar_file: "test-archive.tar"
+  destination_bucket: test-destination-bucket-{env}
+  destination_folder: "test-folder"
+  dag:
+    dagrun_timeout: 240
+    read_pause_deploy_config: True
+    tags: [ "test-tag" ]

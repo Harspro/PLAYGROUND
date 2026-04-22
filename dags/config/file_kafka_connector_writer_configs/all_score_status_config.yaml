@@ -1,0 +1,46 @@
+all_score_status_kafka_writer:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "Transaction Risk Scoring"
+    business_impact: "Will open the business to financial risk that can result into monetary loss if customer risk score was not updated"
+    customer_impact: "None"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/risk-management/all_score/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/risk-management/all_score/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/risk-management/all_score/all_score_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/risk-management/all_score/all_score_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/risk-management/all_score/all_score_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: all_score_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: all_score_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_source_bigquery: true
+    pcb.file.kafka.connector.kafka.key: executionId
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.auto.register.schemas: true
+    pcb.file.kafka.connector.schema.file.path: all_score_file_schema.avsc
+  dag:
+    kafka_writer_task: all_score_status
+    read_pause_deploy_config: True
+    tags: ["All Score" , "P3" ]
+    job_size: extra_small
+    dataproc_cluster_name: all-score-status
+  bigquery:
+    project_id: pcb-{env}-curated
+    dataset_id: domain_scoring
+    table_id: all_score_status_temp
+    query_file: all_score_processor/sql/all_score_status.sql
+    replacements:
+      "{score_type}": "{{ dag_run.conf.get('score_type') }}"
+      "{file_name}": "{{ dag_run.conf.get('file_name') }}"
+      "{file_status}": "{{ dag_run.conf.get('file_status') }}"
+      "{all_score_output_table}": "{{ dag_run.conf.get('all_score_output_table') }}"
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    folder_name: all_score_status
+    file_name: status

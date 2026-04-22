@@ -1,0 +1,14 @@
+SELECT
+  id,
+  conversation_id,
+  date_created,
+  answer_id,
+  answer_title,
+  chatter_id,
+  link_was_clicked,
+  message_data,
+  recipient,
+  sender,
+  review
+FROM
+  pcb-{env}-landing.domain_communication.ADA_CHATBOT_MESSAGE

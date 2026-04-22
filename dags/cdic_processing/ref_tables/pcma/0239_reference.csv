@@ -1,0 +1,11 @@
+Account_Type_Code|MI_Account_Type|Description
+1|SA_1|Suspense account
+2|MT_2|Mortgage Tax account
+3|CA_3|Clearing account (acss clearing)
+4|GIC|GIC
+5|Cash|Cash account
+6|Retl|Retail account
+7|PCB_INDIVIDUAL|Chequing Account
+8|PCB_GOAL|Goal Account
+9|PCB_JOINT|Joint Account
+10|PCB_ADDITIONAL|Additional Account

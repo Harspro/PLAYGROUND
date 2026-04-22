@@ -1,0 +1,13 @@
+dag_id: "cdic_file_processing"
+dag_owner: "team-defenders-alerts"
+control_table_dataset_id: "JobControlDataset"
+control_table_name: "DAGS_HISTORY"
+domain_dataset: "domain_cdic"
+cots_dataset: "cots_cdic"
+inbound_bucket: "temenos-inbound-pcb{env_suffix}"
+staging_bucket: "pcb-{env}-staging"
+outbound_bucket: "cdic-outbound-pcb{env_suffix}"
+jar_file_uris:
+  - gs://pcb-{env}-staging-artifacts/jarfiles/cdic-datamasking-spark-batch-2.0.0.jar
+main_class: "com.pcb.batch.spark.cdicdatamasking.CDICDataMaskingApplication"
+mask_flag: True

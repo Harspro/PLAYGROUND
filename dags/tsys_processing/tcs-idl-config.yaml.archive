@@ -1,0 +1,285 @@
+tcs-idl01-alerts-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_ALERTS_IDL
+  hive_table_name: tcs_alerts
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-alerts-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-alerts.sql
+  cluster_name: tcs-idl-alerts-spark-cluster-ephemeral
+
+tcs-idl02-disposition-rpt-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_DISPOSITION_RPT_IDL
+  hive_table_name: tcs_disposition_rpt
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-disposition-rpt-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-disposition-rpt.sql
+  cluster_name: tcs-idl-disposition-rpt-spark-cluster-ephemeral
+
+tcs-idl03-dispute-claim-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_DISPUTE_CLAIM_IDL
+  hive_table_name: tcs_dispute_claim
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-dispute-claim-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-dispute-claim.sql
+  cluster_name: tcs-idl-dispute-claim-spark-cluster-ephemeral
+
+tcs-idl04-dispute-dtl-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_DISPUTE_DTL_IDL
+  hive_table_name: tcs_dispute_dtl
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-dispute-dtl-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-dispute-dtl.sql
+  cluster_name: tcs-idl-dispute-dtl-spark-cluster-ephemeral
+
+tcs-idl05-dispute-fraud-common-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_DISPUTE_FRAUD_COMMON_IDL
+  hive_table_name: tcs_dispute_fraud_common
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-dispute-fraud-common-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-dispute-fraud-common.sql
+  cluster_name: tcs-idl-dispt-fraud-comn-spark-cluster-ephemeral
+
+tcs-idl06-disputes-ltr-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_DISPUTES_LTR_IDL
+  hive_table_name: tcs_disputes_ltr
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-disputes-ltr-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-disputes-ltr.sql
+  cluster_name: tcs-idl-disputes-ltr-spark-cluster-ephemeral
+
+tcs-idl07-fraud-dtl-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_FRAUD_DTL_IDL
+  hive_table_name: tcs_fraud_dtl
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-fraud-dtl-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-fraud-dtl.sql
+  cluster_name: tcs-idl-fraud-dtl-spark-cluster-ephemeral
+
+tcs-idl08-fraud-monitoring-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_FRAUD_MONITORING_IDL
+  hive_table_name: tcs_fraud_monitoring
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-fraud-monitoring-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-fraud-monitoring.sql
+  cluster_name: tcs-idl-fraud-monitoring-spark-cluster-ephemeral
+
+tcs-idl09-fraud-reporting-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_FRUAD_REPORTING_IDL
+  hive_table_name: tcs_fruad_reporting
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-fraud-reporting-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-fraud-reporting.sql
+  cluster_name: tcs-idl-fraud-reporting-spark-cluster-ephemeral
+
+tcs-idl10-lost-stolen-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_LOST_STOLEN_IDL
+  hive_table_name: tcs_lost_stolen
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-lost-stolen-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-lost-stolen.sql
+  cluster_name: tcs-idl-lost-stolen-spark-cluster-ephemeral
+
+tcs-idl11-work-basket-spark:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/tcs-spark-idl-batch-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/tcs-spark-idl-batch/application.yaml
+  job_size: small
+  main_class: com.pcb.batch.spark.tcs.idl.TcsDataInitialLoadApp
+  properties:
+    spark.driver.extraJavaOptions: -Duser.timezone=America/Toronto
+    spark.executor.extraJavaOptions: -Duser.timezone=America/Toronto
+  staging_folder: pcb-{env}-staging
+  description: DAG to load TCS IDL data to tables
+  table_name: TCS_WORK_BASKET_IDL
+  hive_table_name: tcs_work_basket
+  hive_schema_name: pcf{env}_rpt
+  hive_where_cond: where 1=1
+  business_impact: One time orchestration process of TCS Data not done
+  customer_impact: None
+  sub_capability: EMT
+  capability: Payments
+  tags:
+    - gold-alchemists
+  drop_sql_file_path: tsys_processing/sql/tcs-idl-tcs-work-basket-stg-drop.sql
+  sql_file_path: tsys_processing/sql/tcs-idl-tcs-work-basket.sql
+  cluster_name: tcs-idl-work-basket-spark-cluster-ephemeral

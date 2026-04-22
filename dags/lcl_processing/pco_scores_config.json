@@ -1,0 +1,17 @@
+{
+    "staging_bucket": "lcl-staging-{env}",
+    "staging_bq_dataset": "PCOScoresDataset",
+    "staging_external_bq_table": "PCO_SCORES_EXTERNAL",
+    "staging_bq_table": "PCO_SCORES_STAGING",
+    "curated_bq_dataset": "PCOScoresDataset",
+    "curated_bq_table": "PCO_SCORES",
+    "ods_audit_spark_job": {
+      "jar_file_uris": [ "gs://pcb-{env}-staging-artifacts/jarfiles/pco-spark-batch-2.0.0.jar" ],
+      "file_uris": [ "gs://pcb-{env}-staging-artifacts/resources/pco-spark-batch/application.yaml" ],
+      "main_class": "com.pcb.batch.spark.pco.PCOSparkBatchApplication",
+      "args": {
+        "pcb.pco.processor.source.filename": "",
+        "pcb.pco.processor.execution.id": ""
+      }
+    }
+}

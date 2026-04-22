@@ -1,0 +1,4 @@
+clustering_fields:
+  - ID
+  - CICS_TRAN_CODE
+  - DATE_EVENT

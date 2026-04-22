@@ -1,0 +1,195 @@
+"""
+Postgres Query Executor class.
+
+Author: Yash Sharma
+"""
+import logging
+
+from copy import deepcopy
+from datetime import timedelta, datetime
+from typing import Final
+import pendulum
+import util.constants as consts
+
+from airflow import DAG, settings
+from airflow.exceptions import AirflowFailException
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+
+from pcf_operators.bigquery_operators.bigquery_to_postgres import PcfPrePostEtlOperator
+
+from util.deploy_utils import read_pause_unpause_setting, pause_unpause_dag
+from util.miscutils import create_airflow_connection, read_file_env, read_variable_or_file, \
+    read_yamlfile_env
+from dag_factory.terminus_dag_factory import add_tags
+
+logger = logging.getLogger(__name__)
+
+"""
+Initial default args to be used, users of the class can override the default args
+as needed through configuration placed in the YAML file.
+"""
+INITIAL_DEFAULT_ARGS: Final = {
+    'owner': 'TBD',
+    'capability': 'TBD',
+    'severity': 'P3',
+    'sub_capability': 'TBD',
+    'business_impact': 'TBD',
+    'customer_impact': 'TBD',
+    'depends_on_past': False,
+    "email": [],
+    "email_on_failure": False,
+    "email_on_retry": False
+}
+
+
+class PostgresQueryExecutor:
+    """
+    PostgresQueryExecutor class dynamically creates Airflow DAGs for executing SQL queries in a Postgres database.
+
+    Methods:
+        - __init__: Initializes the class with configuration details.
+        - create_dag: Creates a single DAG based on the given configuration.
+        - create_dags: Creates multiple DAGs dynamically using the configurations from a YAML file.
+    """
+
+    def __init__(self, config_filename: str, config_dir: str = None):
+        """
+        Initializes the PostgresQueryExecutor class with the configuration file and directory.
+
+        :param config_filename: Name of the configuration file.
+        :type config_filename: str
+        :param config_dir: Directory containing the configuration file. Defaults to
+            `settings.DAGS_FOLDER` if not provided.
+        :type config_dir: str
+        """
+
+        # Copy the default args to allow overrides.
+        self.default_args = deepcopy(INITIAL_DEFAULT_ARGS)
+        # Timezone for DAG start dates.
+        self.local_tz = pendulum.timezone('America/Toronto')
+
+        # Read GCP configuration details.
+        self.gcp_config = read_variable_or_file(consts.GCP_CONFIG)
+        self.deploy_env = self.gcp_config[consts.DEPLOYMENT_ENVIRONMENT_NAME]
+
+        # Set the configuration directory path.
+        if config_dir is None:
+            config_dir = f'{settings.DAGS_FOLDER}/config/postgres_query_executor_configs'
+        self.config_dir = config_dir
+
+        # Load job configurations from the YAML file.
+        self.job_config = read_yamlfile_env(f'{config_dir}/{config_filename}', self.deploy_env)
+
+    def create_dag(self, dag_id: str, config: dict) -> DAG:
+        """
+        Creates a DAG based on the given configuration.
+
+        :param dag_id: Unique identifier for the DAG.
+        :type dag_id: str
+        :param config: Configuration dictionary for the DAG.
+        :type config: dict
+        :return: Configured Airflow DAG object.
+        :rtype: DAG
+        """
+
+        # Update default args with DAG-specific configurations.
+        self.default_args.update(config.get(consts.DEFAULT_ARGS, INITIAL_DEFAULT_ARGS))
+
+        # Retrieve DAG run timeout (default to 30 minutes if not specified).
+        dag_timeout = int(config[consts.DAG].get(consts.DAGRUN_TIMEOUT)) if config[consts.DAG].get(consts.DAGRUN_TIMEOUT) else 30
+
+        # Define the DAG structure.
+        dag = DAG(
+            dag_id=dag_id,
+            default_args=self.default_args,
+            description="DAG to run queries in Postgres DB.",
+            render_template_as_native_obj=True,
+            schedule=config[consts.DAG].get(consts.SCHEDULE_INTERVAL),
+            start_date=datetime(2024, 8, 1, tzinfo=self.local_tz),
+            max_active_runs=1,
+            catchup=False,
+            dagrun_timeout=timedelta(minutes=dag_timeout),
+            is_paused_upon_creation=True,
+            tags=config[consts.DAG].get(consts.TAGS)
+        )
+        with dag:
+            # Handle pause/unpause behavior based on deployment configurations.
+            if config[consts.DAG].get(consts.READ_PAUSE_DEPLOY_CONFIG):
+                is_paused = read_pause_unpause_setting(dag_id, self.deploy_env)
+                pause_unpause_dag(dag, is_paused)
+
+            # Define start and end dummy tasks.
+            start_point = EmptyOperator(task_id=consts.START_TASK_ID)
+            end_point = EmptyOperator(task_id=consts.END_TASK_ID)
+
+            # Retrieve environment-specific configurations.
+            env = self.deploy_env
+
+            # Check if Airflow connection configuration is provided.
+            if config.get(consts.AIRFLOW_CONNECTION_CONFIG) and config.get(consts.POSTGRES):
+                # Extract database connection details.
+                db_host = config[consts.AIRFLOW_CONNECTION_CONFIG][env].get(consts.HOST)
+                db_login = config[consts.AIRFLOW_CONNECTION_CONFIG][env].get(consts.LOGIN)
+                db_schema = config[consts.AIRFLOW_CONNECTION_CONFIG][env].get(consts.SCHEMA)
+                db_port = config[consts.AIRFLOW_CONNECTION_CONFIG][env].get(consts.PORT)
+                secret_path = config[consts.AIRFLOW_CONNECTION_CONFIG][env].get(consts.VAULT_PASSWORD_SECRET_PATH)
+                secret_key = config[consts.AIRFLOW_CONNECTION_CONFIG][env].get(consts.VAULT_PASSWORD_SECRET_KEY)
+
+                # Create Airflow Connection Task, creates Airflow connection used when querying the Postgres DB.
+                create_airflow_connection_task = PythonOperator(
+                    task_id=consts.CREATE_AIRFLOW_CONNECTION,
+                    python_callable=create_airflow_connection,
+                    op_kwargs={
+                        consts.CONN_ID: config[consts.AIRFLOW_CONNECTION_CONFIG].get(consts.CONN_ID),
+                        consts.CONN_TYPE: config[consts.AIRFLOW_CONNECTION_CONFIG].get(consts.CONN_TYPE),
+                        consts.DESCRIPTION: config[consts.AIRFLOW_CONNECTION_CONFIG].get(consts.DESCRIPTION),
+                        consts.HOST: db_host,
+                        consts.LOGIN: db_login,
+                        consts.VAULT_PASSWORD_SECRET_PATH: secret_path,
+                        consts.VAULT_PASSWORD_SECRET_KEY: secret_key,
+                        consts.SCHEMA: db_schema,
+                        consts.PORT: db_port
+                    }
+                )
+
+                pg_query = None
+                # Retrieve the SQL query from configuration or file.
+                if config[consts.POSTGRES].get(consts.PG_QUERY):
+                    pg_query = config[consts.POSTGRES].get(consts.PG_QUERY)
+                elif config[consts.POSTGRES].get(consts.PG_QUERY_FILE):
+                    pg_query_file = f"{settings.DAGS_FOLDER}/{config[consts.POSTGRES].get(consts.PG_QUERY_FILE)}"
+                    pg_query = read_file_env(pg_query_file, env)
+                else:
+                    raise AirflowFailException("Please provide query, none found.")
+
+                # Task to execute the SQL query in Postgres.
+                postgres_execute_query_task = PcfPrePostEtlOperator(
+                    task_id=consts.POSTGRES_EXECUTE_QUERY_TASK_ID,
+                    query=pg_query,
+                    postgres_conn_id=config[consts.POSTGRES].get(consts.POSTGRES_CONN_ID)
+                )
+
+                # Define the task dependencies.
+                start_point >> create_airflow_connection_task >> postgres_execute_query_task >> end_point
+
+        return add_tags(dag)
+
+    def create_dags(self) -> dict:
+        """
+        Creates a dag for each provided configuration in the postgres_query_executor_config.yaml file.
+
+        :return: created dags.
+        :rtype: dict
+        """
+
+        if self.job_config:
+            dags = {}
+
+            # Loop through each job configuration to create a DAG.
+            for job_id, config in self.job_config.items():
+                dags[job_id] = self.create_dag(job_id, config)
+
+            return dags
+        else:
+            return {}

@@ -1,0 +1,3 @@
+- folder_name: mdl_pcb_pds
+  filename_pattern: ^mdl_pcb_pds_[a-z0-9_]{3,40}_\d{14}.*$
+  dags_to_trigger: [medallia_inbound_file_transfer]

@@ -1,0 +1,99 @@
+db839_mcc_sales_weekly_table_daily_loading_job:
+  is_sqlserver: True
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-pr839.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-pr839.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: Generic.dbo.MCC_SALES_WEEKLY
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: YearMonth
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: generic
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: MCC_SALES_WEEKLY
+  dag:
+    schedule_interval: '45 7 * * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_alm_table_daily_loading_job:
+  is_sqlserver: True
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-pr839.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-pr839.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: MasterCard.dbo.ALM
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: Month
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: mastercard
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: ALM
+  dag:
+    schedule_interval: '0 8 13 * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_indicator_table_daily_loading_job:
+  is_sqlserver: True
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-pr839.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-pr839.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: MasterCard.dbo.Indicator
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: Cohort
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: mastercard
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: INDICATOR
+  dag:
+    schedule_interval: '0 7 13 * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"
+
+db839_standard_data_pull_table_daily_loading_job:
+  is_sqlserver: True
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-pr839.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-pr839.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: MasterCard.dbo.Standard_Data_Pull
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+    pcb.bigquery.loader.source.primary.key.column: Month
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: mastercard
+  bigquery:
+    project_id: pcb-prod-pds
+    dataset_id: sql_server_tables
+    table_name: STANDARD_DATA_PULL
+  dag:
+    schedule_interval: '0 9 13 * *'
+  default_args:
+    owner: "team-centaurs"
+    capability: "PDS"

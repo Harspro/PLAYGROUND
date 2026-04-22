@@ -1,0 +1,324 @@
+tsys_conv_cheque_post_extractor:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Payments"
+    severity: "P2"
+    sub_capability: "Money Movement"
+    business_impact: 'Convenience cheques from NTT will not be processed and sent to TSYS'
+    customer_impact: 'Customer convenience cheques requests will not be posted to TSYS'
+  tags: ["MoneyMove - payments", "P2"]
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  cluster_name: ntt-conv-cheque-loader-c
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  PROCESSING_INTERIM_DIR: tsys_processing/ccpost/extract
+  PROCESSING_OUTPUT_DIR: tsys_processing/ccpost/extract
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: tsys-outbound-pcb{env_suffix}
+  destination_folder: pcb_tsys_ccbatch
+  inbound_dag_id: ntt_conv_cheque_loader
+  spark:
+    output_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/payments-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/payments-spark-batch/application.yaml
+    output_main_class: com.pcb.batch.spark.payments.PaymentsSparkBatchApplication
+    output_job_args:
+      interim.filepath: _tempplaceholder
+      output.filepath: _tempplaceholder
+      file.name: _tempplaceholder
+      output.filename: "pcb_tsys_ccbatch"
+      file.type: "CONVCHQ_PROC"
+      filename.extension: "{file_env}"
+      copybook.path: "gs://pcb-{env}-staging-artifacts/copybooks/dnh_conv_chq_proc/"
+    transformer.job: False
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    batch_num_table: TSYS_CONVCHQ_POST_PARAM
+    data_load_type: APPEND_ONLY
+    segment_dependency_groups:
+      - group_name: header
+        segments: HEDR
+      - group_name: batch-header
+        segments: BT-HEDR
+      - group_name: detail
+        segments: DETL
+      - group_name: trailer
+        segments: TRLR
+      - group_name: tr-trailer
+        segments: TR-TRLR
+    segment_args:
+      HEDR:
+        input_table_name: CONVCHQ_HEDR
+        output_table_name: CC_BATCH_TR_HEDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      BT-HEDR:
+        input_table_name: CONVCHQ_HEDR
+        output_table_name: CC_BATCH_HEDR
+        sequence_number_field: TH1_SEQUENCE_NUMBER
+        sequence_number_table: CC_BATCH_TR_HEDR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL:
+        input_table_name: CONVCHQ_DETL
+        output_table_name: CC_BATCH_DETL
+        sequence_number_field: BH1_SEQUENCE_NUMBER
+        sequence_number_table: CC_BATCH_HEDR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        input_table_name: CONVCHQ_DETL
+        output_table_name: CC_BATCH_TRLR
+        sequence_number_field: DF5_SEQUENCE_NUMBER
+        sequence_number_table: CC_BATCH_DETL_DBEXT_COLUMN_TF
+        prev_sequence_number_field: BH1_SEQUENCE_NUMBER
+        prev_sequence_number_table: CC_BATCH_HEDR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+      TR-TRLR:
+        input_table_name: CONVCHQ_DETL
+        output_table_name: CC_BATCH_TR_TRLR
+        sequence_number_field: BT1_SEQUENCE_NUMBER
+        sequence_number_table: CC_BATCH_TRLR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+
+dnh_cheque_order_extractor:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Payments"
+    severity: "P3"
+    sub_capability: "Money Movement"
+    business_impact: 'Convenience Cheque orders will not be processed and sent to NTT'
+    customer_impact: 'Customers who ordered cheques will not be processed by NTT . very low volume'
+  tags: ["MoneyMove - payments", "P3"]
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  cluster_name: tsys-cheque-order-loader-c
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  PROCESSING_INTERIM_DIR: m1s_processing/cheque_orders/extract
+  PROCESSING_OUTPUT_DIR: m1s_processing/cheque_orders/extract
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: finastra-outbound-pcb{env_suffix}
+  destination_folder: pcb_m1s_dhdailyorders
+  inbound_dag_id: tsys_cheque_order_loader
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/payments-spark-batch/application.yaml
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    output_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/payments-spark-batch-2.0.0.jar
+    output_main_class: com.pcb.batch.spark.payments.PaymentsSparkBatchApplication
+    output_job_args:
+      interim.filepath: _tempplaceholder
+      output.filepath: _tempplaceholder
+      file.name: _tempplaceholder
+      file.type: "CHEQUE_ORDER"
+      output.filename: "pcb_m1s_dhdailyorders"
+      filename.extension: "{file_env}"
+      copybook.path: "gs://pcb-{env}-staging-artifacts/copybooks/DH_Dailyorders/"
+    transformer.job: "false"
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    batch_num_table: DNH_CHQORDER_PARAM
+    data_load_type: APPEND_ONLY
+    segment_dependency_groups:
+      - group_name: header
+        segments: HEDR
+      - group_name: detail
+        segments: DETL
+      - group_name: trailer
+        segments: TRLR
+    segment_args:
+      HEDR:
+        input_table_name: CONVCHQ_HEDR
+        output_table_name: DH_DAILYORDERS_HEDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL:
+        input_table_name: TS2_CHQORDER_DETL
+        output_table_name: DH_DAILYORDERS_DETL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        input_table_name: TS2_CHQORDER_DETL
+        output_table_name: DH_DAILYORDERS_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+
+tsys_conv_cheque_fee_extractor:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Payments"
+    severity: "P3"
+    sub_capability: "Data Movement"
+    business_impact: 'NSF fee will not be communicated to TSYS for declined transactions '
+    customer_impact: 'NSF fee for Customer will not be posted , note these is a downstream process '
+  tags: ["MoneyMove - payments", "P3"]
+  job_size: small
+  cluster_name: tsys-convchq-conf-loader-c
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  PROCESSING_INTERIM_DIR: tsys_processing/tsys_cc_fee_post/extract
+  PROCESSING_OUTPUT_DIR: tsys_processing/tsys_cc_fee_post/extract
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: tsys-outbound-pcb{env_suffix}
+  destination_folder: pcb_tsys_ccfeepost
+  inbound_dag_id: tsys_convchq_conf_loader
+  spark:
+    output_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/payments-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/payments-spark-batch/application.yaml
+    output_main_class: com.pcb.batch.spark.payments.PaymentsSparkBatchApplication
+    output_job_args:
+      interim.filepath: _tempplaceholder
+      output.filepath: _tempplaceholder
+      file.name: _tempplaceholder
+      output.filename: "pcb_tsys_ccfeepost"
+      file.type: "CONVCHQ_CONF"
+      filename.extension: "{file_env}"
+      copybook.path: "gs://pcb-{env}-staging-artifacts/copybooks/CC_FEEPOST/"
+    transformer.job: "false"
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    batch_num_table: TSYS_CONVCHQ_FEE_PARAM
+    data_load_type: APPEND_ONLY
+    segment_dependency_groups:
+      - group_name: header
+        segments: HEDR
+      - group_name: batch-header
+        segments: BT-HEDR
+      - group_name: detail
+        segments: DETL
+      - group_name: trailer
+        segments: TRLR
+      - group_name: tr-trailer
+        segments: TR-TRLR
+    segment_args:
+      HEDR:
+        input_table_name: CONVCHQ_CONF_TR_HDR
+        output_table_name: CC_FEEPOST_TR_HEDR
+      BT-HEDR:
+        input_table_name: CONVCHQ_CONF_HEDR
+        output_table_name: CC_FEEPOST_HEDR
+        sequence_number_field: TH1_SEQUENCE_NUMBER
+        sequence_number_table: CC_FEEPOST_TR_HEDR_DBEXT_COLUMN_TF
+      DETL:
+        input_table_name: CONVCHQ_CONF_DETL
+        output_table_name: CC_FEEPOST_DETL
+        sequence_number_field: BH1_SEQUENCE_NUMBER
+        sequence_number_table: CC_FEEPOST_HEDR_DBEXT_COLUMN_TF
+      TRLR:
+        input_table_name: CC_FEEPOST_HEDR
+        output_table_name: CC_FEEPOST_TRLR
+        sequence_number_field: DF5_SEQUENCE_NUMBER
+        sequence_number_table: CC_FEEPOST_DETL_DBEXT_COLUMN_TF
+        prev_sequence_number_field: BH1_SEQUENCE_NUMBER
+        prev_sequence_number_table: CC_FEEPOST_HEDR_DBEXT_COLUMN_TF
+      TR-TRLR:
+        input_table_name: CC_FEEPOST_TRLR
+        output_table_name: CC_FEEPOST_TR_TRLR
+        sequence_number_field: BT1_SEQUENCE_NUMBER
+        sequence_number_table: CC_FEEPOST_TRLR_DBEXT_COLUMN_TF
+
+tsys_ppymts_post_extractor:
+  default_args:
+    owner: "team-money-movement-eng"
+    capability: "Payments"
+    severity: "P2"
+    sub_capability: "Money Movement"
+    business_impact: 'Paper payments will not be posted to TSYS'
+    customer_impact: 'Paper payments will not be posted to TSYS'
+  tags: ["MoneyMove - payments", "P2"]
+  job_size: small
+  processing_bucket: pcb-{env}-staging
+  cluster_name: tsys-ppayments-loader-c
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  PROCESSING_INTERIM_DIR: tsys_processing/ccpost/extract
+  PROCESSING_OUTPUT_DIR: tsys_processing/ccpost/extract
+  staging_bucket: pcb-{env}-staging
+  destination_bucket: tsys-outbound-pcb{env_suffix}
+  destination_folder: pcb_tsys_payments
+  inbound_dag_id: ntt_paper_payments_loader
+  spark:
+    output_jar_uri:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/payments-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/payments-spark-batch/application.yaml
+    output_main_class: com.pcb.batch.spark.payments.PaymentsSparkBatchApplication
+    output_job_args:
+      interim.filepath: _tempplaceholder
+      output.filepath: _tempplaceholder
+      file.name: _tempplaceholder
+      output.filename: "pcb_tsys_payments"
+      file.type: "P_PYMTS"
+      filename.extension: "{file_env}"
+      copybook.path: "gs://pcb-{env}-staging-artifacts/copybooks/tsys_ppayments/"
+    transformer.job: "false"
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    batch_num_table: TSYS_PPAYMENTS_PARAM
+    data_load_type: APPEND_ONLY
+    segment_dependency_groups:
+      - group_name: header
+        segments: TR-HEDR
+      - group_name: batch-header
+        segments: BT-HEDR
+      - group_name: detail
+        segments: DETL
+      - group_name: trailer
+        segments: BT-TRLR
+      - group_name: tr-trailer
+        segments: TR-TRLR
+    segment_args:
+      TR-HEDR:
+        input_table_name: PAPER_PYMT_HEDR
+        output_table_name: TSYS_PPYMT_TR_HEDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      BT-HEDR:
+        input_table_name: PAPER_PYMT_HEDR
+        output_table_name: TSYS_PPYMT_HEDR
+        sequence_number_field: TH1_SEQUENCE_NUMBER
+        sequence_number_table: TSYS_PPYMT_TR_HEDR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL:
+        input_table_name: PAPER_PYMT_DETL
+        output_table_name: TSYS_PPYMT_DETL
+        sequence_number_field: BH1_SEQUENCE_NUMBER
+        sequence_number_table: TSYS_PPYMT_HEDR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      BT-TRLR:
+        input_table_name: PAPER_PYMT_TRLR
+        output_table_name: TSYS_PPYMT_TRLR
+        sequence_number_field: DF5_SEQUENCE_NUMBER
+        sequence_number_table: TSYS_PPYMT_DETL_DBEXT_COLUMN_TF
+        prev_sequence_number_field: BH1_SEQUENCE_NUMBER
+        prev_sequence_number_table: TSYS_PPYMT_HEDR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+      TR-TRLR:
+        input_table_name: PAPER_PYMT_TRLR
+        output_table_name: TSYS_PPYMT_TR_TRLR
+        sequence_number_field: BT1_SEQUENCE_NUMBER
+        sequence_number_table: TSYS_PPYMT_TRLR_DBEXT_COLUMN_TF
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP

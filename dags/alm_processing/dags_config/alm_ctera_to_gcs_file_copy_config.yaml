@@ -1,0 +1,54 @@
+alm_pcb_ctera_to_gcs_file_copy_daily:
+  raw_file:
+    nonprod:
+      ctera_shared_folder: DFSPCBALMUAT/UAT/alm/in/original
+    prod:
+      ctera_shared_folder: DFSPCBALMPROD/PROD/alm/in/original
+  process_file:
+    nonprod:
+      pattern: .*_pcb_alm_.*_submit_.*_uatv.csv
+      ctera_shared_folder: DFSPCBALMUAT/UAT/alm/in/submit
+    prod:
+      pattern: .*_pcb_alm_.*_submit_.*_prod.csv
+      ctera_shared_folder: DFSPCBALMPROD/PROD/alm/in/submit
+  bbg_req_file:
+    pattern: .*pcb_bbg_alm_.*.req
+    nonprod:
+      ctera_shared_folder: DFSPCBALMUAT/UAT/alm/in/submit_bloomberg
+    prod:
+      ctera_shared_folder: DFSPCBALMPROD/PROD/alm/in/submit_bloomberg
+  gcs_archive_bucket: treasury-manual-archive-inbound-pcb{env_suffix}
+  gcs_archive_folder:
+     cibccm: archive
+     bmocm: archive
+     nbc: archive
+     rbcfc: archive
+     rbcdm: archive
+     pgf: archive
+     rdg: archive
+     eagcct: archive
+     safet: archive
+     soundt: archive
+     gwl: archive
+     treasury: archive
+  gcs_process_bucket: treasury-manual-inbound-pcb{env_suffix}
+  gcs_process_folder:
+     swap: treasury_inbound_swaps
+     bond: treasury_inbound_bonds
+     abcp: treasury_inbound_abcp
+     cash: treasury_inbound_cash
+     investment: treasury_inbound_investment
+     eagle: treasury_inbound_eagle
+     eaglefees: treasury_inbound_eaglefees
+     hedge: treasury_inbound_hedges
+     ref: treasury_inbound_ref_table
+  gcs_bbg_req_bucket: bbg-outbound-pcb{env_suffix}
+  gcs_bbg_req_folder: bbg_outbound_alm
+  bigquery:
+      destination_project_id: pcb-{env}-landing
+      destination_dataset_id: domain_treasury
+      destination_table_name: CTERA_TO_GCS_AUDIT_TABLE
+      partition_column: load_dt
+  dag:
+    schedule_interval: '0 17 * * 1-5'
+

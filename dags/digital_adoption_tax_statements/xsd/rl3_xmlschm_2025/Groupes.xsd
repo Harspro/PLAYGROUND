@@ -1,0 +1,1056 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="R01.xsd" />
+	<xsd:include
+    schemaLocation="A01.xsd" />
+	<xsd:include
+    schemaLocation="D01.xsd" />
+	<xsd:include
+    schemaLocation="T01.xsd" />
+	<xsd:include
+    schemaLocation="R02.xsd" />
+	<xsd:include
+    schemaLocation="A02.xsd" />
+	<xsd:include
+    schemaLocation="D02.xsd" />
+	<xsd:include
+    schemaLocation="T02.xsd" />
+	<xsd:include
+    schemaLocation="R03.xsd" />
+	<xsd:include
+    schemaLocation="A03.xsd" />
+	<xsd:include
+    schemaLocation="D03.xsd" />
+	<xsd:include
+    schemaLocation="T03.xsd" />
+	<xsd:include
+    schemaLocation="R05.xsd" />
+	<xsd:include
+    schemaLocation="A05.xsd" />
+	<xsd:include
+    schemaLocation="D05.xsd" />
+	<xsd:include
+    schemaLocation="T05.xsd" />
+	<xsd:include
+    schemaLocation="R06.xsd" />
+	<xsd:include
+    schemaLocation="A06.xsd" />
+	<xsd:include
+    schemaLocation="D06.xsd" />
+	<xsd:include
+    schemaLocation="T06.xsd" />
+	<xsd:include
+    schemaLocation="R07.xsd" />
+	<xsd:include
+    schemaLocation="A07.xsd" />
+	<xsd:include
+    schemaLocation="D07.xsd" />
+	<xsd:include
+    schemaLocation="T07.xsd" />
+	<xsd:include
+    schemaLocation="R08.xsd" />
+	<xsd:include
+    schemaLocation="A08.xsd" />
+	<xsd:include
+    schemaLocation="D08.xsd" />
+	<xsd:include
+    schemaLocation="T08.xsd" />
+	<xsd:include
+    schemaLocation="R10.xsd" />
+	<xsd:include
+    schemaLocation="A10.xsd" />
+	<xsd:include
+    schemaLocation="D10.xsd" />
+	<xsd:include
+    schemaLocation="T10.xsd" />
+	<xsd:include
+    schemaLocation="R11.xsd" />
+	<xsd:include
+    schemaLocation="A11.xsd" />
+	<xsd:include
+    schemaLocation="D11.xsd" />
+	<xsd:include
+    schemaLocation="T11.xsd" />
+	<xsd:include
+    schemaLocation="R13.xsd" />
+	<xsd:include
+    schemaLocation="A13.xsd" />
+	<xsd:include
+    schemaLocation="D13.xsd" />
+	<xsd:include
+    schemaLocation="T13.xsd" />
+	<xsd:include
+    schemaLocation="R14.xsd" />
+	<xsd:include
+    schemaLocation="A14.xsd" />
+	<xsd:include
+    schemaLocation="D14.xsd" />
+	<xsd:include
+    schemaLocation="T14.xsd" />
+	<xsd:include
+    schemaLocation="R15.xsd" />
+	<xsd:include
+    schemaLocation="A15.xsd" />
+	<xsd:include
+    schemaLocation="D15.xsd" />
+	<xsd:include
+    schemaLocation="T15.xsd" />
+	<xsd:include
+    schemaLocation="R16.xsd" />
+	<xsd:include
+    schemaLocation="A16.xsd" />
+	<xsd:include
+    schemaLocation="D16.xsd" />
+	<xsd:include
+    schemaLocation="T16.xsd" />
+	<xsd:include
+    schemaLocation="R18.xsd" />
+	<xsd:include
+    schemaLocation="A18.xsd" />
+	<xsd:include
+    schemaLocation="D18.xsd" />
+	<xsd:include
+    schemaLocation="T18.xsd" />
+	<xsd:include
+    schemaLocation="R21.xsd" />
+	<xsd:include
+    schemaLocation="A21.xsd" />
+	<xsd:include
+    schemaLocation="D21.xsd" />
+	<xsd:include
+    schemaLocation="T21.xsd" />
+	<xsd:include
+    schemaLocation="R22.xsd" />
+	<xsd:include
+    schemaLocation="A22.xsd" />
+	<xsd:include
+    schemaLocation="D22.xsd" />
+	<xsd:include
+    schemaLocation="T22.xsd" />
+	<xsd:include
+    schemaLocation="R24.xsd" />
+	<xsd:include
+    schemaLocation="A24.xsd" />
+	<xsd:include
+    schemaLocation="D24.xsd" />
+	<xsd:include
+    schemaLocation="T24.xsd" />
+	<xsd:include
+    schemaLocation="R25.xsd" />
+	<xsd:include
+    schemaLocation="A25.xsd" />
+	<xsd:include
+    schemaLocation="D25.xsd" />
+	<xsd:include
+    schemaLocation="T25.xsd" />
+	<xsd:include
+    schemaLocation="R26.xsd" />
+	<xsd:include
+    schemaLocation="A26.xsd" />
+	<xsd:include
+    schemaLocation="D26.xsd" />
+	<xsd:include
+    schemaLocation="T26.xsd" />
+	<xsd:include
+    schemaLocation="R27.xsd" />
+	<xsd:include
+    schemaLocation="A27.xsd" />
+	<xsd:include
+    schemaLocation="D27.xsd" />
+	<xsd:include
+    schemaLocation="T27.xsd" />
+	<xsd:include
+    schemaLocation="R29.xsd" />
+	<xsd:include
+    schemaLocation="A29.xsd" />
+	<xsd:include
+    schemaLocation="D29.xsd" />
+	<xsd:include
+    schemaLocation="T29.xsd" />
+	<xsd:include
+    schemaLocation="R31.xsd" />
+	<xsd:include
+    schemaLocation="A31.xsd" />
+	<xsd:include
+    schemaLocation="D31.xsd" />
+	<xsd:include
+    schemaLocation="T31.xsd" />
+	<xsd:include
+    schemaLocation="R32.xsd" />
+	<xsd:include
+    schemaLocation="A32.xsd" />
+	<xsd:include
+    schemaLocation="D32.xsd" />
+	<xsd:include
+    schemaLocation="T32.xsd" />
+	<xsd:include
+    schemaLocation="R4O.xsd" />
+	<xsd:include
+    schemaLocation="A4O.xsd" />
+	<xsd:include
+    schemaLocation="D4O.xsd" />
+	<xsd:include
+    schemaLocation="T4O.xsd" />
+	<xsd:include
+    schemaLocation="R4E.xsd" />
+	<xsd:include
+    schemaLocation="A4E.xsd" />
+	<xsd:include
+    schemaLocation="D4E.xsd" />
+	<xsd:include
+    schemaLocation="T4E.xsd" />
+	<!-- @@@@    Groupe01     @@@@ -->
+	<xsd:element
+    name="Groupe01"
+    type="Groupe01Struct" />
+	<xsd:complexType
+    name="Groupe01Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R01Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A01Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D01Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T01Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe02     @@@@ -->
+	<xsd:element
+    name="Groupe02"
+    type="Groupe02Struct" />
+	<xsd:complexType
+    name="Groupe02Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R02Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A02Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D02Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T02Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe03     @@@@ -->
+	<xsd:element
+    name="Groupe03"
+    type="Groupe03Struct" />
+	<xsd:complexType
+    name="Groupe03Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R03Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A03Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D03Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T03Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe05     @@@@ -->
+	<xsd:element
+    name="Groupe05"
+    type="Groupe05Struct" />
+	<xsd:complexType
+    name="Groupe05Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R05Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A05Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D05Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T05Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe06     @@@@ -->
+	<xsd:element
+    name="Groupe06"
+    type="Groupe06Struct" />
+	<xsd:complexType
+    name="Groupe06Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R06Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A06Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D06Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T06Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe07     @@@@ -->
+	<xsd:element
+    name="Groupe07"
+    type="Groupe07Struct" />
+	<xsd:complexType
+    name="Groupe07Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R07Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A07Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D07Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T07Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe08     @@@@ -->
+	<xsd:element
+    name="Groupe08"
+    type="Groupe08Struct" />
+	<xsd:complexType
+    name="Groupe08Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R08Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A08Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D08Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T08Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe10     @@@@ -->
+	<xsd:element
+    name="Groupe10"
+    type="Groupe10Struct" />
+	<xsd:complexType
+    name="Groupe10Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R10Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A10Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D10Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T10Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe11     @@@@ -->
+	<xsd:element
+    name="Groupe11"
+    type="Groupe11Struct" />
+	<xsd:complexType
+    name="Groupe11Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R11Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A11Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D11Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T11Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe13     @@@@ -->
+	<xsd:element
+    name="Groupe13"
+    type="Groupe13Struct" />
+	<xsd:complexType
+    name="Groupe13Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R13Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A13Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D13Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T13Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe14     @@@@ -->
+	<xsd:element
+    name="Groupe14"
+    type="Groupe14Struct" />
+	<xsd:complexType
+    name="Groupe14Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R14Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A14Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D14Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T14Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe15     @@@@ -->
+	<xsd:element
+    name="Groupe15"
+    type="Groupe15Struct" />
+	<xsd:complexType
+    name="Groupe15Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R15Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A15Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D15Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T15Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe16     @@@@ -->
+	<xsd:element
+    name="Groupe16"
+    type="Groupe16Struct" />
+	<xsd:complexType
+    name="Groupe16Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R16Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A16Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D16Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T16Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe18     @@@@ -->
+	<xsd:element
+    name="Groupe18"
+    type="Groupe18Struct" />
+	<xsd:complexType
+    name="Groupe18Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R18Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A18Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D18Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T18Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe21     @@@@ -->
+	<xsd:element
+    name="Groupe21"
+    type="Groupe21Struct" />
+	<xsd:complexType
+    name="Groupe21Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R21Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A21Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D21Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T21Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe22     @@@@ -->
+	<xsd:element
+    name="Groupe22"
+    type="Groupe22Struct" />
+	<xsd:complexType
+    name="Groupe22Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R22Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A22Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D22Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T22Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe24     @@@@ -->
+	<xsd:element
+    name="Groupe24"
+    type="Groupe24Struct" />
+	<xsd:complexType
+    name="Groupe24Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R24Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A24Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D24Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T24Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe25     @@@@ -->
+	<xsd:element
+    name="Groupe25"
+    type="Groupe25Struct" />
+	<xsd:complexType
+    name="Groupe25Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R25Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A25Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D25Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T25Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe26     @@@@ -->
+	<xsd:element
+    name="Groupe26"
+    type="Groupe26Struct" />
+	<xsd:complexType
+    name="Groupe26Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R26Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A26Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D26Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T26Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe27     @@@@ -->
+	<xsd:element
+    name="Groupe27"
+    type="Groupe27Struct" />
+	<xsd:complexType
+    name="Groupe27Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R27Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A27Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D27Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T27Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe29     @@@@ -->
+	<xsd:element
+    name="Groupe29"
+    type="Groupe29Struct" />
+	<xsd:complexType
+    name="Groupe29Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R29Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A29Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D29Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T29Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe31     @@@@ -->
+	<xsd:element
+    name="Groupe31"
+    type="Groupe31Struct" />
+	<xsd:complexType
+    name="Groupe31Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R31Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A31Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D31Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T31Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe32     @@@@ -->
+	<xsd:element
+    name="Groupe32"
+    type="Groupe32Struct" />
+	<xsd:complexType
+    name="Groupe32Struct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R32Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A32Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D32Struct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T32Struct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe4O     @@@@ -->
+	<xsd:element
+    name="Groupe4O"
+    type="Groupe4OStruct" />
+	<xsd:complexType
+    name="Groupe4OStruct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R4OStruct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A4OStruct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D4OStruct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T4OStruct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- @@@@    Groupe4E     @@@@ -->
+	<xsd:element
+    name="Groupe4E"
+    type="Groupe4EStruct" />
+	<xsd:complexType
+    name="Groupe4EStruct">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element
+          name="R"
+          type="R4EStruct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="A"
+          type="A4EStruct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+				<xsd:element
+          name="D"
+          type="D4EStruct"
+          maxOccurs="unbounded">
+					
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element
+        name="T"
+        type="T4EStruct">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

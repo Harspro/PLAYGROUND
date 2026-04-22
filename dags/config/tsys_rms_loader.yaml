@@ -1,0 +1,110 @@
+tsys_rms_file_loader:
+  default_args:
+    owner: "team-defenders-alerts"
+    capability: "risk-management"
+    severity: "P3"
+    sub_capability: "credit-risk"
+    business_impact: 'RecoveryManagementSystem transactions will not be processed successfully'
+    customer_impact: 'No Impact'
+  tags:
+    - P3
+  job_size: medium
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_rms
+  folder_prefix: tsys_pcb_rms
+  outbound_trigger: True
+  trigger_dag_id: score_rms_post_extractor
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    file_uris:
+      - gs://pcb-{env}-staging-artifacts/resources/rms-spark-batch/application.yaml
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: TSYS_RMS
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: TSYS_RMS
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: detl_group
+        segments: DETL01,DETL02,DETL03,DETL04,DETL05
+      - group_name: header_group
+        segments: HEDR
+    segment_args:
+      HEDR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_rms/HEDR.CPY
+        pcb.tsys.processor.segment.name: "HD"
+        pcb.tsys.processor.layout.name: HEDR_REC
+      DETL01:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_rms/DETL01.CPY
+        pcb.tsys.processor.segment.name: "01"
+        pcb.tsys.processor.layout.name: DETL01_REC
+      DETL02:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_rms/DETL02.CPY
+        pcb.tsys.processor.segment.name: "02"
+        pcb.tsys.processor.layout.name: DETL02_REC
+      DETL03:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_rms/DETL03.CPY
+        pcb.tsys.processor.segment.name: "03"
+        pcb.tsys.processor.layout.name: DETL03_REC
+      DETL04:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_rms/DETL04.CPY
+        pcb.tsys.processor.segment.name: "04"
+        pcb.tsys.processor.layout.name: DETL04_REC
+      DETL05:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_rms/DETL05.CPY
+        pcb.tsys.processor.segment.name: "05"
+        pcb.tsys.processor.layout.name: DETL05_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_rms/TRLR.CPY
+        pcb.tsys.processor.segment.name: "TR"
+        pcb.tsys.processor.layout.name: TRLR_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    landing_proj_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      HEDR:
+        table_name: TSYS_RMS_HEDR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL01:
+        table_name: RMS_NEW_ACCOUNT_01
+        record_count_column: REC1_TOTAL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL02:
+        table_name: RMS_MEMO_02
+        record_count_column: REC2_TOTAL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL03:
+        table_name: RMS_TRANSACTION_03
+        record_count_column: REC3_TOTAL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL04:
+        table_name: RMS_MAINT_ACCOUNT_04
+        record_count_column: REC4_TOTAL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      DETL05:
+        table_name: RMS_LEGAL_05
+        record_count_column: REC5_TOTAL
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      TRLR:
+        table_name: TSYS_RMS_TRLR
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        create_date_column: FILE_CREATE_DT

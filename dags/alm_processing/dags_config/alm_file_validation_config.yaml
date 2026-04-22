@@ -1,0 +1,14 @@
+alm_cibccm_pcb_bonds_file_validator:
+  file:
+    days_delta: 0
+    extension: "{file_env}"
+  inbound_bucket: treasury-manual-inbound-pcb-{env}
+  inbound_folder: treasury_inbound_swaps
+  inbound_file:
+    format: csv
+    delimiter: "|"
+    header: true
+    footer: true
+    prefix: cibccm_pcb_alm_swaps_submit
+  
+        

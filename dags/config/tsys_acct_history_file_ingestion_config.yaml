@@ -1,0 +1,505 @@
+tsys_pcb_mc_acct_hist_file_loading:
+  job_size: small
+  source_bucket: tsys-inbound-pcb
+  processing_bucket: pcb-{env}-staging
+  processing_bucket_config: pcb-{env}-staging-artifacts
+  processing_bucket_extract: pcb-{env}-staging-extract
+  file_prefix: tsys_pcb_mc_accthisto
+  bigquery_oracle_loader_dag_id: acct_hist_bq_to_oracle
+  file_date_column: FILE_CREATE_DT
+  require_bigquery_oracle_loader: True
+  trigger_flag: True
+  spark:
+    jar_file_uris:
+      - gs://pcb-{env}-staging-artifacts/jarfiles/tsys-spark-batch-2.0.0.jar
+    main_class: com.pcb.batch.spark.tsys.TsysSparkBatchApplication
+    filtering_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_HISTORY
+      pcb.tsys.processor.filtering: true
+    parsing_job_args:
+      pcb.tsys.processor.datafile.path: _tempplaceholder
+      pcb.tsys.processor.datafile.type: ACCOUNT_HISTORY
+      pcb.tsys.processor.output.format: parquet
+      pcb.tsys.processor.output.path: _tempplaceholder
+    segment_dependency_groups:
+      - group_name: trailer_group
+        segments: TRLR
+      - group_name: ah00_group
+        segments: AH00
+      - group_name: ah00_dependents_group
+        segments: AH01, AH02_ADJ_PASTDUE, AH02_CHG_OFF, AH02_COLL_AGENCY, AH02_CREDLIM_CHG, AH02_DISPUTES, AH02_HIST_BKP, AH02_HIST_TYPE10, AH02_PTP, AH02_REAGE, AH02_REGZ
+      - group_name: ah00_ah01_dependents_group
+        segments: AH31, AH32, AH35
+    segment_args:
+      AH00:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH00.CPY
+        pcb.tsys.processor.segment.name: AH00
+        pcb.tsys.processor.layout.name: AH00_REC
+      AH01:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH01.CPY
+        pcb.tsys.processor.segment.name: AH01
+        pcb.tsys.processor.layout.name: AH01_REC
+      AH02_ADJ_PASTDUE:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_ADJ_PASTDUE.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_ADJ_PASTDUE
+      AH02_CHG_OFF:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_CHG_OFF.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_CHG_OFF
+      AH02_COLL_AGENCY:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_COLL_AGENCY.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_COLL_AGENCY
+      AH02_CREDLIM_CHG:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_CREDLIM_CHG.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_CREDLIM_CHG
+      AH02_DISPUTES:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_DISPUTES.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_DISPUTES
+      AH02_HIST_BKP:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_HIST_BKP.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_HIST_BKP
+      AH02_HIST_TYPE10:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_HIST_TYPE10.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_HIST_TYPE10
+      AH02_PTP:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_PTP.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_PTP
+      AH02_REAGE:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_REAGE.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_REAGE
+      AH02_REGZ:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH02_REGZ_HIST.CPY
+        pcb.tsys.processor.segment.name: AH02
+        pcb.tsys.processor.layout.name: AH02_REGZ
+      AH31:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH31.CPY
+        pcb.tsys.processor.segment.name: AH31
+        pcb.tsys.processor.layout.name: AH31_REC
+      AH32:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH32.CPY
+        pcb.tsys.processor.segment.name: AH32
+        pcb.tsys.processor.layout.name: AH32_REC
+      AH35:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/MSTAHIST_AH35.CPY
+        pcb.tsys.processor.segment.name: AH35
+        pcb.tsys.processor.layout.name: AH35_REC
+      TRLR:
+        pcb.tsys.processor.copybook.path: gs://pcb-{env}-staging-artifacts/copybooks/tsys_pcb_mc_accthistory/TRLR.CPY
+        pcb.tsys.processor.segment.name: 9999
+        pcb.tsys.processor.layout.name: MAST_TRAILER_REC
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_account_management
+    data_load_type: APPEND_ONLY
+    tables:
+      AH00:
+        table_name: AH00
+        record_count_column: TRAILER_REC_CNT_X_1
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+      AH01:
+        table_name: AH01
+        record_count_column: TRAILER_REC_CNT_X_2
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH01_CDATE_CYCLE IS NOT NULL AND AH01_CDATE_CYCLE>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH01_CDATE_CYCLE AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH01_CDATE_CYCLE
+        drop_columns:
+          - AH01_CDATE_CYCLE
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_ADJ_PASTDUE:
+        table_name: AH02_ADJ_PASTDUE
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_CHG_OFF:
+        table_name: AH02_CHG_OFF
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_COLL_AGENCY:
+        table_name: AH02_COLL_AGENCY
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_CREDLIM_CHG:
+        table_name: AH02_CREDLIM_CHG
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_DISPUTES:
+        table_name: AH02_DISPUTES
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_STMT_BEGIN IS NOT NULL AND AH02_CDATE_STMT_BEGIN>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_STMT_BEGIN AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_STMT_BEGIN
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+          - IF(AH02_TIME_POST IS NOT NULL AND AH02_TIME_POST>0, REGEXP_REPLACE(FORMAT('%07d', CAST(AH02_TIME_POST AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_TIME_POST AS STRING))  AS AH02_TIME_POST
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CDATE_STMT_BEGIN
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+          - AH02_TIME_POST
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_HIST_BKP:
+        table_name: AH02_HIST_BKP
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_HIST_TYPE10:
+        table_name: AH02_HIST_TYPE10
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_PTP:
+        table_name: AH02_PTP
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_REAGE:
+        table_name: AH02_REAGE
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH02_REGZ:
+        table_name: AH02_REGZ_HIST
+        is_redefine: True
+        record_count_column: TRAILER_REC_CNT_X_6
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto') AS REC_LOAD_TIMESTAMP
+          - IF(AH02_CDATE_HISTORY IS NOT NULL AND AH02_CDATE_HISTORY>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH02_CDATE_HISTORY AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH02_CDATE_HISTORY
+          - IF(AH02_CTIME_HISTORY IS NOT NULL AND AH02_CTIME_HISTORY>0, REGEXP_REPLACE(FORMAT('%07d', CAST(10000000-AH02_CTIME_HISTORY AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH02_CTIME_HISTORY AS STRING))  AS AH02_CTIME_HISTORY
+        drop_columns:
+          - AH02_CDATE_HISTORY
+          - AH02_CTIME_HISTORY
+          - AH02_ACT_HIST_DETAIL_DATA
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH31:
+        table_name: AH31
+        record_count_column: TRAILER_REC_CNT_X_3
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH01
+            output_columns:
+              - AH01_CDATE_CYCLE
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH32:
+        table_name: AH32
+        record_count_column: TRAILER_REC_CNT_X_4
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH01
+            output_columns:
+              - AH01_CDATE_CYCLE
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      AH35:
+        table_name: AH35
+        record_count_column: TRAILER_REC_CNT_X_5
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+          - IF(AH35_CDATE_STMT_BEG IS NOT NULL AND AH35_CDATE_STMT_BEG>0, PARSE_DATE('%E4Y%j', CAST(10000000-AH35_CDATE_STMT_BEG AS STRING)), SAFE_CAST(NULL AS DATE)) AS AH35_CDATE_STMT_BEG
+          - IF(AH35_TIME_POST IS NOT NULL AND AH35_TIME_POST>0, REGEXP_REPLACE(FORMAT('%07d', CAST(AH35_TIME_POST AS INT64)), r'^([0-9]{2})([0-9]{2})([0-9]{3})$', '\\1:\\2:\\3'), SAFE_CAST(AH35_TIME_POST AS STRING))  AS AH35_TIME_POST
+        drop_columns:
+          - AH35_CDATE_STMT_BEG
+          - AH35_TIME_POST
+        join:
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH00
+            output_columns:
+              - AH00_CLIENT_NUM
+              - AH00_APPLICATION_NUM
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+          - project_id: pcb-{env}-landing
+            dataset_id: domain_account_management
+            table_name: AH01
+            output_columns:
+              - AH01_CDATE_CYCLE
+            join_columns:
+              - from_col: s.FILE_CREATE_DT
+                to_col: t.FILE_CREATE_DT
+              - from_col: s.MAST_ACCOUNT_ID
+                to_col: t.MAST_ACCOUNT_ID
+              - from_col: s.AH00_APPLICATION_SUFFIX
+                to_col: t.AH00_APPLICATION_SUFFIX
+      TRLR:
+        table_name: ACCOUNT_HISTORY_TRAILER
+        add_columns:
+          - CURRENT_DATETIME('America/Toronto')  AS REC_LOAD_TIMESTAMP
+        duplicate_check_cols:
+          - FILE_CREATE_DT
+  default_args:
+    owner: "team-digital-adoption-alerts"
+    capability: "account-management"
+    sub_capability: "account-management"
+    business_impact: "Potential compliance issue due to delay in loading business data"
+    customer_impact: "Delay in loading business data"
+    severity: "P3"

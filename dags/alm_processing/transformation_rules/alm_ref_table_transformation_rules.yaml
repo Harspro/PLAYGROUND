@@ -1,0 +1,63 @@
+context_parameter:
+      bq_staging_tmp_table_id: "pcb-{env}-processing.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI_STG"
+      bq_source_tmp_table_id: "pcb-{env}-processing.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI_RAW_TMP"
+      bq_history_table_id: "pcb-{env}-processing.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI_HIST"
+      bq_target_table_id: "pcb-{env}-curated.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI"
+      bq_invalid_table_id: "pcb-{env}-processing.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI_INVALID_DATA"
+      bq_audit_table_id: "pcb-{env}-processing.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI_AUDIT_DATA"
+      bq_invalid_tmp_table_id: "pcb-{env}-processing.cots_alm_tbsm.REF_ALM_INTEREST_RATE_BY_FI_INVALID_TMP"
+      target_table_schema: REQUESTOR_EMAIL STRING, REFERENCE_TABLE_ID STRING, ACTION STRING, VENDOR_CODE STRING, INSTRUMENT_TYPE STRING, FIELD_NAME STRING, BANK STRING, RATE STRING, EFFECTIVE_DATE DATE, END_DATE DATE, LOAD_DATE DATETIME
+      staging_table_schema: REQUESTOR_EMAIL STRING, REFERENCE_TABLE_ID STRING, ACTION STRING, VENDOR_CODE STRING, INSTRUMENT_TYPE STRING, FIELD_NAME STRING, BANK STRING, OLD_RATE STRING, NEW_RATE STRING, EFFECTIVE_DATE DATE, END_DATE DATE, LOAD_DATE DATETIME
+      invalid_table_schema: REQUESTOR_EMAIL STRING, REFERENCE_TABLE_ID STRING, ACTION STRING, VENDOR_CODE STRING, INSTRUMENT_TYPE STRING, FIELD_NAME STRING, BANK STRING, OLD_RATE STRING, NEW_RATE STRING, EFFECTIVE_DATE DATE, END_DATE DATE, LOAD_DATE DATETIME, ERROR_MESSAGE STRING
+      audit_table_schema: AUDIT_DATE DATETIME, REFERENCE_TABLE_ID STRING, STAGING_RECORDS INT64, INGESTED_INTO_TARGET INT64, INVALID_RECORDS INT64, TOTAL_PROCESSED INT64, STATUS STRING
+      reference_table_id_parameter: "REF_ALM_INTEREST_RATE_BY_FI"
+      load_date: DATETIME(CURRENT_TIMESTAMP(), "America/Toronto")
+      
+
+transformation:
+  - task_name: trans1_load_ref_raw_tmp_to_stg_tmp
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans1_load_ref_raw_tmp_to_stg_tmp.sql
+  
+  - task_name: trans2_load_ref_stg_tmp_to_hist
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans2_load_ref_stg_tmp_to_hist.sql
+
+  - task_name: trans3_load_ref_stg_tmp_to_invalid_tmp
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans3_load_ref_stg_tmp_to_invalid_tmp.sql
+  
+  - task_name: trans4_insert_ref_invalid_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans4_insert_ref_invalid_table.sql
+
+  - task_name: trans5_update_target_table_for_action_add
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans5_update_target_table_for_action_add.sql
+  
+  - task_name: trans6_update_target_table_for_action_change
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans6_update_target_table_for_action_change.sql
+
+  - task_name: trans7_update_target_table_for_action_expire
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans7_update_target_table_for_action_expire.sql
+  
+  - task_name: trans8_replace_invalid_tmp_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans8_replace_invalid_tmp_table.sql
+  
+  - task_name: trans9_insert_audit_table
+    task_type: SQL_EXTRACT_BQ_TO_BQ
+    task_param:
+        script_path: sql/ref_table_interest_rate/trans9_insert_audit_table.sql
+
+

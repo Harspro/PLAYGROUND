@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- édité avec XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) par Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSpy v2016 rel. 2 sp1 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du P @@@@ -->
+	<xsd:element
+    name="P"
+    type="PStruct" />
+	<xsd:complexType
+    name="PStruct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="TypeEnvoi"
+        type="Indicateur1-4-6Type">
+				
+			</xsd:element>
+			<xsd:element
+        name="Preparateur">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+              name="No">
+							
+							<xsd:simpleType>
+								<xsd:restriction
+                  base="xsd:string">
+									<xsd:pattern
+                    value="(NP|np)\d{6}" />
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element
+              name="Type"
+              type="Indicateur1-3Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Nom1"
+              type="Char30Type">
+							
+						</xsd:element>
+						<xsd:element
+              name="Nom2"
+              type="Char30Type"
+              minOccurs="0">
+							
+						</xsd:element>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct"
+              minOccurs="0" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element
+        name="Informatique"
+        type="RessourceStruct"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="Comptabilite"
+        type="RessourceStruct"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoCertification">
+				
+				<xsd:simpleType>
+					<xsd:restriction
+            base="xsd:string">
+						<xsd:pattern
+              value="RQ-\d{2}-\w{2}-\w{3}" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element
+        name="NomLogiciel"
+        type="Char40Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="VersionLogiciel"
+        type="Char15Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="CourrielResponsable"
+        type="Char60Type"
+        minOccurs="0">
+				
+			</xsd:element>
+			<xsd:element
+        name="IdPartenaireReleves"
+        type="Char16FixeType">
+				
+			</xsd:element>
+			<xsd:element
+        name="IdProduitReleves"
+        type="Char16FixeType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NoCasEssai"
+        type="Char25Type"
+        minOccurs="0">
+				
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

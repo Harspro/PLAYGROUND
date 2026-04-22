@@ -1,0 +1,11 @@
+# for airflow scanning
+import os
+
+from bigquery_loader.bigquery_batchloader import BigQueryBatchLoader
+from bigquery_loader.bigquery_loader_base import LoadingFrequency
+from util.constants import DLAAS_BQL_CHUNK_CONFIG_PATH
+
+os.makedirs(DLAAS_BQL_CHUNK_CONFIG_PATH, exist_ok=True)
+for config in os.listdir(DLAAS_BQL_CHUNK_CONFIG_PATH):
+    globals().update(
+        BigQueryBatchLoader(config, LoadingFrequency.Onetime, DLAAS_BQL_CHUNK_CONFIG_PATH, True).create_dags())  # pragma: no cover

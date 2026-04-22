@@ -1,0 +1,11 @@
+CREATE OR REPLACE TABLE
+  `pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED_BCKP_NO_FEE_PCMA`
+AS
+SELECT 
+  * 
+FROM
+  `pcb-{env}-landing.domain_loyalty.LOYALTY_POINTS_EARNED`
+WHERE
+  CARD_BIN IN (518116, 522879, 518127, 533866)
+;
+

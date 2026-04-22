@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- édité avec XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) par Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSpy v2008 rel. 2 (http://www.altova.com) by Revenu Quebec (Revenu Quebec) -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Diane Roy (mrq) -->
+<xsd:schema
+  targetNamespace="http://www.mrq.gouv.qc.ca/T5"
+  elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mrq.gouv.qc.ca/T5">
+	<xsd:include
+    schemaLocation="Complexe.xsd" />
+	<xsd:include
+    schemaLocation="SimpleEvolutif.xsd" />
+	<!-- @@@@ Definition du T24         @@@@           -->
+	<xsd:complexType
+    name="T24Struct">
+		<xsd:sequence>
+			<xsd:element
+        name="Annee"
+        type="AnImpositionType">
+				
+			</xsd:element>
+			<xsd:element
+        name="NbReleves"
+        type="Int9Type">
+				
+			</xsd:element>
+			<xsd:element
+        name="Emetteur">
+				
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:choice>
+							<xsd:element
+                name="Personne">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NAS"
+                      type="NasType"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NEQ"
+                      type="Numeric10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NoFiche"
+                      type="Numeric1To10Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NomFamille"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Prenom"
+                      type="Char30Type">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="Etablissement">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="No"
+                      type="Numeric8Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="Ecole">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="Code"
+                      type="Char6Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element
+                name="RaisonSociale">
+								
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element
+                      name="NoId"
+                      type="NoIdentificationType"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="TypeDossier"
+                      type="xsd:string"
+                      fixed="RS"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NoDossier"
+                      type="NoDossierType"
+                      minOccurs="0">
+											
+										</xsd:element>
+										<xsd:element
+                      name="NEQ"
+                      type="Numeric10Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom1"
+                      type="Char30Type">
+											
+										</xsd:element>
+										<xsd:element
+                      name="Nom2"
+                      type="Char30Type"
+                      minOccurs="0">
+											
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element
+              name="Adresse"
+              type="Adresse2Struct" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

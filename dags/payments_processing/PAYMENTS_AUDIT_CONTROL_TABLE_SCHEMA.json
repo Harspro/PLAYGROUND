@@ -1,0 +1,58 @@
+[
+  {
+    "name": "DAG_RUN_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "DAG_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "FILE_CREATE_DT",
+    "type": "DATE"
+  },
+  {
+    "name": "INBOUND_FILE_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "INBOUND_RECORD_COUNT",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "INBOUND_TOTAL_AMOUNT",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "OUTBOUND_DAG_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "OUTBOUND_RUN_ID",
+    "type": "STRING"
+  },
+  {
+    "name": "OUTBOUND_FILE_NAME",
+    "type": "STRING"
+  },
+  {
+    "name": "OUTBOUND_RECORD_COUNT",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "OUTBOUND_TOTAL_AMOUNT",
+    "type": "NUMERIC"
+  },
+  {
+    "name": "JOB_START_TIME",
+    "type": "DATETIME"
+  },
+  {
+    "name": "JOB_END_TIME",
+    "type": "DATETIME"
+  },
+  {
+    "name": "STATUS",
+    "type": "STRING"
+  }
+]

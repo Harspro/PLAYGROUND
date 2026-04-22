@@ -1,0 +1,105 @@
+from datetime import datetime
+from aml_processing.funds_move.funds_move_dag_builder_common import FundsMoveTable, FundsMoveDagBuilder
+from typing import List
+import logging
+from aml_processing.transaction.bq_util import run_bq_dml_with_log
+from airflow import DAG
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
+from aml_processing import feed_commons as commons
+from aml_processing.funds_move.sql_builder import PROJECT_LANDING, TABLE_FUNDS_MOVE_CTL
+
+
+class FundsMoveCDCFix():
+
+    @staticmethod
+    def read_config(config_filename: str, config_dir: str = None) -> List[FundsMoveTable]:
+        dag_config = FundsMoveDagBuilder.read_dag_config(config_filename, config_dir)
+
+        tables: List[FundsMoveTable] = []
+        for dag_id, config in dag_config.items():
+            logging.info(f"loading config for table:{config['table_name']}")
+            funds_move_table = FundsMoveTable(dag_id=dag_id, schedule_cron=config["schedule_cron"], dataset=config['dataset'], table_name=config['table_name'], key_cols=config['key_cols'])
+            tables.append(funds_move_table)
+        return tables
+
+    @staticmethod
+    def get_fix_sql(fundsmove_table: FundsMoveTable) -> str:
+        project_landing = PROJECT_LANDING
+
+        table_name = f"{project_landing}.{fundsmove_table.dataset_table_name()}"
+        key_col = "".join(fundsmove_table.key_cols)
+        sql = f"""
+             DELETE
+             FROM `{TABLE_FUNDS_MOVE_CTL}` c
+             WHERE  c.table_name = '{fundsmove_table.table_name}'
+                AND EXISTS (
+                            -- Find records with deletion operation but not being the last operation.
+                            WITH m AS
+                              ( SELECT x.{key_col}
+                                FROM (
+                                    SELECT
+                                    row_number() OVER (PARTITION BY l.{key_col} ORDER BY position desc,timestamp desc,currenttimestamp desc) op_rank
+                                    ,l.{key_col}
+                                    ,l.optype
+                                    FROM `{table_name}` l
+                                    WHERE EXISTS ( SELECT 1
+                                                  FROM `{table_name}` l2
+                                                  WHERE l2.{key_col} = l.{key_col}
+                                                  AND l2.optype = 'D'
+                                                )
+                                    ) x
+                                WHERE  x.op_rank = 1 AND x.optype != 'D'
+                              )
+                           SELECT 1
+                           FROM `{table_name}` l inner join m on m.{key_col} = l.{key_col}
+                           WHERE l.optype = c.OPTYPE
+                             AND l.position = c.position
+                             AND l.timestamp = c.timestamp
+                             AND l.currenttimestamp = c.currenttimestamp
+                           )
+        """
+        return sql
+
+    @staticmethod
+    def execute_fix_sqls():
+        tables = FundsMoveCDCFix.read_config("funds_move_dag.yaml")
+        for table in tables:
+            sql = FundsMoveCDCFix.get_fix_sql(table)
+            run_bq_dml_with_log(f"Marking records as unprocessed with delete/insert operations for table '{table.table_name}'",
+                                f"Completed records as unprocessed with delete/insert operations for table '{table.table_name}'",
+                                sql)
+
+
+# Creating DAG
+tags = commons.TAGS.copy()
+tags.append("fundsmove")
+tags.append("cdc")
+tags.append("onetime")
+# Modify the default_args dictionary
+custom_default_args = commons.DAG_DEFAULT_ARGS.copy()
+custom_default_args['business_impact'] = 'None'
+
+with DAG(
+        "funds_move_cdc_fix",
+        is_paused_upon_creation=True,
+        description="Mark funds move table records with delete/insert operations as unprocessed",
+        default_args=custom_default_args,
+        start_date=datetime(2022, 1, 1, tzinfo=commons.TORONTO_TZ),
+        end_date=None,
+        schedule=None,
+        tags=tags,
+        max_active_runs=1,
+        catchup=False
+) as dag:
+    pipeline_start = EmptyOperator(task_id="pipeline_start")
+    pipeline_complete = EmptyOperator(task_id='end')
+
+    data_funds_move_cdc_fix_task = PythonOperator(
+        task_id="run_funds_move_cdc_fix",
+        python_callable=FundsMoveCDCFix.execute_fix_sqls,
+        op_args=[],
+        trigger_rule="all_success"
+    )
+
+    pipeline_start >> data_funds_move_cdc_fix_task >> pipeline_complete

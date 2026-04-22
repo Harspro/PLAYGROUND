@@ -1,0 +1,10 @@
+from airflow import settings
+from postgres_query_executor.postgres_query_executor_base import PostgresQueryExecutor
+
+# Separating out the launching part so that Postgres Query Executor can be reused.
+globals().update(
+    PostgresQueryExecutor(
+        'postgres_query_executor_config.yaml',
+        f'{settings.DAGS_FOLDER}/config/postgres_query_executor_configs'
+    ).create_dags()
+)

@@ -1,0 +1,31 @@
+default_args:
+  owner: "team-growth-and-sales-alerts"
+  capability: "CustomerAcquisition"
+  severity: "P2"
+  sub_capability: "Applications"
+  business_impact: "RE IDV for ABB customer will be impacted"
+  customer_impact: "Delay in on-boarding ABB as a regular customer"
+  depends_on_past: False
+  email: []
+  retries: 0
+  email_on_failure: False
+  email_on_retry: False
+
+
+dag:
+  task_id:
+    kafka_writer_task_id: trigger_kafka_writer_dag
+  dag_id:
+    kafka_trigger_dag_id: re_idv_request_kafka_writer
+  query:
+    re_idv_customer_count: re_idv_customer_count.sql
+    re_idv_customer: re_idv_customer.sql
+  wait_for_completion: True
+  poke_interval: 30
+  bucket: pcb-{env}-staging-extract
+  folder_name: re_idv_request
+  file_name: re-idv-request-customer-*.parquet
+  reminder_config:
+    min_hours_between_reminders: 48
+    max_reminder_count: 3
+

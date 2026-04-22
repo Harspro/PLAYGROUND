@@ -1,0 +1,7 @@
+{
+    "data_validation": {
+      "scan_yml_file": "aml_processing/aml_scan.yml",
+      "warehouse_yml_file": "aml_processing/aml_warehouse.yml",
+      "scan_results_file": "aml_processing/scan_results.txt"
+    }
+}

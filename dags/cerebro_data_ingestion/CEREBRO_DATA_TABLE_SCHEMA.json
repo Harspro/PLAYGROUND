@@ -1,0 +1,112 @@
+[
+  {
+    "name": "process_dt",
+    "type": "DATE",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "wallet_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "segment",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "email_control",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "trigger_type",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "trigger_cd",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "email_scenario_num",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature1",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature2",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature3",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature4",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature5",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature6",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature7",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature8",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature9",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature10",
+    "type": "FLOAT",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature11",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature12",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature13",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature14",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "pcf_feature15",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

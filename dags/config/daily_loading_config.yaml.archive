@@ -1,0 +1,194 @@
+ods_fundsmove_limit_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: CARDINAL.FUNDSMOVE_LIMIT
+    pcb.bigquery.loader.source.primary.key.column: FUNDSMOVE_LIMIT_UID
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_payments
+    table_name: FUNDSMOVE_LIMIT
+  dag:
+    schedule_interval: '0 21 * * *'
+
+app_cust_info_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db563.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db563.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.APP_CUST_INFO
+    pcb.bigquery.loader.source.primary.key.column: PC_MC_CUST_APPL_ID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: pcmc
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APP_CUST_INFO
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: '05 09,13 * * *'
+    is_multiple_runs: True
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "NA"
+    business_impact: "Potential compliance issue due to delay in loading business data for PRR"
+    customer_impact: "Delay in loading reporting data"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_application_product_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_PRODUCT
+    pcb.bigquery.loader.source.primary.key.column: APPLICATION_PRODUCT_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_PRODUCT
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: '0 7-22/3 * * *'
+    is_multiple_runs: True
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales
+
+ods_application_submission_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-ods.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-ods.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: APPLMGMT.APPLICATION_SUBMISSION
+    pcb.bigquery.loader.source.primary.key.column: APPLICATION_SUBMISSION_UID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: ods
+  bigquery:
+    project_id: pcb-{env}-landing
+    dataset_id: domain_customer_acquisition
+    table_name: APPLICATION_SUBMISSION
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "Applications"
+    business_impact: "NA"
+    customer_impact: "NA"
+    severity: 'P3'
+  dag:
+    schedule_interval: '0 7-22/3 * * *'
+    is_multiple_runs: True
+  tags:
+    - team-growth-and-sales
+
+one_time_patch_app_cust_info_table_daily_loading_job:
+  jar_file_uris:
+    - gs://pcb-{env}-staging-artifacts/jarfiles/ods-bigquery-connector-2.0.0.jar
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/ods-bigquery-connector/application-pds-db563.conf
+  main_class: com.pcb.batch.odsbigqueryconnector.ODSToGCSConnector
+  application_config: application-pds-db563.conf
+  args:
+    pcb.bigquery.loader.source.schema.qualified.tablename: PCMC.APP_CUST_INFO
+    pcb.bigquery.loader.source.primary.key.column: PC_MC_CUST_APPL_ID
+    pcb.bigquery.loader.source.db.read.parallelism: 8
+  gcs:
+    bucket: pcb-{env}-staging-extract
+    staging_folder: pcmc
+  bigquery:
+    project_id: pcb-{env}-processing
+    dataset_id: domain_customer_acquisition
+    table_name: APP_CUST_INFO_FOR_PATCH
+    add_columns:
+      - STRUCT(
+        STRING(NULL) AS STREAM_NAME,
+        INT64(NULL) AS TOPIC_PARTITION,
+        INT64(NULL) AS PARTITION_OFFSET,
+        INT64(NULL) AS STREAM_OFFSET,
+        INT64(NULL) AS OFFSET_DIFF,
+        STRING(NULL) AS ENVIRONMENT,
+        INT64(NULL) AS TOPIC_VERSION,
+        STRING(NULL) AS USERVICE_CORRELATION_ID,
+        STRING(NULL) AS USERVICE_TRACEABILITY_ID
+        ) AS METADATA
+      - TIMESTAMP(NULL) AS INGESTION_TIMESTAMP
+  dag:
+    schedule_interval: null
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    sub_capability: "NA"
+    business_impact: "Potential compliance issue due to delay in loading business data for PRR"
+    customer_impact: "Delay in loading reporting data"
+    severity: 'P3'
+  tags:
+    - team-growth-and-sales

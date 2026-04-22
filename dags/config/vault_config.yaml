@@ -1,0 +1,14 @@
+dev:
+  gcp_meta_url: "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity"
+  base_url: "https://web-vault.dolphin.azure.nonprod.pcfcloud.io/v1"
+  login_path: "/auth/gcp-dev/login"
+
+uat:
+  gcp_meta_url: "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity"
+  base_url: "https://web-vault.dolphin.azure.nonprod.pcfcloud.io/v1"
+  login_path: "/auth/gcp-uat/login"
+
+prod:
+  gcp_meta_url: "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity"
+  base_url: "https://web-vault.salmon.gcp.prod.pcfcloud.io/v1"
+  login_path: "/auth/gcp-prod/login"

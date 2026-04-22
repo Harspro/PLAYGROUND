@@ -1,0 +1,12 @@
+prepare_initial_cif_tables:
+  default_args:
+    dag_owner: team-centaurs
+  tables:
+    - source_table_ref: pcb-{env}-landing.domain_account_management.IDL_CIF_ACCOUNT_CURR
+      target_table_ref: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_CURR
+    - source_table_ref: pcb-{env}-landing.domain_account_management.IDL_CIF_ACCOUNT_PREV
+      target_table_ref: pcb-{env}-landing.domain_account_management.CIF_ACCOUNT_PREV
+    - source_table_ref: pcb-{env}-landing.domain_account_management.IDL_CIF_CARD_CURR
+      target_table_ref: pcb-{env}-landing.domain_account_management.CIF_CARD_CURR
+    - source_table_ref: pcb-{env}-landing.domain_account_management.IDL_CIF_CARD_PREV
+      target_table_ref: pcb-{env}-landing.domain_account_management.CIF_CARD_PREV

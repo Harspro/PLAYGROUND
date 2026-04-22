@@ -1,0 +1,18 @@
+**/.vscode
+**/venv
+**/.venv
+
+.idea/
+
+.DS_Store
+
+*.log
+
+**/__pycache__/
+
+# from coverage reports
+.coverage
+
+
+coverage.xml
+htmlcov/

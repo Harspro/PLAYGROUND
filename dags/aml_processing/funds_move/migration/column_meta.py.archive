@@ -1,0 +1,41 @@
+from dataclasses import dataclass
+from typing import List
+
+
+@dataclass
+class ColumnMeta:
+    col_name: str
+    data_type: str
+    nullable: bool
+
+    def __init__(self, col_name, data_type, nullable: bool):
+        self.col_name = col_name
+        self.data_type = data_type
+        self.nullable = nullable
+
+    def __eq__(self, other):
+        if isinstance(other, ColumnMeta):
+            return self.col_name == other.col_name and self.data_type == other.data_type and self.nullable == other.nullable
+        return False
+
+    def __str__(self):
+        return f"{self.col_name} {self.data_type} {'NULL' if self.nullable else 'NOT NULL'}"
+
+
+class ColListUtils:
+    @staticmethod
+    def _get_col_name(col_meta: ColumnMeta):
+        return col_meta.col_name
+
+    @staticmethod
+    def is_cols_eq(col_list: List[ColumnMeta], other: List[ColumnMeta]) -> str:
+        if len(col_list) != len(other):
+            return f"column count mot matched: {len(col_list)} vs {len(other)}"
+
+        col_list.sort(key=ColListUtils._get_col_name)
+        other.sort(key=ColListUtils._get_col_name)
+        diff_list = []
+        for idx, col in enumerate(col_list):
+            if col != other[idx]:
+                diff_list.append(f"{col} <--> {other[idx]}")
+        return "" if len(diff_list) == 0 else "\n".join(diff_list)

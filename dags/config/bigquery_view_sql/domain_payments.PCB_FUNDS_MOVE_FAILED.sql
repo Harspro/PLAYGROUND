@@ -1,0 +1,15 @@
+SELECT
+customerId AS CUSTOMER_ID,
+accountId AS ACCOUNT_ID,
+fundsMoveType AS FUNDS_MOVE_TYPE,
+amount AS AMOUNT,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.workflowType') as WORKFLOW_TYPE,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.frequency') as FREQUENCY,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.FraudCheckResult.isFraudActivitySuspected') as IS_FRAUD_ACTIVITY_SUSPECTED,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.startDate') as START_DATE,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.endDate') as END_DATE,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.immediate') as IMMEDIATE,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.instructionId') as INSTRUCTION_ID,
+(SELECT envelope.any FROM UNNEST(supplementaryData) WHERE placeAndName='InstructionData.FraudCheckResult.fraudDecision') as FRAUD_DECISION,
+DATETIME(TIMESTAMP(INGESTION_TIMESTAMP), 'America/Toronto') AS RECORD_LOAD_TIMESTAMP,
+ FROM `pcb-{env}-landing.domain_payments.PCB_FUNDS_MOVE_FAILED`

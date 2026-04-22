@@ -1,0 +1,37 @@
+edsa_reminder_later_email_recipients_kafka_writer:
+  default_args:
+    owner: "team-growth-and-sales-alerts"
+    capability: "CustomerAcquisition"
+    severity: "P3"
+    sub_capability: "Applications"
+    business_impact: "EDSA Reminder Emails will not be sent to exisiting PCMA customers."
+    customer_impact: "PCMA Customer will not receive reminder emails for EDSA, which they opted for 48 hours ago"
+  file_uris:
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/edsa-reminder-later-email/application.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/edsa-reminder-later-email/schema_mapping.yaml
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/edsa-reminder-later-email/edsa_reminder_later_email_key.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/edsa-reminder-later-email/edsa_reminder_later_email_value.avsc
+    - gs://pcb-{env}-staging-artifacts/resources/file-kafka-connector/growth-and-sales/edsa-reminder-later-email/edsa_reminder_later_email_file_schema.avsc
+  application_config: application.yaml
+  args:
+    pcb.file.kafka.connector.avro.key.schema.path: edsa_reminder_later_email_key.avsc
+    pcb.file.kafka.connector.avro.value.schema.path: edsa_reminder_later_email_value.avsc
+    pcb.file.kafka.connector.file.kafka.schema.mapping.path: schema_mapping.yaml
+    pcb.file.kafka.connector.file.type: PARQUET
+    pcb.file.kafka.connector.file.path:
+      file_path_from_preceding_dag: true
+    pcb.file.kafka.connector.group.by.fields:
+      - CODE
+      - SOURCE
+      - UUID
+      - IDENTIFIERS
+    pcb.file.kafka.connector.struct.to.map.field: ADDITIONALIDENTIFIERS
+    pcb.file.kafka.connector.kafka.key: uuid
+    pcb.file.kafka.connector.kafka.key.part.of.dataset: true
+    pcb.file.kafka.connector.schema.file.path: edsa_reminder_later_email_file_schema.avsc
+  dag:
+    kafka_writer_task: kafka_writer_esda_email_recipient
+    read_pause_deploy_config: False
+    tags: ["team-growth-and-sales"]
+    job_size: extra_small
+    dataproc_cluster_name: edsa-reminder-later-email-kafka-writer
