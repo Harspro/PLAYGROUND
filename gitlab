@@ -1,0 +1,56 @@
+
+# Terraform remove stage in Dev####
+tf-migrate-dev-landing:
+  image: ${JFROG_BETA}/docker/build/google/gcp-terragrunt:v2026.3.0
+  id_tokens:
+    TERRAFORM_VAULT_AUTH_JWT:
+      aud: "https://web-vault.dolphin.azure.nonprod.pcfcloud.io"
+  extends:
+    - .vault-auth
+    - .google-oidc:auth
+  script:
+    - |
+      set +e
+      export TF_CLI_CONFIG_FILE=$CI_PROJECT_DIR/terraformrc
+      cd ${ENV_DIR}
+      # Fail early if Slack webhook is missing
+      if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+        echo "ERROR: SLACK_WEBHOOK_URL CI/CD variable is not set. Add it in Settings > CI/CD > Variables."
+        exit 1
+      fi
+      terragrunt state list
+      export TF_EXIT_CODE=$?
+      set -e
+      echo "$TF_EXIT_CODE"
+      # Fail the job if TF_EXIT_CODE is neither 0 nor 2
+      if [ "$TF_EXIT_CODE" -ne 0 ] && [ "$TF_EXIT_CODE" -ne 2 ]; then
+        echo "Error: Unexpected exit code $TF_EXIT_CODE"
+        curl -X POST --data-urlencode "payload={
+          \"channel\": \"$GITLAB_PIPELINE_CHANNEL\",
+          \"text\": \"Pipeline Status\",
+          \"attachments\": [
+            {
+              \"text\": \"Failed: The pipeline job fails for Processing zone deployment. Job URL: ${CI_JOB_URL}\",
+              \"color\": \"danger\"
+            }
+          ]
+        }" "$SLACK_WEBHOOK_URL"
+        exit 1
+      fi
+      chmod -R a+r $CI_PROJECT_DIR
+      echo "Permissions updated for .terragrunt-cache before artifact upload"
+  stage: tfmigrate-dev
+  environment: nonprod
+  variables:
+    ENV_DIR: "live/Dev/01_landing/"
+    ENV_NAME: "dev"
+    PROJECT_ID: "pcb-dev-landing"
+  artifacts:
+    paths:
+      - ${ENV_DIR}/.terragrunt-cache/
+      - ${ENV_DIR}/.terraform.lock.hcl
+      - ${ENV_DIR}/tfplan
+    expire_in: 1 hrs
+  only:
+    - merge_requests
+    - main
